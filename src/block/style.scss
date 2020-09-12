@@ -1,0 +1,18 @@
+/**
+ * #.# Styles
+ *
+ * CSS for both Frontend+Backend.
+ */
+
+
+.ootb-openstreetmap--map {
+  width: 100%;
+
+  .leaflet-popup-content {
+	min-width: 150px;
+
+	p {
+	  margin: .5em 0;
+	}
+  }
+}

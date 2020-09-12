@@ -1,0 +1,17 @@
+/**
+ * #.# Common SCSS
+ *
+ * Can include things like variables and mixins
+ * that are used across the project.
+*/
+/**
+ * #.# Styles
+ *
+ * CSS for both Frontend+Backend.
+ */
+.ootb-openstreetmap--map {
+  width: 100%; }
+  .ootb-openstreetmap--map .leaflet-popup-content {
+    min-width: 150px; }
+    .ootb-openstreetmap--map .leaflet-popup-content p {
+      margin: .5em 0; }

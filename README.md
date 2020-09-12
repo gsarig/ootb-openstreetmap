@@ -2,7 +2,7 @@ A map block for WordPress' Gutenberg Editor which uses [OpenStreetMap](https://w
 
 Instead of manually adding coordinates for each one of your markers, just click-and-drop them directly on the map. You want to adjust their position? Just drag them wherever you want. And instead of filling-in custom fields to set each marker's popup content, just open that popup and start writing in it, the Gutenberg way (it supports WYSIWYG editing, with links, images, and all). It even stores the map's zoom level as you use it so that you don't have to set it by hand.
 
-[![Watch the video](.github/assets/youtube-thumbnail.jpg)](https://www.youtube.com/watch?v=FGe7zJnrIgo)
+![Demo GIF](.github/assets/ootb-openstreetmap.gif)
 
 ### Features
 
@@ -48,11 +48,11 @@ Check under the "Map behavior" section, at the blocks' settings at the sidebar o
 ![The map editing screen](.wordpress-org/screenshot-1.jpg) 
 The map editing screen
 
-![Adding a marker](.wordpress-org/screenshot-2.jpg) 
-Adding a marker
+![Map behavior options](.wordpress-org/screenshot-2.jpg) 
+Map behavior options
 
-![Map behavior options open](.wordpress-org/screenshot-3.jpg)
-Map behavior options open
+![Adding a marker](.wordpress-org/screenshot-3.jpg)
+Adding a marker
 
 ![Using custom markers](.wordpress-org/screenshot-4.jpg)
 Using custom markers

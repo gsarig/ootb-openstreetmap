@@ -61,7 +61,7 @@ Check under the "Map behavior" section, at the blocks' settings at the sidebar o
 == Screenshots ==
 
 1. The map editing screen
-2. Map behavior options open
+2. Map behavior options
 3. Adding a marker
 4. Using custom markers
 

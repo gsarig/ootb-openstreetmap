@@ -4,7 +4,7 @@ export default function getIcon(props) {
 			defaultIcon,
 		},
 	} = props;
-	const fallbackIcon = ootbGlobal.pluginDirUrl + 'assets/leaflet/images/marker-icon.png';
+	const fallbackIcon = ootbGlobal.pluginDirUrl + 'assets/vendor/leaflet/images/marker-icon.png';
 	const horizontalPosition = defaultIcon ? defaultIcon.width / 2 : 12;
 	return {
 		iconUrl: defaultIcon ? defaultIcon.url : fallbackIcon,

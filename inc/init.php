@@ -2,13 +2,12 @@
 /**
  * Blocks Initializer
  *
- * Enqueue CSS/JS of all the blocks.
+ * Enqueue CSS/JS on the block.
  *
  * @since   1.0.0
  * @package OOTB
  */
 
-// Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -16,14 +15,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 function openstreetmap_ootb_block_assets() { // phpcs:ignore
 	wp_register_style(
-		'openstreetmap-ootb-style-css',
+		'ootb-openstreetmap-style-css',
 		plugins_url( 'dist/blocks.style.build.css', dirname( __FILE__ ) ),
 		is_admin() ? array( 'wp-editor' ) : null,
 		filemtime( plugin_dir_path( __DIR__ ) . 'dist/blocks.style.build.css' )
 	);
 
 	wp_register_script(
-		'openstreetmap-ootb-block-js',
+		'ootb-openstreetmap-block-js',
 		plugins_url( '/dist/blocks.build.js', dirname( __FILE__ ) ),
 		array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor' ),
 		filemtime( plugin_dir_path( __DIR__ ) . 'dist/blocks.build.js' ),
@@ -31,14 +30,14 @@ function openstreetmap_ootb_block_assets() { // phpcs:ignore
 	);
 
 	wp_register_style(
-		'openstreetmap-ootb-block-editor-css',
+		'ootb-openstreetmap-block-editor-css',
 		plugins_url( 'dist/blocks.editor.build.css', dirname( __FILE__ ) ),
 		array( 'wp-edit-blocks' ),
 		filemtime( plugin_dir_path( __DIR__ ) . 'dist/blocks.editor.build.css' )
 	);
 
 	wp_localize_script(
-		'openstreetmap-ootb-block-js',
+		'ootb-openstreetmap-block-js',
 		'ootbGlobal',
 		[
 			'pluginDirPath' => plugin_dir_path( __DIR__ ),
@@ -49,9 +48,9 @@ function openstreetmap_ootb_block_assets() { // phpcs:ignore
 	register_block_type(
 		'ootb/openstreetmap',
 		array(
-			'style'         => 'openstreetmap-ootb-style-css',
-			'editor_script' => 'openstreetmap-ootb-block-js',
-			'editor_style'  => 'openstreetmap-ootb-block-editor-css',
+			'style'         => 'ootb-openstreetmap-style-css',
+			'editor_script' => 'ootb-openstreetmap-block-js',
+			'editor_style'  => 'ootb-openstreetmap-block-editor-css',
 		)
 	);
 }

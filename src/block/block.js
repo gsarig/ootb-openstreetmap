@@ -1,13 +1,6 @@
 /**
  * BLOCK: openstreetmap
  *
- * @todo Pro version
- * 1. Custom marker per pin
- * 3. Change map colors and styles
- * 4. Location finder with autocomplete (https://stackoverflow.com/questions/53168692/esri-leaflet-geosearch-how-to-integrate-it-with-react and https://codepen.io/exomark/pen/dafBD
- * 5. Import/export markers
- * 6. Geolocation
- *
  */
 
 import './editor.scss';

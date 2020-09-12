@@ -4,7 +4,7 @@
  * CSS for just Backend enqueued after style.scss
  * which makes it higher in priority.
  */
-@import "./../assets/leaflet/leaflet.css";
+@import "./../assets/vendor/leaflet/leaflet.css";
 
 .block-editor-block-list__block[data-type="ootb/openstreetmap"] {
   z-index: 1;
@@ -19,9 +19,10 @@
   }
 
   .leaflet-popup-content {
-	min-width: 150px;
+	width: 150px;
 
 	p {
+	  font: 12px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
 	  margin: .5em 0;
 	}
   }
@@ -30,6 +31,7 @@
 	top: 0;
 	animation: animate-marker 400ms ease-in-out;
   }
+
 }
 
 .ootb-openstreetmap--icon {

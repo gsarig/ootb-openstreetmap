@@ -1,4 +1,4 @@
-[![Download from WordPress.org](.wordpress-org/banner-1544-500.jpg)](https://www.wordpress.org/ootb-openstreetmap)
+[![Download from WordPress.org](.wordpress-org/banner-1544-500.jpg)](https://wordpress.org/plugins/ootb-openstreetmap/)
     
 # Out of the Block: OpenStreetMap
 

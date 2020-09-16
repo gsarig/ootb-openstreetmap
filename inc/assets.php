@@ -17,7 +17,7 @@ function openstreetmap_non_react_block_assets() {
 		wp_enqueue_style(
 			'leaflet',
 			plugins_url( $leaflet_css, dirname( __FILE__ ) ),
-			[],
+			[]
 		);
 		$leaflet_js = 'assets/vendor/leaflet/leaflet.js';
 		wp_enqueue_script(

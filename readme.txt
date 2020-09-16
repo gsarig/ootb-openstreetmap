@@ -5,7 +5,7 @@ Tags: Map, Maps, OpenStreetMap, Open Street Maps, Leaflet, Google Maps
 Requires at least: 5.0
 Tested up to: 5.5
 Requires PHP: 7.2
-Stable tag: 1.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -69,6 +69,9 @@ Check under the "Map behavior" section, at the blocks' settings at the sidebar o
 = 1.0 =
 
 == Changelog ==
+
+= 1.0.1 =
+* Fixed a bug during plugin activation.
 
 = 1.0 =
 * First releases

@@ -3,6 +3,7 @@ import Controls from "./Elements/Controls";
 import Markers from "./Elements/Markers";
 import getBounds from "./Helpers/getBounds";
 import centerMap from "./Helpers/centerMap";
+import {isMobile, isSafari} from 'react-device-detect';
 
 const {__} = wp.i18n;
 
@@ -22,15 +23,18 @@ export default function edit(props) {
 
 	const timeout = 300;
 	let delay;
-
 	const isClicking = () => {
 		if (false === isDraggingMarker) {
-			delay = setTimeout(function () {
+			if (isMobile && !isSafari) {
 				setAttributes({addingMarker: ' pinning'});
-				setTimeout(function () { // If hangs for too long, stop it.
-					setAttributes({addingMarker: ''});
-				}, timeout * 3);
-			}, timeout);
+			} else {
+				delay = setTimeout(function () {
+					setAttributes({addingMarker: ' pinning'});
+					setTimeout(function () { // If hangs for too long, stop it.
+						setAttributes({addingMarker: ''});
+					}, timeout * 3);
+				}, timeout);
+			}
 		}
 	}
 
@@ -53,17 +57,21 @@ export default function edit(props) {
 						text: '',
 					}
 				],
+				isDraggingMarker: false,
 			});
 			getBounds(props);
 		}
 		setAttributes({
-			isDraggingMarker: false,
 			addingMarker: '',
 		});
 	}
 
 	const changeZoom = (e) => {
 		setAttributes({zoom: e.zoom});
+	}
+
+	const closePopupActions = () => {
+		setAttributes({isDraggingMarker: false});
 	}
 
 	let setAlert = '';
@@ -85,6 +93,7 @@ export default function edit(props) {
 				onMouseDown={isClicking}
 				onDrag={isDragging}
 				onViewportChanged={changeZoom}
+				onPopupClose={closePopupActions}
 				style={
 					{
 						height: mapHeight + 'px'

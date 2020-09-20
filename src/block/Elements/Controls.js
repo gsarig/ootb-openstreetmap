@@ -1,7 +1,9 @@
 import getIcon from "../Helpers/getIcon";
-
+// noinspection JSUnresolvedVariable
 const {__} = wp.i18n;
+// noinspection JSUnresolvedVariable
 const {PanelBody, RangeControl, Button, ToggleControl} = wp.components;
+// noinspection JSUnresolvedVariable
 const {MediaUpload, MediaUploadCheck, InspectorControls} = wp.blockEditor;
 
 export default function Controls({props}) {
@@ -33,6 +35,7 @@ export default function Controls({props}) {
 
 	const icon = getIcon(props);
 
+	// noinspection JSXNamespaceValidation
 	return (
 		<InspectorControls>
 			<PanelBody

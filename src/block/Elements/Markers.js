@@ -1,15 +1,19 @@
 import L from 'leaflet';
 import {Marker, Popup} from "react-leaflet";
-import getBounds from "../Helpers/getBounds";
 import getIcon from "../Helpers/getIcon";
+import getBounds from "../Helpers/getBounds";
 
+// noinspection JSUnresolvedVariable
 const {__} = wp.i18n;
+// noinspection JSUnresolvedVariable
 const {RichText} = wp.blockEditor;
+// noinspection JSUnresolvedVariable
 const {Button} = wp.components;
 
 export default function Markers({props}) {
 	const {
 		attributes: {
+			mapObj,
 			markers,
 		},
 		setAttributes,
@@ -23,7 +27,7 @@ export default function Markers({props}) {
 			isDraggingMarker: false,
 			markers: updatedMarkers
 		});
-		getBounds(props);
+		getBounds(props, [], mapObj.leafletElement);
 	}
 
 	const startDragging = () => {
@@ -52,6 +56,7 @@ export default function Markers({props}) {
 	const markerIcon = L.icon(getIcon(props));
 
 	return typeof markers !== "undefined" && markers.length ? markers.map((marker, index) => {
+		// noinspection JSXNamespaceValidation
 		return (
 			<Marker
 				position={[marker.lat, marker.lng]}

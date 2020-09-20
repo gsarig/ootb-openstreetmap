@@ -5,9 +5,11 @@ export default function getIcon(props) {
 		},
 	} = props;
 	const fallbackIcon = ootbGlobal.pluginDirUrl + 'assets/vendor/leaflet/images/marker-icon.png';
-	const horizontalPosition = defaultIcon ? defaultIcon.width / 2 : 12;
+	const horizontalPosition = defaultIcon ? Math.round(defaultIcon.width / 2) : 12;
+	const verticalPosition = defaultIcon ? Math.round(defaultIcon.height) : 41;
 	return {
 		iconUrl: defaultIcon ? defaultIcon.url : fallbackIcon,
-		iconAnchor: [horizontalPosition, 0],
+		iconAnchor: [horizontalPosition, verticalPosition],
+		popupAnchor: [0, -Math.abs(verticalPosition)],
 	}
 }

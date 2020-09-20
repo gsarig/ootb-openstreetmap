@@ -25,15 +25,13 @@ registerBlockType('ootb/openstreetmap', {
 		align: ['wide', 'full'],
 	},
 	attributes: {
+		mapHeight: {
+			type: 'integer',
+			default: 400,
+		},
 		markers: {
 			type: 'array',
 			default: [],
-		},
-		bounds: {
-			type: 'array',
-			default: [
-				[37.97155174977503, 23.72656345367432]
-			],
 		},
 		zoom: {
 			type: 'integer',
@@ -46,22 +44,6 @@ registerBlockType('ootb/openstreetmap', {
 		maxZoom: {
 			type: 'integer',
 			default: 18,
-		},
-		addingMarker: {
-			type: 'string',
-			default: '',
-		},
-		isDraggingMarker: {
-			type: 'boolean',
-			default: false,
-		},
-		mapHeight: {
-			type: 'integer',
-			default: 400,
-		},
-		defaultIcon: {
-			type: 'object',
-			default: null,
 		},
 		dragging: {
 			type: 'boolean',
@@ -79,9 +61,15 @@ registerBlockType('ootb/openstreetmap', {
 			type: 'boolean',
 			default: true,
 		},
-		alert: {
-			type: 'string',
-			default: '',
+		defaultIcon: {
+			type: 'object',
+			default: null,
+		},
+		bounds: {
+			type: 'array',
+			default: [
+				[37.97155174977503, 23.72656345367432]
+			],
 		},
 	},
 	edit,

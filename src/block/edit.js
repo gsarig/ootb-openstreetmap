@@ -4,26 +4,38 @@ import Markers from "./Elements/Markers";
 import getBounds from "./Helpers/getBounds";
 import centerMap from "./Helpers/centerMap";
 import {isMobile, isSafari} from 'react-device-detect';
+import SearchBox from "./Elements/SearchBox";
+import Alert from "./Elements/Alert";
 
-const {__} = wp.i18n;
+// noinspection JSUnresolvedVariable
+const {useRef} = wp.element;
 
 export default function edit(props) {
 	const {
 		className,
 		attributes: {
+			mapObj,
 			markers,
 			zoom,
 			addingMarker,
 			mapHeight,
 			isDraggingMarker,
-			alert,
 		},
 		setAttributes,
 	} = props;
 
+	const inputRef = useRef();
+	if ('undefined' !== typeof inputRef.current && !mapObj) {
+		setAttributes({mapObj: inputRef.current});
+	}
+
 	const timeout = 300;
 	let delay;
-	const isClicking = () => {
+	const isClicking = (e) => {
+		const elementClicked = e.originalEvent.target.nodeName.toLowerCase();
+		if ('div' === elementClicked) {
+			setAttributes({isDraggingMarker: false});
+		}
 		if (false === isDraggingMarker) {
 			if (isMobile && !isSafari) {
 				setAttributes({addingMarker: ' pinning'});
@@ -39,33 +51,31 @@ export default function edit(props) {
 	}
 
 	const isDragging = () => {
-		if (false === isDraggingMarker) {
-			clearTimeout(delay);
-			setAttributes({addingMarker: ''});
-		}
+		clearTimeout(delay);
+		setAttributes({addingMarker: '', isDraggingMarker: false});
 	}
 
 	const addMarker = (e) => {
 		clearTimeout(delay);
 		if (!!addingMarker) {
+			const newMarker = {
+				lat: e.latlng.lat,
+				lng: e.latlng.lng,
+				text: '',
+			};
 			setAttributes({
 				markers: [
 					...markers,
-					{
-						lat: e.latlng.lat,
-						lng: e.latlng.lng,
-						text: '',
-					}
+					newMarker,
 				],
-				isDraggingMarker: false,
+				addingMarker: '',
 			});
-			getBounds(props);
+			getBounds(props, newMarker, e.target);
+			setTimeout(function () {
+				setAttributes({isDraggingMarker: false});
+			}, timeout * 2);
 		}
-		setAttributes({
-			addingMarker: '',
-		});
 	}
-
 	const changeZoom = (e) => {
 		setAttributes({zoom: e.zoom});
 	}
@@ -74,19 +84,14 @@ export default function edit(props) {
 		setAttributes({isDraggingMarker: false});
 	}
 
-	let setAlert = '';
-	if (' pinning' === addingMarker) {
-		setAlert = __('Release to drop a marker here', 'ootb-openstreetmap');
-	}
-	setAttributes({alert: setAlert});
-
+	// noinspection JSXNamespaceValidation
 	return (
-		<div className={className + addingMarker}>
+		<div className={className + (addingMarker || '')}>
+			<SearchBox props={props}/>
 			<Controls props={props}/>
-			{alert ?
-				<div className="ootb-openstreetmap--alert">{alert}</div>
-				: null}
+			<Alert props={props}/>
 			<Map
+				ref={inputRef}
 				center={centerMap(props)}
 				zoom={zoom}
 				onMouseUp={addMarker}
@@ -106,7 +111,6 @@ export default function edit(props) {
 				/>
 				<Markers props={props}/>
 			</Map>
-
 		</div>
 	);
 }

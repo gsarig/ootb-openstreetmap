@@ -71,6 +71,8 @@ Check under the "Map behavior" section, at the blocks' settings at the sidebar o
 == Changelog ==
 
 = 1.1 =
+* Place search functionality added
+* Improved marker precision
 * Better handling of pinning on mobile devices
 * Overall improvements on dragging smoothness
 

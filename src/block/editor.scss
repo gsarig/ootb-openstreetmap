@@ -8,9 +8,22 @@
 
 .block-editor-block-list__block[data-type="ootb/openstreetmap"] {
   z-index: 1;
+
+  &.is-selected {
+	.ootb-openstreetmap--search-results {
+	  top: 48px;
+	  opacity: 1;
+	}
+
+	.ootb-openstreetmap--searchbox {
+	  top: .5rem;
+	  opacity: 1;
+	}
+  }
 }
 
 .wp-block-ootb-openstreetmap {
+  position: relative;
   &.pinning {
 	.leaflet-container .leaflet-marker-pane img,
 	.leaflet-container {
@@ -76,6 +89,64 @@
   background: rgba(0, 0, 0, 0.6);
   color: #fff;
   z-index: 9999;
+}
+
+/* Searchbox */
+.ootb-openstreetmap--searchbox {
+  display: flex;
+  background: #fff;
+  color: #444;
+  position: absolute;
+  z-index: 999;
+  right: .5rem;
+  border: 1px solid #1e1e1e;
+  top: 0;
+  opacity: 0;
+  padding: 0 0 0 .5rem;
+  width: 280px;
+  max-width: calc(100% - 5rem);
+  transition: all 200ms ease-in-out;
+
+  > div {
+	flex: 1;
+  }
+
+  .components-base-control__field {
+	margin-bottom: 0;
+  }
+
+  .components-text-control__input[type="text"] {
+	background: transparent;
+	border: none;
+	color: #000;
+	box-shadow: none;
+  }
+
+  svg.dashicon {
+	fill: #000;
+  }
+}
+
+.block-editor-block-list__block[data-type="ootb/openstreetmap"] .ootb-openstreetmap--search-results {
+  position: absolute;
+  z-index: 999;
+  background: #fff;
+  top: 0;
+  opacity: 0;
+  transition: all 200ms ease-in-out;
+  max-width: calc(100% - 5rem);
+  right: .5rem;
+  border: 1px solid #1e1e1e;
+  width: 280px;
+  max-height: calc(100% - 70px);
+  overflow-y: auto;
+  text-align: left;
+
+  .components-button {
+	height: auto;
+	text-align: left;
+	width: 100%;
+  }
 }
 
 @keyframes animate-marker {

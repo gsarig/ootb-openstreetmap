@@ -6,15 +6,21 @@ A map block for WordPress' Gutenberg Editor which uses [OpenStreetMap](https://w
 
 Instead of manually adding coordinates for each one of your markers, just click-and-drop them directly on the map. You want to adjust their position? Just drag them wherever you want. And instead of filling-in custom fields to set each marker's popup content, just open that popup and start writing in it, the Gutenberg way (it supports WYSIWYG editing, with links, images, and all). It even stores the map's zoom level as you use it so that you don't have to set it by hand.
 
-👉 [Read more about the UX challenges](https://www.gsarigiannidis.gr/wordpress-gutenberg-map-block-openstreetmap/)
+👉 [Read more about the overall UX challenges](https://www.gsarigiannidis.gr/wordpress-gutenberg-map-block-openstreetmap/)
 
-![Demo GIF](.github/assets/ootb-openstreetmap.gif)
+![Demo GIF](.wordpress-org/screenshot-1.gif)
+
+👉 [The challenges of building a user-friendly place search for OpenStreetMap](https://www.gsarigiannidis.gr/openstreetmap-place-search/)
+
+![Demo GIF](.wordpress-org/screenshot-2.gif)
+
 
 ### Features
 
 * No need for API keys. Just install and use it.
 * Support for multiple markers.
-* Dead-simple interface. Don't search for coordinates and don't get overwhelmed by too many fields when using multiple markers. Just point and click on the map to add your marker where you want it and edit it's popup content directly from there.
+* [Dead-simple interface](https://www.gsarigiannidis.gr/wordpress-gutenberg-map-block-openstreetmap/). Don't search for coordinates and don't get overwhelmed by too many fields when using multiple markers. Just point and click on the map to add your marker where you want it and edit it's popup content directly from there.
+* [Place search](https://www.gsarigiannidis.gr/openstreetmap-place-search/). Find locations by typing keywords.
 * Remembers the zoom that you set when adding the markers and stores it so that you don't set it by hand (which you can do anyway if you prefer).
 * Adjust the map height.
 * Change the default marker icon with a custom one.
@@ -51,14 +57,17 @@ Check under the "Map behavior" section, at the blocks' settings at the sidebar o
 
 ## Screenshots
 
-![The map editing screen](.wordpress-org/screenshot-1.jpg) 
+![The map editing screen](.wordpress-org/screenshot-3.jpg) 
 The map editing screen
 
-![Map behavior options](.wordpress-org/screenshot-2.jpg) 
+![Map behavior options](.wordpress-org/screenshot-4.jpg) 
 Map behavior options
 
-![Adding a marker](.wordpress-org/screenshot-3.jpg)
+![Adding a marker](.wordpress-org/screenshot-5.jpg)
 Adding a marker
 
-![Using custom markers](.wordpress-org/screenshot-4.jpg)
+![Using custom markers](.wordpress-org/screenshot-6.jpg)
 Using custom markers
+
+![Place search](.wordpress-org/screenshot-7.jpg)
+Place search

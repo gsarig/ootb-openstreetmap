@@ -23,7 +23,8 @@ Instead of manually adding coordinates for each one of your markers, just click-
 
 * No need for API keys. Just install and use it.
 * Support for multiple markers.
-* Dead-simple interface. Don't search for coordinates and don't get overwhelmed by too many fields when using multiple markers. Just point and click on the map to add your marker where you want it and edit it's popup content directly from there.
+* [Dead-simple interface](https://www.gsarigiannidis.gr/wordpress-gutenberg-map-block-openstreetmap/). Don't search for coordinates and don't get overwhelmed by too many fields when using multiple markers. Just point and click on the map to add your marker where you want it and edit it's popup content directly from there.
+* [Place search](https://www.gsarigiannidis.gr/openstreetmap-place-search/). Find locations by typing keywords.
 * Remembers the zoom that you set when adding the markers and stores it so that you don't set it by hand (which you can do anyway if you prefer).
 * Adjust the map height.
 * Change the default marker icon with a custom one.
@@ -60,10 +61,13 @@ Check under the "Map behavior" section, at the blocks' settings at the sidebar o
 
 == Screenshots ==
 
-1. The map editing screen
-2. Map behavior options
-3. Adding a marker
-4. Using custom markers
+1. Adding markers and rich content
+2. Using the place search to throw multiple markers in a row by typing keyword and double+enter (no mouse)
+3. The map editing screen
+4. Map behavior options
+5. Adding a marker
+6. Using custom markers
+7. Place search
 
 == Upgrade Notice ==
 = 1.0 =

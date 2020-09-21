@@ -1,11 +1,9 @@
-#, fuzzy
 msgid ""
 msgstr ""
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: OpenStreetMap Block\n"
 "POT-Creation-Date: 2020-09-21 02:56+0300\n"
-"PO-Revision-Date: 2020-09-12 17:18+0300\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2020-09-21 03:08+0300\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,143 +14,149 @@ msgstr ""
 "X-Poedit-WPHeader: ootb-openstreetmap.php\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
-"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
+"_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Last-Translator: \n"
+"Language: el\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.min.js\n"
 "X-Poedit-SearchPathExcluded-1: node_modules\n"
 
 #: src/block/Elements/Alert.js:13
 msgid "Release to drop a marker here"
-msgstr ""
+msgstr "Απελευθερώστε για να ρίξετε τον δείκτη εδώ"
 
 #: src/block/Elements/Controls.js:42
 msgid "Main settings"
-msgstr ""
+msgstr "Βασικές ρυθμίσεις"
 
 #: src/block/Elements/Controls.js:46
 msgid "Height (pixels)"
-msgstr ""
+msgstr "Ύψος (pixels)"
 
 #: src/block/Elements/Controls.js:57
 msgid "Zoom"
-msgstr ""
+msgstr "Μεγέθυνση"
 
 #: src/block/Elements/Controls.js:71
 msgid "Map Marker"
-msgstr ""
+msgstr "Δείκτης Χάρτη"
 
 #: src/block/Elements/Controls.js:83
 msgid "Change icon"
-msgstr ""
+msgstr "Αλλαγή εικονιδίου"
 
 #: src/block/Elements/Controls.js:92
 msgid "Restore default"
-msgstr ""
+msgstr "Επαναφορά προεπιλογής"
 
 #: src/block/Elements/Controls.js:101
 msgid "Map behavior"
-msgstr ""
+msgstr "Συμπεριφορά χάρτη"
 
 #: src/block/Elements/Controls.js:105
 msgid "Map dragging"
-msgstr ""
+msgstr "Μετακίνηση χάρτη"
 
 #: src/block/Elements/Controls.js:108 src/block/Elements/Controls.js:114
 #: src/block/Elements/Controls.js:120 src/block/Elements/Controls.js:126
 msgid "Enabled."
-msgstr ""
+msgstr "Ενεργοποιημένο"
 
 #: src/block/Elements/Controls.js:108 src/block/Elements/Controls.js:114
 #: src/block/Elements/Controls.js:120 src/block/Elements/Controls.js:126
 msgid "Disabled."
-msgstr ""
+msgstr "Απενεργοποιημένο"
 
 #: src/block/Elements/Controls.js:111
 msgid "Touch zoom"
-msgstr ""
+msgstr "Εστίαση με άγγιγμα (οθόνες αφής)"
 
 #: src/block/Elements/Controls.js:117
 msgid "Double-click zoom"
-msgstr ""
+msgstr "Εστίαση με διπλό κλικ"
 
 #: src/block/Elements/Controls.js:123
 msgid "Scroll Wheel zoom"
-msgstr ""
+msgstr "Εστίαση με κύλιση της ροδέλας του ποντικού"
 
 #: src/block/Elements/Controls.js:129
 msgid "Minimum Zoom"
-msgstr ""
+msgstr "Ελάχιστη εστίαση"
 
 #: src/block/Elements/Controls.js:143
 msgid "Maximum Zoom"
-msgstr ""
+msgstr "Μέγιστη εστίαση"
 
 #: src/block/Elements/Controls.js:155
 msgid ""
 "Tip: setting the same minimum and maximum zoom practically locks zoom at "
 "that level."
 msgstr ""
+"Συμβουλή: ορίζοντας ίδια τιμή ως ελάχιστη και μέγιστη εστίαση, πρακτικά "
+"την κλειδώνετε σε αυτό το σημείο."
 
 #: src/block/Elements/Markers.js:93
 msgid "Write something"
-msgstr ""
+msgstr "Γράψτε κάτι"
 
 #: src/block/Elements/Markers.js:101
 msgid "Remove this marker"
-msgstr ""
+msgstr "Αφαίρεση δείκτη"
 
 #: src/block/Elements/Markers.js:103
 msgid "Remove"
-msgstr ""
+msgstr "Αφαίρεση"
 
 #: src/block/Elements/SearchBox.js:70
 msgid "Enter your keywords..."
-msgstr ""
+msgstr "Λέξεις-κλειδιά..."
 
 #: src/block/Elements/SearchBox.js:78
 msgid "Clear results"
-msgstr ""
+msgstr "Καθαρισμός αποτελεσμάτων"
 
 #: src/block/Elements/SearchBox.js:79
 msgid "Find locations"
-msgstr ""
+msgstr "Εντοπισμός τοποθεσιών"
 
 #. Plugin Name of the plugin/theme
 #: src/block/block.js:15
 msgid "Out of the Block: OpenStreetMap"
-msgstr ""
+msgstr "Out of the Block: OpenStreetMap"
 
 #: src/block/block.js:19
 msgid "Map block"
-msgstr ""
+msgstr "Μπλοκ χάρτη"
 
 #: src/block/block.js:20
 msgid "Open Street Maps"
-msgstr ""
+msgstr "Open Street Maps"
 
 #: src/block/block.js:21
 msgid "Contact"
-msgstr ""
+msgstr "Επικοινωνία"
 
 #: src/block/block.js:22
 msgid "Locations"
-msgstr ""
+msgstr "Τοποθεσίες"
 
 #. Plugin URI of the plugin/theme
 msgid "https://wordpress.org/plugins/ootb-openstreetmap/"
-msgstr ""
+msgstr "https://el.wordpress.org/plugins/ootb-openstreetmap/"
 
 #. Description of the plugin/theme
 msgid ""
 "A map block for the Gutenberg Editor using OpenStreetMaps and Leaflet that "
 "needs no API keys and works out of the box."
 msgstr ""
+"Ένα μπλοκ Χάρτη για τον Gutenberg, που χρησιμοποιεί το OpenStreetMaps και "
+"το Leaflet και λειτουργεί χωρίς να χρειάζεται κλειδιά API και εγγραφές."
 
 #. Author of the plugin/theme
 msgid "gsarig"
-msgstr ""
+msgstr "gsarig"
 
 #. Author URI of the plugin/theme
 msgid "https://www.gsarigiannidis.gr"
-msgstr ""
+msgstr "https://www.gsarigiannidis.gr"

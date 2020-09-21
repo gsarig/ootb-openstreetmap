@@ -75,7 +75,6 @@ Check under the "Map behavior" section, at the blocks' settings at the sidebar o
 * Improved marker precision
 * Better handling of pinning on mobile devices
 * Overall improvements on dragging smoothness
-* Greek translation added
 
 = 1.0.1 =
 * Fixed a bug during plugin activation.

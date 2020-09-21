@@ -15,6 +15,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Localize the plugin.
+add_action( 'init', 'ootb_load_textdomain' );
+function ootb_load_textdomain() {
+	load_plugin_textdomain( 'ootb-openstreetmap', false, basename( dirname( __FILE__ ) ) . '/languages' );
+}
+
 function ootb_blocks_plugin_dirpath( $file = '' ) {
 	return plugin_dir_path( __FILE__ ) . $file;
 }

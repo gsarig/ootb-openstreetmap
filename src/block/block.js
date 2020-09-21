@@ -7,6 +7,7 @@ import './editor.scss';
 import './style.scss';
 import edit from "./edit";
 import save from "./save";
+import deprecated from "./deprecated";
 
 const {__} = wp.i18n;
 const {registerBlockType} = wp.blocks;
@@ -74,4 +75,5 @@ registerBlockType('ootb/openstreetmap', {
 	},
 	edit,
 	save,
+	deprecated,
 });

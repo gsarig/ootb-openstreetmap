@@ -78,8 +78,8 @@ class Options {
 	function ootb_options_page() {
 		add_submenu_page(
 				'options-general.php',
-				'Out of the Block',
-				'Out of the Block',
+				'Out of the Block: OpenStreetMap',
+				'OOTB OpenStreetMap',
 				'manage_options',
 				'ootb-openstreetmap',
 				[ $this, 'ootb_options_page_html' ]

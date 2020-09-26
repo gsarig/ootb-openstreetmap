@@ -52,6 +52,9 @@ const deprecated = [
 				],
 			},
 		},
+		supports: {
+			align: ['wide', 'full'],
+		},
 		save(props) {
 			const {
 				className,
@@ -67,6 +70,7 @@ const deprecated = [
 					scrollWheelZoom,
 				},
 			} = props;
+			// noinspection JSXNamespaceValidation
 			return markers ? (
 				<div className={className}>
 					<div className="ootb-openstreetmap--map"
@@ -139,6 +143,9 @@ const deprecated = [
 					[37.97155174977503, 23.72656345367432]
 				],
 			},
+		},
+		supports: {
+			align: ['wide', 'full'],
 		},
 		save(props) {
 			const {

@@ -33,6 +33,7 @@ Instead of manually adding coordinates for each one of your markers, just click-
 * Enable or disable double-click zoom.
 * Enable or disable scroll wheel zoom.
 * Set a minimum and maximum limit that the user can zoom on the frontend. Setting the same value to both fields will lock the zoom at that level.
+* Support for MapBox, as an additional Layer Provider, using your own API key.
 
 == Installation ==
 
@@ -45,11 +46,13 @@ Instead of manually adding coordinates for each one of your markers, just click-
 
 No.
 
-That's the point actually. Just install the plugin and start adding maps.
+That's the point actually. Just install the plugin and start adding maps. Keep in mind, though, that as stated on the [OpenStreetMap Tile Usage Policy](https://operations.osmfoundation.org/policies/tiles/), OSM’s own servers are run entirely on donated resources and they have strictly limited capacity. Using them on a site with low traffic will probably be fine. Nevertheless, you are advised to create an account to [MapBox](https://www.mapbox.com/) and get a free API Key.
 
 = How do I add a new location? =
 
 To add a location, left-click on the map for a while, until the cursor transforms from hand to crosshair. As long as the cursor is a crosshair, it means that releasing it will drop the marker at that spot. That slight delay has been added to prevent you from accidentally add markers all over the place with every click.
+
+Alternatively, you can use the map's place search functionality.
 
 = How do I remove a location? =
 
@@ -68,11 +71,15 @@ Check under the "Map behavior" section, at the blocks' settings at the sidebar o
 5. Adding a marker
 6. Using custom markers
 7. Place search
+8. Plugin settings page
 
 == Upgrade Notice ==
 = 1.0 =
 
 == Changelog ==
+
+= 1.2 =
+* Added MapBox as a Tile Provider
 
 = 1.1 =
 * Place search functionality added

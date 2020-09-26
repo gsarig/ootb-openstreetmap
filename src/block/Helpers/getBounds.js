@@ -13,6 +13,7 @@ export default function getBounds(props, newMarker = [], mapObj = null) {
 			boundsArr.push([newMarker.lat, newMarker.lng]);
 		}
 		const markersArr = Object.entries(markers);
+		//noinspection JSUnusedLocalSymbols
 		markersArr.forEach(([index, value]) => {
 			if (value) {
 				boundsArr.push([value.lat, value.lng]);

@@ -4,7 +4,12 @@ export default function getIcon(props) {
 			defaultIcon,
 		},
 	} = props;
-	const fallbackIcon = ootbGlobal.pluginDirUrl + 'assets/vendor/leaflet/images/marker-icon.png';
+
+	//noinspection JSUnresolvedVariable
+	const {
+		pluginDirUrl,
+	} = ootbGlobal;
+	const fallbackIcon = pluginDirUrl + 'assets/vendor/leaflet/images/marker-icon.png';
 	const horizontalPosition = defaultIcon ? Math.round(defaultIcon.width / 2) : 12;
 	const verticalPosition = defaultIcon ? Math.round(defaultIcon.height) : 41;
 	return {

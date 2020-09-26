@@ -8,8 +8,9 @@ import './style.scss';
 import edit from "./edit";
 import save from "./save";
 import deprecated from "./deprecated";
-
+//noinspection JSUnresolvedVariable
 const {__} = wp.i18n;
+//noinspection JSUnresolvedVariable
 const {registerBlockType} = wp.blocks;
 
 registerBlockType('ootb/openstreetmap', {

@@ -10,6 +10,15 @@ export default function ProviderControl({props}) {
 		},
 		setAttributes,
 	} = props;
+
+	//noinspection JSUnresolvedVariable
+	const {
+		adminUrl,
+		options: {
+			api_mapbox,
+		}
+	} = ootbGlobal;
+
 	const providers = [
 		{
 			label: __('OpenStreetMap', 'ootb-openstreetmap'),
@@ -21,24 +30,26 @@ export default function ProviderControl({props}) {
 		},
 	];
 
-	const mapBoxKey = ootbGlobal.options.api_mapbox;
 	let providerHelp = '';
 
-	if ('mapbox' === provider && !mapBoxKey) {
+	if ('mapbox' === provider && !api_mapbox) {
+		// noinspection JSXNamespaceValidation
 		providerHelp = (
 			<p>
 				{__('Make sure that you provided a valid API key on the ', 'ootb-openstreetmap')}
-				<a href={ootbGlobal.adminUrl}>{__('plugin settings', 'ootb-openstreetmap')}</a>.
+				<a href={adminUrl}>{__('plugin settings', 'ootb-openstreetmap')}</a>.
 			</p>
 		);
-	} else if ('openstreetmap' === provider) {
+	} else if (!provider || 'openstreetmap' === provider) {
+		// noinspection JSXNamespaceValidation
 		providerHelp = (
 			<p>
 				{__('Heavy usage of OSM tiles is forbidden and you might want to switch to a different tile provider. Read more on the ', 'ootb-openstreetmap')}
-				<a href={ootbGlobal.adminUrl}>{__('plugin settings', 'ootb-openstreetmap')}</a>.
+				<a href={adminUrl}>{__('plugin settings', 'ootb-openstreetmap')}</a>.
 			</p>
 		);
 	}
+
 	return (
 		<SelectControl
 			label={__('Tile Layer Provider', 'ootb-openstreetmap')}

@@ -7,7 +7,7 @@
 	maps.forEach(renderMap);
 
 	function renderMap(osmap) {
-		const provider = osmap.getAttribute('data-provider');
+		const provider = osmap.getAttribute('data-provider') || 'openstreetmap';
 		const escapedMarkers = osmap.getAttribute('data-markers');
 		const escapedDefaultIcon = osmap.getAttribute('data-marker');
 		const zoom = osmap.getAttribute('data-zoom');

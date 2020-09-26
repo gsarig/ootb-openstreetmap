@@ -29,6 +29,7 @@ Instead of manually adding coordinates for each one of your markers, just click-
 * Enable or disable double-click zoom.
 * Enable or disable scroll wheel zoom.
 * Set a minimum and maximum limit that the user can zoom on the frontend. Setting the same value to both fields will lock the zoom at that level.
+* Support for MapBox, as an additional Layer Provider, using your own API key.
 
 ## Installation
 

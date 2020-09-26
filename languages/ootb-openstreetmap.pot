@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Out of the Block: OpenStreetMap plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Out of the Block: OpenStreetMap 1.1\n"
+"Project-Id-Version: Out of the Block: OpenStreetMap 1.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ootb-openstreetmap\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-09-21T17:33:02+03:00\n"
+"POT-Creation-Date: 2020-09-26T21:11:20+03:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: ootb-openstreetmap\n"
@@ -34,94 +34,147 @@ msgstr ""
 msgid "https://www.gsarigiannidis.gr"
 msgstr ""
 
-#: src/block/block.js:19
-msgid "Map block"
+#: admin/Options.class.php:32
+msgid "Map Provider API key"
+msgstr ""
+
+#: admin/Options.class.php:38
+msgid "MapBox"
+msgstr ""
+
+#: admin/Options.class.php:53
+msgid "About OpenStreetMap usage limits"
+msgstr ""
+
+#: admin/Options.class.php:57
+msgid "As stated on the <a href=\"%1$s\" target=\"_blank\">OpenStreetMap Tile Usage Policy</a>, OSM’s own servers are run entirely on donated resources and they have strictly limited capacity. Using them on a site with low traffic will probably be fine. Nevertheless, you are advised to create an account to <a href=\"%2$s\" target=\"_blank\">MapBox</a> and get a free API Key."
+msgstr ""
+
+#: admin/Options.class.php:67
+msgid "Support forum"
+msgstr ""
+
+#: admin/Options.class.php:69
+msgid "Plugin created by <a href=\"%s\" target=\"_blank\">Giorgos Sarigiannidis</a>"
+msgstr ""
+
+#: admin/Options.class.php:112
+msgid "Save Settings"
 msgstr ""
 
 #: src/block/block.js:20
-msgid "Open Street Maps"
+msgid "Map block"
 msgstr ""
 
 #: src/block/block.js:21
-msgid "Contact"
+msgid "Open Street Maps"
 msgstr ""
 
 #: src/block/block.js:22
+msgid "Contact"
+msgstr ""
+
+#: src/block/block.js:23
 msgid "Locations"
+msgstr ""
+
+#: src/block/Controls/BehaviorControls.js:25
+msgid "Map dragging"
+msgstr ""
+
+#: src/block/Controls/BehaviorControls.js:28
+#: src/block/Controls/BehaviorControls.js:34
+#: src/block/Controls/BehaviorControls.js:40
+#: src/block/Controls/BehaviorControls.js:46
+msgid "Enabled."
+msgstr ""
+
+#: src/block/Controls/BehaviorControls.js:28
+#: src/block/Controls/BehaviorControls.js:34
+#: src/block/Controls/BehaviorControls.js:40
+#: src/block/Controls/BehaviorControls.js:46
+msgid "Disabled."
+msgstr ""
+
+#: src/block/Controls/BehaviorControls.js:31
+msgid "Touch zoom"
+msgstr ""
+
+#: src/block/Controls/BehaviorControls.js:37
+msgid "Double-click zoom"
+msgstr ""
+
+#: src/block/Controls/BehaviorControls.js:43
+msgid "Scroll Wheel zoom"
+msgstr ""
+
+#: src/block/Controls/BehaviorControls.js:49
+msgid "Minimum Zoom"
+msgstr ""
+
+#: src/block/Controls/BehaviorControls.js:63
+msgid "Maximum Zoom"
+msgstr ""
+
+#: src/block/Controls/BehaviorControls.js:75
+msgid "Tip: setting the same minimum and maximum zoom practically locks zoom at that level."
+msgstr ""
+
+#: src/block/Controls/Controls.js:16
+msgid "Main settings"
+msgstr ""
+
+#: src/block/Controls/Controls.js:22
+msgid "Map behavior"
+msgstr ""
+
+#: src/block/Controls/MainControls.js:42
+msgid "Height (pixels)"
+msgstr ""
+
+#: src/block/Controls/MainControls.js:53
+msgid "Zoom"
+msgstr ""
+
+#: src/block/Controls/MainControls.js:67
+msgid "Map Marker"
+msgstr ""
+
+#: src/block/Controls/MainControls.js:79
+msgid "Change icon"
+msgstr ""
+
+#: src/block/Controls/MainControls.js:88
+msgid "Restore default"
+msgstr ""
+
+#: src/block/Controls/ProviderControl.js:15
+msgid "OpenStreetMap"
+msgstr ""
+
+#: src/block/Controls/ProviderControl.js:19
+msgid "Mapbox"
+msgstr ""
+
+#: src/block/Controls/ProviderControl.js:30
+msgid "Make sure that you provided a valid API key on the "
+msgstr ""
+
+#: src/block/Controls/ProviderControl.js:31
+#: src/block/Controls/ProviderControl.js:38
+msgid "plugin settings"
+msgstr ""
+
+#: src/block/Controls/ProviderControl.js:37
+msgid "Heavy usage of OSM tiles is forbidden and you might want to switch to a different tile provider. Read more on the "
+msgstr ""
+
+#: src/block/Controls/ProviderControl.js:44
+msgid "Tile Layer Provider"
 msgstr ""
 
 #: src/block/Elements/Alert.js:13
 msgid "Release to drop a marker here"
-msgstr ""
-
-#: src/block/Elements/Controls.js:42
-msgid "Main settings"
-msgstr ""
-
-#: src/block/Elements/Controls.js:46
-msgid "Height (pixels)"
-msgstr ""
-
-#: src/block/Elements/Controls.js:57
-msgid "Zoom"
-msgstr ""
-
-#: src/block/Elements/Controls.js:71
-msgid "Map Marker"
-msgstr ""
-
-#: src/block/Elements/Controls.js:83
-msgid "Change icon"
-msgstr ""
-
-#: src/block/Elements/Controls.js:92
-msgid "Restore default"
-msgstr ""
-
-#: src/block/Elements/Controls.js:101
-msgid "Map behavior"
-msgstr ""
-
-#: src/block/Elements/Controls.js:105
-msgid "Map dragging"
-msgstr ""
-
-#: src/block/Elements/Controls.js:108
-#: src/block/Elements/Controls.js:114
-#: src/block/Elements/Controls.js:120
-#: src/block/Elements/Controls.js:126
-msgid "Enabled."
-msgstr ""
-
-#: src/block/Elements/Controls.js:108
-#: src/block/Elements/Controls.js:114
-#: src/block/Elements/Controls.js:120
-#: src/block/Elements/Controls.js:126
-msgid "Disabled."
-msgstr ""
-
-#: src/block/Elements/Controls.js:111
-msgid "Touch zoom"
-msgstr ""
-
-#: src/block/Elements/Controls.js:117
-msgid "Double-click zoom"
-msgstr ""
-
-#: src/block/Elements/Controls.js:123
-msgid "Scroll Wheel zoom"
-msgstr ""
-
-#: src/block/Elements/Controls.js:129
-msgid "Minimum Zoom"
-msgstr ""
-
-#: src/block/Elements/Controls.js:143
-msgid "Maximum Zoom"
-msgstr ""
-
-#: src/block/Elements/Controls.js:155
-msgid "Tip: setting the same minimum and maximum zoom practically locks zoom at that level."
 msgstr ""
 
 #: src/block/Elements/Markers.js:93

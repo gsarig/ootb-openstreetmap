@@ -7,15 +7,23 @@ export default function TileProvider({props}) {
 		},
 	} = props;
 
-	const mapBoxKey = ootbGlobal.options.api_mapbox;
-	const providers = ootbGlobal.providers;
+	//noinspection JSUnresolvedVariable
+	const {
+		options: {
+			api_mapbox,
+		},
+		providers: {
+			openstreetmap,
+			mapbox,
+		}
+	} = ootbGlobal;
 
-	let providerUrl = providers.openstreetmap.url;
-	let providerAttribution = providers.openstreetmap.attribution;
+	let providerUrl = openstreetmap.url;
+	let providerAttribution = openstreetmap.attribution;
 
-	if ('mapbox' === provider && mapBoxKey) {
-		providerUrl = providers.mapbox.url + mapBoxKey;
-		providerAttribution = providers.mapbox.attribution;
+	if ('mapbox' === provider && api_mapbox) {
+		providerUrl = mapbox.url + api_mapbox;
+		providerAttribution = mapbox.attribution;
 	}
 
 	// noinspection JSXNamespaceValidation

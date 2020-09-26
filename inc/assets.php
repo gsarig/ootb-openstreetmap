@@ -6,6 +6,8 @@
  * @package OOTB
  */
 
+use OOTB\Helper;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -36,6 +38,11 @@ function openstreetmap_non_react_block_assets() {
 			filemtime( ootb_blocks_plugin_dirpath( $openstreetmap ) ),
 			true
 		);
-
+		wp_localize_script( 'ootb-openstreetmap',
+			'ootb',
+			[
+				'providers' => Helper::providers(),
+				'options'   => get_option( 'ootb_options' ),
+			] );
 	}
 }

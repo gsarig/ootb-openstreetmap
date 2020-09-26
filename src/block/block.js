@@ -72,6 +72,10 @@ registerBlockType('ootb/openstreetmap', {
 				[37.97155174977503, 23.72656345367432]
 			],
 		},
+		provider: {
+			type: 'string',
+			default: 'openstreetmap',
+		},
 	},
 	edit,
 	save,

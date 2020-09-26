@@ -1,0 +1,46 @@
+.ootb_info {
+	padding: 1em 2em;
+	background: #fff;
+	border-radius: 5px;
+	height: min-content;
+	border: 1px solid #ededed;
+}
+
+#ootb_form h2,
+#ootb_form .form-table {
+	height: min-content;
+}
+
+.form-table th {
+	max-width: 100px;
+}
+
+#ootb_form .form-table td {
+	vertical-align: top;
+}
+
+#api_mapbox {
+	width: 100%;
+}
+
+.ootb-colophon {
+	border-top: 1px solid #ddd;
+	padding-top: 1em;
+	margin-top: 2em;
+	font-size: 90%;
+}
+
+@media all and (min-width: 760px) {
+	#ootb_form form {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-column-gap: 1em;
+		grid-template-rows: auto auto auto;
+	}
+
+	.ootb_info {
+		grid-row-end: 5;
+		grid-row-start: 1;
+		grid-column-start: 2;
+	}
+}

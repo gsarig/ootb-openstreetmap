@@ -8,6 +8,8 @@
  * @package OOTB
  */
 
+use OOTB\Helper;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -42,6 +44,9 @@ function openstreetmap_ootb_block_assets() { // phpcs:ignore
 		[
 			'pluginDirPath' => plugin_dir_path( __DIR__ ),
 			'pluginDirUrl'  => plugin_dir_url( __DIR__ ),
+			'options'       => get_option( 'ootb_options' ),
+			'adminUrl'      => admin_url( 'options-general.php?page=ootb-openstreetmap' ),
+			'providers'     => Helper::providers(),
 		]
 	);
 

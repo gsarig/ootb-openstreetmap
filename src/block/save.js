@@ -14,11 +14,13 @@ export default function save(props) {
 			touchZoom,
 			doubleClickZoom,
 			scrollWheelZoom,
+			provider,
 		},
 	} = props;
 	return markers ? (
 		<div className={className}>
 			<div className="ootb-openstreetmap--map"
+				 data-provider={provider}
 				 data-markers={escape(JSON.stringify(markers))} // Escape because of the potential HTML in the output.
 				 data-bounds={JSON.stringify(centerMap(props))}
 				 data-zoom={zoom}

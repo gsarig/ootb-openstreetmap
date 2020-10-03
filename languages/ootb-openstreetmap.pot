@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Out of the Block: OpenStreetMap plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Out of the Block: OpenStreetMap 1.2\n"
+"Project-Id-Version: Out of the Block: OpenStreetMap 1.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ootb-openstreetmap\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-09-26T21:11:20+03:00\n"
+"POT-Creation-Date: 2020-10-04T00:51:57+03:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: ootb-openstreetmap\n"
@@ -62,26 +62,107 @@ msgstr ""
 msgid "Save Settings"
 msgstr ""
 
-#: src/block/block.js:20
+#: ootb-openstreetmap.php:30
+msgid "Settings"
+msgstr ""
+
+#: dist/blocks.build.js:1
+#: src/block/block.js:21
 msgid "Map block"
 msgstr ""
 
-#: src/block/block.js:21
+#: dist/blocks.build.js:1
+#: src/block/block.js:22
 msgid "Open Street Maps"
 msgstr ""
 
-#: src/block/block.js:22
+#: dist/blocks.build.js:1
+#: src/block/block.js:23
 msgid "Contact"
 msgstr ""
 
-#: src/block/block.js:23
+#: dist/blocks.build.js:1
+#: src/block/block.js:24
 msgid "Locations"
 msgstr ""
 
+#: dist/blocks.build.js:1
+#: src/block/Controls/Controls.js:16
+msgid "Main settings"
+msgstr ""
+
+#: dist/blocks.build.js:1
+#: src/block/Controls/Controls.js:22
+msgid "Map behavior"
+msgstr ""
+
+#: dist/blocks.build.js:1
+#: src/block/Controls/MainControls.js:42
+msgid "Height (pixels)"
+msgstr ""
+
+#: dist/blocks.build.js:1
+#: src/block/Controls/MainControls.js:53
+msgid "Zoom"
+msgstr ""
+
+#: dist/blocks.build.js:1
+#: src/block/Controls/MainControls.js:67
+msgid "Map Marker"
+msgstr ""
+
+#: dist/blocks.build.js:1
+#: src/block/Controls/MainControls.js:79
+msgid "Change icon"
+msgstr ""
+
+#: dist/blocks.build.js:1
+#: src/block/Controls/MainControls.js:88
+msgid "Restore default"
+msgstr ""
+
+#: dist/blocks.build.js:1
+#: src/block/Controls/ProviderControl.js:24
+msgid "OpenStreetMap"
+msgstr ""
+
+#: dist/blocks.build.js:1
+#: src/block/Controls/ProviderControl.js:28
+msgid "Mapbox"
+msgstr ""
+
+#: dist/blocks.build.js:1
+#: src/block/Controls/ProviderControl.js:32
+msgid "Stamen"
+msgstr ""
+
+#: dist/blocks.build.js:1
+#: src/block/Controls/ProviderControl.js:51
+msgid "Heavy usage of OSM tiles is forbidden and you might want to switch to a different tile provider. Read more on the "
+msgstr ""
+
+#: dist/blocks.build.js:1
+#: src/block/Controls/ProviderControl.js:44
+#: src/block/Controls/ProviderControl.js:52
+msgid "plugin settings"
+msgstr ""
+
+#: dist/blocks.build.js:1
+#: src/block/Controls/ProviderControl.js:43
+msgid "Make sure that you provided a valid API key on the "
+msgstr ""
+
+#: dist/blocks.build.js:1
+#: src/block/Controls/ProviderControl.js:59
+msgid "Tile Layer Provider"
+msgstr ""
+
+#: dist/blocks.build.js:1
 #: src/block/Controls/BehaviorControls.js:25
 msgid "Map dragging"
 msgstr ""
 
+#: dist/blocks.build.js:1
 #: src/block/Controls/BehaviorControls.js:28
 #: src/block/Controls/BehaviorControls.js:34
 #: src/block/Controls/BehaviorControls.js:40
@@ -89,6 +170,7 @@ msgstr ""
 msgid "Enabled."
 msgstr ""
 
+#: dist/blocks.build.js:1
 #: src/block/Controls/BehaviorControls.js:28
 #: src/block/Controls/BehaviorControls.js:34
 #: src/block/Controls/BehaviorControls.js:40
@@ -96,107 +178,67 @@ msgstr ""
 msgid "Disabled."
 msgstr ""
 
+#: dist/blocks.build.js:1
 #: src/block/Controls/BehaviorControls.js:31
 msgid "Touch zoom"
 msgstr ""
 
+#: dist/blocks.build.js:1
 #: src/block/Controls/BehaviorControls.js:37
 msgid "Double-click zoom"
 msgstr ""
 
+#: dist/blocks.build.js:1
 #: src/block/Controls/BehaviorControls.js:43
 msgid "Scroll Wheel zoom"
 msgstr ""
 
+#: dist/blocks.build.js:1
 #: src/block/Controls/BehaviorControls.js:49
 msgid "Minimum Zoom"
 msgstr ""
 
+#: dist/blocks.build.js:1
 #: src/block/Controls/BehaviorControls.js:63
 msgid "Maximum Zoom"
 msgstr ""
 
+#: dist/blocks.build.js:1
 #: src/block/Controls/BehaviorControls.js:75
 msgid "Tip: setting the same minimum and maximum zoom practically locks zoom at that level."
 msgstr ""
 
-#: src/block/Controls/Controls.js:16
-msgid "Main settings"
-msgstr ""
-
-#: src/block/Controls/Controls.js:22
-msgid "Map behavior"
-msgstr ""
-
-#: src/block/Controls/MainControls.js:42
-msgid "Height (pixels)"
-msgstr ""
-
-#: src/block/Controls/MainControls.js:53
-msgid "Zoom"
-msgstr ""
-
-#: src/block/Controls/MainControls.js:67
-msgid "Map Marker"
-msgstr ""
-
-#: src/block/Controls/MainControls.js:79
-msgid "Change icon"
-msgstr ""
-
-#: src/block/Controls/MainControls.js:88
-msgid "Restore default"
-msgstr ""
-
-#: src/block/Controls/ProviderControl.js:15
-msgid "OpenStreetMap"
-msgstr ""
-
-#: src/block/Controls/ProviderControl.js:19
-msgid "Mapbox"
-msgstr ""
-
-#: src/block/Controls/ProviderControl.js:30
-msgid "Make sure that you provided a valid API key on the "
-msgstr ""
-
-#: src/block/Controls/ProviderControl.js:31
-#: src/block/Controls/ProviderControl.js:38
-msgid "plugin settings"
-msgstr ""
-
-#: src/block/Controls/ProviderControl.js:37
-msgid "Heavy usage of OSM tiles is forbidden and you might want to switch to a different tile provider. Read more on the "
-msgstr ""
-
-#: src/block/Controls/ProviderControl.js:44
-msgid "Tile Layer Provider"
-msgstr ""
-
-#: src/block/Elements/Alert.js:13
-msgid "Release to drop a marker here"
-msgstr ""
-
-#: src/block/Elements/Markers.js:93
-msgid "Write something"
-msgstr ""
-
-#: src/block/Elements/Markers.js:101
-msgid "Remove this marker"
-msgstr ""
-
-#: src/block/Elements/Markers.js:103
-msgid "Remove"
-msgstr ""
-
+#: dist/blocks.build.js:1
 #: src/block/Elements/SearchBox.js:70
 msgid "Enter your keywords..."
 msgstr ""
 
+#: dist/blocks.build.js:1
 #: src/block/Elements/SearchBox.js:78
 msgid "Clear results"
 msgstr ""
 
+#: dist/blocks.build.js:1
 #: src/block/Elements/SearchBox.js:79
 msgid "Find locations"
+msgstr ""
+
+#: dist/blocks.build.js:1
+#: src/block/Elements/Markers.js:93
+msgid "Write something"
+msgstr ""
+
+#: dist/blocks.build.js:1
+#: src/block/Elements/Markers.js:101
+msgid "Remove this marker"
+msgstr ""
+
+#: dist/blocks.build.js:1
+#: src/block/Elements/Markers.js:103
+msgid "Remove"
+msgstr ""
+
+#: dist/blocks.build.js:1
+#: src/block/Elements/Alert.js:13
+msgid "Release to drop a marker here"
 msgstr ""

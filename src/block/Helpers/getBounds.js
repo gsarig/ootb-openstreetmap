@@ -7,21 +7,20 @@ export default function getBounds(props, newMarker = [], mapObj = null) {
 		},
 		setAttributes,
 	} = props;
-	if (markers && markers.length > 0) {
-		let boundsArr = [];
-		if (newMarker && 'undefined' !== typeof newMarker.lat) {
-			boundsArr.push([newMarker.lat, newMarker.lng]);
+
+	let boundsArr = [];
+	if (newMarker && 'undefined' !== typeof newMarker.lat) {
+		boundsArr.push([newMarker.lat, newMarker.lng]);
+	}
+	const markersArr = Object.entries(markers);
+	//noinspection JSUnusedLocalSymbols
+	markersArr.forEach(([index, value]) => {
+		if (value) {
+			boundsArr.push([value.lat, value.lng]);
 		}
-		const markersArr = Object.entries(markers);
-		//noinspection JSUnusedLocalSymbols
-		markersArr.forEach(([index, value]) => {
-			if (value) {
-				boundsArr.push([value.lat, value.lng]);
-			}
-		});
-		if (boundsArr.length > 1) {
-			setAttributes({bounds: boundsArr});
-			fitBounds(boundsArr, mapObj)
-		}
+	});
+	if (boundsArr.length) {
+		setAttributes({bounds: boundsArr});
+		fitBounds(boundsArr, mapObj)
 	}
 }

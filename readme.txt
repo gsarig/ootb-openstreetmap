@@ -5,7 +5,7 @@ Tags: Map, Maps, OpenStreetMap, Open Street Maps, Leaflet, Google Maps
 Requires at least: 5.0
 Tested up to: 5.5
 Requires PHP: 7.2
-Stable tag: 1.2
+Stable tag: 1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,7 +33,7 @@ Instead of manually adding coordinates for each one of your markers, just click-
 * Enable or disable double-click zoom.
 * Enable or disable scroll wheel zoom.
 * Set a minimum and maximum limit that the user can zoom on the frontend. Setting the same value to both fields will lock the zoom at that level.
-* Support for MapBox, as an additional Layer Provider, using your own API key.
+* Support for other Layer Providers: MapBox (using your own API key) and Stamen.
 
 == Installation ==
 
@@ -77,6 +77,11 @@ Check under the "Map behavior" section, at the blocks' settings at the sidebar o
 = 1.0 =
 
 == Changelog ==
+
+= 1.3 =
+* Added Stamen as a Tile Provider
+* Fixed a bug with map centering when there is only one location
+* Fixed wrong link on attributions
 
 = 1.2 =
 * Added MapBox as a Tile Provider

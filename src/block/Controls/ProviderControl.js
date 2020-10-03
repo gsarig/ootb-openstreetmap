@@ -28,6 +28,10 @@ export default function ProviderControl({props}) {
 			label: __('Mapbox', 'ootb-openstreetmap'),
 			value: 'mapbox',
 		},
+		{
+			label: __('Stamen', 'ootb-openstreetmap'),
+			value: 'stamen',
+		},
 	];
 
 	let providerHelp = '';

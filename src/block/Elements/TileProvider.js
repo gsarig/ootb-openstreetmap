@@ -15,6 +15,7 @@ export default function TileProvider({props}) {
 		providers: {
 			openstreetmap,
 			mapbox,
+			stamen,
 		}
 	} = ootbGlobal;
 
@@ -24,6 +25,10 @@ export default function TileProvider({props}) {
 	if ('mapbox' === provider && api_mapbox) {
 		providerUrl = mapbox.url + api_mapbox;
 		providerAttribution = mapbox.attribution;
+	}
+	if ('stamen' === provider) {
+		providerUrl = stamen.url;
+		providerAttribution = stamen.attribution;
 	}
 
 	// noinspection JSXNamespaceValidation

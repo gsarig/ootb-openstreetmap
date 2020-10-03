@@ -14,7 +14,7 @@ const {__} = wp.i18n;
 const {registerBlockType} = wp.blocks;
 
 registerBlockType('ootb/openstreetmap', {
-	title: __('Out of the Block: OpenStreetMap'),
+	title: __('OpenStreetMap by Out of the Block'),
 	icon: 'location-alt',
 	category: 'common',
 	keywords: [

@@ -1,7 +1,7 @@
 === Out of the Block: OpenStreetMap ===
 Contributors: gsarig
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MZR4JSRUMH5EA&source=url
-Tags: Map, Maps, OpenStreetMap, Open Street Maps, Leaflet, Google Maps, block
+Tags: Map, OpenStreetMap, Leaflet, Google Maps, block
 Requires at least: 5.0
 Tested up to: 5.6
 Requires PHP: 7.2

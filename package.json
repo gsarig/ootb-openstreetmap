@@ -1,0 +1,20 @@
+{
+  "name": "openstreetmap-cgb-guten-block",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "cgb-scripts start",
+    "build": "cgb-scripts build",
+    "eject": "cgb-scripts eject"
+  },
+  "dependencies": {
+    "cgb-scripts": "1.23.1",
+    "leaflet": "^1.7.1",
+    "react-device-detect": "^1.13.1",
+    "react-leaflet": "^2.7.0"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "merge-stream": "^2.0.0"
+  }
+}

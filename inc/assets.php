@@ -75,7 +75,7 @@ if ( ! function_exists( 'has_block_in_reusable' ) ) {
 		}
 
 		foreach ( $blocks as $block ) {
-			if ( $block['blockName'] === 'core/block' && ! empty( $block['attrs']['ref'] ) ) {
+			if ( 'core/block' === $block['blockName'] && ! empty( $block['attrs']['ref'] ) ) {
 				if ( has_block( $block_name, $block['attrs']['ref'] ) ) {
 					return true;
 				}

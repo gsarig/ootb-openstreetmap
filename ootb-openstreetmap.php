@@ -3,7 +3,7 @@
  * Plugin Name: Out of the Block: OpenStreetMap
  * Plugin URI: https://wordpress.org/plugins/ootb-openstreetmap/
  * Description: A map block for the Gutenberg Editor using OpenStreetMaps and Leaflet that needs no API keys and works out of the box.
- * Version: 1.3.1
+ * Version: 1.3.2
  * Author: gsarig
  * Author URI: https://www.gsarigiannidis.gr
  * Text Domain: ootb-openstreetmap

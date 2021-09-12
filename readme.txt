@@ -3,9 +3,9 @@ Contributors: gsarig
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MZR4JSRUMH5EA&source=url
 Tags: Map, OpenStreetMap, Leaflet, Google Maps, block
 Requires at least: 5.0
-Tested up to: 5.6
+Tested up to: 5.8
 Requires PHP: 7.2
-Stable tag: 1.3
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,6 +77,9 @@ Check under the "Map behavior" section, at the blocks' settings at the sidebar o
 = 1.0 =
 
 == Changelog ==
+
+= 1.3.1 =
+* Fixes a bug where the block's scripts didn't load when used as a reusable block
 
 = 1.3 =
 * Added Stamen as a Tile Provider

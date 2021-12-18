@@ -101,7 +101,7 @@ class Helper {
 		}
 
 		foreach ( $blocks as $block ) {
-			if ( has_block( $block_name, $block['content'] ) ) {
+			if ( is_array( $block ) && isset( $block['content'] ) && has_block( $block_name, $block['content'] ) ) {
 				return true;
 			}
 		}

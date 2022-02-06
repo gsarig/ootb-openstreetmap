@@ -5,7 +5,7 @@ Tags: Map, OpenStreetMap, Leaflet, Google Maps, block
 Requires at least: 5.0
 Tested up to: 5.9
 Requires PHP: 7.2
-Stable tag: 1.3.4
+Stable tag: 1.3.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -77,6 +77,10 @@ Check under the "Map behavior" section, at the blocks' settings at the sidebar o
 = 1.0 =
 
 == Changelog ==
+
+= 1.3.5 =
+* Fixes a PHP warning in the widgets area of the admin
+* Updates translations
 
 = 1.3.4 =
 * Fixes a PHP warning (more info: https://wordpress.org/support/topic/error-under-php8-2/)

@@ -26,7 +26,7 @@ function openstreetmap_ootb_block_assets() { // phpcs:ignore
 	wp_register_script(
 		'ootb-openstreetmap-block-js',
 		plugins_url( '/dist/blocks.build.js', dirname( __FILE__ ) ),
-		[ 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor' ],
+		[ 'wp-blocks', 'wp-i18n', 'wp-element' ],
 		filemtime( plugin_dir_path( __DIR__ ) . 'dist/blocks.build.js' ),
 		true
 	);
@@ -49,6 +49,7 @@ function openstreetmap_ootb_block_assets() { // phpcs:ignore
 			'providers'     => Helper::providers(),
 		]
 	);
+	wp_set_script_translations( 'ootb-openstreetmap-script', 'ootb-openstreetmap', plugin_dir_path( __DIR__ ) . 'languages' );
 
 	register_block_type(
 		OOTB_BLOCK_NAME,

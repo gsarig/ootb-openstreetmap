@@ -1,17 +1,17 @@
-# Copyright (C) 2020 gsarig
+# Copyright (C) 2022 gsarig
 # This file is distributed under the same license as the Out of the Block: OpenStreetMap plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Out of the Block: OpenStreetMap 1.3\n"
+"Project-Id-Version: Out of the Block: OpenStreetMap 1.3.5\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ootb-openstreetmap\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-10-04T00:51:57+03:00\n"
+"POT-Creation-Date: 2022-01-31T00:09:30+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.4.0\n"
+"X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: ootb-openstreetmap\n"
 
 #. Plugin Name of the plugin
@@ -62,7 +62,7 @@ msgstr ""
 msgid "Save Settings"
 msgstr ""
 
-#: ootb-openstreetmap.php:30
+#: ootb-openstreetmap.php:32
 msgid "Settings"
 msgstr ""
 
@@ -122,38 +122,32 @@ msgid "Restore default"
 msgstr ""
 
 #: dist/blocks.build.js:1
-#: src/block/Controls/ProviderControl.js:24
+#: src/block/Controls/ProviderControl.js:26
 msgid "OpenStreetMap"
 msgstr ""
 
 #: dist/blocks.build.js:1
-#: src/block/Controls/ProviderControl.js:28
+#: src/block/Controls/ProviderControl.js:30
 msgid "Mapbox"
 msgstr ""
 
 #: dist/blocks.build.js:1
-#: src/block/Controls/ProviderControl.js:32
+#: src/block/Controls/ProviderControl.js:34
 msgid "Stamen"
 msgstr ""
 
 #: dist/blocks.build.js:1
-#: src/block/Controls/ProviderControl.js:51
-msgid "Heavy usage of OSM tiles is forbidden and you might want to switch to a different tile provider. Read more on the "
+#: src/block/Controls/ProviderControl.js:60
+msgid "Heavy usage of OSM tiles is forbidden and you might want to switch to a different tile provider. Read more on the <a>plugin settings</a>."
 msgstr ""
 
 #: dist/blocks.build.js:1
-#: src/block/Controls/ProviderControl.js:44
-#: src/block/Controls/ProviderControl.js:52
-msgid "plugin settings"
+#: src/block/Controls/ProviderControl.js:47
+msgid "Make sure that you provided a valid API key on the <a>plugin settings</a>."
 msgstr ""
 
 #: dist/blocks.build.js:1
-#: src/block/Controls/ProviderControl.js:43
-msgid "Make sure that you provided a valid API key on the "
-msgstr ""
-
-#: dist/blocks.build.js:1
-#: src/block/Controls/ProviderControl.js:59
+#: src/block/Controls/ProviderControl.js:71
 msgid "Tile Layer Provider"
 msgstr ""
 
@@ -164,17 +158,13 @@ msgstr ""
 
 #: dist/blocks.build.js:1
 #: src/block/Controls/BehaviorControls.js:28
-#: src/block/Controls/BehaviorControls.js:34
-#: src/block/Controls/BehaviorControls.js:40
-#: src/block/Controls/BehaviorControls.js:46
+msgctxt "Map dragging setting"
 msgid "Enabled."
 msgstr ""
 
 #: dist/blocks.build.js:1
 #: src/block/Controls/BehaviorControls.js:28
-#: src/block/Controls/BehaviorControls.js:34
-#: src/block/Controls/BehaviorControls.js:40
-#: src/block/Controls/BehaviorControls.js:46
+msgctxt "Map dragging setting"
 msgid "Disabled."
 msgstr ""
 
@@ -184,13 +174,49 @@ msgid "Touch zoom"
 msgstr ""
 
 #: dist/blocks.build.js:1
+#: src/block/Controls/BehaviorControls.js:34
+msgctxt "Touch zoom setting"
+msgid "Enabled."
+msgstr ""
+
+#: dist/blocks.build.js:1
+#: src/block/Controls/BehaviorControls.js:34
+msgctxt "Touch zoom setting"
+msgid "Disabled."
+msgstr ""
+
+#: dist/blocks.build.js:1
 #: src/block/Controls/BehaviorControls.js:37
 msgid "Double-click zoom"
 msgstr ""
 
 #: dist/blocks.build.js:1
+#: src/block/Controls/BehaviorControls.js:40
+msgctxt "Double-click zoom setting"
+msgid "Enabled."
+msgstr ""
+
+#: dist/blocks.build.js:1
+#: src/block/Controls/BehaviorControls.js:40
+msgctxt "Double-click zoom setting"
+msgid "Disabled."
+msgstr ""
+
+#: dist/blocks.build.js:1
 #: src/block/Controls/BehaviorControls.js:43
 msgid "Scroll Wheel zoom"
+msgstr ""
+
+#: dist/blocks.build.js:1
+#: src/block/Controls/BehaviorControls.js:46
+msgctxt "Scroll Wheel zoom setting"
+msgid "Enabled."
+msgstr ""
+
+#: dist/blocks.build.js:1
+#: src/block/Controls/BehaviorControls.js:46
+msgctxt "Scroll Wheel zoom setting"
+msgid "Disabled."
 msgstr ""
 
 #: dist/blocks.build.js:1

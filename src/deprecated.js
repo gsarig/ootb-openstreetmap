@@ -1,6 +1,6 @@
-import centerMap from "./Helpers/centerMap";
-import getIconDeprecated from "./Deprecated/getIconDeprecated";
-import getIcon from "./Helpers/getIcon";
+import centerMap from './Helpers/centerMap';
+import getIconDeprecated from './Deprecated/getIconDeprecated';
+import getIcon from './Helpers/getIcon';
 
 const deprecated = [
 	{

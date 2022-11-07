@@ -2,7 +2,7 @@
 /**
  * Plugin Options
  *
- * @package OOTB
+ * @package ootb-openstreetmap
  * @since 1.2
  */
 

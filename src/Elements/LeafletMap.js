@@ -1,11 +1,10 @@
-import centerMap from "../Helpers/centerMap";
-import TileProvider from "./TileProvider";
-import Markers from "./Markers";
-import {Map} from "react-leaflet";
-import {isMobile, isSafari} from "react-device-detect";
-import getBounds from "../Helpers/getBounds";
-// noinspection JSUnresolvedVariable
-const {useRef} = wp.element;
+import centerMap from '../Helpers/centerMap';
+import TileProvider from './TileProvider';
+import Markers from './Markers';
+import {Map} from 'react-leaflet';
+import {isMobile, isSafari} from 'react-device-detect';
+import getBounds from '../Helpers/getBounds';
+import {useRef, useEffect} from '@wordpress/element';
 
 export default function LeafletMap({props}) {
 	const {
@@ -21,9 +20,12 @@ export default function LeafletMap({props}) {
 	} = props;
 
 	const inputRef = useRef();
-	if ('undefined' !== typeof inputRef.current && !mapObj) {
-		setAttributes({mapObj: inputRef.current});
-	}
+
+	useEffect(() => {
+		if ('undefined' !== typeof inputRef.current && ('undefined' === typeof mapObj || !mapObj.length || mapObj !== inputRef.current)) {
+			setAttributes({mapObj: inputRef.current});
+		}
+	});
 
 	const timeout = 300;
 	let delay;
@@ -54,9 +56,11 @@ export default function LeafletMap({props}) {
 	const addMarker = (e) => {
 		clearTimeout(delay);
 		if (!!addingMarker) {
+			const lat = e.latlng.lat;
+			const lng = e.latlng.lng;
 			const newMarker = {
-				lat: e.latlng.lat,
-				lng: e.latlng.lng,
+				lat: lat.toString(),
+				lng: lng.toString(),
 				text: '',
 			};
 			setAttributes({

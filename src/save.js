@@ -1,9 +1,8 @@
 import centerMap from "./Helpers/centerMap";
 import getIcon from "./Helpers/getIcon";
 
-export default function save(props) {
+export default function save(props, className) {
 	const {
-		className,
 		attributes: {
 			mapHeight,
 			markers,

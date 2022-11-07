@@ -3,7 +3,7 @@
  * Enqueue frontend assets
  *
  * @since   1.0.0
- * @package OOTB
+ * @package ootb-openstreetmap
  */
 
 use OOTB\Helper;

@@ -3,7 +3,7 @@
  * Helper functions
  *
  * @since   1.2
- * @package OOTB
+ * @package ootb-openstreetmap
  */
 
 namespace OOTB;

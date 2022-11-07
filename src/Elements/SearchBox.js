@@ -1,10 +1,7 @@
-import SearchResults from "./SearchResults";
-// noinspection JSUnresolvedVariable
-const {__} = wp.i18n;
-// noinspection JSUnresolvedVariable
-const {TextControl, Button} = wp.components;
-// noinspection JSUnresolvedVariable
-const {Fragment} = wp.element;
+import SearchResults from './SearchResults';
+import {__} from '@wordpress/i18n';
+import {TextControl, Button} from '@wordpress/components';
+import {Fragment} from '@wordpress/element';
 
 export default function SearchBox({props}) {
 	const {

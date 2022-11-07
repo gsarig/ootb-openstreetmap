@@ -1,10 +1,10 @@
-import ProviderControl from "./ProviderControl";
-import getIcon from "../Helpers/getIcon";
+import ProviderControl from './ProviderControl';
+import getIcon from '../Helpers/getIcon';
 
 // noinspection JSUnresolvedVariable
-const {__} = wp.i18n;
+import {__} from '@wordpress/i18n';
 // noinspection JSUnresolvedVariable
-const {Fragment} = wp.element;
+import {Fragment} from '@wordpress/element';
 // noinspection JSUnresolvedVariable
 const {RangeControl, Button} = wp.components;
 // noinspection JSUnresolvedVariable

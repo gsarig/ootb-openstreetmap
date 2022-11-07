@@ -1,9 +1,6 @@
-// noinspection JSUnresolvedVariable
-const {__} = wp.i18n;
-// noinspection JSUnresolvedVariable
-const {SelectControl} = wp.components;
-// noinspection JSUnresolvedVariable
-const {createInterpolateElement} = wp.element;
+import {__} from '@wordpress/i18n';
+import {SelectControl} from '@wordpress/components';
+import {createInterpolateElement} from '@wordpress/element';
 
 export default function ProviderControl({props}) {
     const {
@@ -41,7 +38,7 @@ export default function ProviderControl({props}) {
     if ('mapbox' === provider && !api_mapbox) {
         // noinspection JSXNamespaceValidation
         providerHelp = (
-            <p>
+            <span>
                 {
                     createInterpolateElement(
                         __('Make sure that you provided a valid API key on the <a>plugin settings</a>.', 'ootb-openstreetmap'),
@@ -50,19 +47,19 @@ export default function ProviderControl({props}) {
                         }
                     )
                 }
-            </p>
+            </span>
         );
     } else if (!provider || 'openstreetmap' === provider) {
         // noinspection JSXNamespaceValidation
         providerHelp = (
-            <p>
+            <span>
                 {createInterpolateElement(
-                    __('Heavy usage of OSM tiles is forbidden and you might want to switch to a different tile provider. Read more on the <a>plugin settings</a>.', 'ootb-openstreetmap'),
+                    __('Heavy usage of OSM tiles is forbidden, and you might want to switch to a different tile provider. Read more on the <a>plugin settings</a>.', 'ootb-openstreetmap'),
                     {
                         a: <a href={adminUrl}/>,
                     }
                 )}
-            </p>
+            </span>
         );
     }
 

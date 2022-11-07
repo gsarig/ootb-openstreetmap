@@ -1,8 +1,8 @@
-import MainControls from "./MainControls";
-import BehaviorControls from "./BehaviorControls";
+import MainControls from './MainControls';
+import BehaviorControls from './BehaviorControls';
 
 // noinspection JSUnresolvedVariable
-const {__} = wp.i18n;
+import {__} from '@wordpress/i18n';
 // noinspection JSUnresolvedVariable
 const {PanelBody} = wp.components;
 // noinspection JSUnresolvedVariable

@@ -1,0 +1,11 @@
+/** * The following styles get applied both on the front of your site * and in the editor. */
+.ootb-openstreetmap--map {
+  width: 100%;
+}
+.ootb-openstreetmap--map .leaflet-popup-content {
+  width: 150px;
+}
+.ootb-openstreetmap--map .leaflet-popup-content p {
+  margin: 0.5em 0;
+}
+

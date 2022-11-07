@@ -1,9 +1,6 @@
-// noinspection JSUnresolvedVariable
-const {__, _x} = wp.i18n;
-// noinspection JSUnresolvedVariable
-const {Fragment} = wp.element;
-// noinspection JSUnresolvedVariable
-const {RangeControl, ToggleControl} = wp.components;
+import {__, _x} from '@wordpress/i18n';
+import {Fragment} from '@wordpress/element';
+import {RangeControl, ToggleControl} from '@wordpress/components';
 
 export default function BehaviorControls({props}) {
     const {

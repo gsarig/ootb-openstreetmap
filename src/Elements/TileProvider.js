@@ -1,4 +1,4 @@
-import {TileLayer} from "react-leaflet";
+import {TileLayer} from 'react-leaflet';
 
 export default function TileProvider({props}) {
 	const {

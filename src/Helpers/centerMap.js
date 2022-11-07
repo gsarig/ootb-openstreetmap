@@ -1,4 +1,4 @@
-import getBoundsCenter from "./getBoundsCenter";
+import getBoundsCenter from './getBoundsCenter';
 
 export default function centerMap(props) {
 	const {

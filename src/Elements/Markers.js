@@ -1,14 +1,11 @@
 import L from 'leaflet';
-import {Marker, Popup} from "react-leaflet";
-import getIcon from "../Helpers/getIcon";
-import getBounds from "../Helpers/getBounds";
+import {Marker, Popup} from 'react-leaflet';
+import getIcon from '../Helpers/getIcon';
+import getBounds from '../Helpers/getBounds';
 
-// noinspection JSUnresolvedVariable
-const {__} = wp.i18n;
-// noinspection JSUnresolvedVariable
-const {RichText} = wp.blockEditor;
-// noinspection JSUnresolvedVariable
-const {Button} = wp.components;
+import {__} from '@wordpress/i18n';
+import {RichText} from '@wordpress/block-editor';
+import {Button} from '@wordpress/components';
 
 export default function Markers({props}) {
 	const {
@@ -59,6 +56,7 @@ export default function Markers({props}) {
 		// noinspection JSXNamespaceValidation
 		return (
 			<Marker
+				key={index}
 				position={[marker.lat, marker.lng]}
 				icon={markerIcon}
 				onMouseDown={onClickStart}
@@ -95,7 +93,7 @@ export default function Markers({props}) {
 					<div className="ootb-openstreetmap--marker-remove">
 						<Button
 							onClick={removeMarker}
-							dataIndex={index}
+							dataindex={index}
 							icon="trash"
 							showTooltip={true}
 							label={__('Remove this marker', 'ootb-openstreetmap')}

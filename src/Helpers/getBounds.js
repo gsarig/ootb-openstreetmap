@@ -1,6 +1,6 @@
-import fitBounds from "./fitBounds";
+import fitBounds from './fitBounds';
 
-export default function getBounds(props, newMarker = [], mapObj = null) {
+export default function getBounds(props, newMarker = [], mapObject = null) {
 	const {
 		attributes: {
 			markers,
@@ -21,6 +21,6 @@ export default function getBounds(props, newMarker = [], mapObj = null) {
 	});
 	if (boundsArr.length) {
 		setAttributes({bounds: boundsArr});
-		fitBounds(boundsArr, mapObj)
+		fitBounds(boundsArr, mapObject);
 	}
 }

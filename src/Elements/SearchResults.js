@@ -1,7 +1,5 @@
-import getBounds from "../Helpers/getBounds";
-
-// noinspection JSUnresolvedVariable
-const {Button} = wp.components;
+import getBounds from '../Helpers/getBounds';
+import {Button} from '@wordpress/components';
 
 export default function SearchResults({props}) {
 	const {
@@ -17,8 +15,8 @@ export default function SearchResults({props}) {
 		const index = e.target.getAttribute('data-index');
 		const {display_name, lon, lat} = searchResults[index];
 		const newMarker = {
-			lat: lat,
-			lng: lon,
+			lat: lat.toString(),
+			lng: lon.toString(),
 			text: `<p>${display_name}</p>`,
 		};
 		setAttributes({
@@ -41,6 +39,7 @@ export default function SearchResults({props}) {
 			// noinspection JSXNamespaceValidation
 			return (
 				<Button
+					key={index}
 					autoFocus={(index === 0)}
 					onClick={addMarker}
 					data-index={index}

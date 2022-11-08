@@ -1,4 +1,5 @@
 import getBounds from '../Helpers/getBounds';
+// noinspection NpmUsedModulesInstalled
 import {Button} from '@wordpress/components';
 
 export default function SearchResults({props}) {
@@ -27,7 +28,8 @@ export default function SearchResults({props}) {
 			keywords: '',
 			searchResults: [],
 		});
-		getBounds(props, newMarker, mapObj.leafletElement);
+		setAttributes({shouldUpdateBounds: true});
+		getBounds(props, newMarker, mapObj);
 		if (inputRef) {
 			inputRef.target.focus();
 		}
@@ -36,7 +38,6 @@ export default function SearchResults({props}) {
 	const resultsList = () => {
 		return searchResults.map((item, index) => {
 			const {display_name} = item;
-			// noinspection JSXNamespaceValidation
 			return (
 				<Button
 					key={index}

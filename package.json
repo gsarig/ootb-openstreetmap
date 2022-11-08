@@ -18,8 +18,8 @@
 		"@wordpress/scripts": "^24.5.0"
 	},
 	"dependencies": {
-		"leaflet": "1.7.1",
-		"react-device-detect": "^1.13.1",
-		"react-leaflet": "2.7.0"
+		"leaflet": "^1.9.2",
+		"react-device-detect": "^2.2.2",
+		"react-leaflet": "^4.1.0"
 	}
 }

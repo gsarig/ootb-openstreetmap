@@ -1,12 +1,1444 @@
+/******/ (function() { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./src/Controls/BehaviorControls.js":
+/*!******************************************!*\
+  !*** ./src/Controls/BehaviorControls.js ***!
+  \******************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ BehaviorControls; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
+
+// noinspection NpmUsedModulesInstalled
+
+
+
+
+function BehaviorControls(_ref) {
+  let {
+    props
+  } = _ref;
+  const {
+    attributes: {
+      minZoom,
+      maxZoom,
+      dragging,
+      touchZoom,
+      doubleClickZoom,
+      scrollWheelZoom
+    },
+    setAttributes
+  } = props;
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Map dragging', 'ootb-openstreetmap'),
+    checked: !!dragging,
+    onChange: () => setAttributes({
+      dragging: !dragging
+    }),
+    help: !!dragging ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__._x)('Enabled.', 'Map dragging setting', 'ootb-openstreetmap') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__._x)('Disabled.', 'Map dragging setting', 'ootb-openstreetmap')
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Touch zoom', 'ootb-openstreetmap'),
+    checked: !!touchZoom,
+    onChange: () => setAttributes({
+      touchZoom: !touchZoom
+    }),
+    help: !!touchZoom ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__._x)('Enabled.', 'Touch zoom setting', 'ootb-openstreetmap') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__._x)('Disabled.', 'Touch zoom setting', 'ootb-openstreetmap')
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Double-click zoom', 'ootb-openstreetmap'),
+    checked: !!doubleClickZoom,
+    onChange: () => setAttributes({
+      doubleClickZoom: !doubleClickZoom
+    }),
+    help: !!doubleClickZoom ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__._x)('Enabled.', 'Double-click zoom setting', 'ootb-openstreetmap') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__._x)('Disabled.', 'Double-click zoom setting', 'ootb-openstreetmap')
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Scroll Wheel zoom', 'ootb-openstreetmap'),
+    checked: !!scrollWheelZoom,
+    onChange: () => setAttributes({
+      scrollWheelZoom: !scrollWheelZoom
+    }),
+    help: !!scrollWheelZoom ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__._x)('Enabled.', 'Scroll Wheel zoom setting', 'ootb-openstreetmap') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__._x)('Disabled.', 'Scroll Wheel zoom setting', 'ootb-openstreetmap')
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Minimum Zoom', 'ootb-openstreetmap'),
+    value: minZoom,
+    onChange: value => {
+      setAttributes({
+        minZoom: value,
+        maxZoom: maxZoom <= minZoom ? minZoom + 1 : maxZoom
+      });
+    },
+    min: 0,
+    max: 18
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Maximum Zoom', 'ootb-openstreetmap'),
+    value: maxZoom,
+    onChange: value => {
+      setAttributes({
+        maxZoom: value,
+        minZoom: minZoom >= maxZoom ? maxZoom - 1 : minZoom
+      });
+    },
+    min: 0,
+    max: 18,
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Tip: setting the same minimum and maximum zoom practically locks zoom at that level.', 'ootb-openstreetmap')
+  }));
+}
+
+/***/ }),
+
+/***/ "./src/Controls/Controls.js":
+/*!**********************************!*\
+  !*** ./src/Controls/Controls.js ***!
+  \**********************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ Controls; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _MainControls__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MainControls */ "./src/Controls/MainControls.js");
+/* harmony import */ var _BehaviorControls__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./BehaviorControls */ "./src/Controls/BehaviorControls.js");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__);
+
+// noinspection NpmUsedModulesInstalled,JSUnresolvedVariable
+
+
+
+
+const {
+  PanelBody
+} = wp.components;
+const {
+  InspectorControls
+} = wp.blockEditor;
+function Controls(_ref) {
+  let {
+    props
+  } = _ref;
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(InspectorControls, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Main settings', 'ootb-openstreetmap'),
+    initialOpen: true
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_MainControls__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    props: props
+  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Map behavior', 'ootb-openstreetmap'),
+    initialOpen: false
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_BehaviorControls__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    props: props
+  })));
+}
+
+/***/ }),
+
+/***/ "./src/Controls/MainControls.js":
+/*!**************************************!*\
+  !*** ./src/Controls/MainControls.js ***!
+  \**************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ MainControls; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _ProviderControl__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ProviderControl */ "./src/Controls/ProviderControl.js");
+/* harmony import */ var _Helpers_getIcon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Helpers/getIcon */ "./src/Helpers/getIcon.js");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__);
+
+// noinspection NpmUsedModulesInstalled,JSUnresolvedVariable
+
+
+
+
+
+const {
+  RangeControl,
+  Button
+} = wp.components;
+const {
+  MediaUpload,
+  MediaUploadCheck
+} = wp.blockEditor;
+function MainControls(_ref) {
+  let {
+    props
+  } = _ref;
+  const {
+    attributes: {
+      mapHeight,
+      defaultIcon,
+      zoom
+    },
+    setAttributes
+  } = props;
+  const setDefaultIcon = image => {
+    setAttributes({
+      defaultIcon: image
+    });
+  };
+  const restoreDefaultIcon = () => {
+    setAttributes({
+      defaultIcon: null
+    });
+  };
+  const icon = (0,_Helpers_getIcon__WEBPACK_IMPORTED_MODULE_2__["default"])(props);
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ProviderControl__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    props: props
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(RangeControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Height (pixels)', 'ootb-openstreetmap'),
+    value: mapHeight,
+    onChange: pixels => {
+      setAttributes({
+        mapHeight: pixels
+      });
+    },
+    min: 50,
+    max: 1000
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(RangeControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Zoom', 'ootb-openstreetmap'),
+    value: zoom,
+    onChange: value => {
+      setAttributes({
+        zoom: value
+      });
+    },
+    min: 0,
+    max: 18
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(MediaUploadCheck, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "ootb-openstreetmap--icon"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+    src: icon.iconUrl,
+    alt: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Map Marker', 'ootb-openstreetmap')
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "gmp-openstreetmap--buttons"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(MediaUpload, {
+    onSelect: setDefaultIcon,
+    allowedTypes: ['image'],
+    value: defaultIcon,
+    render: _ref2 => {
+      let {
+        open
+      } = _ref2;
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(Button, {
+        onClick: open,
+        isSecondary: true
+      }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Change icon', 'ootb-openstreetmap'));
+    }
+  }), defaultIcon ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(Button, {
+    onClick: restoreDefaultIcon,
+    isDestructive: true
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Restore default', 'ootb-openstreetmap')) : null))));
+}
+
+/***/ }),
+
+/***/ "./src/Controls/ProviderControl.js":
+/*!*****************************************!*\
+  !*** ./src/Controls/ProviderControl.js ***!
+  \*****************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ ProviderControl; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
+
+// noinspection NpmUsedModulesInstalled,JSUnresolvedVariable
+
+
+
+
+function ProviderControl(_ref) {
+  let {
+    props
+  } = _ref;
+  const {
+    attributes: {
+      provider
+    },
+    setAttributes
+  } = props;
+  const {
+    adminUrl,
+    options: {
+      api_mapbox
+    }
+  } = ootbGlobal;
+  const providers = [{
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('OpenStreetMap', 'ootb-openstreetmap'),
+    value: 'openstreetmap'
+  }, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Mapbox', 'ootb-openstreetmap'),
+    value: 'mapbox'
+  }, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Stamen', 'ootb-openstreetmap'),
+    value: 'stamen'
+  }];
+  let providerHelp = '';
+  if ('mapbox' === provider && !api_mapbox) {
+    providerHelp = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createInterpolateElement)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Make sure that you provided a valid API key on the <a>plugin settings</a>.', 'ootb-openstreetmap'), {
+      a: (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+        href: adminUrl
+      })
+    }));
+  } else if (!provider || 'openstreetmap' === provider) {
+    // noinspection JSXNamespaceValidation
+    providerHelp = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createInterpolateElement)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Heavy usage of OSM tiles is forbidden, and you might want to switch to a different tile provider. Read more on the <a>plugin settings</a>.', 'ootb-openstreetmap'), {
+      a: (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+        href: adminUrl
+      })
+    }));
+  }
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Tile Layer Provider', 'ootb-openstreetmap'),
+    value: provider,
+    options: providers,
+    onChange: selectedProvider => {
+      setAttributes({
+        provider: selectedProvider
+      });
+    },
+    help: providerHelp
+  });
+}
+
+/***/ }),
+
+/***/ "./src/Deprecated/getIconDeprecated.js":
+/*!*********************************************!*\
+  !*** ./src/Deprecated/getIconDeprecated.js ***!
+  \*********************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ getIconDeprecated; }
+/* harmony export */ });
+function getIconDeprecated(props) {
+  const {
+    attributes: {
+      defaultIcon
+    }
+  } = props;
+  //noinspection JSUnresolvedVariable
+  const {
+    pluginDirUrl
+  } = ootbGlobal;
+  const fallbackIcon = pluginDirUrl + 'assets/vendor/leaflet/images/marker-icon.png';
+  const horizontalPosition = defaultIcon ? defaultIcon.width / 2 : 12;
+  return {
+    iconUrl: defaultIcon ? defaultIcon.url : fallbackIcon,
+    iconAnchor: [horizontalPosition, 0]
+  };
+}
+
+/***/ }),
+
+/***/ "./src/Elements/Alert.js":
+/*!*******************************!*\
+  !*** ./src/Elements/Alert.js ***!
+  \*******************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ Alert; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
+
+// noinspection NpmUsedModulesInstalled
+
+function Alert(_ref) {
+  let {
+    props
+  } = _ref;
+  const {
+    attributes: {
+      addingMarker
+    }
+  } = props;
+  let alert = '';
+  if (' pinning' === addingMarker) {
+    alert = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Release to drop a marker here', 'ootb-openstreetmap');
+  }
+  return alert ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "ootb-openstreetmap--alert"
+  }, alert) : null;
+}
+
+/***/ }),
+
+/***/ "./src/Elements/LeafletMap.js":
+/*!************************************!*\
+  !*** ./src/Elements/LeafletMap.js ***!
+  \************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ LeafletMap; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Helpers_centerMap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Helpers/centerMap */ "./src/Helpers/centerMap.js");
+/* harmony import */ var _TileProvider__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TileProvider */ "./src/Elements/TileProvider.js");
+/* harmony import */ var _Markers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Markers */ "./src/Elements/Markers.js");
+/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/lib/MapContainer.js");
+/* harmony import */ var _MapEvents__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./MapEvents */ "./src/Elements/MapEvents.js");
+/* harmony import */ var _MapUpdate__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./MapUpdate */ "./src/Elements/MapUpdate.js");
+
+
+
+
+
+
+
+function LeafletMap(_ref) {
+  let {
+    props
+  } = _ref;
+  const {
+    attributes: {
+      zoom,
+      bounds,
+      mapHeight
+    }
+  } = props;
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_leaflet__WEBPACK_IMPORTED_MODULE_6__.MapContainer, {
+    center: (0,_Helpers_centerMap__WEBPACK_IMPORTED_MODULE_1__["default"])(props),
+    zoom: zoom,
+    bounds: bounds,
+    style: {
+      height: mapHeight + 'px'
+    }
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_MapEvents__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    props: props
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_MapUpdate__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    props: props
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_TileProvider__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    props: props
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Markers__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    props: props
+  }));
+}
+
+/***/ }),
+
+/***/ "./src/Elements/MapEvents.js":
+/*!***********************************!*\
+  !*** ./src/Elements/MapEvents.js ***!
+  \***********************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ MapEvents; }
+/* harmony export */ });
+/* harmony import */ var react_leaflet_hooks__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-leaflet/hooks */ "./node_modules/react-leaflet/lib/hooks.js");
+/* harmony import */ var react_device_detect__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-device-detect */ "./node_modules/react-device-detect/dist/lib.js");
+/* harmony import */ var _Helpers_getBounds__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Helpers/getBounds */ "./src/Helpers/getBounds.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+// noinspection NpmUsedModulesInstalled
+
+function MapEvents(_ref) {
+  let {
+    props
+  } = _ref;
+  const {
+    attributes: {
+      mapObj,
+      markers,
+      addingMarker,
+      isDraggingMarker
+    },
+    setAttributes
+  } = props;
+  const timeout = 300;
+  let delay;
+  const isClicking = e => {
+    const elementClicked = e.originalEvent.target.nodeName.toLowerCase();
+    if ('div' === elementClicked) {
+      setAttributes({
+        isDraggingMarker: false
+      });
+    }
+    if (false === isDraggingMarker) {
+      if (react_device_detect__WEBPACK_IMPORTED_MODULE_0__.isMobile && !react_device_detect__WEBPACK_IMPORTED_MODULE_0__.isSafari) {
+        setAttributes({
+          addingMarker: ' pinning'
+        });
+      } else {
+        delay = setTimeout(function () {
+          setAttributes({
+            addingMarker: ' pinning'
+          });
+          setTimeout(function () {
+            // If hangs for too long, stop it.
+            setAttributes({
+              addingMarker: ''
+            });
+          }, timeout * 3);
+        }, timeout);
+      }
+    }
+  };
+  const isDragging = () => {
+    clearTimeout(delay);
+    setAttributes({
+      addingMarker: '',
+      isDraggingMarker: false
+    });
+  };
+  const addMarker = e => {
+    clearTimeout(delay);
+    if (!!addingMarker) {
+      const lat = e.latlng.lat;
+      const lng = e.latlng.lng;
+      const newMarker = {
+        lat: lat.toString(),
+        lng: lng.toString(),
+        text: ''
+      };
+      setAttributes({
+        markers: [...markers, newMarker],
+        addingMarker: ''
+      });
+      (0,_Helpers_getBounds__WEBPACK_IMPORTED_MODULE_1__["default"])(props, newMarker, e.target);
+      setTimeout(function () {
+        setAttributes({
+          isDraggingMarker: false
+        });
+      }, timeout * 2);
+    }
+  };
+  const changeZoom = e => {
+    setAttributes({
+      zoom: e.zoom
+    });
+  };
+  const closePopupActions = () => {
+    setAttributes({
+      isDraggingMarker: false
+    });
+  };
+  const map = (0,react_leaflet_hooks__WEBPACK_IMPORTED_MODULE_3__.useMapEvents)({
+    // Available events: https://leafletjs.com/reference.html#evented
+    mouseup: e => {
+      addMarker(e);
+    },
+    mousedown: e => {
+      isClicking(e);
+    },
+    drag: e => {
+      isDragging(e);
+    },
+    zoomanim: e => {
+      changeZoom(e);
+    },
+    popupclose: () => {
+      closePopupActions();
+    }
+  });
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
+    if ('undefined' !== typeof map && ('undefined' === typeof mapObj || !mapObj.length || mapObj !== map)) {
+      setAttributes({
+        mapObj: map
+      });
+    }
+  });
+  return null;
+}
+
+/***/ }),
+
+/***/ "./src/Elements/MapUpdate.js":
+/*!***********************************!*\
+  !*** ./src/Elements/MapUpdate.js ***!
+  \***********************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ MapUpdate; }
+/* harmony export */ });
+/* harmony import */ var react_leaflet_hooks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-leaflet/hooks */ "./node_modules/react-leaflet/lib/hooks.js");
+
+function MapUpdate(_ref) {
+  let {
+    props
+  } = _ref;
+  const {
+    attributes: {
+      zoom,
+      bounds,
+      mapHeight
+    }
+  } = props;
+  const map = (0,react_leaflet_hooks__WEBPACK_IMPORTED_MODULE_0__.useMap)();
+  if (zoom !== map.getZoom()) {
+    map.setZoom(zoom);
+  }
+  // map.fitBounds(bounds);
+  const mapContainer = map.getContainer();
+  if (parseInt(mapContainer.style.height) !== mapHeight) {
+    mapContainer.style.height = `${mapHeight}px`;
+  }
+  return null;
+}
+
+/***/ }),
+
+/***/ "./src/Elements/Markers.js":
+/*!*********************************!*\
+  !*** ./src/Elements/Markers.js ***!
+  \*********************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ Markers; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
+/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(leaflet__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/lib/Marker.js");
+/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/lib/Popup.js");
+/* harmony import */ var _Helpers_getIcon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Helpers/getIcon */ "./src/Helpers/getIcon.js");
+/* harmony import */ var _Helpers_getBounds__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Helpers/getBounds */ "./src/Helpers/getBounds.js");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__);
+
+// noinspection NpmUsedModulesInstalled,JSUnresolvedVariable
+
+
+
+
+
+
+
+
+function Markers(_ref) {
+  let {
+    props
+  } = _ref;
+  const {
+    attributes: {
+      mapObj,
+      markers
+    },
+    setAttributes
+  } = props;
+  const removeMarker = e => {
+    const index = parseInt(e.target.getAttribute('dataIndex'));
+    let updatedMarkers = [...markers];
+    updatedMarkers.splice(index, 1);
+    setAttributes({
+      isDraggingMarker: false,
+      markers: updatedMarkers
+    });
+    (0,_Helpers_getBounds__WEBPACK_IMPORTED_MODULE_3__["default"])(props, [], mapObj.leafletElement);
+  };
+  const startDragging = () => {
+    if (markers) {
+      setAttributes({
+        isDraggingMarker: true
+      });
+    }
+  };
+  const isHovering = () => {
+    startDragging();
+  };
+  let clickStarted = null;
+  const onClickStart = () => {
+    setAttributes({
+      addingMarker: ''
+    });
+    clickStarted = new Date();
+  };
+  const onClickEnd = e => {
+    const now = new Date();
+    const duration = now - clickStarted;
+    if (!clickStarted || false === !!duration) {
+      e.target.openPopup();
+    }
+  };
+  const markerIcon = leaflet__WEBPACK_IMPORTED_MODULE_1___default().icon((0,_Helpers_getIcon__WEBPACK_IMPORTED_MODULE_2__["default"])(props));
+  return typeof markers !== "undefined" && markers.length ? markers.map((marker, index) => {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_leaflet__WEBPACK_IMPORTED_MODULE_7__.Marker, {
+      key: index,
+      position: [marker.lat, marker.lng],
+      icon: markerIcon,
+      onMouseDown: onClickStart,
+      onMouseUp: onClickEnd,
+      onMouseOver: isHovering,
+      draggable: true,
+      onDragStart: startDragging,
+      onDragEnd: e => {
+        const newLatLng = e.target.getLatLng();
+        let updatedMarkers = [...markers];
+        updatedMarkers[index].lat = newLatLng.lat;
+        updatedMarkers[index].lng = newLatLng.lng;
+        setAttributes({
+          isDraggingMarker: false,
+          markers: updatedMarkers
+        });
+      }
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_leaflet__WEBPACK_IMPORTED_MODULE_8__.Popup, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.RichText, {
+      multiline: true,
+      value: marker.text,
+      onChange: content => {
+        let updatedMarkers = [...markers];
+        updatedMarkers[index].text = content;
+        setAttributes({
+          markers: updatedMarkers
+        });
+      },
+      placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Write something', 'ootb-openstreetmap')
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "ootb-openstreetmap--marker-remove"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__.Button, {
+      onClick: removeMarker,
+      dataindex: index,
+      icon: "trash",
+      showTooltip: true,
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Remove this marker', 'ootb-openstreetmap')
+    }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Remove', 'ootb-openstreetmap')))));
+  }) : null;
+}
+
+/***/ }),
+
+/***/ "./src/Elements/SearchBox.js":
+/*!***********************************!*\
+  !*** ./src/Elements/SearchBox.js ***!
+  \***********************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ SearchBox; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _SearchResults__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SearchResults */ "./src/Elements/SearchResults.js");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
+
+// noinspection NpmUsedModulesInstalled
+
+
+
+
+
+function SearchBox(_ref) {
+  let {
+    props
+  } = _ref;
+  const {
+    attributes: {
+      keywords,
+      inputRef,
+      searchResults
+    },
+    setAttributes
+  } = props;
+  const findMarkers = () => {
+    if (keywords && keywords.length > 2) {
+      fetch('https://nominatim.openstreetmap.org/search?q=' + keywords + '&format=json').then(response => {
+        if (200 !== response.status) {
+          return;
+        }
+        return response.json();
+      }).then(data => {
+        setAttributes({
+          searchResults: data
+        });
+      });
+    }
+  };
+  const onTyping = text => {
+    setAttributes({
+      keywords: text
+    });
+  };
+  const detectEnter = e => {
+    if (!inputRef) {
+      setAttributes({
+        inputRef: e
+      });
+    }
+    if ('Enter' === e.key) {
+      findMarkers();
+    }
+  };
+  const onButtonClick = () => {
+    if (searchResults && searchResults.length) {
+      if (inputRef) {
+        inputRef.target.focus();
+        setAttributes({
+          searchResults: [],
+          keywords: ''
+        });
+      }
+    } else {
+      findMarkers();
+    }
+  };
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "ootb-openstreetmap--searchbox"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.TextControl, {
+    value: keywords,
+    onChange: onTyping,
+    onKeyDown: detectEnter,
+    placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Enter your keywords...', 'ootb-openstreetmap')
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
+    onClick: onButtonClick,
+    icon: searchResults && searchResults.length > 0 ? 'no' : 'search',
+    showTooltip: true,
+    label: searchResults && searchResults.length > 0 ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Clear results', 'ootb-openstreetmap') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Find locations', 'ootb-openstreetmap'),
+    disabled: !(keywords && keywords.length > 2)
+  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_SearchResults__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    props: props
+  }));
+}
+
+/***/ }),
+
+/***/ "./src/Elements/SearchResults.js":
+/*!***************************************!*\
+  !*** ./src/Elements/SearchResults.js ***!
+  \***************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ SearchResults; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Helpers_getBounds__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Helpers/getBounds */ "./src/Helpers/getBounds.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
+
+
+// noinspection NpmUsedModulesInstalled
+
+function SearchResults(_ref) {
+  let {
+    props
+  } = _ref;
+  const {
+    attributes: {
+      markers,
+      searchResults,
+      mapObj,
+      inputRef
+    },
+    setAttributes
+  } = props;
+  const addMarker = e => {
+    const index = e.target.getAttribute('data-index');
+    const {
+      display_name,
+      lon,
+      lat
+    } = searchResults[index];
+    const newMarker = {
+      lat: lat.toString(),
+      lng: lon.toString(),
+      text: `<p>${display_name}</p>`
+    };
+    setAttributes({
+      markers: [...markers, newMarker],
+      keywords: '',
+      searchResults: []
+    });
+    setAttributes({
+      shouldUpdateBounds: true
+    });
+    (0,_Helpers_getBounds__WEBPACK_IMPORTED_MODULE_1__["default"])(props, newMarker, mapObj);
+    if (inputRef) {
+      inputRef.target.focus();
+    }
+  };
+  const resultsList = () => {
+    return searchResults.map((item, index) => {
+      const {
+        display_name
+      } = item;
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+        key: index,
+        autoFocus: index === 0,
+        onClick: addMarker,
+        "data-index": index
+      }, display_name);
+    });
+  };
+  return searchResults && searchResults.length ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "ootb-openstreetmap--search-results"
+  }, resultsList()) : null;
+}
+
+/***/ }),
+
+/***/ "./src/Elements/TileProvider.js":
+/*!**************************************!*\
+  !*** ./src/Elements/TileProvider.js ***!
+  \**************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ TileProvider; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-leaflet */ "./node_modules/react-leaflet/lib/TileLayer.js");
+
+
+function TileProvider(_ref) {
+  let {
+    props
+  } = _ref;
+  const {
+    attributes: {
+      provider
+    }
+  } = props;
+
+  //noinspection JSUnresolvedVariable
+  const {
+    options: {
+      api_mapbox
+    },
+    providers: {
+      openstreetmap,
+      mapbox,
+      stamen
+    }
+  } = ootbGlobal;
+  let providerUrl = openstreetmap.url;
+  let providerAttribution = openstreetmap.attribution;
+  if ('mapbox' === provider && api_mapbox) {
+    providerUrl = mapbox.url + api_mapbox;
+    providerAttribution = mapbox.attribution;
+  }
+  if ('stamen' === provider) {
+    providerUrl = stamen.url;
+    providerAttribution = stamen.attribution;
+  }
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_leaflet__WEBPACK_IMPORTED_MODULE_1__.TileLayer, {
+    url: providerUrl,
+    attribution: providerAttribution
+  });
+}
+
+/***/ }),
+
+/***/ "./src/Helpers/centerMap.js":
+/*!**********************************!*\
+  !*** ./src/Helpers/centerMap.js ***!
+  \**********************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ centerMap; }
+/* harmony export */ });
+/* harmony import */ var _getBoundsCenter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./getBoundsCenter */ "./src/Helpers/getBoundsCenter.js");
+
+function centerMap(props) {
+  const {
+    attributes: {
+      bounds,
+      markers
+    }
+  } = props;
+  return (0,_getBoundsCenter__WEBPACK_IMPORTED_MODULE_0__["default"])(bounds) || [markers[0].lat, markers[0].lng];
+}
+
+/***/ }),
+
+/***/ "./src/Helpers/fitBounds.js":
+/*!**********************************!*\
+  !*** ./src/Helpers/fitBounds.js ***!
+  \**********************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ fitBounds; }
+/* harmony export */ });
+function fitBounds(bounds) {
+  let mapObj = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  if (mapObj && bounds) {
+    mapObj.fitBounds(bounds, {
+      padding: [50, 50]
+    });
+  }
+}
+
+/***/ }),
+
+/***/ "./src/Helpers/getBounds.js":
+/*!**********************************!*\
+  !*** ./src/Helpers/getBounds.js ***!
+  \**********************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ getBounds; }
+/* harmony export */ });
+/* harmony import */ var _fitBounds__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./fitBounds */ "./src/Helpers/fitBounds.js");
+
+function getBounds(props) {
+  let newMarker = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+  let mapObject = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+  const {
+    attributes: {
+      markers
+    },
+    setAttributes
+  } = props;
+  let boundsArr = [];
+  if (newMarker && 'undefined' !== typeof newMarker.lat) {
+    boundsArr.push([newMarker.lat, newMarker.lng]);
+  }
+  const markersArr = Object.entries(markers);
+  //noinspection JSUnusedLocalSymbols
+  markersArr.forEach(_ref => {
+    let [index, value] = _ref;
+    if (value) {
+      boundsArr.push([value.lat, value.lng]);
+    }
+  });
+  if (boundsArr.length) {
+    setAttributes({
+      bounds: boundsArr
+    });
+    (0,_fitBounds__WEBPACK_IMPORTED_MODULE_0__["default"])(boundsArr, mapObject);
+  }
+}
+
+/***/ }),
+
+/***/ "./src/Helpers/getBoundsCenter.js":
+/*!****************************************!*\
+  !*** ./src/Helpers/getBoundsCenter.js ***!
+  \****************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ getBoundsCenter; }
+/* harmony export */ });
+function getBoundsCenter(arr) {
+  const x = arr.map(xy => xy[0]);
+  const y = arr.map(xy => xy[1]);
+  const cx = (Math.min(...x) + Math.max(...x)) / 2;
+  const cy = (Math.min(...y) + Math.max(...y)) / 2;
+  return cx && !isNaN(cx) && cy && !isNaN(cy) ? [cx, cy] : null;
+}
+
+/***/ }),
+
+/***/ "./src/Helpers/getIcon.js":
+/*!********************************!*\
+  !*** ./src/Helpers/getIcon.js ***!
+  \********************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ getIcon; }
+/* harmony export */ });
+function getIcon(props) {
+  const {
+    attributes: {
+      defaultIcon
+    }
+  } = props;
+
+  //noinspection JSUnresolvedVariable
+  const {
+    pluginDirUrl
+  } = ootbGlobal;
+  const fallbackIcon = pluginDirUrl + 'assets/vendor/leaflet/images/marker-icon.png';
+  const horizontalPosition = defaultIcon ? Math.round(defaultIcon.width / 2) : 12;
+  const verticalPosition = defaultIcon ? Math.round(defaultIcon.height) : 41;
+  return {
+    iconUrl: defaultIcon ? defaultIcon.url : fallbackIcon,
+    iconAnchor: [horizontalPosition, verticalPosition],
+    popupAnchor: [0, -Math.abs(verticalPosition)]
+  };
+}
+
+/***/ }),
+
+/***/ "./src/deprecated.js":
+/*!***************************!*\
+  !*** ./src/deprecated.js ***!
+  \***************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Helpers_centerMap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Helpers/centerMap */ "./src/Helpers/centerMap.js");
+/* harmony import */ var _Deprecated_getIconDeprecated__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Deprecated/getIconDeprecated */ "./src/Deprecated/getIconDeprecated.js");
+/* harmony import */ var _Helpers_getIcon__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Helpers/getIcon */ "./src/Helpers/getIcon.js");
+
+
+
+
+const deprecated = [{
+  attributes: {
+    mapHeight: {
+      type: 'integer',
+      default: 400
+    },
+    markers: {
+      type: 'array',
+      default: []
+    },
+    zoom: {
+      type: 'integer',
+      default: 8
+    },
+    minZoom: {
+      type: 'integer',
+      default: 2
+    },
+    maxZoom: {
+      type: 'integer',
+      default: 18
+    },
+    dragging: {
+      type: 'boolean',
+      default: true
+    },
+    touchZoom: {
+      type: 'boolean',
+      default: true
+    },
+    doubleClickZoom: {
+      type: 'boolean',
+      default: true
+    },
+    scrollWheelZoom: {
+      type: 'boolean',
+      default: true
+    },
+    defaultIcon: {
+      type: 'object',
+      default: null
+    },
+    bounds: {
+      type: 'array',
+      default: [[37.97155174977503, 23.72656345367432]]
+    }
+  },
+  supports: {
+    align: ['wide', 'full']
+  },
+  save(props) {
+    const {
+      className,
+      attributes: {
+        mapHeight,
+        markers,
+        zoom,
+        minZoom,
+        maxZoom,
+        dragging,
+        touchZoom,
+        doubleClickZoom,
+        scrollWheelZoom
+      }
+    } = props;
+    return markers ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: className
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "ootb-openstreetmap--map",
+      "data-markers": escape(JSON.stringify(markers)) // Escape because of the potential HTML in the output.
+      ,
+      "data-bounds": JSON.stringify((0,_Helpers_centerMap__WEBPACK_IMPORTED_MODULE_1__["default"])(props)),
+      "data-zoom": zoom,
+      "data-minzoom": minZoom,
+      "data-maxzoom": maxZoom,
+      "data-dragging": dragging,
+      "data-touchzoom": touchZoom,
+      "data-doubleclickzoom": doubleClickZoom,
+      "data-scrollwheelzoom": scrollWheelZoom,
+      "data-marker": escape(JSON.stringify((0,_Helpers_getIcon__WEBPACK_IMPORTED_MODULE_3__["default"])(props))),
+      style: {
+        height: mapHeight + 'px'
+      }
+    })) : null;
+  }
+}, {
+  attributes: {
+    mapHeight: {
+      type: 'integer',
+      default: 400
+    },
+    markers: {
+      type: 'array',
+      default: []
+    },
+    zoom: {
+      type: 'integer',
+      default: 8
+    },
+    minZoom: {
+      type: 'integer',
+      default: 2
+    },
+    maxZoom: {
+      type: 'integer',
+      default: 18
+    },
+    dragging: {
+      type: 'boolean',
+      default: true
+    },
+    touchZoom: {
+      type: 'boolean',
+      default: true
+    },
+    doubleClickZoom: {
+      type: 'boolean',
+      default: true
+    },
+    scrollWheelZoom: {
+      type: 'boolean',
+      default: true
+    },
+    defaultIcon: {
+      type: 'object',
+      default: null
+    },
+    bounds: {
+      type: 'array',
+      default: [[37.97155174977503, 23.72656345367432]]
+    }
+  },
+  supports: {
+    align: ['wide', 'full']
+  },
+  save(props) {
+    const {
+      className,
+      attributes: {
+        mapHeight,
+        markers,
+        zoom,
+        minZoom,
+        maxZoom,
+        dragging,
+        touchZoom,
+        doubleClickZoom,
+        scrollWheelZoom
+      }
+    } = props;
+    return markers ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: className
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "ootb-openstreetmap--map",
+      "data-markers": escape(JSON.stringify(markers)) // Escape because of the potential HTML in the output.
+      ,
+      "data-bounds": JSON.stringify((0,_Helpers_centerMap__WEBPACK_IMPORTED_MODULE_1__["default"])(props)),
+      "data-zoom": zoom,
+      "data-minzoom": minZoom,
+      "data-maxzoom": maxZoom,
+      "data-dragging": dragging,
+      "data-touchzoom": touchZoom,
+      "data-doubleclickzoom": doubleClickZoom,
+      "data-scrollwheelzoom": scrollWheelZoom,
+      "data-marker": escape(JSON.stringify((0,_Deprecated_getIconDeprecated__WEBPACK_IMPORTED_MODULE_2__["default"])(props))),
+      style: {
+        height: mapHeight + 'px'
+      }
+    })) : null;
+  }
+}];
+/* harmony default export */ __webpack_exports__["default"] = (deprecated);
+
+/***/ }),
+
+/***/ "./src/edit.js":
+/*!*********************!*\
+  !*** ./src/edit.js ***!
+  \*********************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ edit; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Controls_Controls__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Controls/Controls */ "./src/Controls/Controls.js");
+/* harmony import */ var _Elements_SearchBox__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Elements/SearchBox */ "./src/Elements/SearchBox.js");
+/* harmony import */ var _Elements_LeafletMap__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Elements/LeafletMap */ "./src/Elements/LeafletMap.js");
+/* harmony import */ var _Elements_Alert__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Elements/Alert */ "./src/Elements/Alert.js");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__);
+
+
+
+
+
+// noinspection NpmUsedModulesInstalled
+
+function edit(props) {
+  const {
+    attributes
+  } = props;
+  const {
+    addingMarker
+  } = attributes;
+  const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.useBlockProps)({
+    className: addingMarker || ''
+  });
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", blockProps, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Controls_Controls__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    props: props
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Elements_SearchBox__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    props: props
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Elements_LeafletMap__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    props: props
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Elements_Alert__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    props: props
+  }));
+}
+
+/***/ }),
+
+/***/ "./src/save.js":
+/*!*********************!*\
+  !*** ./src/save.js ***!
+  \*********************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ save; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Helpers_centerMap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Helpers/centerMap */ "./src/Helpers/centerMap.js");
+/* harmony import */ var _Helpers_getIcon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Helpers/getIcon */ "./src/Helpers/getIcon.js");
+
+
+
+function save(props, className) {
+  const {
+    attributes: {
+      mapHeight,
+      markers,
+      zoom,
+      minZoom,
+      maxZoom,
+      dragging,
+      touchZoom,
+      doubleClickZoom,
+      scrollWheelZoom,
+      provider
+    }
+  } = props;
+  return markers ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: className
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "ootb-openstreetmap--map",
+    "data-provider": provider,
+    "data-markers": escape(JSON.stringify(markers)) // Escape because of the potential HTML in the output.
+    ,
+    "data-bounds": JSON.stringify((0,_Helpers_centerMap__WEBPACK_IMPORTED_MODULE_1__["default"])(props)),
+    "data-zoom": zoom,
+    "data-minzoom": minZoom,
+    "data-maxzoom": maxZoom,
+    "data-dragging": dragging,
+    "data-touchzoom": touchZoom,
+    "data-doubleclickzoom": doubleClickZoom,
+    "data-scrollwheelzoom": scrollWheelZoom,
+    "data-marker": escape(JSON.stringify((0,_Helpers_getIcon__WEBPACK_IMPORTED_MODULE_2__["default"])(props))),
+    style: {
+      height: mapHeight + 'px'
+    }
+  })) : null;
+}
+
+/***/ }),
+
+/***/ "./node_modules/leaflet/dist/leaflet-src.js":
+/*!**************************************************!*\
+  !*** ./node_modules/leaflet/dist/leaflet-src.js ***!
+  \**************************************************/
+/***/ (function(__unused_webpack_module, exports) {
+
 /* @preserve
  * Leaflet 1.9.2, a JS library for interactive maps. https://leafletjs.com
  * (c) 2010-2022 Vladimir Agafonkin, (c) 2010-2011 CloudMade
  */
 
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-  typeof define === 'function' && define.amd ? define(['exports'], factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.leaflet = {}));
+   true ? factory(exports) :
+  0;
 })(this, (function (exports) { 'use strict';
 
   var version = "1.9.2";
@@ -14407,3 +15839,2121 @@
 
 }));
 //# sourceMappingURL=leaflet-src.js.map
+
+
+/***/ }),
+
+/***/ "./src/index.css":
+/*!***********************!*\
+  !*** ./src/index.css ***!
+  \***********************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "./src/style-index.css":
+/*!*****************************!*\
+  !*** ./src/style-index.css ***!
+  \*****************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "./node_modules/react-device-detect/dist/lib.js":
+/*!******************************************************!*\
+  !*** ./node_modules/react-device-detect/dist/lib.js ***!
+  \******************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var React = __webpack_require__(/*! react */ "react");
+var React__default = _interopDefault(React);
+
+var UAParser = __webpack_require__(/*! ua-parser-js/dist/ua-parser.min */ "./node_modules/ua-parser-js/dist/ua-parser.min.js");
+
+var ClientUAInstance = new UAParser();
+var browser = ClientUAInstance.getBrowser();
+var cpu = ClientUAInstance.getCPU();
+var device = ClientUAInstance.getDevice();
+var engine = ClientUAInstance.getEngine();
+var os = ClientUAInstance.getOS();
+var ua = ClientUAInstance.getUA();
+var setUa = function setUa(userAgentString) {
+  return ClientUAInstance.setUA(userAgentString);
+};
+var parseUserAgent = function parseUserAgent(userAgent) {
+  if (!userAgent) {
+    console.error('No userAgent string was provided');
+    return;
+  }
+
+  var UserAgentInstance = new UAParser(userAgent);
+  return {
+    UA: UserAgentInstance,
+    browser: UserAgentInstance.getBrowser(),
+    cpu: UserAgentInstance.getCPU(),
+    device: UserAgentInstance.getDevice(),
+    engine: UserAgentInstance.getEngine(),
+    os: UserAgentInstance.getOS(),
+    ua: UserAgentInstance.getUA(),
+    setUserAgent: function setUserAgent(userAgentString) {
+      return UserAgentInstance.setUA(userAgentString);
+    }
+  };
+};
+
+var UAHelper = /*#__PURE__*/Object.freeze({
+  ClientUAInstance: ClientUAInstance,
+  browser: browser,
+  cpu: cpu,
+  device: device,
+  engine: engine,
+  os: os,
+  ua: ua,
+  setUa: setUa,
+  parseUserAgent: parseUserAgent
+});
+
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+
+    if (enumerableOnly) {
+      symbols = symbols.filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+      });
+    }
+
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _objectSpread2(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      ownKeys(Object(source), true).forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
+}
+
+function _typeof(obj) {
+  "@babel/helpers - typeof";
+
+  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+    _typeof = function (obj) {
+      return typeof obj;
+    };
+  } else {
+    _typeof = function (obj) {
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    };
+  }
+
+  return _typeof(obj);
+}
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function");
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) _setPrototypeOf(subClass, superClass);
+}
+
+function _getPrototypeOf(o) {
+  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+    return o.__proto__ || Object.getPrototypeOf(o);
+  };
+  return _getPrototypeOf(o);
+}
+
+function _setPrototypeOf(o, p) {
+  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+
+  return _setPrototypeOf(o, p);
+}
+
+function _objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+
+function _objectWithoutProperties(source, excluded) {
+  if (source == null) return {};
+
+  var target = _objectWithoutPropertiesLoose(source, excluded);
+
+  var key, i;
+
+  if (Object.getOwnPropertySymbols) {
+    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+
+    for (i = 0; i < sourceSymbolKeys.length; i++) {
+      key = sourceSymbolKeys[i];
+      if (excluded.indexOf(key) >= 0) continue;
+      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+      target[key] = source[key];
+    }
+  }
+
+  return target;
+}
+
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return self;
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (call && (typeof call === "object" || typeof call === "function")) {
+    return call;
+  } else if (call !== void 0) {
+    throw new TypeError("Derived constructors may only return object or undefined");
+  }
+
+  return _assertThisInitialized(self);
+}
+
+function _slicedToArray(arr, i) {
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+}
+
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+
+function _iterableToArrayLimit(arr, i) {
+  var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+
+  if (_i == null) return;
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+
+  var _s, _e;
+
+  try {
+    for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+}
+
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+  return arr2;
+}
+
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+var DeviceTypes = {
+  Mobile: 'mobile',
+  Tablet: 'tablet',
+  SmartTv: 'smarttv',
+  Console: 'console',
+  Wearable: 'wearable',
+  Embedded: 'embedded',
+  Browser: undefined
+};
+var BrowserTypes = {
+  Chrome: 'Chrome',
+  Firefox: 'Firefox',
+  Opera: 'Opera',
+  Yandex: 'Yandex',
+  Safari: 'Safari',
+  InternetExplorer: 'Internet Explorer',
+  Edge: 'Edge',
+  Chromium: 'Chromium',
+  Ie: 'IE',
+  MobileSafari: 'Mobile Safari',
+  EdgeChromium: 'Edge Chromium',
+  MIUI: 'MIUI Browser',
+  SamsungBrowser: 'Samsung Browser'
+};
+var OsTypes = {
+  IOS: 'iOS',
+  Android: 'Android',
+  WindowsPhone: 'Windows Phone',
+  Windows: 'Windows',
+  MAC_OS: 'Mac OS'
+};
+var InitialDeviceTypes = {
+  isMobile: false,
+  isTablet: false,
+  isBrowser: false,
+  isSmartTV: false,
+  isConsole: false,
+  isWearable: false
+};
+
+var checkDeviceType = function checkDeviceType(type) {
+  switch (type) {
+    case DeviceTypes.Mobile:
+      return {
+        isMobile: true
+      };
+
+    case DeviceTypes.Tablet:
+      return {
+        isTablet: true
+      };
+
+    case DeviceTypes.SmartTv:
+      return {
+        isSmartTV: true
+      };
+
+    case DeviceTypes.Console:
+      return {
+        isConsole: true
+      };
+
+    case DeviceTypes.Wearable:
+      return {
+        isWearable: true
+      };
+
+    case DeviceTypes.Browser:
+      return {
+        isBrowser: true
+      };
+
+    case DeviceTypes.Embedded:
+      return {
+        isEmbedded: true
+      };
+
+    default:
+      return InitialDeviceTypes;
+  }
+};
+var setUserAgent = function setUserAgent(userAgent) {
+  return setUa(userAgent);
+};
+var setDefaults = function setDefaults(p) {
+  var d = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'none';
+  return p ? p : d;
+};
+var getNavigatorInstance = function getNavigatorInstance() {
+  if (typeof window !== 'undefined') {
+    if (window.navigator || navigator) {
+      return window.navigator || navigator;
+    }
+  }
+
+  return false;
+};
+var isIOS13Check = function isIOS13Check(type) {
+  var nav = getNavigatorInstance();
+  return nav && nav.platform && (nav.platform.indexOf(type) !== -1 || nav.platform === 'MacIntel' && nav.maxTouchPoints > 1 && !window.MSStream);
+};
+
+var browserPayload = function browserPayload(isBrowser, browser, engine, os, ua) {
+  return {
+    isBrowser: isBrowser,
+    browserMajorVersion: setDefaults(browser.major),
+    browserFullVersion: setDefaults(browser.version),
+    browserName: setDefaults(browser.name),
+    engineName: setDefaults(engine.name),
+    engineVersion: setDefaults(engine.version),
+    osName: setDefaults(os.name),
+    osVersion: setDefaults(os.version),
+    userAgent: setDefaults(ua)
+  };
+};
+var mobilePayload = function mobilePayload(type, device, os, ua) {
+  return _objectSpread2({}, type, {
+    vendor: setDefaults(device.vendor),
+    model: setDefaults(device.model),
+    os: setDefaults(os.name),
+    osVersion: setDefaults(os.version),
+    ua: setDefaults(ua)
+  });
+};
+var smartTvPayload = function smartTvPayload(isSmartTV, engine, os, ua) {
+  return {
+    isSmartTV: isSmartTV,
+    engineName: setDefaults(engine.name),
+    engineVersion: setDefaults(engine.version),
+    osName: setDefaults(os.name),
+    osVersion: setDefaults(os.version),
+    userAgent: setDefaults(ua)
+  };
+};
+var consolePayload = function consolePayload(isConsole, engine, os, ua) {
+  return {
+    isConsole: isConsole,
+    engineName: setDefaults(engine.name),
+    engineVersion: setDefaults(engine.version),
+    osName: setDefaults(os.name),
+    osVersion: setDefaults(os.version),
+    userAgent: setDefaults(ua)
+  };
+};
+var wearablePayload = function wearablePayload(isWearable, engine, os, ua) {
+  return {
+    isWearable: isWearable,
+    engineName: setDefaults(engine.name),
+    engineVersion: setDefaults(engine.version),
+    osName: setDefaults(os.name),
+    osVersion: setDefaults(os.version),
+    userAgent: setDefaults(ua)
+  };
+};
+var embeddedPayload = function embeddedPayload(isEmbedded, device, engine, os, ua) {
+  return {
+    isEmbedded: isEmbedded,
+    vendor: setDefaults(device.vendor),
+    model: setDefaults(device.model),
+    engineName: setDefaults(engine.name),
+    engineVersion: setDefaults(engine.version),
+    osName: setDefaults(os.name),
+    osVersion: setDefaults(os.version),
+    userAgent: setDefaults(ua)
+  };
+};
+
+function deviceDetect(userAgent) {
+  var _ref = userAgent ? parseUserAgent(userAgent) : UAHelper,
+      device = _ref.device,
+      browser = _ref.browser,
+      engine = _ref.engine,
+      os = _ref.os,
+      ua = _ref.ua;
+
+  var type = checkDeviceType(device.type);
+  var isBrowser = type.isBrowser,
+      isMobile = type.isMobile,
+      isTablet = type.isTablet,
+      isSmartTV = type.isSmartTV,
+      isConsole = type.isConsole,
+      isWearable = type.isWearable,
+      isEmbedded = type.isEmbedded;
+
+  if (isBrowser) {
+    return browserPayload(isBrowser, browser, engine, os, ua);
+  }
+
+  if (isSmartTV) {
+    return smartTvPayload(isSmartTV, engine, os, ua);
+  }
+
+  if (isConsole) {
+    return consolePayload(isConsole, engine, os, ua);
+  }
+
+  if (isMobile) {
+    return mobilePayload(type, device, os, ua);
+  }
+
+  if (isTablet) {
+    return mobilePayload(type, device, os, ua);
+  }
+
+  if (isWearable) {
+    return wearablePayload(isWearable, engine, os, ua);
+  }
+
+  if (isEmbedded) {
+    return embeddedPayload(isEmbedded, device, engine, os, ua);
+  }
+}
+
+var isMobileType = function isMobileType(_ref) {
+  var type = _ref.type;
+  return type === DeviceTypes.Mobile;
+};
+var isTabletType = function isTabletType(_ref2) {
+  var type = _ref2.type;
+  return type === DeviceTypes.Tablet;
+};
+var isMobileAndTabletType = function isMobileAndTabletType(_ref3) {
+  var type = _ref3.type;
+  return type === DeviceTypes.Mobile || type === DeviceTypes.Tablet;
+};
+var isSmartTVType = function isSmartTVType(_ref4) {
+  var type = _ref4.type;
+  return type === DeviceTypes.SmartTv;
+};
+var isBrowserType = function isBrowserType(_ref5) {
+  var type = _ref5.type;
+  return type === DeviceTypes.Browser;
+};
+var isWearableType = function isWearableType(_ref6) {
+  var type = _ref6.type;
+  return type === DeviceTypes.Wearable;
+};
+var isConsoleType = function isConsoleType(_ref7) {
+  var type = _ref7.type;
+  return type === DeviceTypes.Console;
+};
+var isEmbeddedType = function isEmbeddedType(_ref8) {
+  var type = _ref8.type;
+  return type === DeviceTypes.Embedded;
+};
+var getMobileVendor = function getMobileVendor(_ref9) {
+  var vendor = _ref9.vendor;
+  return setDefaults(vendor);
+};
+var getMobileModel = function getMobileModel(_ref10) {
+  var model = _ref10.model;
+  return setDefaults(model);
+};
+var getDeviceType = function getDeviceType(_ref11) {
+  var type = _ref11.type;
+  return setDefaults(type, 'browser');
+}; // os types
+
+var isAndroidType = function isAndroidType(_ref12) {
+  var name = _ref12.name;
+  return name === OsTypes.Android;
+};
+var isWindowsType = function isWindowsType(_ref13) {
+  var name = _ref13.name;
+  return name === OsTypes.Windows;
+};
+var isMacOsType = function isMacOsType(_ref14) {
+  var name = _ref14.name;
+  return name === OsTypes.MAC_OS;
+};
+var isWinPhoneType = function isWinPhoneType(_ref15) {
+  var name = _ref15.name;
+  return name === OsTypes.WindowsPhone;
+};
+var isIOSType = function isIOSType(_ref16) {
+  var name = _ref16.name;
+  return name === OsTypes.IOS;
+};
+var getOsVersion = function getOsVersion(_ref17) {
+  var version = _ref17.version;
+  return setDefaults(version);
+};
+var getOsName = function getOsName(_ref18) {
+  var name = _ref18.name;
+  return setDefaults(name);
+}; // browser types
+
+var isChromeType = function isChromeType(_ref19) {
+  var name = _ref19.name;
+  return name === BrowserTypes.Chrome;
+};
+var isFirefoxType = function isFirefoxType(_ref20) {
+  var name = _ref20.name;
+  return name === BrowserTypes.Firefox;
+};
+var isChromiumType = function isChromiumType(_ref21) {
+  var name = _ref21.name;
+  return name === BrowserTypes.Chromium;
+};
+var isEdgeType = function isEdgeType(_ref22) {
+  var name = _ref22.name;
+  return name === BrowserTypes.Edge;
+};
+var isYandexType = function isYandexType(_ref23) {
+  var name = _ref23.name;
+  return name === BrowserTypes.Yandex;
+};
+var isSafariType = function isSafariType(_ref24) {
+  var name = _ref24.name;
+  return name === BrowserTypes.Safari || name === BrowserTypes.MobileSafari;
+};
+var isMobileSafariType = function isMobileSafariType(_ref25) {
+  var name = _ref25.name;
+  return name === BrowserTypes.MobileSafari;
+};
+var isOperaType = function isOperaType(_ref26) {
+  var name = _ref26.name;
+  return name === BrowserTypes.Opera;
+};
+var isIEType = function isIEType(_ref27) {
+  var name = _ref27.name;
+  return name === BrowserTypes.InternetExplorer || name === BrowserTypes.Ie;
+};
+var isMIUIType = function isMIUIType(_ref28) {
+  var name = _ref28.name;
+  return name === BrowserTypes.MIUI;
+};
+var isSamsungBrowserType = function isSamsungBrowserType(_ref29) {
+  var name = _ref29.name;
+  return name === BrowserTypes.SamsungBrowser;
+};
+var getBrowserFullVersion = function getBrowserFullVersion(_ref30) {
+  var version = _ref30.version;
+  return setDefaults(version);
+};
+var getBrowserVersion = function getBrowserVersion(_ref31) {
+  var major = _ref31.major;
+  return setDefaults(major);
+};
+var getBrowserName = function getBrowserName(_ref32) {
+  var name = _ref32.name;
+  return setDefaults(name);
+}; // engine types
+
+var getEngineName = function getEngineName(_ref33) {
+  var name = _ref33.name;
+  return setDefaults(name);
+};
+var getEngineVersion = function getEngineVersion(_ref34) {
+  var version = _ref34.version;
+  return setDefaults(version);
+};
+var isElectronType = function isElectronType() {
+  var nav = getNavigatorInstance();
+  var ua = nav && nav.userAgent && nav.userAgent.toLowerCase();
+  return typeof ua === 'string' ? /electron/.test(ua) : false;
+};
+var isEdgeChromiumType = function isEdgeChromiumType(ua) {
+  return typeof ua === 'string' && ua.indexOf('Edg/') !== -1;
+};
+var getIOS13 = function getIOS13() {
+  var nav = getNavigatorInstance();
+  return nav && (/iPad|iPhone|iPod/.test(nav.platform) || nav.platform === 'MacIntel' && nav.maxTouchPoints > 1) && !window.MSStream;
+};
+var getIPad13 = function getIPad13() {
+  return isIOS13Check('iPad');
+};
+var getIphone13 = function getIphone13() {
+  return isIOS13Check('iPhone');
+};
+var getIPod13 = function getIPod13() {
+  return isIOS13Check('iPod');
+};
+var getUseragent = function getUseragent(userAg) {
+  return setDefaults(userAg);
+};
+
+function buildSelectorsObject(options) {
+  var _ref = options ? options : UAHelper,
+      device = _ref.device,
+      browser = _ref.browser,
+      os = _ref.os,
+      engine = _ref.engine,
+      ua = _ref.ua;
+
+  return {
+    isSmartTV: isSmartTVType(device),
+    isConsole: isConsoleType(device),
+    isWearable: isWearableType(device),
+    isEmbedded: isEmbeddedType(device),
+    isMobileSafari: isMobileSafariType(browser) || getIPad13(),
+    isChromium: isChromiumType(browser),
+    isMobile: isMobileAndTabletType(device) || getIPad13(),
+    isMobileOnly: isMobileType(device),
+    isTablet: isTabletType(device) || getIPad13(),
+    isBrowser: isBrowserType(device),
+    isDesktop: isBrowserType(device),
+    isAndroid: isAndroidType(os),
+    isWinPhone: isWinPhoneType(os),
+    isIOS: isIOSType(os) || getIPad13(),
+    isChrome: isChromeType(browser),
+    isFirefox: isFirefoxType(browser),
+    isSafari: isSafariType(browser),
+    isOpera: isOperaType(browser),
+    isIE: isIEType(browser),
+    osVersion: getOsVersion(os),
+    osName: getOsName(os),
+    fullBrowserVersion: getBrowserFullVersion(browser),
+    browserVersion: getBrowserVersion(browser),
+    browserName: getBrowserName(browser),
+    mobileVendor: getMobileVendor(device),
+    mobileModel: getMobileModel(device),
+    engineName: getEngineName(engine),
+    engineVersion: getEngineVersion(engine),
+    getUA: getUseragent(ua),
+    isEdge: isEdgeType(browser) || isEdgeChromiumType(ua),
+    isYandex: isYandexType(browser),
+    deviceType: getDeviceType(device),
+    isIOS13: getIOS13(),
+    isIPad13: getIPad13(),
+    isIPhone13: getIphone13(),
+    isIPod13: getIPod13(),
+    isElectron: isElectronType(),
+    isEdgeChromium: isEdgeChromiumType(ua),
+    isLegacyEdge: isEdgeType(browser) && !isEdgeChromiumType(ua),
+    isWindows: isWindowsType(os),
+    isMacOs: isMacOsType(os),
+    isMIUI: isMIUIType(browser),
+    isSamsungBrowser: isSamsungBrowserType(browser)
+  };
+}
+
+var isSmartTV = isSmartTVType(device);
+var isConsole = isConsoleType(device);
+var isWearable = isWearableType(device);
+var isEmbedded = isEmbeddedType(device);
+var isMobileSafari = isMobileSafariType(browser) || getIPad13();
+var isChromium = isChromiumType(browser);
+var isMobile = isMobileAndTabletType(device) || getIPad13();
+var isMobileOnly = isMobileType(device);
+var isTablet = isTabletType(device) || getIPad13();
+var isBrowser = isBrowserType(device);
+var isDesktop = isBrowserType(device);
+var isAndroid = isAndroidType(os);
+var isWinPhone = isWinPhoneType(os);
+var isIOS = isIOSType(os) || getIPad13();
+var isChrome = isChromeType(browser);
+var isFirefox = isFirefoxType(browser);
+var isSafari = isSafariType(browser);
+var isOpera = isOperaType(browser);
+var isIE = isIEType(browser);
+var osVersion = getOsVersion(os);
+var osName = getOsName(os);
+var fullBrowserVersion = getBrowserFullVersion(browser);
+var browserVersion = getBrowserVersion(browser);
+var browserName = getBrowserName(browser);
+var mobileVendor = getMobileVendor(device);
+var mobileModel = getMobileModel(device);
+var engineName = getEngineName(engine);
+var engineVersion = getEngineVersion(engine);
+var getUA = getUseragent(ua);
+var isEdge = isEdgeType(browser) || isEdgeChromiumType(ua);
+var isYandex = isYandexType(browser);
+var deviceType = getDeviceType(device);
+var isIOS13 = getIOS13();
+var isIPad13 = getIPad13();
+var isIPhone13 = getIphone13();
+var isIPod13 = getIPod13();
+var isElectron = isElectronType();
+var isEdgeChromium = isEdgeChromiumType(ua);
+var isLegacyEdge = isEdgeType(browser) && !isEdgeChromiumType(ua);
+var isWindows = isWindowsType(os);
+var isMacOs = isMacOsType(os);
+var isMIUI = isMIUIType(browser);
+var isSamsungBrowser = isSamsungBrowserType(browser);
+var getSelectorsByUserAgent = function getSelectorsByUserAgent(userAgent) {
+  if (!userAgent || typeof userAgent !== 'string') {
+    console.error('No valid user agent string was provided');
+    return;
+  }
+
+  var _UAHelper$parseUserAg = parseUserAgent(userAgent),
+      device = _UAHelper$parseUserAg.device,
+      browser = _UAHelper$parseUserAg.browser,
+      os = _UAHelper$parseUserAg.os,
+      engine = _UAHelper$parseUserAg.engine,
+      ua = _UAHelper$parseUserAg.ua;
+
+  return buildSelectorsObject({
+    device: device,
+    browser: browser,
+    os: os,
+    engine: engine,
+    ua: ua
+  });
+};
+
+var AndroidView = function AndroidView(_ref) {
+  var renderWithFragment = _ref.renderWithFragment,
+      children = _ref.children,
+      props = _objectWithoutProperties(_ref, ["renderWithFragment", "children"]);
+
+  return isAndroid ? renderWithFragment ? React__default.createElement(React.Fragment, null, children) : React__default.createElement("div", props, children) : null;
+};
+var BrowserView = function BrowserView(_ref2) {
+  var renderWithFragment = _ref2.renderWithFragment,
+      children = _ref2.children,
+      props = _objectWithoutProperties(_ref2, ["renderWithFragment", "children"]);
+
+  return isBrowser ? renderWithFragment ? React__default.createElement(React.Fragment, null, children) : React__default.createElement("div", props, children) : null;
+};
+var IEView = function IEView(_ref3) {
+  var renderWithFragment = _ref3.renderWithFragment,
+      children = _ref3.children,
+      props = _objectWithoutProperties(_ref3, ["renderWithFragment", "children"]);
+
+  return isIE ? renderWithFragment ? React__default.createElement(React.Fragment, null, children) : React__default.createElement("div", props, children) : null;
+};
+var IOSView = function IOSView(_ref4) {
+  var renderWithFragment = _ref4.renderWithFragment,
+      children = _ref4.children,
+      props = _objectWithoutProperties(_ref4, ["renderWithFragment", "children"]);
+
+  return isIOS ? renderWithFragment ? React__default.createElement(React.Fragment, null, children) : React__default.createElement("div", props, children) : null;
+};
+var MobileView = function MobileView(_ref5) {
+  var renderWithFragment = _ref5.renderWithFragment,
+      children = _ref5.children,
+      props = _objectWithoutProperties(_ref5, ["renderWithFragment", "children"]);
+
+  return isMobile ? renderWithFragment ? React__default.createElement(React.Fragment, null, children) : React__default.createElement("div", props, children) : null;
+};
+var TabletView = function TabletView(_ref6) {
+  var renderWithFragment = _ref6.renderWithFragment,
+      children = _ref6.children,
+      props = _objectWithoutProperties(_ref6, ["renderWithFragment", "children"]);
+
+  return isTablet ? renderWithFragment ? React__default.createElement(React.Fragment, null, children) : React__default.createElement("div", props, children) : null;
+};
+var WinPhoneView = function WinPhoneView(_ref7) {
+  var renderWithFragment = _ref7.renderWithFragment,
+      children = _ref7.children,
+      props = _objectWithoutProperties(_ref7, ["renderWithFragment", "children"]);
+
+  return isWinPhone ? renderWithFragment ? React__default.createElement(React.Fragment, null, children) : React__default.createElement("div", props, children) : null;
+};
+var MobileOnlyView = function MobileOnlyView(_ref8) {
+  var renderWithFragment = _ref8.renderWithFragment,
+      children = _ref8.children,
+      viewClassName = _ref8.viewClassName,
+      style = _ref8.style,
+      props = _objectWithoutProperties(_ref8, ["renderWithFragment", "children", "viewClassName", "style"]);
+
+  return isMobileOnly ? renderWithFragment ? React__default.createElement(React.Fragment, null, children) : React__default.createElement("div", props, children) : null;
+};
+var SmartTVView = function SmartTVView(_ref9) {
+  var renderWithFragment = _ref9.renderWithFragment,
+      children = _ref9.children,
+      props = _objectWithoutProperties(_ref9, ["renderWithFragment", "children"]);
+
+  return isSmartTV ? renderWithFragment ? React__default.createElement(React.Fragment, null, children) : React__default.createElement("div", props, children) : null;
+};
+var ConsoleView = function ConsoleView(_ref10) {
+  var renderWithFragment = _ref10.renderWithFragment,
+      children = _ref10.children,
+      props = _objectWithoutProperties(_ref10, ["renderWithFragment", "children"]);
+
+  return isConsole ? renderWithFragment ? React__default.createElement(React.Fragment, null, children) : React__default.createElement("div", props, children) : null;
+};
+var WearableView = function WearableView(_ref11) {
+  var renderWithFragment = _ref11.renderWithFragment,
+      children = _ref11.children,
+      props = _objectWithoutProperties(_ref11, ["renderWithFragment", "children"]);
+
+  return isWearable ? renderWithFragment ? React__default.createElement(React.Fragment, null, children) : React__default.createElement("div", props, children) : null;
+};
+var CustomView = function CustomView(_ref12) {
+  var renderWithFragment = _ref12.renderWithFragment,
+      children = _ref12.children,
+      viewClassName = _ref12.viewClassName,
+      style = _ref12.style,
+      condition = _ref12.condition,
+      props = _objectWithoutProperties(_ref12, ["renderWithFragment", "children", "viewClassName", "style", "condition"]);
+
+  return condition ? renderWithFragment ? React__default.createElement(React.Fragment, null, children) : React__default.createElement("div", props, children) : null;
+};
+
+function withOrientationChange(WrappedComponent) {
+  return /*#__PURE__*/function (_React$Component) {
+    _inherits(_class, _React$Component);
+
+    function _class(props) {
+      var _this;
+
+      _classCallCheck(this, _class);
+
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(_class).call(this, props));
+      _this.isEventListenerAdded = false;
+      _this.handleOrientationChange = _this.handleOrientationChange.bind(_assertThisInitialized(_this));
+      _this.onOrientationChange = _this.onOrientationChange.bind(_assertThisInitialized(_this));
+      _this.onPageLoad = _this.onPageLoad.bind(_assertThisInitialized(_this));
+      _this.state = {
+        isLandscape: false,
+        isPortrait: false
+      };
+      return _this;
+    }
+
+    _createClass(_class, [{
+      key: "handleOrientationChange",
+      value: function handleOrientationChange() {
+        if (!this.isEventListenerAdded) {
+          this.isEventListenerAdded = true;
+        }
+
+        var orientation = window.innerWidth > window.innerHeight ? 90 : 0;
+        this.setState({
+          isPortrait: orientation === 0,
+          isLandscape: orientation === 90
+        });
+      }
+    }, {
+      key: "onOrientationChange",
+      value: function onOrientationChange() {
+        this.handleOrientationChange();
+      }
+    }, {
+      key: "onPageLoad",
+      value: function onPageLoad() {
+        this.handleOrientationChange();
+      }
+    }, {
+      key: "componentDidMount",
+      value: function componentDidMount() {
+        if ((typeof window === "undefined" ? "undefined" : _typeof(window)) !== undefined && isMobile) {
+          if (!this.isEventListenerAdded) {
+            this.handleOrientationChange();
+            window.addEventListener("load", this.onPageLoad, false);
+          } else {
+            window.removeEventListener("load", this.onPageLoad, false);
+          }
+
+          window.addEventListener("resize", this.onOrientationChange, false);
+        }
+      }
+    }, {
+      key: "componentWillUnmount",
+      value: function componentWillUnmount() {
+        window.removeEventListener("resize", this.onOrientationChange, false);
+      }
+    }, {
+      key: "render",
+      value: function render() {
+        return React__default.createElement(WrappedComponent, _extends({}, this.props, {
+          isLandscape: this.state.isLandscape,
+          isPortrait: this.state.isPortrait
+        }));
+      }
+    }]);
+
+    return _class;
+  }(React__default.Component);
+}
+
+function useMobileOrientation() {
+  var _useState = React.useState(function () {
+    var orientation = window.innerWidth > window.innerHeight ? 90 : 0;
+    return {
+      isPortrait: orientation === 0,
+      isLandscape: orientation === 90,
+      orientation: orientation === 0 ? 'portrait' : 'landscape'
+    };
+  }),
+      _useState2 = _slicedToArray(_useState, 2),
+      state = _useState2[0],
+      setState = _useState2[1];
+
+  var handleOrientationChange = React.useCallback(function () {
+    var orientation = window.innerWidth > window.innerHeight ? 90 : 0;
+    var next = {
+      isPortrait: orientation === 0,
+      isLandscape: orientation === 90,
+      orientation: orientation === 0 ? 'portrait' : 'landscape'
+    };
+    state.orientation !== next.orientation && setState(next);
+  }, [state.orientation]);
+  React.useEffect(function () {
+    if ((typeof window === "undefined" ? "undefined" : _typeof(window)) !== undefined && isMobile) {
+      handleOrientationChange();
+      window.addEventListener("load", handleOrientationChange, false);
+      window.addEventListener("resize", handleOrientationChange, false);
+    }
+
+    return function () {
+      window.removeEventListener("resize", handleOrientationChange, false);
+      window.removeEventListener("load", handleOrientationChange, false);
+    };
+  }, [handleOrientationChange]);
+  return state;
+}
+
+function useDeviceData(userAgent) {
+  var hookUserAgent = userAgent ? userAgent : window.navigator.userAgent;
+  return parseUserAgent(hookUserAgent);
+}
+
+function useDeviceSelectors(userAgent) {
+  var hookUserAgent = userAgent ? userAgent : window.navigator.userAgent;
+  var deviceData = useDeviceData(hookUserAgent);
+  var selectors = buildSelectorsObject(deviceData);
+  return [selectors, deviceData];
+}
+
+exports.AndroidView = AndroidView;
+exports.BrowserTypes = BrowserTypes;
+exports.BrowserView = BrowserView;
+exports.ConsoleView = ConsoleView;
+exports.CustomView = CustomView;
+exports.IEView = IEView;
+exports.IOSView = IOSView;
+exports.MobileOnlyView = MobileOnlyView;
+exports.MobileView = MobileView;
+exports.OsTypes = OsTypes;
+exports.SmartTVView = SmartTVView;
+exports.TabletView = TabletView;
+exports.WearableView = WearableView;
+exports.WinPhoneView = WinPhoneView;
+exports.browserName = browserName;
+exports.browserVersion = browserVersion;
+exports.deviceDetect = deviceDetect;
+exports.deviceType = deviceType;
+exports.engineName = engineName;
+exports.engineVersion = engineVersion;
+exports.fullBrowserVersion = fullBrowserVersion;
+exports.getSelectorsByUserAgent = getSelectorsByUserAgent;
+exports.getUA = getUA;
+exports.isAndroid = isAndroid;
+exports.isBrowser = isBrowser;
+exports.isChrome = isChrome;
+exports.isChromium = isChromium;
+exports.isConsole = isConsole;
+exports.isDesktop = isDesktop;
+exports.isEdge = isEdge;
+exports.isEdgeChromium = isEdgeChromium;
+exports.isElectron = isElectron;
+exports.isEmbedded = isEmbedded;
+exports.isFirefox = isFirefox;
+exports.isIE = isIE;
+exports.isIOS = isIOS;
+exports.isIOS13 = isIOS13;
+exports.isIPad13 = isIPad13;
+exports.isIPhone13 = isIPhone13;
+exports.isIPod13 = isIPod13;
+exports.isLegacyEdge = isLegacyEdge;
+exports.isMIUI = isMIUI;
+exports.isMacOs = isMacOs;
+exports.isMobile = isMobile;
+exports.isMobileOnly = isMobileOnly;
+exports.isMobileSafari = isMobileSafari;
+exports.isOpera = isOpera;
+exports.isSafari = isSafari;
+exports.isSamsungBrowser = isSamsungBrowser;
+exports.isSmartTV = isSmartTV;
+exports.isTablet = isTablet;
+exports.isWearable = isWearable;
+exports.isWinPhone = isWinPhone;
+exports.isWindows = isWindows;
+exports.isYandex = isYandex;
+exports.mobileModel = mobileModel;
+exports.mobileVendor = mobileVendor;
+exports.osName = osName;
+exports.osVersion = osVersion;
+exports.parseUserAgent = parseUserAgent;
+exports.setUserAgent = setUserAgent;
+exports.useDeviceData = useDeviceData;
+exports.useDeviceSelectors = useDeviceSelectors;
+exports.useMobileOrientation = useMobileOrientation;
+exports.withOrientationChange = withOrientationChange;
+
+
+/***/ }),
+
+/***/ "./node_modules/ua-parser-js/dist/ua-parser.min.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/ua-parser-js/dist/ua-parser.min.js ***!
+  \*********************************************************/
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_RESULT__;/* UAParser.js v1.0.32
+   Copyright © 2012-2021 Faisal Salman <f@faisalman.com>
+   MIT License */
+(function(window,undefined){"use strict";var LIBVERSION="1.0.32",EMPTY="",UNKNOWN="?",FUNC_TYPE="function",UNDEF_TYPE="undefined",OBJ_TYPE="object",STR_TYPE="string",MAJOR="major",MODEL="model",NAME="name",TYPE="type",VENDOR="vendor",VERSION="version",ARCHITECTURE="architecture",CONSOLE="console",MOBILE="mobile",TABLET="tablet",SMARTTV="smarttv",WEARABLE="wearable",EMBEDDED="embedded",UA_MAX_LENGTH=350;var AMAZON="Amazon",APPLE="Apple",ASUS="ASUS",BLACKBERRY="BlackBerry",BROWSER="Browser",CHROME="Chrome",EDGE="Edge",FIREFOX="Firefox",GOOGLE="Google",HUAWEI="Huawei",LG="LG",MICROSOFT="Microsoft",MOTOROLA="Motorola",OPERA="Opera",SAMSUNG="Samsung",SHARP="Sharp",SONY="Sony",XIAOMI="Xiaomi",ZEBRA="Zebra",FACEBOOK="Facebook";var extend=function(regexes,extensions){var mergedRegexes={};for(var i in regexes){if(extensions[i]&&extensions[i].length%2===0){mergedRegexes[i]=extensions[i].concat(regexes[i])}else{mergedRegexes[i]=regexes[i]}}return mergedRegexes},enumerize=function(arr){var enums={};for(var i=0;i<arr.length;i++){enums[arr[i].toUpperCase()]=arr[i]}return enums},has=function(str1,str2){return typeof str1===STR_TYPE?lowerize(str2).indexOf(lowerize(str1))!==-1:false},lowerize=function(str){return str.toLowerCase()},majorize=function(version){return typeof version===STR_TYPE?version.replace(/[^\d\.]/g,EMPTY).split(".")[0]:undefined},trim=function(str,len){if(typeof str===STR_TYPE){str=str.replace(/^\s\s*/,EMPTY).replace(/\s\s*$/,EMPTY);return typeof len===UNDEF_TYPE?str:str.substring(0,UA_MAX_LENGTH)}};var rgxMapper=function(ua,arrays){var i=0,j,k,p,q,matches,match;while(i<arrays.length&&!matches){var regex=arrays[i],props=arrays[i+1];j=k=0;while(j<regex.length&&!matches){matches=regex[j++].exec(ua);if(!!matches){for(p=0;p<props.length;p++){match=matches[++k];q=props[p];if(typeof q===OBJ_TYPE&&q.length>0){if(q.length===2){if(typeof q[1]==FUNC_TYPE){this[q[0]]=q[1].call(this,match)}else{this[q[0]]=q[1]}}else if(q.length===3){if(typeof q[1]===FUNC_TYPE&&!(q[1].exec&&q[1].test)){this[q[0]]=match?q[1].call(this,match,q[2]):undefined}else{this[q[0]]=match?match.replace(q[1],q[2]):undefined}}else if(q.length===4){this[q[0]]=match?q[3].call(this,match.replace(q[1],q[2])):undefined}}else{this[q]=match?match:undefined}}}}i+=2}},strMapper=function(str,map){for(var i in map){if(typeof map[i]===OBJ_TYPE&&map[i].length>0){for(var j=0;j<map[i].length;j++){if(has(map[i][j],str)){return i===UNKNOWN?undefined:i}}}else if(has(map[i],str)){return i===UNKNOWN?undefined:i}}return str};var oldSafariMap={"1.0":"/8",1.2:"/1",1.3:"/3","2.0":"/412","2.0.2":"/416","2.0.3":"/417","2.0.4":"/419","?":"/"},windowsVersionMap={ME:"4.90","NT 3.11":"NT3.51","NT 4.0":"NT4.0",2e3:"NT 5.0",XP:["NT 5.1","NT 5.2"],Vista:"NT 6.0",7:"NT 6.1",8:"NT 6.2",8.1:"NT 6.3",10:["NT 6.4","NT 10.0"],RT:"ARM"};var regexes={browser:[[/\b(?:crmo|crios)\/([\w\.]+)/i],[VERSION,[NAME,"Chrome"]],[/edg(?:e|ios|a)?\/([\w\.]+)/i],[VERSION,[NAME,"Edge"]],[/(opera mini)\/([-\w\.]+)/i,/(opera [mobiletab]{3,6})\b.+version\/([-\w\.]+)/i,/(opera)(?:.+version\/|[\/ ]+)([\w\.]+)/i],[NAME,VERSION],[/opios[\/ ]+([\w\.]+)/i],[VERSION,[NAME,OPERA+" Mini"]],[/\bopr\/([\w\.]+)/i],[VERSION,[NAME,OPERA]],[/(kindle)\/([\w\.]+)/i,/(lunascape|maxthon|netfront|jasmine|blazer)[\/ ]?([\w\.]*)/i,/(avant |iemobile|slim)(?:browser)?[\/ ]?([\w\.]*)/i,/(ba?idubrowser)[\/ ]?([\w\.]+)/i,/(?:ms|\()(ie) ([\w\.]+)/i,/(flock|rockmelt|midori|epiphany|silk|skyfire|ovibrowser|bolt|iron|vivaldi|iridium|phantomjs|bowser|quark|qupzilla|falkon|rekonq|puffin|brave|whale|qqbrowserlite|qq|duckduckgo)\/([-\w\.]+)/i,/(weibo)__([\d\.]+)/i],[NAME,VERSION],[/(?:\buc? ?browser|(?:juc.+)ucweb)[\/ ]?([\w\.]+)/i],[VERSION,[NAME,"UC"+BROWSER]],[/microm.+\bqbcore\/([\w\.]+)/i,/\bqbcore\/([\w\.]+).+microm/i],[VERSION,[NAME,"WeChat(Win) Desktop"]],[/micromessenger\/([\w\.]+)/i],[VERSION,[NAME,"WeChat"]],[/konqueror\/([\w\.]+)/i],[VERSION,[NAME,"Konqueror"]],[/trident.+rv[: ]([\w\.]{1,9})\b.+like gecko/i],[VERSION,[NAME,"IE"]],[/yabrowser\/([\w\.]+)/i],[VERSION,[NAME,"Yandex"]],[/(avast|avg)\/([\w\.]+)/i],[[NAME,/(.+)/,"$1 Secure "+BROWSER],VERSION],[/\bfocus\/([\w\.]+)/i],[VERSION,[NAME,FIREFOX+" Focus"]],[/\bopt\/([\w\.]+)/i],[VERSION,[NAME,OPERA+" Touch"]],[/coc_coc\w+\/([\w\.]+)/i],[VERSION,[NAME,"Coc Coc"]],[/dolfin\/([\w\.]+)/i],[VERSION,[NAME,"Dolphin"]],[/coast\/([\w\.]+)/i],[VERSION,[NAME,OPERA+" Coast"]],[/miuibrowser\/([\w\.]+)/i],[VERSION,[NAME,"MIUI "+BROWSER]],[/fxios\/([-\w\.]+)/i],[VERSION,[NAME,FIREFOX]],[/\bqihu|(qi?ho?o?|360)browser/i],[[NAME,"360 "+BROWSER]],[/(oculus|samsung|sailfish|huawei)browser\/([\w\.]+)/i],[[NAME,/(.+)/,"$1 "+BROWSER],VERSION],[/(comodo_dragon)\/([\w\.]+)/i],[[NAME,/_/g," "],VERSION],[/(electron)\/([\w\.]+) safari/i,/(tesla)(?: qtcarbrowser|\/(20\d\d\.[-\w\.]+))/i,/m?(qqbrowser|baiduboxapp|2345Explorer)[\/ ]?([\w\.]+)/i],[NAME,VERSION],[/(metasr)[\/ ]?([\w\.]+)/i,/(lbbrowser)/i,/\[(linkedin)app\]/i],[NAME],[/((?:fban\/fbios|fb_iab\/fb4a)(?!.+fbav)|;fbav\/([\w\.]+);)/i],[[NAME,FACEBOOK],VERSION],[/safari (line)\/([\w\.]+)/i,/\b(line)\/([\w\.]+)\/iab/i,/(chromium|instagram)[\/ ]([-\w\.]+)/i],[NAME,VERSION],[/\bgsa\/([\w\.]+) .*safari\//i],[VERSION,[NAME,"GSA"]],[/headlesschrome(?:\/([\w\.]+)| )/i],[VERSION,[NAME,CHROME+" Headless"]],[/ wv\).+(chrome)\/([\w\.]+)/i],[[NAME,CHROME+" WebView"],VERSION],[/droid.+ version\/([\w\.]+)\b.+(?:mobile safari|safari)/i],[VERSION,[NAME,"Android "+BROWSER]],[/(chrome|omniweb|arora|[tizenoka]{5} ?browser)\/v?([\w\.]+)/i],[NAME,VERSION],[/version\/([\w\.\,]+) .*mobile\/\w+ (safari)/i],[VERSION,[NAME,"Mobile Safari"]],[/version\/([\w(\.|\,)]+) .*(mobile ?safari|safari)/i],[VERSION,NAME],[/webkit.+?(mobile ?safari|safari)(\/[\w\.]+)/i],[NAME,[VERSION,strMapper,oldSafariMap]],[/(webkit|khtml)\/([\w\.]+)/i],[NAME,VERSION],[/(navigator|netscape\d?)\/([-\w\.]+)/i],[[NAME,"Netscape"],VERSION],[/mobile vr; rv:([\w\.]+)\).+firefox/i],[VERSION,[NAME,FIREFOX+" Reality"]],[/ekiohf.+(flow)\/([\w\.]+)/i,/(swiftfox)/i,/(icedragon|iceweasel|camino|chimera|fennec|maemo browser|minimo|conkeror|klar)[\/ ]?([\w\.\+]+)/i,/(seamonkey|k-meleon|icecat|iceape|firebird|phoenix|palemoon|basilisk|waterfox)\/([-\w\.]+)$/i,/(firefox)\/([\w\.]+)/i,/(mozilla)\/([\w\.]+) .+rv\:.+gecko\/\d+/i,/(polaris|lynx|dillo|icab|doris|amaya|w3m|netsurf|sleipnir|obigo|mosaic|(?:go|ice|up)[\. ]?browser)[-\/ ]?v?([\w\.]+)/i,/(links) \(([\w\.]+)/i],[NAME,VERSION]],cpu:[[/(?:(amd|x(?:(?:86|64)[-_])?|wow|win)64)[;\)]/i],[[ARCHITECTURE,"amd64"]],[/(ia32(?=;))/i],[[ARCHITECTURE,lowerize]],[/((?:i[346]|x)86)[;\)]/i],[[ARCHITECTURE,"ia32"]],[/\b(aarch64|arm(v?8e?l?|_?64))\b/i],[[ARCHITECTURE,"arm64"]],[/\b(arm(?:v[67])?ht?n?[fl]p?)\b/i],[[ARCHITECTURE,"armhf"]],[/windows (ce|mobile); ppc;/i],[[ARCHITECTURE,"arm"]],[/((?:ppc|powerpc)(?:64)?)(?: mac|;|\))/i],[[ARCHITECTURE,/ower/,EMPTY,lowerize]],[/(sun4\w)[;\)]/i],[[ARCHITECTURE,"sparc"]],[/((?:avr32|ia64(?=;))|68k(?=\))|\barm(?=v(?:[1-7]|[5-7]1)l?|;|eabi)|(?=atmel )avr|(?:irix|mips|sparc)(?:64)?\b|pa-risc)/i],[[ARCHITECTURE,lowerize]]],device:[[/\b(sch-i[89]0\d|shw-m380s|sm-[ptx]\w{2,4}|gt-[pn]\d{2,4}|sgh-t8[56]9|nexus 10)/i],[MODEL,[VENDOR,SAMSUNG],[TYPE,TABLET]],[/\b((?:s[cgp]h|gt|sm)-\w+|galaxy nexus)/i,/samsung[- ]([-\w]+)/i,/sec-(sgh\w+)/i],[MODEL,[VENDOR,SAMSUNG],[TYPE,MOBILE]],[/\((ip(?:hone|od)[\w ]*);/i],[MODEL,[VENDOR,APPLE],[TYPE,MOBILE]],[/\((ipad);[-\w\),; ]+apple/i,/applecoremedia\/[\w\.]+ \((ipad)/i,/\b(ipad)\d\d?,\d\d?[;\]].+ios/i],[MODEL,[VENDOR,APPLE],[TYPE,TABLET]],[/\b((?:ag[rs][23]?|bah2?|sht?|btv)-a?[lw]\d{2})\b(?!.+d\/s)/i],[MODEL,[VENDOR,HUAWEI],[TYPE,TABLET]],[/(?:huawei|honor)([-\w ]+)[;\)]/i,/\b(nexus 6p|\w{2,4}e?-[atu]?[ln][\dx][012359c][adn]?)\b(?!.+d\/s)/i],[MODEL,[VENDOR,HUAWEI],[TYPE,MOBILE]],[/\b(poco[\w ]+)(?: bui|\))/i,/\b; (\w+) build\/hm\1/i,/\b(hm[-_ ]?note?[_ ]?(?:\d\w)?) bui/i,/\b(redmi[\-_ ]?(?:note|k)?[\w_ ]+)(?: bui|\))/i,/\b(mi[-_ ]?(?:a\d|one|one[_ ]plus|note lte|max|cc)?[_ ]?(?:\d?\w?)[_ ]?(?:plus|se|lite)?)(?: bui|\))/i],[[MODEL,/_/g," "],[VENDOR,XIAOMI],[TYPE,MOBILE]],[/\b(mi[-_ ]?(?:pad)(?:[\w_ ]+))(?: bui|\))/i],[[MODEL,/_/g," "],[VENDOR,XIAOMI],[TYPE,TABLET]],[/; (\w+) bui.+ oppo/i,/\b(cph[12]\d{3}|p(?:af|c[al]|d\w|e[ar])[mt]\d0|x9007|a101op)\b/i],[MODEL,[VENDOR,"OPPO"],[TYPE,MOBILE]],[/vivo (\w+)(?: bui|\))/i,/\b(v[12]\d{3}\w?[at])(?: bui|;)/i],[MODEL,[VENDOR,"Vivo"],[TYPE,MOBILE]],[/\b(rmx[12]\d{3})(?: bui|;|\))/i],[MODEL,[VENDOR,"Realme"],[TYPE,MOBILE]],[/\b(milestone|droid(?:[2-4x]| (?:bionic|x2|pro|razr))?:?( 4g)?)\b[\w ]+build\//i,/\bmot(?:orola)?[- ](\w*)/i,/((?:moto[\w\(\) ]+|xt\d{3,4}|nexus 6)(?= bui|\)))/i],[MODEL,[VENDOR,MOTOROLA],[TYPE,MOBILE]],[/\b(mz60\d|xoom[2 ]{0,2}) build\//i],[MODEL,[VENDOR,MOTOROLA],[TYPE,TABLET]],[/((?=lg)?[vl]k\-?\d{3}) bui| 3\.[-\w; ]{10}lg?-([06cv9]{3,4})/i],[MODEL,[VENDOR,LG],[TYPE,TABLET]],[/(lm(?:-?f100[nv]?|-[\w\.]+)(?= bui|\))|nexus [45])/i,/\blg[-e;\/ ]+((?!browser|netcast|android tv)\w+)/i,/\blg-?([\d\w]+) bui/i],[MODEL,[VENDOR,LG],[TYPE,MOBILE]],[/(ideatab[-\w ]+)/i,/lenovo ?(s[56]000[-\w]+|tab(?:[\w ]+)|yt[-\d\w]{6}|tb[-\d\w]{6})/i],[MODEL,[VENDOR,"Lenovo"],[TYPE,TABLET]],[/(?:maemo|nokia).*(n900|lumia \d+)/i,/nokia[-_ ]?([-\w\.]*)/i],[[MODEL,/_/g," "],[VENDOR,"Nokia"],[TYPE,MOBILE]],[/(pixel c)\b/i],[MODEL,[VENDOR,GOOGLE],[TYPE,TABLET]],[/droid.+; (pixel[\daxl ]{0,6})(?: bui|\))/i],[MODEL,[VENDOR,GOOGLE],[TYPE,MOBILE]],[/droid.+ (a?\d[0-2]{2}so|[c-g]\d{4}|so[-gl]\w+|xq-a\w[4-7][12])(?= bui|\).+chrome\/(?![1-6]{0,1}\d\.))/i],[MODEL,[VENDOR,SONY],[TYPE,MOBILE]],[/sony tablet [ps]/i,/\b(?:sony)?sgp\w+(?: bui|\))/i],[[MODEL,"Xperia Tablet"],[VENDOR,SONY],[TYPE,TABLET]],[/ (kb2005|in20[12]5|be20[12][59])\b/i,/(?:one)?(?:plus)? (a\d0\d\d)(?: b|\))/i],[MODEL,[VENDOR,"OnePlus"],[TYPE,MOBILE]],[/(alexa)webm/i,/(kf[a-z]{2}wi)( bui|\))/i,/(kf[a-z]+)( bui|\)).+silk\//i],[MODEL,[VENDOR,AMAZON],[TYPE,TABLET]],[/((?:sd|kf)[0349hijorstuw]+)( bui|\)).+silk\//i],[[MODEL,/(.+)/g,"Fire Phone $1"],[VENDOR,AMAZON],[TYPE,MOBILE]],[/(playbook);[-\w\),; ]+(rim)/i],[MODEL,VENDOR,[TYPE,TABLET]],[/\b((?:bb[a-f]|st[hv])100-\d)/i,/\(bb10; (\w+)/i],[MODEL,[VENDOR,BLACKBERRY],[TYPE,MOBILE]],[/(?:\b|asus_)(transfo[prime ]{4,10} \w+|eeepc|slider \w+|nexus 7|padfone|p00[cj])/i],[MODEL,[VENDOR,ASUS],[TYPE,TABLET]],[/ (z[bes]6[027][012][km][ls]|zenfone \d\w?)\b/i],[MODEL,[VENDOR,ASUS],[TYPE,MOBILE]],[/(nexus 9)/i],[MODEL,[VENDOR,"HTC"],[TYPE,TABLET]],[/(htc)[-;_ ]{1,2}([\w ]+(?=\)| bui)|\w+)/i,/(zte)[- ]([\w ]+?)(?: bui|\/|\))/i,/(alcatel|geeksphone|nexian|panasonic|sony(?!-bra))[-_ ]?([-\w]*)/i],[VENDOR,[MODEL,/_/g," "],[TYPE,MOBILE]],[/droid.+; ([ab][1-7]-?[0178a]\d\d?)/i],[MODEL,[VENDOR,"Acer"],[TYPE,TABLET]],[/droid.+; (m[1-5] note) bui/i,/\bmz-([-\w]{2,})/i],[MODEL,[VENDOR,"Meizu"],[TYPE,MOBILE]],[/\b(sh-?[altvz]?\d\d[a-ekm]?)/i],[MODEL,[VENDOR,SHARP],[TYPE,MOBILE]],[/(blackberry|benq|palm(?=\-)|sonyericsson|acer|asus|dell|meizu|motorola|polytron)[-_ ]?([-\w]*)/i,/(hp) ([\w ]+\w)/i,/(asus)-?(\w+)/i,/(microsoft); (lumia[\w ]+)/i,/(lenovo)[-_ ]?([-\w]+)/i,/(jolla)/i,/(oppo) ?([\w ]+) bui/i],[VENDOR,MODEL,[TYPE,MOBILE]],[/(archos) (gamepad2?)/i,/(hp).+(touchpad(?!.+tablet)|tablet)/i,/(kindle)\/([\w\.]+)/i,/(nook)[\w ]+build\/(\w+)/i,/(dell) (strea[kpr\d ]*[\dko])/i,/(le[- ]+pan)[- ]+(\w{1,9}) bui/i,/(trinity)[- ]*(t\d{3}) bui/i,/(gigaset)[- ]+(q\w{1,9}) bui/i,/(vodafone) ([\w ]+)(?:\)| bui)/i],[VENDOR,MODEL,[TYPE,TABLET]],[/(surface duo)/i],[MODEL,[VENDOR,MICROSOFT],[TYPE,TABLET]],[/droid [\d\.]+; (fp\du?)(?: b|\))/i],[MODEL,[VENDOR,"Fairphone"],[TYPE,MOBILE]],[/(u304aa)/i],[MODEL,[VENDOR,"AT&T"],[TYPE,MOBILE]],[/\bsie-(\w*)/i],[MODEL,[VENDOR,"Siemens"],[TYPE,MOBILE]],[/\b(rct\w+) b/i],[MODEL,[VENDOR,"RCA"],[TYPE,TABLET]],[/\b(venue[\d ]{2,7}) b/i],[MODEL,[VENDOR,"Dell"],[TYPE,TABLET]],[/\b(q(?:mv|ta)\w+) b/i],[MODEL,[VENDOR,"Verizon"],[TYPE,TABLET]],[/\b(?:barnes[& ]+noble |bn[rt])([\w\+ ]*) b/i],[MODEL,[VENDOR,"Barnes & Noble"],[TYPE,TABLET]],[/\b(tm\d{3}\w+) b/i],[MODEL,[VENDOR,"NuVision"],[TYPE,TABLET]],[/\b(k88) b/i],[MODEL,[VENDOR,"ZTE"],[TYPE,TABLET]],[/\b(nx\d{3}j) b/i],[MODEL,[VENDOR,"ZTE"],[TYPE,MOBILE]],[/\b(gen\d{3}) b.+49h/i],[MODEL,[VENDOR,"Swiss"],[TYPE,MOBILE]],[/\b(zur\d{3}) b/i],[MODEL,[VENDOR,"Swiss"],[TYPE,TABLET]],[/\b((zeki)?tb.*\b) b/i],[MODEL,[VENDOR,"Zeki"],[TYPE,TABLET]],[/\b([yr]\d{2}) b/i,/\b(dragon[- ]+touch |dt)(\w{5}) b/i],[[VENDOR,"Dragon Touch"],MODEL,[TYPE,TABLET]],[/\b(ns-?\w{0,9}) b/i],[MODEL,[VENDOR,"Insignia"],[TYPE,TABLET]],[/\b((nxa|next)-?\w{0,9}) b/i],[MODEL,[VENDOR,"NextBook"],[TYPE,TABLET]],[/\b(xtreme\_)?(v(1[045]|2[015]|[3469]0|7[05])) b/i],[[VENDOR,"Voice"],MODEL,[TYPE,MOBILE]],[/\b(lvtel\-)?(v1[12]) b/i],[[VENDOR,"LvTel"],MODEL,[TYPE,MOBILE]],[/\b(ph-1) /i],[MODEL,[VENDOR,"Essential"],[TYPE,MOBILE]],[/\b(v(100md|700na|7011|917g).*\b) b/i],[MODEL,[VENDOR,"Envizen"],[TYPE,TABLET]],[/\b(trio[-\w\. ]+) b/i],[MODEL,[VENDOR,"MachSpeed"],[TYPE,TABLET]],[/\btu_(1491) b/i],[MODEL,[VENDOR,"Rotor"],[TYPE,TABLET]],[/(shield[\w ]+) b/i],[MODEL,[VENDOR,"Nvidia"],[TYPE,TABLET]],[/(sprint) (\w+)/i],[VENDOR,MODEL,[TYPE,MOBILE]],[/(kin\.[onetw]{3})/i],[[MODEL,/\./g," "],[VENDOR,MICROSOFT],[TYPE,MOBILE]],[/droid.+; (cc6666?|et5[16]|mc[239][23]x?|vc8[03]x?)\)/i],[MODEL,[VENDOR,ZEBRA],[TYPE,TABLET]],[/droid.+; (ec30|ps20|tc[2-8]\d[kx])\)/i],[MODEL,[VENDOR,ZEBRA],[TYPE,MOBILE]],[/(ouya)/i,/(nintendo) ([wids3utch]+)/i],[VENDOR,MODEL,[TYPE,CONSOLE]],[/droid.+; (shield) bui/i],[MODEL,[VENDOR,"Nvidia"],[TYPE,CONSOLE]],[/(playstation [345portablevi]+)/i],[MODEL,[VENDOR,SONY],[TYPE,CONSOLE]],[/\b(xbox(?: one)?(?!; xbox))[\); ]/i],[MODEL,[VENDOR,MICROSOFT],[TYPE,CONSOLE]],[/smart-tv.+(samsung)/i],[VENDOR,[TYPE,SMARTTV]],[/hbbtv.+maple;(\d+)/i],[[MODEL,/^/,"SmartTV"],[VENDOR,SAMSUNG],[TYPE,SMARTTV]],[/(nux; netcast.+smarttv|lg (netcast\.tv-201\d|android tv))/i],[[VENDOR,LG],[TYPE,SMARTTV]],[/(apple) ?tv/i],[VENDOR,[MODEL,APPLE+" TV"],[TYPE,SMARTTV]],[/crkey/i],[[MODEL,CHROME+"cast"],[VENDOR,GOOGLE],[TYPE,SMARTTV]],[/droid.+aft(\w)( bui|\))/i],[MODEL,[VENDOR,AMAZON],[TYPE,SMARTTV]],[/\(dtv[\);].+(aquos)/i,/(aquos-tv[\w ]+)\)/i],[MODEL,[VENDOR,SHARP],[TYPE,SMARTTV]],[/(bravia[\w ]+)( bui|\))/i],[MODEL,[VENDOR,SONY],[TYPE,SMARTTV]],[/(mitv-\w{5}) bui/i],[MODEL,[VENDOR,XIAOMI],[TYPE,SMARTTV]],[/\b(roku)[\dx]*[\)\/]((?:dvp-)?[\d\.]*)/i,/hbbtv\/\d+\.\d+\.\d+ +\([\w ]*; *(\w[^;]*);([^;]*)/i],[[VENDOR,trim],[MODEL,trim],[TYPE,SMARTTV]],[/\b(android tv|smart[- ]?tv|opera tv|tv; rv:)\b/i],[[TYPE,SMARTTV]],[/((pebble))app/i],[VENDOR,MODEL,[TYPE,WEARABLE]],[/droid.+; (glass) \d/i],[MODEL,[VENDOR,GOOGLE],[TYPE,WEARABLE]],[/droid.+; (wt63?0{2,3})\)/i],[MODEL,[VENDOR,ZEBRA],[TYPE,WEARABLE]],[/(quest( 2)?)/i],[MODEL,[VENDOR,FACEBOOK],[TYPE,WEARABLE]],[/(tesla)(?: qtcarbrowser|\/[-\w\.]+)/i],[VENDOR,[TYPE,EMBEDDED]],[/droid .+?; ([^;]+?)(?: bui|\) applew).+? mobile safari/i],[MODEL,[TYPE,MOBILE]],[/droid .+?; ([^;]+?)(?: bui|\) applew).+?(?! mobile) safari/i],[MODEL,[TYPE,TABLET]],[/\b((tablet|tab)[;\/]|focus\/\d(?!.+mobile))/i],[[TYPE,TABLET]],[/(phone|mobile(?:[;\/]| [ \w\/\.]*safari)|pda(?=.+windows ce))/i],[[TYPE,MOBILE]],[/(android[-\w\. ]{0,9});.+buil/i],[MODEL,[VENDOR,"Generic"]]],engine:[[/windows.+ edge\/([\w\.]+)/i],[VERSION,[NAME,EDGE+"HTML"]],[/webkit\/537\.36.+chrome\/(?!27)([\w\.]+)/i],[VERSION,[NAME,"Blink"]],[/(presto)\/([\w\.]+)/i,/(webkit|trident|netfront|netsurf|amaya|lynx|w3m|goanna)\/([\w\.]+)/i,/ekioh(flow)\/([\w\.]+)/i,/(khtml|tasman|links)[\/ ]\(?([\w\.]+)/i,/(icab)[\/ ]([23]\.[\d\.]+)/i],[NAME,VERSION],[/rv\:([\w\.]{1,9})\b.+(gecko)/i],[VERSION,NAME]],os:[[/microsoft (windows) (vista|xp)/i],[NAME,VERSION],[/(windows) nt 6\.2; (arm)/i,/(windows (?:phone(?: os)?|mobile))[\/ ]?([\d\.\w ]*)/i,/(windows)[\/ ]?([ntce\d\. ]+\w)(?!.+xbox)/i],[NAME,[VERSION,strMapper,windowsVersionMap]],[/(win(?=3|9|n)|win 9x )([nt\d\.]+)/i],[[NAME,"Windows"],[VERSION,strMapper,windowsVersionMap]],[/ip[honead]{2,4}\b(?:.*os ([\w]+) like mac|; opera)/i,/cfnetwork\/.+darwin/i],[[VERSION,/_/g,"."],[NAME,"iOS"]],[/(mac os x) ?([\w\. ]*)/i,/(macintosh|mac_powerpc\b)(?!.+haiku)/i],[[NAME,"Mac OS"],[VERSION,/_/g,"."]],[/droid ([\w\.]+)\b.+(android[- ]x86|harmonyos)/i],[VERSION,NAME],[/(android|webos|qnx|bada|rim tablet os|maemo|meego|sailfish)[-\/ ]?([\w\.]*)/i,/(blackberry)\w*\/([\w\.]*)/i,/(tizen|kaios)[\/ ]([\w\.]+)/i,/\((series40);/i],[NAME,VERSION],[/\(bb(10);/i],[VERSION,[NAME,BLACKBERRY]],[/(?:symbian ?os|symbos|s60(?=;)|series60)[-\/ ]?([\w\.]*)/i],[VERSION,[NAME,"Symbian"]],[/mozilla\/[\d\.]+ \((?:mobile|tablet|tv|mobile; [\w ]+); rv:.+ gecko\/([\w\.]+)/i],[VERSION,[NAME,FIREFOX+" OS"]],[/web0s;.+rt(tv)/i,/\b(?:hp)?wos(?:browser)?\/([\w\.]+)/i],[VERSION,[NAME,"webOS"]],[/crkey\/([\d\.]+)/i],[VERSION,[NAME,CHROME+"cast"]],[/(cros) [\w]+ ([\w\.]+\w)/i],[[NAME,"Chromium OS"],VERSION],[/(nintendo|playstation) ([wids345portablevuch]+)/i,/(xbox); +xbox ([^\);]+)/i,/\b(joli|palm)\b ?(?:os)?\/?([\w\.]*)/i,/(mint)[\/\(\) ]?(\w*)/i,/(mageia|vectorlinux)[; ]/i,/([kxln]?ubuntu|debian|suse|opensuse|gentoo|arch(?= linux)|slackware|fedora|mandriva|centos|pclinuxos|red ?hat|zenwalk|linpus|raspbian|plan 9|minix|risc os|contiki|deepin|manjaro|elementary os|sabayon|linspire)(?: gnu\/linux)?(?: enterprise)?(?:[- ]linux)?(?:-gnu)?[-\/ ]?(?!chrom|package)([-\w\.]*)/i,/(hurd|linux) ?([\w\.]*)/i,/(gnu) ?([\w\.]*)/i,/\b([-frentopcghs]{0,5}bsd|dragonfly)[\/ ]?(?!amd|[ix346]{1,2}86)([\w\.]*)/i,/(haiku) (\w+)/i],[NAME,VERSION],[/(sunos) ?([\w\.\d]*)/i],[[NAME,"Solaris"],VERSION],[/((?:open)?solaris)[-\/ ]?([\w\.]*)/i,/(aix) ((\d)(?=\.|\)| )[\w\.])*/i,/\b(beos|os\/2|amigaos|morphos|openvms|fuchsia|hp-ux)/i,/(unix) ?([\w\.]*)/i],[NAME,VERSION]]};var UAParser=function(ua,extensions){if(typeof ua===OBJ_TYPE){extensions=ua;ua=undefined}if(!(this instanceof UAParser)){return new UAParser(ua,extensions).getResult()}var _ua=ua||(typeof window!==UNDEF_TYPE&&window.navigator&&window.navigator.userAgent?window.navigator.userAgent:EMPTY);var _rgxmap=extensions?extend(regexes,extensions):regexes;this.getBrowser=function(){var _browser={};_browser[NAME]=undefined;_browser[VERSION]=undefined;rgxMapper.call(_browser,_ua,_rgxmap.browser);_browser.major=majorize(_browser.version);return _browser};this.getCPU=function(){var _cpu={};_cpu[ARCHITECTURE]=undefined;rgxMapper.call(_cpu,_ua,_rgxmap.cpu);return _cpu};this.getDevice=function(){var _device={};_device[VENDOR]=undefined;_device[MODEL]=undefined;_device[TYPE]=undefined;rgxMapper.call(_device,_ua,_rgxmap.device);return _device};this.getEngine=function(){var _engine={};_engine[NAME]=undefined;_engine[VERSION]=undefined;rgxMapper.call(_engine,_ua,_rgxmap.engine);return _engine};this.getOS=function(){var _os={};_os[NAME]=undefined;_os[VERSION]=undefined;rgxMapper.call(_os,_ua,_rgxmap.os);return _os};this.getResult=function(){return{ua:this.getUA(),browser:this.getBrowser(),engine:this.getEngine(),os:this.getOS(),device:this.getDevice(),cpu:this.getCPU()}};this.getUA=function(){return _ua};this.setUA=function(ua){_ua=typeof ua===STR_TYPE&&ua.length>UA_MAX_LENGTH?trim(ua,UA_MAX_LENGTH):ua;return this};this.setUA(_ua);return this};UAParser.VERSION=LIBVERSION;UAParser.BROWSER=enumerize([NAME,VERSION,MAJOR]);UAParser.CPU=enumerize([ARCHITECTURE]);UAParser.DEVICE=enumerize([MODEL,VENDOR,TYPE,CONSOLE,MOBILE,SMARTTV,TABLET,WEARABLE,EMBEDDED]);UAParser.ENGINE=UAParser.OS=enumerize([NAME,VERSION]);if(typeof exports!==UNDEF_TYPE){if("object"!==UNDEF_TYPE&&module.exports){exports=module.exports=UAParser}exports.UAParser=UAParser}else{if("function"===FUNC_TYPE&&__webpack_require__.amdO){!(__WEBPACK_AMD_DEFINE_RESULT__ = (function(){return UAParser}).call(exports, __webpack_require__, exports, module),
+		__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__))}else if(typeof window!==UNDEF_TYPE){window.UAParser=UAParser}}var $=typeof window!==UNDEF_TYPE&&(window.jQuery||window.Zepto);if($&&!$.ua){var parser=new UAParser;$.ua=parser.getResult();$.ua.get=function(){return parser.getUA()};$.ua.set=function(ua){parser.setUA(ua);var result=parser.getResult();for(var prop in result){$.ua[prop]=result[prop]}}}})(typeof window==="object"?window:this);
+
+/***/ }),
+
+/***/ "react":
+/*!************************!*\
+  !*** external "React" ***!
+  \************************/
+/***/ (function(module) {
+
+"use strict";
+module.exports = window["React"];
+
+/***/ }),
+
+/***/ "react-dom":
+/*!***************************!*\
+  !*** external "ReactDOM" ***!
+  \***************************/
+/***/ (function(module) {
+
+"use strict";
+module.exports = window["ReactDOM"];
+
+/***/ }),
+
+/***/ "@wordpress/block-editor":
+/*!*************************************!*\
+  !*** external ["wp","blockEditor"] ***!
+  \*************************************/
+/***/ (function(module) {
+
+"use strict";
+module.exports = window["wp"]["blockEditor"];
+
+/***/ }),
+
+/***/ "@wordpress/blocks":
+/*!********************************!*\
+  !*** external ["wp","blocks"] ***!
+  \********************************/
+/***/ (function(module) {
+
+"use strict";
+module.exports = window["wp"]["blocks"];
+
+/***/ }),
+
+/***/ "@wordpress/components":
+/*!************************************!*\
+  !*** external ["wp","components"] ***!
+  \************************************/
+/***/ (function(module) {
+
+"use strict";
+module.exports = window["wp"]["components"];
+
+/***/ }),
+
+/***/ "@wordpress/element":
+/*!*********************************!*\
+  !*** external ["wp","element"] ***!
+  \*********************************/
+/***/ (function(module) {
+
+"use strict";
+module.exports = window["wp"]["element"];
+
+/***/ }),
+
+/***/ "@wordpress/i18n":
+/*!******************************!*\
+  !*** external ["wp","i18n"] ***!
+  \******************************/
+/***/ (function(module) {
+
+"use strict";
+module.exports = window["wp"]["i18n"];
+
+/***/ }),
+
+/***/ "./node_modules/react-leaflet/lib/MapContainer.js":
+/*!********************************************************!*\
+  !*** ./node_modules/react-leaflet/lib/MapContainer.js ***!
+  \********************************************************/
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "MapContainer": function() { return /* binding */ MapContainer; }
+/* harmony export */ });
+/* harmony import */ var _react_leaflet_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @react-leaflet/core */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/context.js");
+/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+function _extends() {
+    _extends = Object.assign || function(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source){
+                if (Object.prototype.hasOwnProperty.call(source, key)) {
+                    target[key] = source[key];
+                }
+            }
+        }
+        return target;
+    };
+    return _extends.apply(this, arguments);
+}
+
+
+
+function MapContainerComponent({ bounds , boundsOptions , center , children , className , id , placeholder , style , whenReady , zoom , ...options }, forwardedRef) {
+    const [props] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)({
+        className,
+        id,
+        style
+    });
+    const [context, setContext] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
+    (0,react__WEBPACK_IMPORTED_MODULE_1__.useImperativeHandle)(forwardedRef, ()=>context?.map ?? null, [
+        context
+    ]);
+    const mapRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useCallback)((node)=>{
+        if (node !== null && context === null) {
+            const map = new leaflet__WEBPACK_IMPORTED_MODULE_0__.Map(node, options);
+            if (center != null && zoom != null) {
+                map.setView(center, zoom);
+            } else if (bounds != null) {
+                map.fitBounds(bounds, boundsOptions);
+            }
+            if (whenReady != null) {
+                map.whenReady(whenReady);
+            }
+            setContext((0,_react_leaflet_core__WEBPACK_IMPORTED_MODULE_2__.createLeafletContext)(map));
+        }
+    }, []);
+    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(()=>{
+        return ()=>{
+            context?.map.remove();
+        };
+    }, [
+        context
+    ]);
+    const contents = context ? /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_1__.createElement(_react_leaflet_core__WEBPACK_IMPORTED_MODULE_2__.LeafletProvider, {
+        value: context
+    }, children) : placeholder ?? null;
+    return /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", _extends({}, props, {
+        ref: mapRef
+    }), contents);
+}
+const MapContainer = /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.forwardRef)(MapContainerComponent);
+
+
+/***/ }),
+
+/***/ "./node_modules/react-leaflet/lib/Marker.js":
+/*!**************************************************!*\
+  !*** ./node_modules/react-leaflet/lib/Marker.js ***!
+  \**************************************************/
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Marker": function() { return /* binding */ Marker; }
+/* harmony export */ });
+/* harmony import */ var _react_leaflet_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @react-leaflet/core */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/generic.js");
+/* harmony import */ var _react_leaflet_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @react-leaflet/core */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/element.js");
+/* harmony import */ var _react_leaflet_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @react-leaflet/core */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/context.js");
+/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
+
+
+const Marker = (0,_react_leaflet_core__WEBPACK_IMPORTED_MODULE_1__.createLayerComponent)(function createMarker({ position , ...options }, ctx) {
+    const marker = new leaflet__WEBPACK_IMPORTED_MODULE_0__.Marker(position, options);
+    return (0,_react_leaflet_core__WEBPACK_IMPORTED_MODULE_2__.createElementObject)(marker, (0,_react_leaflet_core__WEBPACK_IMPORTED_MODULE_3__.extendContext)(ctx, {
+        overlayContainer: marker
+    }));
+}, function updateMarker(marker, props, prevProps) {
+    if (props.position !== prevProps.position) {
+        marker.setLatLng(props.position);
+    }
+    if (props.icon != null && props.icon !== prevProps.icon) {
+        marker.setIcon(props.icon);
+    }
+    if (props.zIndexOffset != null && props.zIndexOffset !== prevProps.zIndexOffset) {
+        marker.setZIndexOffset(props.zIndexOffset);
+    }
+    if (props.opacity != null && props.opacity !== prevProps.opacity) {
+        marker.setOpacity(props.opacity);
+    }
+    if (marker.dragging != null && props.draggable !== prevProps.draggable) {
+        if (props.draggable === true) {
+            marker.dragging.enable();
+        } else {
+            marker.dragging.disable();
+        }
+    }
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/react-leaflet/lib/Popup.js":
+/*!*************************************************!*\
+  !*** ./node_modules/react-leaflet/lib/Popup.js ***!
+  \*************************************************/
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Popup": function() { return /* binding */ Popup; }
+/* harmony export */ });
+/* harmony import */ var _react_leaflet_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @react-leaflet/core */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/generic.js");
+/* harmony import */ var _react_leaflet_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @react-leaflet/core */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/element.js");
+/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+
+
+
+const Popup = (0,_react_leaflet_core__WEBPACK_IMPORTED_MODULE_2__.createOverlayComponent)(function createPopup(props, context) {
+    const popup = new leaflet__WEBPACK_IMPORTED_MODULE_0__.Popup(props, context.overlayContainer);
+    return (0,_react_leaflet_core__WEBPACK_IMPORTED_MODULE_3__.createElementObject)(popup, context);
+}, function usePopupLifecycle(element, context, { position  }, setOpen) {
+    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function addPopup() {
+        const { instance  } = element;
+        function onPopupOpen(event) {
+            if (event.popup === instance) {
+                instance.update();
+                setOpen(true);
+            }
+        }
+        function onPopupClose(event) {
+            if (event.popup === instance) {
+                setOpen(false);
+            }
+        }
+        context.map.on({
+            popupopen: onPopupOpen,
+            popupclose: onPopupClose
+        });
+        if (context.overlayContainer == null) {
+            // Attach to a Map
+            if (position != null) {
+                instance.setLatLng(position);
+            }
+            instance.openOn(context.map);
+        } else {
+            // Attach to container component
+            context.overlayContainer.bindPopup(instance);
+        }
+        return function removePopup() {
+            context.map.off({
+                popupopen: onPopupOpen,
+                popupclose: onPopupClose
+            });
+            context.overlayContainer?.unbindPopup();
+            context.map.removeLayer(instance);
+        };
+    }, [
+        element,
+        context,
+        setOpen,
+        position
+    ]);
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/react-leaflet/lib/TileLayer.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/react-leaflet/lib/TileLayer.js ***!
+  \*****************************************************/
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "TileLayer": function() { return /* binding */ TileLayer; }
+/* harmony export */ });
+/* harmony import */ var _react_leaflet_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @react-leaflet/core */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/generic.js");
+/* harmony import */ var _react_leaflet_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @react-leaflet/core */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/pane.js");
+/* harmony import */ var _react_leaflet_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @react-leaflet/core */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/element.js");
+/* harmony import */ var _react_leaflet_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @react-leaflet/core */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/grid-layer.js");
+/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
+
+
+const TileLayer = (0,_react_leaflet_core__WEBPACK_IMPORTED_MODULE_1__.createTileLayerComponent)(function createTileLayer({ url , ...options }, context) {
+    const layer = new leaflet__WEBPACK_IMPORTED_MODULE_0__.TileLayer(url, (0,_react_leaflet_core__WEBPACK_IMPORTED_MODULE_2__.withPane)(options, context));
+    return (0,_react_leaflet_core__WEBPACK_IMPORTED_MODULE_3__.createElementObject)(layer, context);
+}, _react_leaflet_core__WEBPACK_IMPORTED_MODULE_4__.updateGridLayer);
+
+
+/***/ }),
+
+/***/ "./node_modules/react-leaflet/lib/hooks.js":
+/*!*************************************************!*\
+  !*** ./node_modules/react-leaflet/lib/hooks.js ***!
+  \*************************************************/
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "useMap": function() { return /* binding */ useMap; },
+/* harmony export */   "useMapEvent": function() { return /* binding */ useMapEvent; },
+/* harmony export */   "useMapEvents": function() { return /* binding */ useMapEvents; }
+/* harmony export */ });
+/* harmony import */ var _react_leaflet_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @react-leaflet/core */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/context.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+
+
+function useMap() {
+    return (0,_react_leaflet_core__WEBPACK_IMPORTED_MODULE_1__.useLeafletContext)().map;
+}
+function useMapEvent(type, handler) {
+    const map = useMap();
+    (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function addMapEventHandler() {
+        // @ts-ignore event type
+        map.on(type, handler);
+        return function removeMapEventHandler() {
+            // @ts-ignore event type
+            map.off(type, handler);
+        };
+    }, [
+        map,
+        type,
+        handler
+    ]);
+    return map;
+}
+function useMapEvents(handlers) {
+    const map = useMap();
+    (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function addMapEventHandlers() {
+        map.on(handlers);
+        return function removeMapEventHandlers() {
+            map.off(handlers);
+        };
+    }, [
+        map,
+        handlers
+    ]);
+    return map;
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/attribution.js":
+/*!****************************************************************************************!*\
+  !*** ./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/attribution.js ***!
+  \****************************************************************************************/
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "useAttribution": function() { return /* binding */ useAttribution; }
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+
+function useAttribution(map, attribution) {
+    const attributionRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(attribution);
+    (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function updateAttribution() {
+        if (attribution !== attributionRef.current && map.attributionControl != null) {
+            if (attributionRef.current != null) {
+                map.attributionControl.removeAttribution(attributionRef.current);
+            }
+            if (attribution != null) {
+                map.attributionControl.addAttribution(attribution);
+            }
+        }
+        attributionRef.current = attribution;
+    }, [
+        map,
+        attribution
+    ]);
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/component.js":
+/*!**************************************************************************************!*\
+  !*** ./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/component.js ***!
+  \**************************************************************************************/
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "createContainerComponent": function() { return /* binding */ createContainerComponent; },
+/* harmony export */   "createDivOverlayComponent": function() { return /* binding */ createDivOverlayComponent; },
+/* harmony export */   "createLeafComponent": function() { return /* binding */ createLeafComponent; }
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "react-dom");
+/* harmony import */ var _context_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./context.js */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/context.js");
+
+
+
+function createContainerComponent(useElement) {
+    function ContainerComponent(props, forwardedRef) {
+        const { instance , context  } = useElement(props).current;
+        (0,react__WEBPACK_IMPORTED_MODULE_0__.useImperativeHandle)(forwardedRef, ()=>instance);
+        return props.children == null ? null : /*#__PURE__*/ react__WEBPACK_IMPORTED_MODULE_0__.createElement(_context_js__WEBPACK_IMPORTED_MODULE_2__.LeafletProvider, {
+            value: context
+        }, props.children);
+    }
+    return /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_0__.forwardRef)(ContainerComponent);
+}
+function createDivOverlayComponent(useElement) {
+    function OverlayComponent(props, forwardedRef) {
+        const [isOpen, setOpen] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+        const { instance  } = useElement(props, setOpen).current;
+        (0,react__WEBPACK_IMPORTED_MODULE_0__.useImperativeHandle)(forwardedRef, ()=>instance);
+        (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function updateOverlay() {
+            if (isOpen) {
+                instance.update();
+            }
+        }, [
+            instance,
+            isOpen,
+            props.children
+        ]);
+        // @ts-ignore _contentNode missing in type definition
+        const contentNode = instance._contentNode;
+        return contentNode ? /*#__PURE__*/ (0,react_dom__WEBPACK_IMPORTED_MODULE_1__.createPortal)(props.children, contentNode) : null;
+    }
+    return /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_0__.forwardRef)(OverlayComponent);
+}
+function createLeafComponent(useElement) {
+    function LeafComponent(props, forwardedRef) {
+        const { instance  } = useElement(props).current;
+        (0,react__WEBPACK_IMPORTED_MODULE_0__.useImperativeHandle)(forwardedRef, ()=>instance);
+        return null;
+    }
+    return /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_0__.forwardRef)(LeafComponent);
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/context.js":
+/*!************************************************************************************!*\
+  !*** ./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/context.js ***!
+  \************************************************************************************/
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "CONTEXT_VERSION": function() { return /* binding */ CONTEXT_VERSION; },
+/* harmony export */   "LeafletContext": function() { return /* binding */ LeafletContext; },
+/* harmony export */   "LeafletProvider": function() { return /* binding */ LeafletProvider; },
+/* harmony export */   "createLeafletContext": function() { return /* binding */ createLeafletContext; },
+/* harmony export */   "extendContext": function() { return /* binding */ extendContext; },
+/* harmony export */   "useLeafletContext": function() { return /* binding */ useLeafletContext; }
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+
+const CONTEXT_VERSION = 1;
+function createLeafletContext(map) {
+    return Object.freeze({
+        __version: CONTEXT_VERSION,
+        map
+    });
+}
+function extendContext(source, extra) {
+    return Object.freeze({
+        ...source,
+        ...extra
+    });
+}
+const LeafletContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)(null);
+const LeafletProvider = LeafletContext.Provider;
+function useLeafletContext() {
+    const context = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(LeafletContext);
+    if (context == null) {
+        throw new Error('No context provided: useLeafletContext() can only be used in a descendant of <MapContainer>');
+    }
+    return context;
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/control.js":
+/*!************************************************************************************!*\
+  !*** ./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/control.js ***!
+  \************************************************************************************/
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "createControlHook": function() { return /* binding */ createControlHook; }
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var _context_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./context.js */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/context.js");
+
+
+function createControlHook(useElement) {
+    return function useLeafletControl(props) {
+        const context = (0,_context_js__WEBPACK_IMPORTED_MODULE_1__.useLeafletContext)();
+        const elementRef = useElement(props, context);
+        const { instance  } = elementRef.current;
+        const positionRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(props.position);
+        const { position  } = props;
+        (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function addControl() {
+            instance.addTo(context.map);
+            return function removeControl() {
+                instance.remove();
+            };
+        }, [
+            context.map,
+            instance
+        ]);
+        (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function updateControl() {
+            if (position != null && position !== positionRef.current) {
+                instance.setPosition(position);
+                positionRef.current = position;
+            }
+        }, [
+            instance,
+            position
+        ]);
+        return elementRef;
+    };
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/div-overlay.js":
+/*!****************************************************************************************!*\
+  !*** ./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/div-overlay.js ***!
+  \****************************************************************************************/
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "createDivOverlayHook": function() { return /* binding */ createDivOverlayHook; }
+/* harmony export */ });
+/* harmony import */ var _attribution_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./attribution.js */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/attribution.js");
+/* harmony import */ var _context_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./context.js */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/context.js");
+/* harmony import */ var _events_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./events.js */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/events.js");
+/* harmony import */ var _pane_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./pane.js */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/pane.js");
+
+
+
+
+function createDivOverlayHook(useElement, useLifecycle) {
+    return function useDivOverlay(props, setOpen) {
+        const context = (0,_context_js__WEBPACK_IMPORTED_MODULE_0__.useLeafletContext)();
+        const elementRef = useElement((0,_pane_js__WEBPACK_IMPORTED_MODULE_1__.withPane)(props, context), context);
+        (0,_attribution_js__WEBPACK_IMPORTED_MODULE_2__.useAttribution)(context.map, props.attribution);
+        (0,_events_js__WEBPACK_IMPORTED_MODULE_3__.useEventHandlers)(elementRef.current, props.eventHandlers);
+        useLifecycle(elementRef.current, context, props, setOpen);
+        return elementRef;
+    };
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/element.js":
+/*!************************************************************************************!*\
+  !*** ./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/element.js ***!
+  \************************************************************************************/
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "createElementHook": function() { return /* binding */ createElementHook; },
+/* harmony export */   "createElementObject": function() { return /* binding */ createElementObject; }
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+
+function createElementObject(instance, context, container) {
+    return Object.freeze({
+        instance,
+        context,
+        container
+    });
+}
+function createElementHook(createElement, updateElement) {
+    if (updateElement == null) {
+        return function useImmutableLeafletElement(props, context) {
+            const elementRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)();
+            if (!elementRef.current) elementRef.current = createElement(props, context);
+            return elementRef;
+        };
+    }
+    return function useMutableLeafletElement(props, context) {
+        const elementRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)();
+        if (!elementRef.current) elementRef.current = createElement(props, context);
+        const propsRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(props);
+        const { instance  } = elementRef.current;
+        (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function updateElementProps() {
+            if (propsRef.current !== props) {
+                updateElement(instance, props, propsRef.current);
+                propsRef.current = props;
+            }
+        }, [
+            instance,
+            props,
+            context
+        ]);
+        return elementRef;
+    };
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/events.js":
+/*!***********************************************************************************!*\
+  !*** ./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/events.js ***!
+  \***********************************************************************************/
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "useEventHandlers": function() { return /* binding */ useEventHandlers; }
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+
+function useEventHandlers(element, eventHandlers) {
+    const eventHandlersRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)();
+    (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function addEventHandlers() {
+        if (eventHandlers != null) {
+            element.instance.on(eventHandlers);
+        }
+        eventHandlersRef.current = eventHandlers;
+        return function removeEventHandlers() {
+            if (eventHandlersRef.current != null) {
+                element.instance.off(eventHandlersRef.current);
+            }
+            eventHandlersRef.current = null;
+        };
+    }, [
+        element,
+        eventHandlers
+    ]);
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/generic.js":
+/*!************************************************************************************!*\
+  !*** ./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/generic.js ***!
+  \************************************************************************************/
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "createControlComponent": function() { return /* binding */ createControlComponent; },
+/* harmony export */   "createLayerComponent": function() { return /* binding */ createLayerComponent; },
+/* harmony export */   "createOverlayComponent": function() { return /* binding */ createOverlayComponent; },
+/* harmony export */   "createPathComponent": function() { return /* binding */ createPathComponent; },
+/* harmony export */   "createTileLayerComponent": function() { return /* binding */ createTileLayerComponent; }
+/* harmony export */ });
+/* harmony import */ var _component_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./component.js */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/component.js");
+/* harmony import */ var _control_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./control.js */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/control.js");
+/* harmony import */ var _element_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./element.js */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/element.js");
+/* harmony import */ var _layer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./layer.js */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/layer.js");
+/* harmony import */ var _div_overlay_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./div-overlay.js */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/div-overlay.js");
+/* harmony import */ var _path_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./path.js */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/path.js");
+
+
+
+
+
+
+function createControlComponent(createInstance) {
+    function createElement(props, context) {
+        return (0,_element_js__WEBPACK_IMPORTED_MODULE_0__.createElementObject)(createInstance(props), context);
+    }
+    const useElement = (0,_element_js__WEBPACK_IMPORTED_MODULE_0__.createElementHook)(createElement);
+    const useControl = (0,_control_js__WEBPACK_IMPORTED_MODULE_1__.createControlHook)(useElement);
+    return (0,_component_js__WEBPACK_IMPORTED_MODULE_2__.createLeafComponent)(useControl);
+}
+function createLayerComponent(createElement, updateElement) {
+    const useElement = (0,_element_js__WEBPACK_IMPORTED_MODULE_0__.createElementHook)(createElement, updateElement);
+    const useLayer = (0,_layer_js__WEBPACK_IMPORTED_MODULE_3__.createLayerHook)(useElement);
+    return (0,_component_js__WEBPACK_IMPORTED_MODULE_2__.createContainerComponent)(useLayer);
+}
+function createOverlayComponent(createElement, useLifecycle) {
+    const useElement = (0,_element_js__WEBPACK_IMPORTED_MODULE_0__.createElementHook)(createElement);
+    const useOverlay = (0,_div_overlay_js__WEBPACK_IMPORTED_MODULE_4__.createDivOverlayHook)(useElement, useLifecycle);
+    return (0,_component_js__WEBPACK_IMPORTED_MODULE_2__.createDivOverlayComponent)(useOverlay);
+}
+function createPathComponent(createElement, updateElement) {
+    const useElement = (0,_element_js__WEBPACK_IMPORTED_MODULE_0__.createElementHook)(createElement, updateElement);
+    const usePath = (0,_path_js__WEBPACK_IMPORTED_MODULE_5__.createPathHook)(useElement);
+    return (0,_component_js__WEBPACK_IMPORTED_MODULE_2__.createContainerComponent)(usePath);
+}
+function createTileLayerComponent(createElement, updateElement) {
+    const useElement = (0,_element_js__WEBPACK_IMPORTED_MODULE_0__.createElementHook)(createElement, updateElement);
+    const useLayer = (0,_layer_js__WEBPACK_IMPORTED_MODULE_3__.createLayerHook)(useElement);
+    return (0,_component_js__WEBPACK_IMPORTED_MODULE_2__.createLeafComponent)(useLayer);
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/grid-layer.js":
+/*!***************************************************************************************!*\
+  !*** ./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/grid-layer.js ***!
+  \***************************************************************************************/
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "updateGridLayer": function() { return /* binding */ updateGridLayer; }
+/* harmony export */ });
+function updateGridLayer(layer, props, prevProps) {
+    const { opacity , zIndex  } = props;
+    if (opacity != null && opacity !== prevProps.opacity) {
+        layer.setOpacity(opacity);
+    }
+    if (zIndex != null && zIndex !== prevProps.zIndex) {
+        layer.setZIndex(zIndex);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/layer.js":
+/*!**********************************************************************************!*\
+  !*** ./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/layer.js ***!
+  \**********************************************************************************/
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "createLayerHook": function() { return /* binding */ createLayerHook; },
+/* harmony export */   "useLayerLifecycle": function() { return /* binding */ useLayerLifecycle; }
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var _attribution_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./attribution.js */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/attribution.js");
+/* harmony import */ var _context_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./context.js */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/context.js");
+/* harmony import */ var _events_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./events.js */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/events.js");
+/* harmony import */ var _pane_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./pane.js */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/pane.js");
+
+
+
+
+
+function useLayerLifecycle(element, context) {
+    (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function addLayer() {
+        const container = context.layerContainer ?? context.map;
+        container.addLayer(element.instance);
+        return function removeLayer() {
+            context.layerContainer?.removeLayer(element.instance);
+            context.map.removeLayer(element.instance);
+        };
+    }, [
+        context,
+        element
+    ]);
+}
+function createLayerHook(useElement) {
+    return function useLayer(props) {
+        const context = (0,_context_js__WEBPACK_IMPORTED_MODULE_1__.useLeafletContext)();
+        const elementRef = useElement((0,_pane_js__WEBPACK_IMPORTED_MODULE_2__.withPane)(props, context), context);
+        (0,_attribution_js__WEBPACK_IMPORTED_MODULE_3__.useAttribution)(context.map, props.attribution);
+        (0,_events_js__WEBPACK_IMPORTED_MODULE_4__.useEventHandlers)(elementRef.current, props.eventHandlers);
+        useLayerLifecycle(elementRef.current, context);
+        return elementRef;
+    };
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/pane.js":
+/*!*********************************************************************************!*\
+  !*** ./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/pane.js ***!
+  \*********************************************************************************/
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "withPane": function() { return /* binding */ withPane; }
+/* harmony export */ });
+function withPane(props, context) {
+    const pane = props.pane ?? context.pane;
+    return pane ? {
+        ...props,
+        pane
+    } : props;
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/path.js":
+/*!*********************************************************************************!*\
+  !*** ./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/path.js ***!
+  \*********************************************************************************/
+/***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "createPathHook": function() { return /* binding */ createPathHook; },
+/* harmony export */   "usePathOptions": function() { return /* binding */ usePathOptions; }
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var _context_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./context.js */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/context.js");
+/* harmony import */ var _events_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./events.js */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/events.js");
+/* harmony import */ var _layer_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./layer.js */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/layer.js");
+/* harmony import */ var _pane_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./pane.js */ "./node_modules/react-leaflet/node_modules/@react-leaflet/core/lib/pane.js");
+
+
+
+
+
+function usePathOptions(element, props) {
+    const optionsRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)();
+    (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function updatePathOptions() {
+        if (props.pathOptions !== optionsRef.current) {
+            const options = props.pathOptions ?? {};
+            element.instance.setStyle(options);
+            optionsRef.current = options;
+        }
+    }, [
+        element,
+        props
+    ]);
+}
+function createPathHook(useElement) {
+    return function usePath(props) {
+        const context = (0,_context_js__WEBPACK_IMPORTED_MODULE_1__.useLeafletContext)();
+        const elementRef = useElement((0,_pane_js__WEBPACK_IMPORTED_MODULE_2__.withPane)(props, context), context);
+        (0,_events_js__WEBPACK_IMPORTED_MODULE_3__.useEventHandlers)(elementRef.current, props.eventHandlers);
+        (0,_layer_js__WEBPACK_IMPORTED_MODULE_4__.useLayerLifecycle)(elementRef.current, context);
+        usePathOptions(elementRef.current, props);
+        return elementRef;
+    };
+}
+
+
+/***/ }),
+
+/***/ "./src/block.json":
+/*!************************!*\
+  !*** ./src/block.json ***!
+  \************************/
+/***/ (function(module) {
+
+"use strict";
+module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"ootb/openstreetmap","version":"2.0","title":"OpenStreetMap by Out of the Block","category":"common","icon":"location-alt","description":"A map block for the Gutenberg Editor using OpenStreetMaps and Leaflet that needs no API keys and works out of the box.","supports":{"html":false,"align":["wide","full"]},"keywords":["Map block","Open Street Maps","Contact","Locations"],"attributes":{"mapHeight":{"type":"integer","default":400},"markers":{"type":"array","default":[]},"zoom":{"type":"integer","default":8},"minZoom":{"type":"integer","default":2},"maxZoom":{"type":"integer","default":18},"dragging":{"type":"boolean","default":true},"touchZoom":{"type":"boolean","default":true},"doubleClickZoom":{"type":"boolean","default":true},"scrollWheelZoom":{"type":"boolean","default":true},"defaultIcon":{"type":"object","default":null},"addingMarker":{"type":"string","default":""},"keywords":{"type":"string","default":""},"bounds":{"type":"array","default":[[37.97155174977503,23.72656345367432]]},"provider":{"type":"string","default":"openstreetmap"}},"textdomain":"ootb-openstreetmap","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/amd options */
+/******/ 	!function() {
+/******/ 		__webpack_require__.amdO = {};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+!function() {
+"use strict";
+/*!**********************!*\
+  !*** ./src/index.js ***!
+  \**********************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index.css */ "./src/index.css");
+/* harmony import */ var _style_index_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./style-index.css */ "./src/style-index.css");
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./block.json */ "./src/block.json");
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./edit */ "./src/edit.js");
+/* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./save */ "./src/save.js");
+/* harmony import */ var _deprecated__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./deprecated */ "./src/deprecated.js");
+/**
+ * BLOCK: openstreetmap
+ *
+ */
+
+
+// noinspection NpmUsedModulesInstalled
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_3__, {
+  edit: _edit__WEBPACK_IMPORTED_MODULE_4__["default"],
+  save: _save__WEBPACK_IMPORTED_MODULE_5__["default"],
+  deprecated: _deprecated__WEBPACK_IMPORTED_MODULE_6__["default"]
+});
+}();
+/******/ })()
+;
+//# sourceMappingURL=index.js.map

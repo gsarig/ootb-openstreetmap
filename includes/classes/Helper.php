@@ -8,10 +8,6 @@
 
 namespace OOTB;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
 class Helper {
 	/**
 	 * Asset Providers.
@@ -19,7 +15,7 @@ class Helper {
 	 * @return mixed
 	 */
 	public static function providers() {
-		$json_file = trailingslashit( plugin_dir_path( dirname( __FILE__ ) ) ) . 'assets/providers.json';
+		$json_file = OOTB_PLUGIN_PATH . 'assets/providers.json';
 		$request   = file_get_contents( $json_file );
 
 		return json_decode( $request );

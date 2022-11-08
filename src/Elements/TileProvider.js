@@ -31,7 +31,6 @@ export default function TileProvider({props}) {
 		providerAttribution = stamen.attribution;
 	}
 
-	// noinspection JSXNamespaceValidation
 	return (
 		<TileLayer
 			url={providerUrl}

@@ -1,3 +1,4 @@
+// noinspection NpmUsedModulesInstalled
 import {__} from '@wordpress/i18n';
 
 export default function Alert({props}) {
@@ -12,7 +13,6 @@ export default function Alert({props}) {
 		alert = __('Release to drop a marker here', 'ootb-openstreetmap');
 	}
 
-	// noinspection JSXNamespaceValidation
 	return alert ?
 		<div className="ootb-openstreetmap--alert">{alert}</div>
 		: null;

@@ -1,3 +1,5 @@
+// noinspection NpmUsedModulesInstalled,JSUnresolvedVariable
+
 import {__} from '@wordpress/i18n';
 import {SelectControl} from '@wordpress/components';
 import {createInterpolateElement} from '@wordpress/element';
@@ -10,7 +12,6 @@ export default function ProviderControl({props}) {
         setAttributes,
     } = props;
 
-    //noinspection JSUnresolvedVariable
     const {
         adminUrl,
         options: {
@@ -36,7 +37,6 @@ export default function ProviderControl({props}) {
     let providerHelp = '';
 
     if ('mapbox' === provider && !api_mapbox) {
-        // noinspection JSXNamespaceValidation
         providerHelp = (
             <span>
                 {

@@ -1,3 +1,5 @@
+// noinspection NpmUsedModulesInstalled
+
 import {__, _x} from '@wordpress/i18n';
 import {Fragment} from '@wordpress/element';
 import {RangeControl, ToggleControl} from '@wordpress/components';
@@ -15,7 +17,6 @@ export default function BehaviorControls({props}) {
         setAttributes,
     } = props;
 
-    // noinspection JSXNamespaceValidation
     return (
         <Fragment>
             <ToggleControl

@@ -1,13 +1,12 @@
+// noinspection NpmUsedModulesInstalled,JSUnresolvedVariable
+
 import ProviderControl from './ProviderControl';
 import getIcon from '../Helpers/getIcon';
 
-// noinspection JSUnresolvedVariable
 import {__} from '@wordpress/i18n';
-// noinspection JSUnresolvedVariable
 import {Fragment} from '@wordpress/element';
-// noinspection JSUnresolvedVariable
+
 const {RangeControl, Button} = wp.components;
-// noinspection JSUnresolvedVariable
 const {MediaUpload, MediaUploadCheck} = wp.blockEditor;
 
 export default function MainControls({props}) {
@@ -34,7 +33,6 @@ export default function MainControls({props}) {
 
 	const icon = getIcon(props);
 
-	// noinspection JSXNamespaceValidation
 	return (
 		<Fragment>
 			<ProviderControl props={props}/>

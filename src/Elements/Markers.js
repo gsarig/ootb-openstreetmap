@@ -1,3 +1,5 @@
+// noinspection NpmUsedModulesInstalled,JSUnresolvedVariable
+
 import L from 'leaflet';
 import {Marker, Popup} from 'react-leaflet';
 import getIcon from '../Helpers/getIcon';
@@ -53,7 +55,6 @@ export default function Markers({props}) {
 	const markerIcon = L.icon(getIcon(props));
 
 	return typeof markers !== "undefined" && markers.length ? markers.map((marker, index) => {
-		// noinspection JSXNamespaceValidation
 		return (
 			<Marker
 				key={index}

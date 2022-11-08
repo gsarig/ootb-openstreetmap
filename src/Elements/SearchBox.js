@@ -1,3 +1,5 @@
+// noinspection NpmUsedModulesInstalled
+
 import SearchResults from './SearchResults';
 import {__} from '@wordpress/i18n';
 import {TextControl, Button} from '@wordpress/components';
@@ -56,7 +58,6 @@ export default function SearchBox({props}) {
 			findMarkers();
 		}
 	}
-	// noinspection JSXNamespaceValidation
 	return (
 		<Fragment>
 			<div className="ootb-openstreetmap--searchbox">

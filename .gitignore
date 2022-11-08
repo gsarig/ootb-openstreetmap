@@ -4,3 +4,5 @@
 /.idea/php.xml
 /.idea/vcs.xml
 /node_modules/
+/vendor/
+/.idea/

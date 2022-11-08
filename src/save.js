@@ -17,7 +17,6 @@ export default function save(props, className) {
 		},
 	} = props;
 
-	// noinspection JSXNamespaceValidation
 	return markers ? (
 		<div className={className}>
 			<div className="ootb-openstreetmap--map"

@@ -4,6 +4,7 @@
  */
 import './index.css';
 import './style-index.css';
+// noinspection NpmUsedModulesInstalled
 import {registerBlockType} from '@wordpress/blocks';
 import metadata from './block.json';
 

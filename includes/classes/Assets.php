@@ -39,7 +39,7 @@ class Assets {
 			wp_add_inline_script( 'ootb-openstreetmap',
 				sprintf(
 					'const ootb = %s',
-					json_encode(
+					wp_json_encode(
 						[
 							'providers' => Helper::providers(),
 							'options'   => get_option( 'ootb_options' ),

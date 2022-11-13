@@ -4,6 +4,7 @@ export default function getBounds(props, newMarker = [], mapObject = null) {
 	const {
 		attributes: {
 			markers,
+			zoom,
 		},
 		setAttributes,
 	} = props;
@@ -22,5 +23,11 @@ export default function getBounds(props, newMarker = [], mapObject = null) {
 	if (boundsArr.length) {
 		setAttributes({bounds: boundsArr});
 		fitBounds(boundsArr, mapObject);
+	}
+	if (mapObject) {
+		const lastZoom = mapObject.getZoom();
+		if (zoom !== lastZoom) {
+			setAttributes({zoom: lastZoom});
+		}
 	}
 }

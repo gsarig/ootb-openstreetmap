@@ -1,4 +1,6 @@
 import {TileLayer} from 'react-leaflet';
+// noinspection NpmUsedModulesInstalled
+import {useEffect, useRef} from '@wordpress/element';
 
 export default function TileProvider({props}) {
 	const {
@@ -30,9 +32,13 @@ export default function TileProvider({props}) {
 		providerUrl = stamen.url;
 		providerAttribution = stamen.attribution;
 	}
-
+	const ref = useRef(null);
+	useEffect(() => {
+		ref.current.setUrl(providerUrl);
+	}, [providerUrl]);
 	return (
 		<TileLayer
+			ref={ref}
 			url={providerUrl}
 			attribution={providerAttribution}
 		/>

@@ -9,6 +9,10 @@ export default function MapEvents({props}) {
 		attributes: {
 			mapObj,
 			markers,
+			zoom,
+			showDefaultBounds,
+			shouldUpdateZoom,
+			shouldUpdateBounds,
 			addingMarker,
 			isDraggingMarker,
 		},
@@ -88,8 +92,25 @@ export default function MapEvents({props}) {
 		}
 	});
 	useEffect(() => {
+		if (true === showDefaultBounds) {
+			// noinspection JSUnresolvedVariable
+			setAttributes({
+				bounds: ootbGlobal.defaultLocation,
+				showDefaultBounds: false
+			});
+		}
+		if (true === shouldUpdateBounds) {
+			getBounds(props, [], map);
+			setAttributes({
+				shouldUpdateBounds: false
+			});
+		}
 		if ('undefined' !== typeof map && ('undefined' === typeof mapObj || !mapObj.length || mapObj !== map)) {
 			setAttributes({mapObj: map});
+		}
+		if (true === shouldUpdateZoom && zoom !== map.getZoom()) {
+			map.setZoom(zoom);
+			setAttributes({shouldUpdateZoom: false});
 		}
 	});
 	return null;

@@ -69,6 +69,10 @@
       "type": "string",
       "default": ""
     },
+    "showDefaultBounds": {
+      "type": "boolean",
+      "default": true
+    },
     "bounds": {
       "type": "array",
       "default": [

@@ -24,7 +24,8 @@ export default function Markers({props}) {
 		updatedMarkers.splice(index, 1);
 		setAttributes({
 			isDraggingMarker: false,
-			markers: updatedMarkers
+			markers: updatedMarkers,
+			shouldUpdateBounds: true
 		});
 		getBounds(props, [], mapObj.leafletElement);
 	}

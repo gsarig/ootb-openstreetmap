@@ -28,7 +28,6 @@ export default function SearchResults({props}) {
 			keywords: '',
 			searchResults: [],
 		});
-		setAttributes({shouldUpdateBounds: true});
 		getBounds(props, newMarker, mapObj);
 		if (inputRef) {
 			inputRef.target.focus();

@@ -69,6 +69,60 @@ class Options {
 				'ootb_custom_data' => 'custom',
 			]
 		);
+
+		add_settings_section(
+			'ootb_section_defaults',
+			__( 'Default location', 'ootb-openstreetmap' ),
+			[ $this, 'section_defaults_callback' ],
+			'ootb'
+		);
+		add_settings_field(
+			'default_lat',
+			__( 'Latitude', 'ootb-openstreetmap' ),
+			[ $this, 'field_coordinates' ],
+			'ootb',
+			'ootb_section_defaults',
+			[
+				'label_for'        => 'default_lat',
+				'class'            => 'ootb_row',
+				'ootb_custom_data' => 'custom',
+			]
+		);
+		add_settings_field(
+			'default_lng',
+			__( 'Longitude', 'ootb-openstreetmap' ),
+			[ $this, 'field_coordinates' ],
+			'ootb',
+			'ootb_section_defaults',
+			[
+				'label_for'        => 'default_lng',
+				'class'            => 'ootb_row',
+				'ootb_custom_data' => 'custom',
+			]
+		);
+	}
+
+	/**
+	 * The callback method for the default coordinates.
+	 *
+	 * @param array $args THe settings args.
+	 *
+	 * @return void
+	 */
+	function section_defaults_callback( array $args ) {
+		?>
+		<p id="<?php echo esc_attr( $args['id'] ); ?>">
+			<?php
+			echo sprintf(
+				wp_kses(
+					__( 'Set the default coordinates when you add a new block and no marker is yet set. The plugin will try to guess the default location based on the <a href="%1$s">site\'s timezone</a>, but because there is no easy way to match against a specific database of coordinates, it can get it wrong. You can override these values here.', 'ootb-openstreetmap' ),
+					[ 'a' => [ 'href' => [] ] ]
+				),
+				esc_url( admin_url( 'options-general.php' ) )
+			);
+			?>
+		</p>
+		<?php
 	}
 
 	/**
@@ -83,7 +137,8 @@ class Options {
 		<div class="ootb_info">
 			<h3><?php _e( 'About OpenStreetMap usage limits', 'ootb-openstreetmap' ); ?></h3>
 			<p id="<?php echo esc_attr( $args['id'] ); ?>">
-				<?php echo sprintf(
+				<?php
+				echo sprintf(
 					wp_kses(
 						__( 'As stated on the <a href="%1$s" target="_blank">OpenStreetMap Tile Usage Policy</a>, OSM’s own servers are run entirely on donated resources and they have strictly limited capacity. Using them on a site with low traffic will probably be fine. Nevertheless, you are advised to create an account to <a href="%2$s" target="_blank">MapBox</a> and get a free API Key.',
 							'ootb-openstreetmap'
@@ -92,7 +147,8 @@ class Options {
 					),
 					esc_url( 'https://operations.osmfoundation.org/policies/tiles/' ),
 					esc_url( 'https://www.mapbox.com/' )
-				); ?>
+				);
+				?>
 			</p>
 			<p class="ootb-colophon"><a href="https://wordpress.org/support/plugin/ootb-openstreetmap/"
 										target="_blank"><?php _e( 'Support forum',
@@ -139,6 +195,30 @@ class Options {
 	}
 
 	/**
+	 * The default coordinates.
+	 *
+	 * @param array $args The settings args.
+	 *
+	 * @return void
+	 */
+	function field_coordinates( array $args ) {
+		$option   = get_option( 'ootb_options' );
+		$defaults = Helper::default_location();
+		$default  = '';
+		if ( 'default_lat' === $args['label_for'] ) {
+			$default = $defaults[0] ?? '';
+		}
+		if ( 'default_lng' === $args['label_for'] ) {
+			$default = $defaults[1] ?? '';
+		}
+		?>
+		<input type="text" name="ootb_options[<?php echo esc_attr( $args['label_for'] ); ?>]"
+			   id="<?php echo esc_attr( $args['label_for'] ); ?>" placeholder="<?php echo esc_html( $default ); ?>"
+			   value="<?php echo isset( $option[ $args['label_for'] ] ) ? esc_attr( $option[ $args['label_for'] ] ) : $default; ?>"/>
+		<?php
+	}
+
+	/**
 	 * The options page HTML.
 	 *
 	 * @return void
@@ -171,13 +251,27 @@ class Options {
 	 *
 	 * @return array
 	 */
-	function options_validate( array $input ) {
-		if ( empty( $input['api_mapbox'] ) ) {
-			return $input;
+	function options_validate( array $input ): array {
+		// Validate api_mapbox.
+		if ( ! empty( $input['api_mapbox'] ) ) {
+			$input['api_mapbox'] = preg_replace( '/\s+/',
+				' ',
+				esc_attr( $input['api_mapbox'] ) );
 		}
-		$input['api_mapbox'] = preg_replace( '/\s+/',
-			' ',
-			esc_attr( $input['api_mapbox'] ) );
+		// Validate coordinates.
+		$fallback = Helper::fallback_location();
+		if ( ! empty( $input['default_lat'] ) ) {
+			$is_valid = preg_match( '/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/', $input['default_lat'] );
+			if ( ! $is_valid ) {
+				$input['default_lat'] = $fallback[0] ?? '';
+			}
+		}
+		if ( ! empty( $input['default_lng'] ) ) {
+			$is_valid = preg_match( '/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/', $input['default_lng'] );
+			if ( ! $is_valid ) {
+				$input['default_lng'] = $fallback[1] ?? '';
+			}
+		}
 
 		return $input;
 	}
@@ -196,7 +290,7 @@ class Options {
 
 		wp_enqueue_style(
 			'ootb-admin-styles',
-			OOTB_PLUGIN_URL . '/admin/css/styles.css',
+			OOTB_PLUGIN_URL . 'assets/css/admin/styles.css',
 			[],
 			OOTB_VERSION
 		);

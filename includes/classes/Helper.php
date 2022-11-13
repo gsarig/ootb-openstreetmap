@@ -16,9 +16,8 @@ class Helper {
 	 */
 	public static function providers() {
 		$json_file = OOTB_PLUGIN_PATH . 'assets/providers.json';
-		$request   = file_get_contents( $json_file );
 
-		return json_decode( $request );
+		return wp_json_file_decode( $json_file );
 	}
 
 	/**
@@ -103,5 +102,50 @@ class Helper {
 		}
 
 		return false;
+	}
+
+	/**
+	 * The fallback coordinates.
+	 *
+	 * @return string[]
+	 */
+	public static function fallback_location(): array {
+		return [
+			"37.97155174977503",
+			"23.72656345367432",
+		];
+	}
+
+	/**
+	 * Get the default location and return its coordinates.
+	 *
+	 * @return array|string[]
+	 */
+	public static function default_location(): array {
+		$options = get_option( 'ootb_options' );
+		if ( ! empty( $options['default_lat'] ) && ! empty( $options['default_lng'] ) ) {
+			return [
+				$options['default_lat'],
+				$options['default_lng'],
+			];
+		}
+		$timezone  = wp_timezone_string();
+		$locations = explode( '/', $timezone );
+		$keyword   = $locations[ array_key_last( $locations ) ];
+		// Return empty if a manual timezone is set.
+		if ( strtotime( $keyword ) ) {
+			return self::fallback_location();
+		}
+		$defaults = wp_json_file_decode( OOTB_PLUGIN_PATH . '/assets/defaults.json', true );
+		$column   = array_column( $defaults, 'name' );
+		$entry    = array_search( $keyword, $column );
+		if ( empty( $defaults[ $entry ] ) || empty( $defaults[ $entry ]->lat ) || empty( $defaults[ $entry ]->lng ) ) {
+			return self::fallback_location();
+		}
+
+		return [
+			strval( $defaults[ $entry ]->lat ),
+			strval( $defaults[ $entry ]->lng ),
+		];
 	}
 }

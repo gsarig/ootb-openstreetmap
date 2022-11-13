@@ -23,7 +23,7 @@
 	vertical-align: top;
 }
 
-#api_mapbox {
+#ootb_form input[type="text"] {
 	width: 100%;
 }
 
@@ -55,5 +55,9 @@
 		grid-row-end: 5;
 		grid-row-start: 1;
 		grid-column-start: 2;
+	}
+
+	#ootb_form .submit {
+		grid-column-end: 2;
 	}
 }

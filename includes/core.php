@@ -19,7 +19,6 @@ function setup() {
 
 	add_action( 'init', $n( 'i18n' ) );
 	add_action( 'init', $n( 'openstreetmap_block_init' ) );
-
 }
 
 new Options();
@@ -48,13 +47,14 @@ function openstreetmap_block_init() {
 	register_block_type( OOTB_PLUGIN_PATH . '/build' );
 	wp_add_inline_script(
 		'ootb-openstreetmap-editor-script',
-		'const ootbGlobal = ' . json_encode(
+		'const ootbGlobal = ' . wp_json_encode(
 			[
-				'pluginDirPath' => OOTB_PLUGIN_PATH,
-				'pluginDirUrl'  => OOTB_PLUGIN_URL,
-				'options'       => get_option( 'ootb_options' ),
-				'adminUrl'      => admin_url( 'options-general.php?page=ootb-openstreetmap' ),
-				'providers'     => Helper::providers(),
+				'pluginDirPath'   => OOTB_PLUGIN_PATH,
+				'pluginDirUrl'    => OOTB_PLUGIN_URL,
+				'options'         => get_option( 'ootb_options' ),
+				'adminUrl'        => admin_url( 'options-general.php?page=ootb-openstreetmap' ),
+				'providers'       => Helper::providers(),
+				'defaultLocation' => [ Helper::default_location() ],
 			]
 		),
 		'before'

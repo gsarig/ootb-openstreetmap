@@ -52,7 +52,10 @@ export default function MainControls({props}) {
 				value={zoom}
 				onChange={
 					(value) => {
-						setAttributes({zoom: value})
+						setAttributes({
+							zoom: value,
+							shouldUpdateZoom: true
+						})
 					}
 				}
 				min={0}

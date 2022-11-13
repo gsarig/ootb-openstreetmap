@@ -6,7 +6,7 @@
  * Requires at least: 5.8
  * Requires PHP:      7.4
  * Version:           2.0
- * Author:            gsarig
+ * Author:            Giorgos Sarigiannidis
  * Author URI:        https://www.gsarigiannidis.gr
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html

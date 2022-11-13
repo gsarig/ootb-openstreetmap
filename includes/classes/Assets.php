@@ -20,13 +20,13 @@ class Assets {
 				'leaflet',
 				OOTB_PLUGIN_URL . 'assets/vendor/leaflet/leaflet.css',
 				[],
-				OOTB_VERSION
+				'1.9.2'
 			);
 			wp_enqueue_script(
 				'leaflet',
 				OOTB_PLUGIN_URL . 'assets/vendor/leaflet/leaflet.js',
 				[],
-				OOTB_VERSION,
+				'1.9.2',
 				true
 			);
 			wp_enqueue_script(

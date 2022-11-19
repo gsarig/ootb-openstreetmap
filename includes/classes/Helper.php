@@ -131,15 +131,19 @@ class Helper {
 		}
 		$timezone  = wp_timezone_string();
 		$locations = explode( '/', $timezone );
-		$keyword   = $locations[ array_key_last( $locations ) ];
-		// Return empty if a manual timezone is set.
+		$keyword   = str_replace(  // Convert names like "New_York" to "New York".
+			'_',
+			' ',
+			$locations[ array_key_last( $locations ) ]
+		);
+		// Return empty if a manual timezone is set (as opposed to selecting a specific city/region).
 		if ( strtotime( $keyword ) ) {
 			return self::fallback_location();
 		}
 		$defaults = wp_json_file_decode( OOTB_PLUGIN_PATH . '/assets/defaults.json', true );
 		$column   = array_column( $defaults, 'name' );
 		$entry    = array_search( $keyword, $column );
-		if ( empty( $defaults[ $entry ] ) || empty( $defaults[ $entry ]->lat ) || empty( $defaults[ $entry ]->lng ) ) {
+		if ( ! $entry || empty( $defaults[ $entry ] ) || empty( $defaults[ $entry ]->lat ) || empty( $defaults[ $entry ]->lng ) ) {
 			return self::fallback_location();
 		}
 

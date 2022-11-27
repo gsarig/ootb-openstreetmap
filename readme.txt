@@ -5,7 +5,7 @@ Tags: Map, OpenStreetMap, Leaflet, Google Maps, block
 Requires at least: 5.9
 Tested up to: 6.1
 Requires PHP: 7.4
-Stable tag: 2.0
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,17 +74,17 @@ Check under the "Map behavior" section, at the blocks' settings at the sidebar o
 8. Plugin settings page
 
 == Upgrade Notice ==
-= 2.0 =
-Version 2.0 is a major, almost full, refactoring, both for the build scripts and the codebase. The changes should be backwards compatible and your already existing blocks should keep working as expected. If you notice any issues, though, please report them to the plugin's support forum.
+= 2.0.0 =
+Version 2.0.0 is a major, almost full, refactoring, both for the build scripts and the codebase. The changes should be backwards compatible and your already existing blocks should keep working as expected. If you notice any issues, though, please report them to the plugin's [support forum](https://wordpress.org/support/plugin/ootb-openstreetmap/).
 
 = 1.0 =
 
 == Changelog ==
 
-= 2.0 =
-* Refactors the build scripts to use the official `@wordpress/create-block` instead of `create-gutenblock`, which isn't supported anymore.
-* Updates `Leaflet` and `react-leaflet` to their latest versions (Leaflet 1.9.2 and react-leaflet 4.1.0).
-* Adds a new option to set the default coordinates when you add a new block. The plugin will try to guess the default location based on the site's timezone, but because there is no easy way to match against a specific and official database of coordinates, it isn't always reliable (hence the option to override).
+= 2.0.0 =
+* Refactors the build scripts to use the official `@wordpress/create-block` instead of `create-guten-block`, which isn't supported anymore.
+* Updates `Leaflet` and `react-leaflet` to their latest versions (Leaflet 1.9.3 and react-leaflet 4.1.0).
+* Adds a new option to set the default coordinates when you add a new block. The plugin will try to guess the default location based on the site's timezone.
 
 = 1.3.5 =
 * Fixes a PHP warning in the widgets area of the admin

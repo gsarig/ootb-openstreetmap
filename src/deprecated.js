@@ -1,4 +1,4 @@
-import centerMap from './Helpers/centerMap';
+import centerMapDeprecated from './Deprecated/centerMapDeprecated';
 import getIconDeprecated from './Deprecated/getIconDeprecated';
 import getIcon from './Helpers/getIcon';
 
@@ -56,6 +56,10 @@ const deprecated = [
 				default: 'openstreetmap',
 			},
 		},
+		supports: {
+			className: false,
+			align: ['wide', 'full'],
+		},
 		save(props) {
 			const {
 				className,
@@ -79,7 +83,7 @@ const deprecated = [
 					<div className="ootb-openstreetmap--map"
 						 data-provider={provider}
 						 data-markers={escape(JSON.stringify(markers))} // Escape because of the potential HTML in the output.
-						 data-bounds={JSON.stringify(centerMap(props))}
+						 data-bounds={JSON.stringify(centerMapDeprecated(props))}
 						 data-zoom={zoom}
 						 data-minzoom={minZoom}
 						 data-maxzoom={maxZoom}
@@ -170,7 +174,7 @@ const deprecated = [
 				<div className={className}>
 					<div className="ootb-openstreetmap--map"
 						 data-markers={escape(JSON.stringify(markers))} // Escape because of the potential HTML in the output.
-						 data-bounds={JSON.stringify(centerMap(props))}
+						 data-bounds={JSON.stringify(centerMapDeprecated(props))}
 						 data-zoom={zoom}
 						 data-minzoom={minZoom}
 						 data-maxzoom={maxZoom}
@@ -261,7 +265,7 @@ const deprecated = [
 				<div className={className}>
 					<div className="ootb-openstreetmap--map"
 						 data-markers={escape(JSON.stringify(markers))} // Escape because of the potential HTML in the output.
-						 data-bounds={JSON.stringify(centerMap(props))}
+						 data-bounds={JSON.stringify(centerMapDeprecated(props))}
 						 data-zoom={zoom}
 						 data-minzoom={minZoom}
 						 data-maxzoom={maxZoom}

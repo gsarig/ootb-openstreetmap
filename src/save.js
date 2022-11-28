@@ -21,7 +21,7 @@ export default function save(props, className) {
 		<div className={className}>
 			<div className="ootb-openstreetmap--map"
 				 data-provider={provider}
-				 data-markers={escape(JSON.stringify(markers))} // Escape because of the potential HTML in the output.
+				 data-markers={encodeURIComponent(JSON.stringify(markers))} // Escape because of the potential HTML in the output.
 				 data-bounds={JSON.stringify(centerMap(props))}
 				 data-zoom={zoom}
 				 data-minzoom={minZoom}
@@ -30,7 +30,7 @@ export default function save(props, className) {
 				 data-touchzoom={touchZoom}
 				 data-doubleclickzoom={doubleClickZoom}
 				 data-scrollwheelzoom={scrollWheelZoom}
-				 data-marker={escape(JSON.stringify(getIcon(props)))}
+				 data-marker={encodeURIComponent(JSON.stringify(getIcon(props)))}
 				 style={
 					 {
 						 height: mapHeight + 'px'

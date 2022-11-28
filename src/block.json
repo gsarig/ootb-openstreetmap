@@ -1,0 +1,94 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "ootb/openstreetmap",
+  "version": "2.0.0",
+  "title": "OpenStreetMap by Out of the Block",
+  "category": "common",
+  "icon": "location-alt",
+  "description": "A map block for the Gutenberg Editor using OpenStreetMaps and Leaflet that needs no API keys and works out of the box.",
+  "supports": {
+	"html": false,
+	"align": [
+	  "wide",
+	  "full"
+	]
+  },
+  "keywords": [
+	"Map block",
+	"Open Street Maps",
+	"Contact",
+	"Locations"
+  ],
+  "attributes": {
+	"mapHeight": {
+	  "type": "integer",
+	  "default": 400
+	},
+	"markers": {
+	  "type": "array",
+	  "default": []
+	},
+	"zoom": {
+	  "type": "integer",
+	  "default": 8
+	},
+	"minZoom": {
+	  "type": "integer",
+	  "default": 2
+	},
+	"maxZoom": {
+	  "type": "integer",
+	  "default": 18
+	},
+	"dragging": {
+	  "type": "boolean",
+	  "default": true
+	},
+	"touchZoom": {
+	  "type": "boolean",
+	  "default": true
+	},
+	"doubleClickZoom": {
+	  "type": "boolean",
+	  "default": true
+	},
+	"scrollWheelZoom": {
+	  "type": "boolean",
+	  "default": true
+	},
+	"defaultIcon": {
+	  "type": "object",
+	  "default": null
+	},
+	"addingMarker": {
+	  "type": "string",
+	  "default": ""
+	},
+	"keywords": {
+	  "type": "string",
+	  "default": ""
+	},
+	"showDefaultBounds": {
+	  "type": "boolean",
+	  "default": true
+	},
+	"bounds": {
+	  "type": "array",
+	  "default": [
+		[
+		  37.97155174977503,
+		  23.72656345367432
+		]
+	  ]
+	},
+	"provider": {
+	  "type": "string",
+	  "default": "openstreetmap"
+	}
+  },
+  "textdomain": "ootb-openstreetmap",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css"
+}

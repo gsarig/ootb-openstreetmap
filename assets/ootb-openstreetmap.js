@@ -18,8 +18,8 @@
 		const doubleClickZoom = osmap.getAttribute('data-doubleclickzoom');
 		const scrollWheelZoom = osmap.getAttribute('data-scrollwheelzoom');
 		const bounds = osmap.getAttribute('data-bounds');
-		const defaultIcon = JSON.parse(unescape(escapedDefaultIcon));
-		const locations = JSON.parse(unescape(escapedMarkers));
+		const defaultIcon = JSON.parse(decodeURIComponent(escapedDefaultIcon));
+		const locations = JSON.parse(decodeURIComponent(escapedMarkers));
 
 		let apiKey = '';
 		if ('mapbox' === provider) {

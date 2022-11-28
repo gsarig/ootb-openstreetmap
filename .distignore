@@ -12,3 +12,12 @@ Makefile
 package.json
 package-lock.json
 readme.md
+.editorconfig
+composer.json
+composer.lock
+CONTRIBUTING.md
+CREDITS.md
+LICENSE.md
+package-lock.json
+package.json
+README.md

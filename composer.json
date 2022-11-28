@@ -1,0 +1,18 @@
+{
+  "name": "ootb/openstreetmap",
+  "type": "wordpress-plugin",
+  "authors": [
+	{
+	  "name": "gsarig",
+	  "email": "contact@gsarigiannidis.gr"
+	}
+  ],
+  "require": {
+	"php": ">=7.4"
+  },
+  "autoload": {
+	"psr-4": {
+	  "OOTB\\": "includes/classes/"
+	}
+  }
+}

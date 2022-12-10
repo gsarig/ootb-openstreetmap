@@ -16,6 +16,11 @@ class Helper {
 	 */
 	public static function providers() {
 		$json_file = OOTB_PLUGIN_PATH . 'assets/providers.json';
+		if ( ! function_exists( 'wp_json_file_decode' ) ) {
+			$request = file_get_contents( $json_file );
+
+			return json_decode( $request );
+		}
 
 		return wp_json_file_decode( $json_file );
 	}
@@ -134,7 +139,11 @@ class Helper {
 		if ( ! str_contains( $timezone, '/' ) ) {
 			return self::fallback_location();
 		}
-		$defaults = wp_json_file_decode( OOTB_PLUGIN_PATH . '/assets/defaults.json', true );
+		if ( function_exists( 'wp_json_file_decode' ) ) {
+			$defaults = wp_json_file_decode( OOTB_PLUGIN_PATH . '/assets/defaults.json', true );
+		} else {
+			$defaults = json_decode( file_get_contents( OOTB_PLUGIN_PATH . '/assets/defaults.json' ) );
+		}
 		$column = array_column( $defaults, 'timezone' );
 		$entry  = array_search( $timezone, $column );
 		if ( empty( $defaults[ $entry ] ) || empty( $defaults[ $entry ]->lat ) || empty( $defaults[ $entry ]->lng ) ) {

@@ -2,10 +2,10 @@
 Contributors: gsarig
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MZR4JSRUMH5EA&source=url
 Tags: Map, OpenStreetMap, Leaflet, Google Maps, block
-Requires at least: 5.9
+Requires at least: 5.8.6
 Tested up to: 6.1
 Requires PHP: 7.4
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,9 @@ Version 2.0.0 is a major, almost full, refactoring, both for the build scripts a
 = 1.0 =
 
 == Changelog ==
+
+= 2.0.1 =
+* Fixes a bug which broke the admin on WordPress versions prior to 5.9.
 
 = 2.0.0 =
 * Refactors the build scripts to use the official `@wordpress/create-block` instead of `create-guten-block`, which isn't supported anymore.

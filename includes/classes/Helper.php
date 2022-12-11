@@ -136,7 +136,7 @@ class Helper {
 		}
 		$timezone = wp_timezone_string();
 		// Return empty if a manual timezone is set.
-		if ( ! str_contains( $timezone, '/' ) ) {
+		if ( false === strpos( $timezone, '/' ) ) {
 			return self::fallback_location();
 		}
 		if ( function_exists( 'wp_json_file_decode' ) ) {

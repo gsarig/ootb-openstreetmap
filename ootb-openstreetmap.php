@@ -5,7 +5,7 @@
  * Description:       A map block for the Gutenberg Editor using OpenStreetMaps and Leaflet that needs no API keys and works out of the box.
  * Requires at least: 5.8.6
  * Requires PHP:      7.4
- * Version:           2.0.1
+ * Version:           2.0.2
  * Author:            Giorgos Sarigiannidis
  * Author URI:        https://www.gsarigiannidis.gr
  * License:           GPL-2.0-or-later
@@ -21,7 +21,7 @@ define( 'OOTB_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OOTB_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 
 const OOTB_BLOCK_NAME = 'ootb/openstreetmap';
-const OOTB_VERSION    = '2.0.1';
+const OOTB_VERSION    = '2.0.2';
 const OOTB_PLUGIN_INC = OOTB_PLUGIN_PATH . 'includes/';
 
 // Require Composer autoloader if it exists.

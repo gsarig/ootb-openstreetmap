@@ -5,7 +5,7 @@ Tags: Map, OpenStreetMap, Leaflet, Google Maps, block
 Requires at least: 5.8.6
 Tested up to: 6.1
 Requires PHP: 7.4
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,6 +80,9 @@ Version 2.0.0 is a major, almost full, refactoring, both for the build scripts a
 = 1.0 =
 
 == Changelog ==
+
+= 2.0.2 =
+* Replaces `str_contains` with `strpos`, for better backwards compatibility with older versions of PHP / WordPress.
 
 = 2.0.1 =
 * Fixes a bug which broke the admin on WordPress versions prior to 5.9.

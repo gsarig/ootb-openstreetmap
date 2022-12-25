@@ -85,6 +85,22 @@
     "provider": {
       "type": "string",
       "default": "openstreetmap"
+    },
+    "mapType": {
+      "type": "string",
+      "default": "marker"
+    },
+    "showMarkers": {
+      "type": "boolean",
+      "default": true
+    },
+    "shapeColor": {
+      "type": "string",
+      "default": "#008EFF"
+    },
+    "shapeText": {
+      "type": "string",
+      "default": ""
     }
   },
   "textdomain": "ootb-openstreetmap",

@@ -17,11 +17,14 @@ export default function save(props, className) {
 			mapType,
 			showMarkers,
 			shapeColor,
+			shapeWeight,
 			shapeText,
 		},
 	} = props;
 	const shapeStyles = {
-		color: shapeColor
+		fillColor: shapeColor,
+		color: shapeColor,
+		weight: shapeWeight
 	}
 	return markers ? (
 		<div className={className}>

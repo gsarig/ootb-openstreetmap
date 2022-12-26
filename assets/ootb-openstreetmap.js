@@ -1,3 +1,5 @@
+// noinspection NpmUsedModulesInstalled,JSUnresolvedVariable
+
 (function () {
 	'use strict';
 
@@ -20,6 +22,11 @@
 		const bounds = osmap.getAttribute('data-bounds');
 		const defaultIcon = JSON.parse(decodeURIComponent(escapedDefaultIcon));
 		const locations = JSON.parse(decodeURIComponent(escapedMarkers));
+		const mapType = osmap.getAttribute('data-maptype');
+		const showMarkers = osmap.getAttribute('data-showmarkers');
+		const escapedShapeStyle = osmap.getAttribute('data-shapestyle');
+		const shapeStyle = JSON.parse(decodeURIComponent(escapedShapeStyle));
+		const shapeText = osmap.getAttribute('data-shapetext');
 
 		let apiKey = '';
 		if ('mapbox' === provider) {
@@ -51,8 +58,18 @@
 
 		if (!locations || !locations.length) return; // If there are no locations, don't go any further
 
-		// Render the locations
-		locations.forEach(renderLocation);
+		if ('polygon' === mapType) {
+			const polygon = L.polygon(locations, shapeStyle).addTo(map);
+			map.fitBounds(polygon.getBounds());
+			if (shapeText.length) {
+				polygon.bindPopup(shapeText);
+			}
+		}
+
+		if ('false' !== showMarkers) {
+			// Render the locations
+			locations.forEach(renderLocation);
+		}
 
 		// Render a location's marker
 		function renderLocation(location) {

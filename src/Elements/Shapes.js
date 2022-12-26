@@ -32,7 +32,7 @@ export default function Shapes({props}) {
 			shapeText: content
 		});
 	}
-	return (!isDraggingMarker && markers.length ?
+	return (true !== isDraggingMarker && markers.length ?
 			<Polygon
 				positions={markers}
 				pathOptions={getShapeColor}

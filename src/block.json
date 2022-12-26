@@ -101,6 +101,14 @@
 	"shapeText": {
 	  "type": "string",
 	  "default": ""
+	},
+	"isDraggingMarker": {
+	  "type": "boolean",
+	  "default": false
+	},
+	"searchCount": {
+	  "type": "number",
+	  "default": 0
 	}
   },
   "textdomain": "ootb-openstreetmap",

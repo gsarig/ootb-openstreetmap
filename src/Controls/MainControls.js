@@ -1,8 +1,9 @@
 // noinspection NpmUsedModulesInstalled,JSUnresolvedVariable
 
 import ProviderControl from './ProviderControl';
-import getIcon from '../Helpers/getIcon';
+import TypeControl from "./TypeControl";
 
+import getIcon from '../Helpers/getIcon';
 import {__} from '@wordpress/i18n';
 import {Fragment} from '@wordpress/element';
 
@@ -36,6 +37,7 @@ export default function MainControls({props}) {
 	return (
 		<Fragment>
 			<ProviderControl props={props}/>
+			<TypeControl props={props}/>
 			<RangeControl
 				label={__('Height (pixels)', 'ootb-openstreetmap')}
 				value={mapHeight}

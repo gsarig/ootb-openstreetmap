@@ -14,6 +14,8 @@ export default function Markers({props}) {
 		attributes: {
 			mapObj,
 			markers,
+			isDraggingMarker,
+			oldLatLng
 		},
 		setAttributes,
 	} = props;
@@ -30,27 +32,58 @@ export default function Markers({props}) {
 		getBounds(props, [], mapObj.leafletElement);
 	}
 
-	const startDragging = () => {
-		if (markers) {
-			setAttributes({isDraggingMarker: true});
-		}
-	}
-
 	const isHovering = () => {
-		startDragging();
+		if (markers) {
+			setAttributes({
+				isDraggingMarker: true,
+			});
+		}
 	}
 
 	let clickStarted = null;
 	const onClickStart = () => {
-		setAttributes({addingMarker: ''});
 		clickStarted = new Date();
+		setAttributes({
+			addingMarker: ''
+		});
 	}
 	const onClickEnd = (e) => {
-		const now = new Date();
-		const duration = now - clickStarted;
-		if (!clickStarted || false === !!duration) {
-			e.target.openPopup();
+		if (true !== isDraggingMarker) {
+			const now = new Date();
+			const duration = now - clickStarted;
+			if (!clickStarted || false === !!duration) {
+				e.target.openPopup();
+			}
 		}
+	}
+	const startDragging = (e) => {
+		setAttributes({
+			isDraggingMarker: true,
+			oldLatLng: oldLatLng ?? e.target.getLatLng()
+		});
+	}
+	const stopDragging = (e) => {
+		const newLatLng = e.target.getLatLng();
+		const markerId = L.Util.stamp(e.target);
+		let index = null;
+		for (let key in markers) {
+			if (markerId === markers[key].id) {
+				index = key;
+			}
+		}
+		const updatedMarkers = [...markers];
+		if (updatedMarkers[index]) {
+			updatedMarkers[index].lat = newLatLng.lat.toString();
+			updatedMarkers[index].lng = newLatLng.lng.toString();
+			setAttributes({
+				markers: updatedMarkers,
+				shouldUpdateBounds: true
+			});
+			getBounds(props, [], mapObj.leafletElement);
+		}
+		setAttributes({
+			isDraggingMarker: false
+		});
 	}
 
 	const markerIcon = L.icon(getIcon(props));
@@ -61,21 +94,26 @@ export default function Markers({props}) {
 				key={index}
 				position={[marker.lat, marker.lng]}
 				icon={markerIcon}
-				onMouseDown={onClickStart}
-				onMouseUp={onClickEnd}
-				onMouseOver={isHovering}
 				draggable={true}
-				onDragStart={startDragging}
-				onDragEnd={(e) => {
-					const newLatLng = e.target.getLatLng();
-					let updatedMarkers = [...markers];
-					updatedMarkers[index].lat = newLatLng.lat;
-					updatedMarkers[index].lng = newLatLng.lng;
-					setAttributes({
-						isDraggingMarker: false,
-						markers: updatedMarkers
-					});
-				}}
+				eventHandlers={
+					{
+						mousedown: (e) => {
+							onClickStart(e);
+						},
+						mouseup: (e) => {
+							onClickEnd(e);
+						},
+						mouseover: (e) => {
+							isHovering(e);
+						},
+						dragstart: (e) => {
+							startDragging(e);
+						},
+						dragend: (e) => {
+							stopDragging(e);
+						}
+					}
+				}
 			>
 				<Popup>
 					<RichText

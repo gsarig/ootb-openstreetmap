@@ -1,61 +1,35 @@
 // noinspection NpmUsedModulesInstalled,JSUnresolvedVariable
 
-import {Polygon, Popup} from 'react-leaflet';
 
-import {__} from '@wordpress/i18n';
-import {RichText} from '@wordpress/block-editor';
-import {Button} from '@wordpress/components';
+import ShapePolygon from "./ShapePolygon";
+import ShapePolyline from "./ShapePolyline";
 
 export default function Shapes({props}) {
 	const {
 		attributes: {
+			mapType,
 			markers,
-			isDraggingMarker,
 			shapeColor,
-			shapeText,
+			shapeWeight,
+			isDraggingMarker,
 		},
-		setAttributes,
 	} = props;
 
-	const removeShape = () => {
-		setAttributes({
-			isDraggingMarker: false,
-			markers: [],
-			shapeText: '',
-			zoom: 8,
-			shouldUpdateZoom: true,
-		});
+	const styles = { // Available options: https://leafletjs.com/reference.html#path
+		fillColor: shapeColor,
+		color: shapeColor,
+		weight: shapeWeight
 	}
-	const getShapeColor = {fillColor: shapeColor, color: shapeColor}
-	const setShapeText = (content) => {
-		setAttributes({
-			shapeText: content
-		});
+
+	if ('polygon' === mapType && true !== isDraggingMarker && markers.length) {
+		return (
+			<ShapePolygon props={props} styles={styles}/>
+		);
+	} else if ('polyline' === mapType && true !== isDraggingMarker && markers.length) {
+		return (
+			<ShapePolyline props={props} styles={styles}/>
+		);
+	} else {
+		return null;
 	}
-	return (true !== isDraggingMarker && markers.length ?
-			<Polygon
-				positions={markers}
-				pathOptions={getShapeColor}
-			>
-				<Popup>
-					<RichText
-						multiline={true}
-						value={shapeText}
-						onChange={setShapeText}
-						placeholder={__('Write something', 'ootb-openstreetmap')}
-					/>
-					<div className="ootb-openstreetmap--marker-remove">
-						<Button
-							onClick={removeShape}
-							icon="trash"
-							showTooltip={true}
-							label={__('Remove this shape', 'ootb-openstreetmap')}
-						>
-							{__('Remove', 'ootb-openstreetmap')}
-						</Button>
-					</div>
-				</Popup>
-			</Polygon>
-			: null
-	);
 }

@@ -64,6 +64,12 @@
 			if (shapeText.length) {
 				polygon.bindPopup(shapeText);
 			}
+		} else if ('polyline' === mapType) {
+			const polyline = L.polyline(locations, shapeStyle).addTo(map);
+			map.fitBounds(polyline.getBounds());
+			if (shapeText.length) {
+				polyline.bindPopup(shapeText);
+			}
 		}
 
 		if ('false' !== showMarkers) {

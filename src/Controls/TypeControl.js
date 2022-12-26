@@ -1,7 +1,7 @@
 // noinspection NpmUsedModulesInstalled,JSUnresolvedVariable
 
 import {__} from '@wordpress/i18n';
-import {SelectControl, ToggleControl, ColorPicker, BaseControl} from '@wordpress/components';
+import {SelectControl, ToggleControl, RangeControl, ColorPicker, BaseControl} from '@wordpress/components';
 import {Fragment} from '@wordpress/element';
 
 export default function TypeControl({props}) {
@@ -10,6 +10,7 @@ export default function TypeControl({props}) {
 			mapType,
 			showMarkers,
 			shapeColor,
+			shapeWeight,
 		},
 		setAttributes,
 	} = props;
@@ -22,6 +23,10 @@ export default function TypeControl({props}) {
 		{
 			label: __('Polygon', 'ootb-openstreetmap'),
 			value: 'polygon',
+		},
+		{
+			label: __('Polyline', 'ootb-openstreetmap'),
+			value: 'polyline',
 		},
 	];
 	const setMapType = type => {
@@ -54,6 +59,17 @@ export default function TypeControl({props}) {
 								__('Show the markers on the frontend.', 'ootb-openstreetmap') :
 								__('Hide the markers on the frontend (does not affect the Backend).', 'ootb-openstreetmap')
 						}
+					/>
+					<RangeControl
+						label={__('Line weight', 'ootb-openstreetmap')}
+						value={shapeWeight}
+						onChange={
+							(pixels) => {
+								setAttributes({shapeWeight: pixels})
+							}
+						}
+						min={1}
+						max={100}
 					/>
 					<BaseControl
 						label={__('Shape color', 'ootb-openstreetmap')}

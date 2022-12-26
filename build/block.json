@@ -98,6 +98,10 @@
       "type": "string",
       "default": "#008EFF"
     },
+    "shapeWeight": {
+      "type": "integer",
+      "default": 3
+    },
     "shapeText": {
       "type": "string",
       "default": ""

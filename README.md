@@ -1,5 +1,5 @@
 [![Download from WordPress.org](.wordpress-org/banner-1544-500.jpg)](https://wordpress.org/plugins/ootb-openstreetmap/)
-    
+
 # Out of the Block: OpenStreetMap
 
 A map block for WordPress' Gutenberg Editor which uses [OpenStreetMap](https://www.openstreetmap.org) and [Leaflet.js](http://https://leafletjs.com). It needs no API keys and works out of the box (or, out of the Block, if you prefer). Benefiting from Gutenberg's potential, the plugin tries a different take on how to add your locations on the map and rethinks a few things, UX-wise.
@@ -14,11 +14,19 @@ Instead of manually adding coordinates for each one of your markers, just click-
 
 ![Demo GIF](.wordpress-org/screenshot-2.gif)
 
+Drawing a polygon:
+
+![Demo GIF](.wordpress-org/screenshot-9.gif)
+
+Drawing a polyline:
+
+![Demo GIF](.wordpress-org/screenshot-10.gif)
 
 ### Features
 
 * No need for API keys. Just install and use it.
 * Support for multiple markers.
+* Support for polygons and polylines.
 * [Dead-simple interface](https://www.gsarigiannidis.gr/wordpress-gutenberg-map-block-openstreetmap/). Don't search for coordinates and don't get overwhelmed by too many fields when using multiple markers. Just point and click on the map to add your marker where you want it and edit it's popup content directly from there.
 * [Place search](https://www.gsarigiannidis.gr/openstreetmap-place-search/). Find locations by typing keywords.
 * Remembers the zoom that you set when adding the markers and stores it so that you don't set it by hand (which you can do anyway if you prefer).
@@ -46,7 +54,7 @@ That's the point actually. Just install the plugin and start adding maps.
 
 ### How do I add a new location?
 
-To add a location, left-click on the map for a while, until the cursor transforms from hand to crosshair. As long as the cursor is a crosshair, it means that releasing it will drop the marker at that spot. That slight delay has been added to prevent you from accidentally add markers all over the place with every click.
+To add a location, left-click on the map for a while, until you see the prompt saying "Release to drop a marker here". On browsers that support it, the cursor transforms from hand to crosshair, to make it even more apparent. As long as the prompt is visible, it means that releasing the click will drop the marker at that spot. That slight delay has been added to prevent you from accidentally adding markers all over the place with every click.
 
 ### How do I remove a location?
 
@@ -58,10 +66,10 @@ Check under the "Map behavior" section, at the blocks' settings at the sidebar o
 
 ## Screenshots
 
-![The map editing screen](.wordpress-org/screenshot-3.jpg) 
+![The map editing screen](.wordpress-org/screenshot-3.jpg)
 The map editing screen
 
-![Map behavior options](.wordpress-org/screenshot-4.jpg) 
+![Map behavior options](.wordpress-org/screenshot-4.jpg)
 Map behavior options
 
 ![Adding a marker](.wordpress-org/screenshot-5.jpg)

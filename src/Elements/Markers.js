@@ -56,7 +56,7 @@ export default function Markers({props}) {
 			}
 		}
 	}
-	const startDragging = (e) => {
+	const startDragging = () => {
 		setAttributes({
 			isDraggingMarker: true
 		});

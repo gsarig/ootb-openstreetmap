@@ -23,6 +23,7 @@ Instead of manually adding coordinates for each one of your markers, just click-
 
 * No need for API keys. Just install and use it.
 * Support for multiple markers.
+* Support for polygons and polylines.
 * [Dead-simple interface](https://www.gsarigiannidis.gr/wordpress-gutenberg-map-block-openstreetmap/). Don't search for coordinates and don't get overwhelmed by too many fields when using multiple markers. Just point and click on the map to add your marker where you want it and edit it's popup content directly from there.
 * [Place search](https://www.gsarigiannidis.gr/openstreetmap-place-search/). Find locations by typing keywords.
 * Remembers the zoom that you set when adding the markers and stores it so that you don't set it by hand (which you can do anyway if you prefer).
@@ -46,11 +47,11 @@ Instead of manually adding coordinates for each one of your markers, just click-
 
 No.
 
-That's the point actually. Just install the plugin and start adding maps. Keep in mind, though, that as stated on the [OpenStreetMap Tile Usage Policy](https://operations.osmfoundation.org/policies/tiles/), OSM’s own servers are run entirely on donated resources and they have strictly limited capacity. Using them on a site with low traffic will probably be fine. Nevertheless, you are advised to create an account to [MapBox](https://www.mapbox.com/) and get a free API Key.
+That's the point, actually. Just install the plugin and start adding maps. Keep in mind, though, that as stated on the [OpenStreetMap Tile Usage Policy](https://operations.osmfoundation.org/policies/tiles/), OSM’s own servers are run entirely on donated resources and they have strictly limited capacity. Using them on a site with low traffic will probably be fine. Nevertheless, you are advised to create an account to [MapBox](https://www.mapbox.com/) and get a free API Key.
 
 = How do I add a new location? =
 
-To add a location, left-click on the map for a while, until the cursor transforms from hand to crosshair. As long as the cursor is a crosshair, it means that releasing it will drop the marker at that spot. That slight delay has been added to prevent you from accidentally add markers all over the place with every click.
+To add a location, left-click on the map for a while, until you see the prompt saying "Release to drop a marker here". On browsers that support it, the cursor transforms from hand to crosshair, to make it even more apparent. As long as the prompt is visible, it means that releasing the click will drop the marker at that spot. That slight delay has been added to prevent you from accidentally adding markers all over the place with every click.
 
 Alternatively, you can use the map's place search functionality.
 
@@ -72,14 +73,26 @@ Check under the "Map behavior" section, at the blocks' settings at the sidebar o
 6. Using custom markers
 7. Place search
 8. Plugin settings page
+9. Adding a polygon
+10. Adding a polyline
 
 == Upgrade Notice ==
+= 2.1.0 =
+Version 2.1.0 introduces 2 new, powerful features: support for polygons, and polylines.
+
 = 2.0.0 =
 Version 2.0.0 is a major, almost full, refactoring, both for the build scripts and the codebase. The changes should be backwards compatible and your already existing blocks should keep working as expected. If you notice any issues, though, please report them to the plugin's [support forum](https://wordpress.org/support/plugin/ootb-openstreetmap/).
 
 = 1.0 =
 
 == Changelog ==
+
+= 2.1.0 =
+* [New] Adds support for polygon shapes
+* [New] Adds support for polyline shapes
+* [Fix] Improves the drag and drop of markers
+* Updates the `react-leaflet` script to `v.4.2.0`
+* Updates the plugin's assets and documentation
 
 = 2.0.2 =
 * Replaces `str_contains` with `strpos`, for better backwards compatibility with older versions of PHP / WordPress.

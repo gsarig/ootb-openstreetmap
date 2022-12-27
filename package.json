@@ -20,6 +20,6 @@
 	"dependencies": {
 		"leaflet": "^1.9.3",
 		"react-device-detect": "^2.2.2",
-		"react-leaflet": "^4.1.0"
+		"react-leaflet": "^4.2.0"
 	}
 }

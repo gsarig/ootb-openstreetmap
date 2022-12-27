@@ -3,6 +3,7 @@ import {isMobile, isSafari} from "react-device-detect";
 import getBounds from "../Helpers/getBounds";
 // noinspection NpmUsedModulesInstalled
 import {useEffect} from '@wordpress/element';
+import getMarkerFromElelement from "../Helpers/getMarkerFromElelement";
 
 export default function MapEvents({props}) {
 	const {
@@ -44,16 +45,16 @@ export default function MapEvents({props}) {
 		setAttributes({addingMarker: '', isDraggingMarker: false});
 	}
 
+	const stopHovering = () => {
+		setAttributes({
+			isDraggingMarker: false,
+		});
+	}
+
 	const addMarker = (e) => {
 		clearTimeout(delay);
 		if (!!addingMarker) {
-			const lat = e.latlng.lat;
-			const lng = e.latlng.lng;
-			const newMarker = {
-				lat: lat.toString(),
-				lng: lng.toString(),
-				text: '',
-			};
+			const newMarker = getMarkerFromElelement(props, e);
 			setAttributes({
 				markers: [
 					...markers,
@@ -83,6 +84,9 @@ export default function MapEvents({props}) {
 		},
 		drag: (e) => {
 			isDragging(e);
+		},
+		mouseout: (e) => {
+			stopHovering(e);
 		},
 		zoomanim: (e) => {
 			changeZoom(e);

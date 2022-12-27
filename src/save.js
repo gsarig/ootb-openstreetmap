@@ -14,13 +14,26 @@ export default function save(props, className) {
 			doubleClickZoom,
 			scrollWheelZoom,
 			provider,
+			mapType,
+			showMarkers,
+			shapeColor,
+			shapeWeight,
+			shapeText,
 		},
 	} = props;
-
+	const shapeStyles = {
+		fillColor: shapeColor,
+		color: shapeColor,
+		weight: shapeWeight
+	}
 	return markers ? (
 		<div className={className}>
 			<div className="ootb-openstreetmap--map"
 				 data-provider={provider}
+				 data-maptype={mapType}
+				 data-showmarkers={showMarkers}
+				 data-shapestyle={encodeURIComponent(JSON.stringify(shapeStyles))}
+				 data-shapetext={shapeText}
 				 data-markers={encodeURIComponent(JSON.stringify(markers))} // Escape because of the potential HTML in the output.
 				 data-bounds={JSON.stringify(centerMap(props))}
 				 data-zoom={zoom}

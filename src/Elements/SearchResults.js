@@ -1,6 +1,7 @@
 import getBounds from '../Helpers/getBounds';
 // noinspection NpmUsedModulesInstalled
 import {Button} from '@wordpress/components';
+import getMarkerFromElelement from "../Helpers/getMarkerFromElelement";
 
 export default function SearchResults({props}) {
 	const {
@@ -13,13 +14,7 @@ export default function SearchResults({props}) {
 		setAttributes,
 	} = props;
 	const addMarker = (e) => {
-		const index = e.target.getAttribute('data-index');
-		const {display_name, lon, lat} = searchResults[index];
-		const newMarker = {
-			lat: lat.toString(),
-			lng: lon.toString(),
-			text: `<p>${display_name}</p>`,
-		};
+		const newMarker = getMarkerFromElelement(props, e);
 		setAttributes({
 			markers: [
 				...markers,

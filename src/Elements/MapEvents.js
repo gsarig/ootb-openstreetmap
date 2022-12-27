@@ -44,6 +44,13 @@ export default function MapEvents({props}) {
 		clearTimeout(delay);
 		setAttributes({addingMarker: '', isDraggingMarker: false});
 	}
+
+	const stopHovering = () => {
+		setAttributes({
+			isDraggingMarker: false,
+		});
+	}
+
 	const addMarker = (e) => {
 		clearTimeout(delay);
 		if (!!addingMarker) {
@@ -77,6 +84,9 @@ export default function MapEvents({props}) {
 		},
 		drag: (e) => {
 			isDragging(e);
+		},
+		mouseout: (e) => {
+			stopHovering(e);
 		},
 		zoomanim: (e) => {
 			changeZoom(e);

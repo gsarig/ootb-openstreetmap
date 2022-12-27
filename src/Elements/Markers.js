@@ -4,6 +4,7 @@ import L from 'leaflet';
 import {Marker, Popup} from 'react-leaflet';
 import getIcon from '../Helpers/getIcon';
 import getBounds from '../Helpers/getBounds';
+import getMarkerIndex from "../Helpers/getMarkerIndex";
 
 import {__} from '@wordpress/i18n';
 import {RichText} from '@wordpress/block-editor';
@@ -15,7 +16,6 @@ export default function Markers({props}) {
 			mapObj,
 			markers,
 			isDraggingMarker,
-			oldLatLng
 		},
 		setAttributes,
 	} = props;
@@ -58,19 +58,12 @@ export default function Markers({props}) {
 	}
 	const startDragging = (e) => {
 		setAttributes({
-			isDraggingMarker: true,
-			oldLatLng: oldLatLng ?? e.target.getLatLng()
+			isDraggingMarker: true
 		});
 	}
 	const stopDragging = (e) => {
 		const newLatLng = e.target.getLatLng();
-		const markerId = e.target.options.markerId ?? L.Util.stamp(e.target);
-		let index = null;
-		for (let key in markers) {
-			if (markerId === markers[key].id) {
-				index = key;
-			}
-		}
+		const index = getMarkerIndex(e, markers);
 		const updatedMarkers = [...markers];
 		if (updatedMarkers[index]) {
 			updatedMarkers[index].lat = newLatLng.lat.toString();
@@ -86,7 +79,6 @@ export default function Markers({props}) {
 		});
 	}
 	const markerIcon = L.icon(getIcon(props));
-
 	return typeof markers !== "undefined" && markers.length ? markers.map((marker, index) => {
 		return (
 			<Marker

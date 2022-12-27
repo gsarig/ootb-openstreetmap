@@ -64,7 +64,7 @@ export default function Markers({props}) {
 	}
 	const stopDragging = (e) => {
 		const newLatLng = e.target.getLatLng();
-		const markerId = L.Util.stamp(e.target);
+		const markerId = e.target.options.markerId ?? L.Util.stamp(e.target);
 		let index = null;
 		for (let key in markers) {
 			if (markerId === markers[key].id) {
@@ -85,13 +85,13 @@ export default function Markers({props}) {
 			isDraggingMarker: false
 		});
 	}
-
 	const markerIcon = L.icon(getIcon(props));
 
 	return typeof markers !== "undefined" && markers.length ? markers.map((marker, index) => {
 		return (
 			<Marker
 				key={index}
+				markerId={marker.id}
 				position={[marker.lat, marker.lng]}
 				icon={markerIcon}
 				draggable={true}

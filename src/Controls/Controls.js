@@ -2,10 +2,11 @@
 
 import MainControls from './MainControls';
 import BehaviorControls from './BehaviorControls';
+import DataControls from "./DataControls";
 
 import {__} from '@wordpress/i18n';
-const {PanelBody} = wp.components;
-const {InspectorControls} = wp.blockEditor;
+import {PanelBody} from '@wordpress/components';
+import {InspectorControls} from '@wordpress/block-editor';
 
 export default function Controls({props}) {
 	return (
@@ -21,6 +22,12 @@ export default function Controls({props}) {
 				initialOpen={false}
 			>
 				<BehaviorControls props={props}/>
+			</PanelBody>
+			<PanelBody
+				title={__('Map data', 'ootb-openstreetmap')}
+				initialOpen={false}
+			>
+				<DataControls props={props}/>
 			</PanelBody>
 		</InspectorControls>
 	);

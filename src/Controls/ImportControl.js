@@ -1,6 +1,7 @@
 // noinspection NpmUsedModulesInstalled,JSUnresolvedVariable
 
 import {__} from '@wordpress/i18n';
+import validMarkers from "../Helpers/validMarkers";
 
 const {BaseControl, FormFileUpload} = wp.components;
 
@@ -21,9 +22,12 @@ export default function ImportControl({props}) {
 		const reader = new FileReader();
 		reader.readAsText(file, "UTF-8");
 		reader.onload = function (fileObj) {
-			const data = fileObj.target.result.toString();
+			const data = validMarkers(fileObj.target.result);
+			if (!data) {
+				return;
+			}
 			setAttributes({
-				markers: markers.concat(JSON.parse(data)),
+				markers: markers.concat(data),
 				shouldUpdateBounds: true,
 			});
 		}

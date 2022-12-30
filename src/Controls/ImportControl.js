@@ -2,8 +2,7 @@
 
 import {__} from '@wordpress/i18n';
 import validMarkers from "../Helpers/validMarkers";
-
-const {BaseControl, FormFileUpload} = wp.components;
+import {BaseControl, FormFileUpload} from '@wordpress/components';
 
 export default function ImportControl({props}) {
 	const {

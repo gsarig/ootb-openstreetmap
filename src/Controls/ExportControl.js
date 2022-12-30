@@ -1,8 +1,7 @@
 // noinspection NpmUsedModulesInstalled,JSUnresolvedVariable
 
 import {__} from '@wordpress/i18n';
-
-const {BaseControl, Button} = wp.components;
+import {BaseControl, Button} from '@wordpress/components';
 
 export default function ExportControl({props}) {
 	const {

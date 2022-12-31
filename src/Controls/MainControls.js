@@ -6,9 +6,8 @@ import TypeControl from "./TypeControl";
 import getIcon from '../Helpers/getIcon';
 import {__} from '@wordpress/i18n';
 import {Fragment} from '@wordpress/element';
-
-const {RangeControl, Button} = wp.components;
-const {MediaUpload, MediaUploadCheck} = wp.blockEditor;
+import {RangeControl, Button} from '@wordpress/components';
+import {MediaUpload, MediaUploadCheck} from '@wordpress/block-editor';
 
 export default function MainControls({props}) {
 	const {

@@ -15,7 +15,7 @@
 		"start": "wp-scripts start"
 	},
 	"devDependencies": {
-		"@wordpress/scripts": "^24.5.0"
+		"@wordpress/scripts": "^25.0.0"
 	},
 	"dependencies": {
 		"leaflet": "^1.9.3",

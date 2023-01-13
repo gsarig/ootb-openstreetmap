@@ -5,7 +5,7 @@ Tags: Map, OpenStreetMap, Leaflet, Google Maps, block
 Requires at least: 5.8.6
 Tested up to: 6.1
 Requires PHP: 7.4
-Stable tag: 2.1.0
+Stable tag: 2.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,8 @@ Instead of manually adding coordinates for each one of your markers, just click-
 * Enable or disable scroll wheel zoom.
 * Set a minimum and maximum limit that the user can zoom on the frontend. Setting the same value to both fields will lock the zoom at that level.
 * Support for other Layer Providers: MapBox (using your own API key) and Stamen.
+* Option to export locations in a JSON file
+* Option to import locations from a JSON file
 
 == Installation ==
 
@@ -75,8 +77,12 @@ Check under the "Map behavior" section, at the blocks' settings at the sidebar o
 8. Plugin settings page
 9. Adding a polygon
 10. Adding a polyline
+11. Export and import locations
 
 == Upgrade Notice ==
+= 2.2.0 =
+Version 2.2.0 adds support for import and export locations [read more](https://github.com/gsarig/ootb-openstreetmap/pull/14).
+
 = 2.1.0 =
 Version 2.1.0 introduces 2 new, powerful features: support for polygons, and polylines.
 
@@ -86,6 +92,10 @@ Version 2.0.0 is a major, almost full, refactoring, both for the build scripts a
 = 1.0 =
 
 == Changelog ==
+
+= 2.2.0 =
+* [New] Adds option to export locations to a JSON file
+* [New] Adds option to import locations from a previously exported JSON file
 
 = 2.1.0 =
 * [New] Adds support for polygon shapes

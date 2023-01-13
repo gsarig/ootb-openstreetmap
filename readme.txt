@@ -77,10 +77,11 @@ Check under the "Map behavior" section, at the blocks' settings at the sidebar o
 8. Plugin settings page
 9. Adding a polygon
 10. Adding a polyline
+11. Export and import locations
 
 == Upgrade Notice ==
 = 2.2.0 =
-Version 2.2.0 adds support for import and export locations.
+Version 2.2.0 adds support for import and export locations [read more](https://github.com/gsarig/ootb-openstreetmap/pull/14).
 
 = 2.1.0 =
 Version 2.1.0 introduces 2 new, powerful features: support for polygons, and polylines.

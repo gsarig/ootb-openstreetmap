@@ -3,35 +3,19 @@
 import ProviderControl from './ProviderControl';
 import TypeControl from "./TypeControl";
 
-import getIcon from '../Helpers/getIcon';
 import {__} from '@wordpress/i18n';
 import {Fragment} from '@wordpress/element';
-import {RangeControl, Button} from '@wordpress/components';
-import {MediaUpload, MediaUploadCheck} from '@wordpress/block-editor';
+import {RangeControl} from '@wordpress/components';
+import IconControl from "./IconControl";
 
 export default function MainControls({props}) {
 	const {
 		attributes: {
 			mapHeight,
-			defaultIcon,
 			zoom,
 		},
 		setAttributes,
 	} = props;
-
-	const setDefaultIcon = image => {
-		setAttributes({
-			defaultIcon: image
-		});
-	}
-
-	const restoreDefaultIcon = () => {
-		setAttributes({
-			defaultIcon: null
-		});
-	}
-
-	const icon = getIcon(props);
 
 	return (
 		<Fragment>
@@ -62,38 +46,7 @@ export default function MainControls({props}) {
 				min={0}
 				max={18}
 			/>
-			<MediaUploadCheck>
-				<div className="ootb-openstreetmap--icon">
-					<img
-						src={icon.iconUrl}
-						alt={__('Map Marker', 'ootb-openstreetmap')}
-					/>
-					<div className="gmp-openstreetmap--buttons">
-						<MediaUpload
-							onSelect={setDefaultIcon}
-							allowedTypes={['image']}
-							value={defaultIcon}
-							render={({open}) => (
-								<Button
-									onClick={open}
-									isSecondary
-								>
-									{__('Change icon', 'ootb-openstreetmap')}
-								</Button>
-							)}
-						/>
-						{defaultIcon ?
-							<Button
-								onClick={restoreDefaultIcon}
-								isDestructive
-							>
-								{__('Restore default', 'ootb-openstreetmap')}
-							</Button>
-							: null}
-
-					</div>
-				</div>
-			</MediaUploadCheck>
+			<IconControl props={props}/>
 		</Fragment>
 	);
 }

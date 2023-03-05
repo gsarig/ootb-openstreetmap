@@ -110,7 +110,6 @@ export default function Markers({props}) {
 			>
 				<Popup>
 					<RichText
-						multiline={true}
 						value={marker.text}
 						onChange={
 							(content) => {

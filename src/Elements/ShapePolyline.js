@@ -36,7 +36,6 @@ export default function ShapePolyline({props, styles}) {
 		>
 			<Popup>
 				<RichText
-					multiline={true}
 					value={shapeText}
 					onChange={setShapeText}
 					placeholder={__('Write something', 'ootb-openstreetmap')}

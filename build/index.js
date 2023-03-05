@@ -316,16 +316,16 @@ function IconControl(_ref) {
       } = _ref2;
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
         onClick: open,
-        icon: "format-image",
-        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Change the icon', 'ootb-openstreetmap'),
-        isSecondary: true
+        icon: "format-gallery",
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Change the Marker icon', 'ootb-openstreetmap'),
+        isSecondary: !isInMarker
       }, !isInMarker ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Change', 'ootb-openstreetmap') : null);
     }
   }), (0,_Helpers_hasIconOverride__WEBPACK_IMPORTED_MODULE_5__["default"])(props, icon?.iconUrl, index) ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
     onClick: restoreDefaultIcon,
     icon: "image-rotate",
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Restore the marker', 'ootb-openstreetmap'),
-    isDestructive: true
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Restore the Marker icon', 'ootb-openstreetmap'),
+    isSecondary: !isInMarker
   }, !isInMarker ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Restore', 'ootb-openstreetmap') : null) : null)));
 }
 
@@ -1149,7 +1149,7 @@ function Markers(_ref) {
       dataindex: index,
       icon: "trash",
       isDestructive: true,
-      variant: "primary",
+      variant: "secondary",
       showTooltip: true,
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Remove this marker', 'ootb-openstreetmap')
     }))));
@@ -1387,13 +1387,16 @@ function ShapePolygon(_ref) {
     onChange: setShapeText,
     placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Write something', 'ootb-openstreetmap')
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "ootb-openstreetmap--marker-remove"
+    className: "ootb-openstreetmap--marker-icon-container ootb-openstreetmap--marker-remove ootb-openstreetmap--shape-controls"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
     onClick: removeShape,
     icon: "trash",
+    isDestructive: true,
+    variant: "secondary",
     showTooltip: true,
+    isSecondary: true,
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Remove this shape', 'ootb-openstreetmap')
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Remove', 'ootb-openstreetmap')))));
+  }))));
 }
 
 /***/ }),
@@ -1461,13 +1464,16 @@ function ShapePolyline(_ref) {
     onChange: setShapeText,
     placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Write something', 'ootb-openstreetmap')
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "ootb-openstreetmap--marker-remove"
+    className: "ootb-openstreetmap--marker-icon-container ootb-openstreetmap--marker-remove ootb-openstreetmap--shape-controls"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Button, {
     onClick: removeShape,
     icon: "trash",
+    isDestructive: true,
+    variant: "secondary",
     showTooltip: true,
+    isSecondary: true,
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Remove this shape', 'ootb-openstreetmap')
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Remove', 'ootb-openstreetmap')))));
+  }))));
 }
 
 /***/ }),

@@ -130,7 +130,7 @@ export default function Markers({props}) {
 							dataindex={index}
 							icon="trash"
 							isDestructive={true}
-							variant="primary"
+							variant="secondary"
 							showTooltip={true}
 							label={__('Remove this marker', 'ootb-openstreetmap')}
 						/>

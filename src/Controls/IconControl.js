@@ -56,9 +56,9 @@ export default function IconControl({props, index}) {
 						render={({open}) => (
 							<Button
 								onClick={open}
-								icon="format-image"
-								label={__('Change the icon', 'ootb-openstreetmap')}
-								isSecondary
+								icon="format-gallery"
+								label={__('Change the Marker icon', 'ootb-openstreetmap')}
+								isSecondary={!isInMarker}
 							>
 								{
 									!isInMarker ?
@@ -72,8 +72,8 @@ export default function IconControl({props, index}) {
 						<Button
 							onClick={restoreDefaultIcon}
 							icon="image-rotate"
-							label={__('Restore the marker', 'ootb-openstreetmap')}
-							isDestructive
+							label={__('Restore the Marker icon', 'ootb-openstreetmap')}
+							isSecondary={!isInMarker}
 						>
 							{
 								!isInMarker ?

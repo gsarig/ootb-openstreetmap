@@ -26,11 +26,6 @@
 	width: 150px;
 }
 
-.wp-block-ootb-openstreetmap .leaflet-popup-content p {
-	font: 8px "Helvetica Neue", Arial, Helvetica, sans-serif;
-	margin: 0.5em 0;
-}
-
 .wp-block-ootb-openstreetmap .leaflet-marker-icon {
 	top: 0;
 	animation: animate-marker 400ms ease-in-out;
@@ -70,31 +65,18 @@
 }
 
 /* Marker buttons */
-.ootb-openstreetmap--marker-icon-container .dashicons-trash::before {
-	font-size: 16px;
-}
-
-.ootb-openstreetmap--marker-icon-container .dashicons-trash {
-	font-size: 18px;
-}
-
-.ootb-openstreetmap--marker-icon-container .is-primary {
-	border-radius: 6px;
-	min-width: auto;
-	min-height: auto;
-	width: 28px;
-	height: 28px;
-	margin: .3rem;
-}
-
 .ootb-openstreetmap--marker-icon-container {
 	border-top: 1px solid #ccc;
 	margin-top: 1rem;
-	padding-top: .5rem;
+	padding-top: .2rem;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: flex-end;
 	align-items: flex-end;
+}
+
+.ootb-openstreetmap--marker-icon-container .gmp-openstreetmap--buttons .dashicon::before {
+	font-size: 16px;
 }
 
 .leaflet-popup-content-wrapper .ootb-openstreetmap--icon {
@@ -107,12 +89,6 @@
 }
 
 .leaflet-popup-content-wrapper .gmp-openstreetmap--buttons {
-}
-
-.leaflet-popup-content-wrapper .ootb-openstreetmap--icon img {
-	margin: .5rem 0;
-	max-height: 24px;
-	max-width: 24px;
 }
 
 .leaflet-popup-content-wrapper .gmp-openstreetmap--buttons {

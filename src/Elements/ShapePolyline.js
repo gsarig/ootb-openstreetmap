@@ -41,15 +41,16 @@ export default function ShapePolyline({props, styles}) {
 					onChange={setShapeText}
 					placeholder={__('Write something', 'ootb-openstreetmap')}
 				/>
-				<div className="ootb-openstreetmap--marker-remove">
+				<div className="ootb-openstreetmap--marker-icon-container ootb-openstreetmap--marker-remove ootb-openstreetmap--shape-controls">
 					<Button
 						onClick={removeShape}
 						icon="trash"
+						isDestructive={true}
+						variant="secondary"
 						showTooltip={true}
+						isSecondary
 						label={__('Remove this shape', 'ootb-openstreetmap')}
-					>
-						{__('Remove', 'ootb-openstreetmap')}
-					</Button>
+					/>
 				</div>
 			</Popup>
 		</Polyline>

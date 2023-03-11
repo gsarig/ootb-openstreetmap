@@ -26,6 +26,7 @@ Drawing a polyline:
 
 * No need for API keys. Just install and use it.
 * Support for multiple markers.
+* Support for a different icon per marker.
 * Support for polygons and polylines.
 * [Dead-simple interface](https://www.gsarigiannidis.gr/wordpress-gutenberg-map-block-openstreetmap/). Don't search for coordinates and don't get overwhelmed by too many fields when using multiple markers. Just point and click on the map to add your marker where you want it and edit it's popup content directly from there.
 * [Place search](https://www.gsarigiannidis.gr/openstreetmap-place-search/). Find locations by typing keywords.
@@ -37,7 +38,9 @@ Drawing a polyline:
 * Enable or disable double-click zoom.
 * Enable or disable scroll wheel zoom.
 * Set a minimum and maximum limit that the user can zoom on the frontend. Setting the same value to both fields will lock the zoom at that level.
-* Support for MapBox, as an additional Layer Provider, using your own API key.
+* Support for other Layer Providers: MapBox (using your own API key) and Stamen.
+* Option to export locations in a JSON file
+* Option to import locations from a JSON file
 
 ## Installation
 

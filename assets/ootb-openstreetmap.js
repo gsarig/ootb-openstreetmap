@@ -20,7 +20,7 @@
 		const doubleClickZoom = osmap.getAttribute('data-doubleclickzoom');
 		const scrollWheelZoom = osmap.getAttribute('data-scrollwheelzoom');
 		const bounds = osmap.getAttribute('data-bounds');
-		const markerIcon = JSON.parse(decodeURIComponent(escapedDefaultIcon));
+		const defaultIcon = JSON.parse(decodeURIComponent(escapedDefaultIcon));
 		const locations = JSON.parse(decodeURIComponent(escapedMarkers));
 		const mapType = osmap.getAttribute('data-maptype');
 		const showMarkers = osmap.getAttribute('data-showmarkers');
@@ -79,6 +79,7 @@
 
 		// Render a location's marker
 		function renderLocation(location) {
+			const markerIcon = structuredClone(defaultIcon);
 			if (location.icon) {
 				markerIcon.iconUrl = location.icon.url;
 			}

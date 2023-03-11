@@ -79,8 +79,12 @@
 
 		// Render a location's marker
 		function renderLocation(location) {
+			const markerIcon = structuredClone(defaultIcon);
+			if (location.icon) {
+				markerIcon.iconUrl = location.icon.url;
+			}
 			let marker = L.marker([location.lat, location.lng], {
-				icon: L.icon(defaultIcon),
+				icon: L.icon(markerIcon),
 			});
 			if (location.text) {
 				marker.bindPopup(location.text);

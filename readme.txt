@@ -3,9 +3,9 @@ Contributors: gsarig
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MZR4JSRUMH5EA&source=url
 Tags: Map, OpenStreetMap, Leaflet, Google Maps, block
 Requires at least: 5.8.6
-Tested up to: 6.1
+Tested up to: 6.2
 Requires PHP: 7.4
-Stable tag: 2.2.0
+Stable tag: 2.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,10 +19,13 @@ Instead of manually adding coordinates for each one of your markers, just click-
 
 [youtube https://www.youtube.com/watch?v=FGe7zJnrIgo]
 
+* [Follow the project's development on GitHub](https://github.com/gsarig/ootb-openstreetmap)
+
 = Features =
 
 * No need for API keys. Just install and use it.
 * Support for multiple markers.
+* Support for a different icon per marker.
 * Support for polygons and polylines.
 * [Dead-simple interface](https://www.gsarigiannidis.gr/wordpress-gutenberg-map-block-openstreetmap/). Don't search for coordinates and don't get overwhelmed by too many fields when using multiple markers. Just point and click on the map to add your marker where you want it and edit it's popup content directly from there.
 * [Place search](https://www.gsarigiannidis.gr/openstreetmap-place-search/). Find locations by typing keywords.
@@ -80,6 +83,9 @@ Check under the "Map behavior" section, at the blocks' settings at the sidebar o
 11. Export and import locations
 
 == Upgrade Notice ==
+= 2.3.0 =
+Version 2.3.0 adds support for different icons per marker.
+
 = 2.2.0 =
 Version 2.2.0 adds support for import and export locations [read more](https://github.com/gsarig/ootb-openstreetmap/pull/14).
 
@@ -92,6 +98,11 @@ Version 2.0.0 is a major, almost full, refactoring, both for the build scripts a
 = 1.0 =
 
 == Changelog ==
+
+= 2.3.0 =
+* [New] Adds support for different icons per marker.
+* Updates the `react-leaflet` script to `v.4.2.1`.
+* Updates compatibility with WordPress 6.2.
 
 = 2.2.0 =
 * [New] Adds option to export locations to a JSON file

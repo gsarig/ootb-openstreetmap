@@ -9,6 +9,7 @@ import getMarkerIndex from "../Helpers/getMarkerIndex";
 import {__} from '@wordpress/i18n';
 import {RichText} from '@wordpress/block-editor';
 import {Button} from '@wordpress/components';
+import IconControl from "../Controls/IconControl";
 
 export default function Markers({props}) {
 	const {
@@ -78,14 +79,14 @@ export default function Markers({props}) {
 			isDraggingMarker: false
 		});
 	}
-	const markerIcon = L.icon(getIcon(props));
+	const markerIcon = (index) => L.icon(getIcon(props, index));
 	return typeof markers !== "undefined" && markers.length ? markers.map((marker, index) => {
 		return (
 			<Marker
 				key={index}
 				markerId={marker.id}
 				position={[marker.lat, marker.lng]}
-				icon={markerIcon}
+				icon={markerIcon(index)}
 				draggable={true}
 				eventHandlers={
 					{
@@ -109,7 +110,6 @@ export default function Markers({props}) {
 			>
 				<Popup>
 					<RichText
-						multiline={true}
 						value={marker.text}
 						onChange={
 							(content) => {
@@ -122,16 +122,17 @@ export default function Markers({props}) {
 						}
 						placeholder={__('Write something', 'ootb-openstreetmap')}
 					/>
-					<div className="ootb-openstreetmap--marker-remove">
+					<div className="ootb-openstreetmap--marker-icon-container">
+						<IconControl props={props} index={index}/>
 						<Button
 							onClick={removeMarker}
 							dataindex={index}
 							icon="trash"
+							isDestructive={true}
+							variant="secondary"
 							showTooltip={true}
 							label={__('Remove this marker', 'ootb-openstreetmap')}
-						>
-							{__('Remove', 'ootb-openstreetmap')}
-						</Button>
+						/>
 					</div>
 				</Popup>
 			</Marker>

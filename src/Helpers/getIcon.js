@@ -1,19 +1,27 @@
-export default function getIcon(props) {
+import getFallbackIcon from "./getFallbackIcon";
+
+export default function getIcon(props, index) {
 	const {
 		attributes: {
+			markers,
 			defaultIcon,
 		},
 	} = props;
-
 	//noinspection JSUnresolvedVariable
 	const {
 		pluginDirUrl,
 	} = ootbGlobal;
-	const fallbackIcon = pluginDirUrl + 'assets/vendor/leaflet/images/marker-icon.png';
-	const horizontalPosition = defaultIcon ? Math.round(defaultIcon.width / 2) : 12;
-	const verticalPosition = defaultIcon ? Math.round(defaultIcon.height) : 41;
+
+	const currentIcon = () => {
+		if (typeof index !== 'undefined' && markers[index]?.icon) {
+			return markers[index].icon;
+		}
+		return defaultIcon ?? null;
+	}
+	const horizontalPosition = currentIcon() ? Math.round(currentIcon().width / 2) : 12;
+	const verticalPosition = currentIcon() ? Math.round(currentIcon().height) : 41;
 	return {
-		iconUrl: defaultIcon ? defaultIcon.url : fallbackIcon,
+		iconUrl: currentIcon() ? currentIcon().url : getFallbackIcon(),
 		iconAnchor: [horizontalPosition, verticalPosition],
 		popupAnchor: [0, -Math.abs(verticalPosition)],
 	}

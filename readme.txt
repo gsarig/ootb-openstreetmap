@@ -20,6 +20,8 @@ Instead of manually adding coordinates for each one of your markers, just click-
 [youtube https://www.youtube.com/watch?v=FGe7zJnrIgo]
 
 * [Follow the project's development on GitHub](https://github.com/gsarig/ootb-openstreetmap)
+* [Release history](https://github.com/gsarig/ootb-openstreetmap/releases)
+* [Roadmap](https://github.com/users/gsarig/projects/1)
 
 = Features =
 
@@ -83,6 +85,9 @@ Check under the "Map behavior" section, at the blocks' settings at the sidebar o
 11. Export and import locations
 
 == Upgrade Notice ==
+= 2.4.0 =
+Version 2.4.0 adds an option to prevent the default map scroll/touch behaviours to make it easier for users to navigate in a page (pretty much like in Google Maps).
+
 = 2.3.0 =
 Version 2.3.0 adds support for different icons per marker.
 
@@ -98,6 +103,8 @@ Version 2.0.0 is a major, almost full, refactoring, both for the build scripts a
 = 1.0 =
 
 == Changelog ==
+= 2.4.0 =
+* [New] Adds an option to prevent the default map scroll/touch behaviours.
 
 = 2.3.0 =
 * [New] Adds support for different icons per marker.

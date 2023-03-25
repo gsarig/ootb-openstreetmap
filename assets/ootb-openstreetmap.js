@@ -5,6 +5,7 @@
 
 	const providers = ootb.providers;
 	const options = ootb.options;
+	const gestureHandlingOptions = ootb.gestureHandlingOptions;
 	const maps = document.querySelectorAll('.ootb-openstreetmap--map');
 	maps.forEach(renderMap);
 
@@ -33,10 +34,19 @@
 			apiKey = options.api_mapbox;
 		}
 
-		const map = L.map(osmap, {
+		const mapOptions = {
 			minZoom: parseInt(minZoom),
 			maxZoom: parseInt(maxZoom),
-		}).setView(JSON.parse(bounds), parseInt(zoom));
+		};
+
+		if (options.prevent_default_gestures) {
+			mapOptions.gestureHandling = true;
+			if (gestureHandlingOptions && Object.keys(gestureHandlingOptions).length > 0) {
+				mapOptions.gestureHandlingOptions = gestureHandlingOptions;
+			}
+		}
+
+		const map = L.map(osmap, mapOptions).setView(JSON.parse(bounds), parseInt(zoom));
 
 		// Set the rest of the map options
 		if ('false' === dragging) {

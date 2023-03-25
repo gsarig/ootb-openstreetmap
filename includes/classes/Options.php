@@ -53,13 +53,13 @@ class Options {
 
 		add_settings_section(
 			'ootb_section_settings',
-			__( 'Map Provider API key', 'ootb-openstreetmap' ),
+			esc_html__( 'Map Provider API key', 'ootb-openstreetmap' ),
 			[ $this, 'section_settings_callback' ],
 			'ootb'
 		);
 		add_settings_field(
 			'api_mapbox',
-			__( 'MapBox', 'ootb-openstreetmap' ),
+			esc_html__( 'MapBox', 'ootb-openstreetmap' ),
 			[ $this, 'field_api_key_mapbox' ],
 			'ootb',
 			'ootb_section_settings',
@@ -72,13 +72,13 @@ class Options {
 
 		add_settings_section(
 			'ootb_section_defaults',
-			__( 'Default location', 'ootb-openstreetmap' ),
+			esc_html__( 'Default location', 'ootb-openstreetmap' ),
 			[ $this, 'section_defaults_callback' ],
 			'ootb'
 		);
 		add_settings_field(
 			'default_lat',
-			__( 'Latitude', 'ootb-openstreetmap' ),
+			esc_html__( 'Latitude', 'ootb-openstreetmap' ),
 			[ $this, 'field_coordinates' ],
 			'ootb',
 			'ootb_section_defaults',
@@ -90,7 +90,7 @@ class Options {
 		);
 		add_settings_field(
 			'default_lng',
-			__( 'Longitude', 'ootb-openstreetmap' ),
+			esc_html__( 'Longitude', 'ootb-openstreetmap' ),
 			[ $this, 'field_coordinates' ],
 			'ootb',
 			'ootb_section_defaults',
@@ -100,6 +100,61 @@ class Options {
 				'ootb_custom_data' => 'custom',
 			]
 		);
+		add_settings_section(
+			'ootb_section_frontend',
+			esc_html__( 'Frontend behavior', 'ootb-openstreetmap' ),
+			[ $this, 'section_frontend_callback' ],
+			'ootb'
+		);
+
+		add_settings_field(
+			'prevent_default_gestures',
+			esc_html__( 'Prevent default gestures', 'ootb-openstreetmap' ),
+			[ $this, 'field_prevent_default_gestures' ],
+			'ootb',
+			'ootb_section_frontend',
+			[
+				'label_for'        => 'prevent_default_gestures',
+				'class'            => 'ootb_row',
+				'ootb_custom_data' => 'custom',
+				'label'            => esc_html__( ' Prevent default map scroll/touch behaviours to make it easier for users to navigate in a page (pretty much like in Google Maps).', 'ootb-openstreetmap' ),
+			]
+		);
+	}
+
+	/**
+	 * The callback method for the option to prevent default gestures.
+	 *
+	 * @param array $args THe settings args.
+	 *
+	 * @return void
+	 */
+	function field_prevent_default_gestures( array $args ) {
+		$option = get_option( 'ootb_options' );
+		?>
+		<input type="checkbox" name="ootb_options[<?php echo esc_attr( $args['label_for'] ); ?>]"
+			   id="<?php echo esc_attr( $args['label_for'] ); ?>"
+			   value="1" <?php checked( ! empty( $option[ $args['label_for'] ] ), true ); ?> />
+		<label
+			for="<?php echo esc_attr( $args['label_for'] ); ?>"><?php echo $args['label']; ?></label>
+		<?php
+	}
+
+	/**
+	 * The callback method for the frontend behavior section.
+	 *
+	 * @param array $args THe settings args.
+	 *
+	 * @return void
+	 */
+	function section_frontend_callback( array $args ) {
+		?>
+		<p id="<?php echo esc_attr( $args['id'] ); ?>">
+			<?php
+			echo esc_html__( 'Apply adjustments to the Frontend behavior of the map.', 'ootb-openstreetmap' );
+			?>
+		</p>
+		<?php
 	}
 
 	/**
@@ -135,7 +190,7 @@ class Options {
 	function section_settings_callback( array $args ) {
 		?>
 		<div class="ootb_info">
-			<h3><?php _e( 'About OpenStreetMap usage limits', 'ootb-openstreetmap' ); ?></h3>
+			<h3><?php echo esc_html__( 'About OpenStreetMap usage limits', 'ootb-openstreetmap' ); ?></h3>
 			<p id="<?php echo esc_attr( $args['id'] ); ?>">
 				<?php
 				echo sprintf(
@@ -237,7 +292,7 @@ class Options {
 				<?php
 				settings_fields( 'ootb' );
 				do_settings_sections( 'ootb' );
-				submit_button( __( 'Save Settings', 'ootb-openstreetmap' ) );
+				submit_button( esc_html__( 'Save Settings', 'ootb-openstreetmap' ) );
 				?>
 			</form>
 		</div>

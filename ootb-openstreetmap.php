@@ -20,9 +20,13 @@ define( 'OOTB_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'OOTB_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OOTB_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 
-const OOTB_BLOCK_NAME = 'ootb/openstreetmap';
-const OOTB_VERSION    = '2.3.0';
-const OOTB_PLUGIN_INC = OOTB_PLUGIN_PATH . 'includes/';
+const OOTB_BLOCK_NAME     = 'ootb/openstreetmap';
+const OOTB_VERSION        = '2.3.0';
+const OOTB_SCRIPT_VERSION = [
+	'leaflet'                  => '1.9.3',
+	'leaflet-gesture-handling' => '1.4.4',
+];
+const OOTB_PLUGIN_INC     = OOTB_PLUGIN_PATH . 'includes/';
 
 // Require Composer autoloader if it exists.
 if ( file_exists( OOTB_PLUGIN_PATH . 'vendor/autoload.php' ) ) {

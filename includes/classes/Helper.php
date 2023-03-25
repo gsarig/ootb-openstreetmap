@@ -155,4 +155,26 @@ class Helper {
 			strval( $defaults[ $entry ]->lng ),
 		];
 	}
+
+	/**
+	 * Get the gesture handling locale. Since `leaflet-gesture-handling` has its own locales, we need to check if the WordPress locale matches one of them. If not, we return `en` as the default.
+	 *
+	 * @return string
+	 */
+	public static function get_gesture_handling_locale(): string {
+		$wp_locale         = get_locale();
+		$unfiltered_locale = str_replace( '_', '-', $wp_locale );
+		$locales_path      = OOTB_PLUGIN_PATH . 'assets/vendor/leaflet-gesture-handling/locales/';
+		if ( file_exists( $locales_path . $unfiltered_locale . '.js' ) ) {
+			return $unfiltered_locale;
+		}
+
+		$maybe_locale = substr( $unfiltered_locale, 0, 2 );
+
+		if ( file_exists( $locales_path . $maybe_locale . '.js' ) ) {
+			return $maybe_locale;
+		}
+
+		return 'en';
+	}
 }

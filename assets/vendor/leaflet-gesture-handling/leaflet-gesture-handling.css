@@ -1,0 +1,34 @@
+.leaflet-gesture-handling:after {
+  color: #fff;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 22px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, .5);
+  z-index: 1001;
+  pointer-events: none;
+  text-align: center;
+  transition: opacity .8s ease-in-out;
+  opacity: 0;
+  content: ""
+}
+
+.leaflet-gesture-handling-warning:after {
+  transition-duration: .3s;
+  opacity: 1
+}
+
+.leaflet-gesture-handling-touch:after {
+  content: attr(data-gesture-handling-touch-content)
+}
+
+.leaflet-gesture-handling-scroll:after {
+  content: attr(data-gesture-handling-scroll-content)
+}

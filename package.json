@@ -16,12 +16,12 @@
 	 	"postinstall": "cp -r ./node_modules/@raruto/leaflet-gesture-handling/dist/* ./assets/vendor/leaflet-gesture-handling && cp -r ./node_modules/leaflet/dist/* ./assets/vendor/leaflet"
 	},
 	"devDependencies": {
-		"@wordpress/scripts": "^25.0.0"
+		"@wordpress/scripts": "^26.16.0"
 	},
 	"dependencies": {
 		"@raruto/leaflet-gesture-handling": "^1.4.4",
-		"leaflet": "^1.9.3",
-		"react-device-detect": "^2.2.2",
+		"leaflet": "^1.9.4",
+		"react-device-detect": "^2.2.3",
 		"react-leaflet": "^4.2.1"
 	}
 }

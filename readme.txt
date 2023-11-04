@@ -106,6 +106,7 @@ Version 2.0.0 is a major, almost full, refactoring, both for the build scripts a
 = 2.4.1 =
 * Updates the build scripts.
 * Updates compatibility with WordPress 6.4.
+* Fixes a bug where the marker's delete button would remove the wrong marker.
 
 = 2.4.0 =
 * [New] Adds an option to prevent the default map scroll/touch behaviours.

@@ -22,7 +22,23 @@ export default function Markers({props}) {
 	} = props;
 
 	const removeMarker = (e) => {
-		const index = parseInt(e.target.getAttribute('dataIndex'));
+
+		const element = e.target;
+		let index;
+
+		// Check if dataIndex attribute exists in the element (for backwards compatibility)
+		if (element.hasAttribute('dataIndex')) {
+			index = element.getAttribute('dataIndex');
+		} else {
+			// Find the immediate parent which should be a "button" element
+			const parentElement = element.parentElement;
+
+			// Make sure the parentElement is a "button"
+			if (parentElement && parentElement.tagName.toLowerCase() === 'button') {
+				index = parentElement.getAttribute('dataIndex');
+			}
+		}
+
 		let updatedMarkers = [...markers];
 		updatedMarkers.splice(index, 1);
 		setAttributes({

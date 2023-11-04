@@ -3,9 +3,9 @@ Contributors: gsarig
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MZR4JSRUMH5EA&source=url
 Tags: Map, OpenStreetMap, Leaflet, Google Maps, block
 Requires at least: 5.8.6
-Tested up to: 6.2
+Tested up to: 6.4
 Requires PHP: 7.4
-Stable tag: 2.4.0
+Stable tag: 2.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -103,6 +103,11 @@ Version 2.0.0 is a major, almost full, refactoring, both for the build scripts a
 = 1.0 =
 
 == Changelog ==
+= 2.4.1 =
+* Updates the build scripts.
+* Updates compatibility with WordPress 6.4.
+* Fixes a bug where the marker's delete button would remove the wrong marker.
+
 = 2.4.0 =
 * [New] Adds an option to prevent the default map scroll/touch behaviours.
 

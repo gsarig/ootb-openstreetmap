@@ -120,6 +120,26 @@ class Options {
 				'label'            => esc_html__( ' Prevent default map scroll/touch behaviours to make it easier for users to navigate in a page (pretty much like in Google Maps).', 'ootb-openstreetmap' ),
 			]
 		);
+
+		add_settings_section(
+			'ootb_section_openai',
+			esc_html__( 'OpenAI settings', 'ootb-openstreetmap' ),
+			[ $this, 'section_openai_callback' ],
+			'ootb'
+		);
+
+		add_settings_field(
+			'api_openai',
+			esc_html__( 'OpenAI API key', 'ootb-openstreetmap' ),
+			[ $this, 'field_api_key_openai' ],
+			'ootb',
+			'ootb_section_openai',
+			[
+				'label_for'        => 'api_openai',
+				'class'            => 'ootb_row',
+				'ootb_custom_data' => 'custom',
+			]
+		);
 	}
 
 	/**
@@ -130,13 +150,13 @@ class Options {
 	 * @return void
 	 */
 	function field_prevent_default_gestures( array $args ) {
-		$option = get_option( 'ootb_options' );
+		$option = Helper::get_option( 'all' );
 		?>
-		<input type="checkbox" name="ootb_options[<?php echo esc_attr( $args['label_for'] ); ?>]"
-			   id="<?php echo esc_attr( $args['label_for'] ); ?>"
-			   value="1" <?php checked( ! empty( $option[ $args['label_for'] ] ), true ); ?> />
+		<input type="checkbox" name="ootb_options[<?php echo esc_attr( $args[ 'label_for' ] ); ?>]"
+			   id="<?php echo esc_attr( $args[ 'label_for' ] ); ?>"
+			   value="1" <?php checked( ! empty( $option[ $args[ 'label_for' ] ] ), true ); ?> />
 		<label
-			for="<?php echo esc_attr( $args['label_for'] ); ?>"><?php echo $args['label']; ?></label>
+			for="<?php echo esc_attr( $args[ 'label_for' ] ); ?>"><?php echo $args[ 'label' ]; ?></label>
 		<?php
 	}
 
@@ -149,7 +169,7 @@ class Options {
 	 */
 	function section_frontend_callback( array $args ) {
 		?>
-		<p id="<?php echo esc_attr( $args['id'] ); ?>">
+		<p id="<?php echo esc_attr( $args[ 'id' ] ); ?>">
 			<?php
 			echo esc_html__( 'Apply adjustments to the Frontend behavior of the map.', 'ootb-openstreetmap' );
 			?>
@@ -166,7 +186,7 @@ class Options {
 	 */
 	function section_defaults_callback( array $args ) {
 		?>
-		<p id="<?php echo esc_attr( $args['id'] ); ?>">
+		<p id="<?php echo esc_attr( $args[ 'id' ] ); ?>">
 			<?php
 			echo sprintf(
 				wp_kses(
@@ -191,7 +211,7 @@ class Options {
 		?>
 		<div class="ootb_info">
 			<h3><?php echo esc_html__( 'About OpenStreetMap usage limits', 'ootb-openstreetmap' ); ?></h3>
-			<p id="<?php echo esc_attr( $args['id'] ); ?>">
+			<p id="<?php echo esc_attr( $args[ 'id' ] ); ?>">
 				<?php
 				echo sprintf(
 					wp_kses(
@@ -241,11 +261,11 @@ class Options {
 	 * @return void
 	 */
 	function field_api_key_mapbox( array $args ) {
-		$option = get_option( 'ootb_options' );
+		$option = Helper::get_option( 'all' );
 		?>
-		<input type="text" name="ootb_options[<?php echo esc_attr( $args['label_for'] ); ?>]"
-			   id="<?php echo esc_attr( $args['label_for'] ); ?>"
-			   value="<?php echo isset( $option[ $args['label_for'] ] ) ? esc_attr( $option[ $args['label_for'] ] ) : ''; ?>"/>
+		<input type="password" name="ootb_options[<?php echo esc_attr( $args[ 'label_for' ] ); ?>]"
+			   id="<?php echo esc_attr( $args[ 'label_for' ] ); ?>"
+			   value="<?php echo isset( $option[ $args[ 'label_for' ] ] ) ? esc_attr( $option[ $args[ 'label_for' ] ] ) : ''; ?>"/>
 		<?php
 	}
 
@@ -257,19 +277,52 @@ class Options {
 	 * @return void
 	 */
 	function field_coordinates( array $args ) {
-		$option   = get_option( 'ootb_options' );
+		$option   = Helper::get_option( 'all' );
 		$defaults = Helper::default_location();
 		$default  = '';
-		if ( 'default_lat' === $args['label_for'] ) {
-			$default = $defaults[0] ?? '';
+		if ( 'default_lat' === $args[ 'label_for' ] ) {
+			$default = $defaults[ 0 ] ?? '';
 		}
-		if ( 'default_lng' === $args['label_for'] ) {
-			$default = $defaults[1] ?? '';
+		if ( 'default_lng' === $args[ 'label_for' ] ) {
+			$default = $defaults[ 1 ] ?? '';
 		}
 		?>
-		<input type="text" name="ootb_options[<?php echo esc_attr( $args['label_for'] ); ?>]"
-			   id="<?php echo esc_attr( $args['label_for'] ); ?>" placeholder="<?php echo esc_html( $default ); ?>"
-			   value="<?php echo isset( $option[ $args['label_for'] ] ) ? esc_attr( $option[ $args['label_for'] ] ) : $default; ?>"/>
+		<input type="text" name="ootb_options[<?php echo esc_attr( $args[ 'label_for' ] ); ?>]"
+			   id="<?php echo esc_attr( $args[ 'label_for' ] ); ?>" placeholder="<?php echo esc_html( $default ); ?>"
+			   value="<?php echo isset( $option[ $args[ 'label_for' ] ] ) ? esc_attr( $option[ $args[ 'label_for' ] ] ) : $default; ?>"/>
+		<?php
+	}
+
+	/**
+	 * The callback method for the OpenAI section.
+	 *
+	 * @param array $args THe settings args.
+	 *
+	 * @return void
+	 */
+	function section_openai_callback( array $args ) {
+		?>
+		<p id="<?php echo esc_attr( $args[ 'id' ] ); ?>">
+			<?php
+			echo esc_html__( 'Set the OpenAI API key.', 'ootb-openstreetmap' );
+			?>
+		</p>
+		<?php
+	}
+
+	/**
+	 * The Mapbox API key field.
+	 *
+	 * @param array $args THe settings args.
+	 *
+	 * @return void
+	 */
+	function field_api_key_openai( array $args ) {
+		$option = Helper::get_option( 'all' );
+		?>
+		<input type="password" name="ootb_options[<?php echo esc_attr( $args[ 'label_for' ] ); ?>]"
+			   id="<?php echo esc_attr( $args[ 'label_for' ] ); ?>"
+			   value="<?php echo isset( $option[ $args[ 'label_for' ] ] ) ? esc_attr( $option[ $args[ 'label_for' ] ] ) : ''; ?>"/>
 		<?php
 	}
 
@@ -283,8 +336,8 @@ class Options {
 			return;
 		}
 
-		$options = get_option( 'ootb_options' );
-		$current = isset( $options['ootb_field_mode'] ) && $options['ootb_field_mode'] ? $options['ootb_field_mode'] : '';
+		$options = Helper::get_option( 'all' );
+		$current = isset( $options[ 'ootb_field_mode' ] ) && $options[ 'ootb_field_mode' ] ? $options[ 'ootb_field_mode' ] : '';
 		?>
 		<div id="ootb_form" class="wrap" data-current="<?php echo esc_attr( $current ); ?>">
 			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
@@ -308,23 +361,23 @@ class Options {
 	 */
 	function options_validate( array $input ): array {
 		// Validate api_mapbox.
-		if ( ! empty( $input['api_mapbox'] ) ) {
-			$input['api_mapbox'] = preg_replace( '/\s+/',
+		if ( ! empty( $input[ 'api_mapbox' ] ) ) {
+			$input[ 'api_mapbox' ] = preg_replace( '/\s+/',
 				' ',
-				esc_attr( $input['api_mapbox'] ) );
+				esc_attr( $input[ 'api_mapbox' ] ) );
 		}
 		// Validate coordinates.
 		$fallback = Helper::fallback_location();
-		if ( ! empty( $input['default_lat'] ) ) {
-			$is_valid = preg_match( '/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/', $input['default_lat'] );
+		if ( ! empty( $input[ 'default_lat' ] ) ) {
+			$is_valid = preg_match( '/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/', $input[ 'default_lat' ] );
 			if ( ! $is_valid ) {
-				$input['default_lat'] = $fallback[0] ?? '';
+				$input[ 'default_lat' ] = $fallback[ 0 ] ?? '';
 			}
 		}
-		if ( ! empty( $input['default_lng'] ) ) {
-			$is_valid = preg_match( '/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/', $input['default_lng'] );
+		if ( ! empty( $input[ 'default_lng' ] ) ) {
+			$is_valid = preg_match( '/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/', $input[ 'default_lng' ] );
 			if ( ! $is_valid ) {
-				$input['default_lng'] = $fallback[1] ?? '';
+				$input[ 'default_lng' ] = $fallback[ 1 ] ?? '';
 			}
 		}
 

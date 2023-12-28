@@ -13,7 +13,7 @@
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"start": "wp-scripts start",
-	 	"postinstall": "cp -r ./node_modules/@raruto/leaflet-gesture-handling/dist/* ./assets/vendor/leaflet-gesture-handling && cp -r ./node_modules/leaflet/dist/* ./assets/vendor/leaflet"
+		"postinstall": "cp -r ./node_modules/@raruto/leaflet-gesture-handling/dist/* ./assets/vendor/leaflet-gesture-handling && cp -r ./node_modules/leaflet/dist/* ./assets/vendor/leaflet"
 	},
 	"devDependencies": {
 		"@wordpress/scripts": "^26.19.0"

@@ -4,6 +4,9 @@ import SearchResults from './SearchResults';
 import {__} from '@wordpress/i18n';
 import {TextControl, Button} from '@wordpress/components';
 import {Fragment} from '@wordpress/element';
+import {openaiAnswers} from '../Helpers/openai';
+import getNominatimSearchUrl from "../Helpers/getNominatimSearchUrl";
+
 
 export default function SearchBox({props}) {
 	const {
@@ -11,12 +14,13 @@ export default function SearchBox({props}) {
 			keywords,
 			inputRef,
 			searchResults,
+			openAImode,
 		},
 		setAttributes,
 	} = props;
 	const findMarkers = () => {
 		if (keywords && keywords.length > 2) {
-			fetch('https://nominatim.openstreetmap.org/search?q=' + keywords + '&format=json')
+			fetch(getNominatimSearchUrl(keywords))
 				.then(response => {
 					if (200 !== response.status) {
 						return;
@@ -31,8 +35,10 @@ export default function SearchBox({props}) {
 	}
 
 	const onTyping = (text) => {
+		const regex = /\bplease\b/i;
 		setAttributes({
 			keywords: text,
+			openAImode: regex.test(text) ? 'started' : '',
 		});
 	}
 
@@ -41,11 +47,13 @@ export default function SearchBox({props}) {
 			setAttributes({inputRef: e});
 		}
 		if ('Enter' === e.key) {
+			openaiAnswers(props).then(() => null);
 			findMarkers();
 		}
 	}
 
 	const onButtonClick = () => {
+		openaiAnswers(props).then(() => null);
 		if (searchResults && searchResults.length) {
 			if (inputRef) {
 				inputRef.target.focus();
@@ -56,6 +64,16 @@ export default function SearchBox({props}) {
 			}
 		} else {
 			findMarkers();
+		}
+	}
+
+	const icon = () => {
+		if (searchResults && searchResults.length > 0) {
+			return 'no';
+		} else if (openAImode.length) {
+			return 'admin-comments';
+		} else {
+			return 'search';
 		}
 	}
 	return (
@@ -69,7 +87,7 @@ export default function SearchBox({props}) {
 				/>
 				<Button
 					onClick={onButtonClick}
-					icon={(searchResults && searchResults.length > 0) ? 'no' : 'search'}
+					icon={icon()}
 					showTooltip={true}
 					label={
 						(searchResults && searchResults.length > 0) ?

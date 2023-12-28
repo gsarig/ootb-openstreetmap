@@ -1,5 +1,5 @@
 // noinspection NpmUsedModulesInstalled
-import {__} from '@wordpress/i18n';
+import {__, sprintf} from '@wordpress/i18n';
 
 export default function Alert({props}) {
 	const {
@@ -20,7 +20,10 @@ export default function Alert({props}) {
 		} else if ('success' === openAImode) {
 			alert = __('Preparing the data. Please be patient...', 'ootb-openstreetmap');
 		} else if ('working' === openAImode) {
-			alert = __('Creating the markers. It will take a while, because we don\'t want to hit the Nominatim rate limits.', 'ootb-openstreetmap');
+			alert = sprintf(
+				__('Creating the markers. It will take a while, because we don\'t want to violate the <a href="%s">Nominatim usage policy</a>.', 'ootb-openstreetmap'),
+				'https://operations.osmfoundation.org/policies/nominatim/',
+			);
 			alertClass += ' alert-active';
 		} else if ('invalid_question' === openAImode) {
 			alert = __('I don\'t understand your question. Please try again.', 'ootb-openstreetmap');
@@ -32,6 +35,9 @@ export default function Alert({props}) {
 	}
 
 	return alert ?
-		<div className={alertClass}>{alert}</div>
+		<div
+			className={alertClass}
+			dangerouslySetInnerHTML={{__html: alert}}
+		></div>
 		: null;
 }

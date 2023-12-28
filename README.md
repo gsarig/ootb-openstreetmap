@@ -8,21 +8,31 @@ Instead of manually adding coordinates for each one of your markers, just click-
 
 👉 [Read more about the overall UX challenges](https://www.gsarigiannidis.gr/wordpress-gutenberg-map-block-openstreetmap/)
 
-![Demo GIF](.wordpress-org/screenshot-1.gif)
-
 👉 [The challenges of building a user-friendly place search for OpenStreetMap](https://www.gsarigiannidis.gr/openstreetmap-place-search/)
 
+👉 [Lessons learned from integrating OpenAI to a WordPress plugin](https://www.gsarigiannidis.gr/openstreetmap-openai-integration/)
+
+## Demos
+
+### The main functionality, with drag and drop pins and WYSIWYG editing
+![Demo GIF](.wordpress-org/screenshot-1.gif)
+
+### Using the location search
 ![Demo GIF](.wordpress-org/screenshot-2.gif)
 
-Drawing a polygon:
+### Drawing a polygon
 
 ![Demo GIF](.wordpress-org/screenshot-9.gif)
 
-Drawing a polyline:
+### Drawing a polyline
 
 ![Demo GIF](.wordpress-org/screenshot-10.gif)
 
-### Features
+### OpenAI integration in action:
+
+![Demo GIF](.wordpress-org/screenshot-12.gif)
+
+## Features
 
 * No need for API keys. Just install and use it.
 * Support for multiple markers.
@@ -31,6 +41,7 @@ Drawing a polyline:
 * [Dead-simple interface](https://www.gsarigiannidis.gr/wordpress-gutenberg-map-block-openstreetmap/). Don't search for coordinates and don't get overwhelmed by too many fields when using multiple markers. Just point and click on the map to add your marker where you want it and edit it's popup content directly from there.
 * [Place search](https://www.gsarigiannidis.gr/openstreetmap-place-search/). Find locations by typing keywords.
 * Remembers the zoom that you set when adding the markers and stores it so that you don't set it by hand (which you can do anyway if you prefer).
+* OpenAI integration which allows you to add markers by using commands in natural language. Just say "please" to activate (e.g. "Please, show me where GOT was filmed"). Requires an OpenAI API key. [Read more](https://www.gsarigiannidis.gr/openstreetmap-openai-integration/).
 * Adjust the map height.
 * Change the default marker icon with a custom one.
 * Enable or disable map dragging.
@@ -53,7 +64,7 @@ Drawing a polyline:
 
 No.
 
-That's the point actually. Just install the plugin and start adding maps.
+That's the point, actually. Just install the plugin and start adding maps. Keep in mind, though, that as stated on the [OpenStreetMap Tile Usage Policy](https://operations.osmfoundation.org/policies/tiles/), OSM’s own servers are run entirely on donated resources and they have strictly limited capacity. Using them on a site with low traffic will probably be fine. Nevertheless, you are advised to create an account to [MapBox](https://www.mapbox.com/) and get a free API Key.
 
 ### How do I add a new location?
 
@@ -66,6 +77,10 @@ Click on the marker to open up its popup. There, you will see the "Remove" butto
 ### I can't find some of the options like disable dragging, setting zoom levels, etc
 
 Check under the "Map behavior" section, at the blocks' settings at the sidebar on the right. It's toggled off by default, that's probably why you missed it.
+
+### How does the OpenAI integration work?
+
+First of all, you will need to create an account to [OpenAI](https://openai.com/) and get an API key. Then, go to the plugin's settings page and paste your key there. After that, you can start adding markers by using commands in natural language. Just say "please" to activate (e.g. "Please, show me where GOT was filmed"). Please keep in mind, though, that it's like asking ChatGPT: the answers you get might not always be 100% reliable, and you should always double-check to confirm their accuracy. [Read more](https://www.gsarigiannidis.gr/openstreetmap-openai-integration/).
 
 ## Screenshots
 

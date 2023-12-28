@@ -43,6 +43,7 @@ function i18n() {
  * through the block editor in the corresponding context.
  *
  * @see https://developer.wordpress.org/reference/functions/register_block_type/
+ * @noinspection PhpUnused
  */
 function openstreetmap_block_init() {
 	register_block_type( OOTB_PLUGIN_PATH . '/build' );

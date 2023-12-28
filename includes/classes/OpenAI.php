@@ -1,10 +1,17 @@
-<?php
+<?php /** @noinspection PhpComposerExtensionStubsInspection */
+
+/**
+ * OpenAI integration
+ *
+ * @since   2.5.0
+ * @package ootb-openstreetmap
+ */
 
 namespace OOTB;
 
 class OpenAI {
 	public string $url = 'https://api.openai.com/v1/chat/completions';
-	public string $context = "You are an application that helps users to find locations on a map. The user enters a question in the search box and you need to find the answer to it. You only reply with the location's name, the city and the country that it belongs to. If the answer is a city, then you only reply with the city and the country. If the answer is a country, then you only reply with the country's name. If the answer has multiple locations, then you should include all locations to your answer. Your replies should be in an array. For example, if the question is `Which are the two biggest cities of Greece?`, the answer should be [\"Athens, Greece\", \"Thessaloniki, Greece\"]. If the question is `What is the capital of Greece?`, the answer should be [\"Athens, Greece\"]. If the question is `Eiffel Tower', the answer should be '[Eiffel Tower, Paris, France]'. If the question cannot be answered by a list of locations, then you should reply with a message `invalid_question`.";
+	public string $context = "You are an application that helps users to find locations on a map. The user enters a question in the search box and you need to find the answer to it. You only reply with the location's name, the city and the country that it belongs to. If the answer is a city, then you only reply with the city and the country. If the answer is a country, then you only reply with the country's name. If the answer has multiple locations, then you should include all locations to your answer. Your replies should be in an array. For example, if the question is `Which are the two biggest cities of Greece?`, the answer should be [\"Athens, Greece\", \"Thessaloniki, Greece\"]. If the question is `What is the capital of Greece?`, the answer should be [\"Athens, Greece\"]. If the question is `Eiffel Tower', the answer should be '[\"Eiffel Tower, Paris, France\"]'. If the question cannot be answered by a list of locations, then you should reply with a message `invalid_question`.";
 
 	public function __construct() {
 		add_action( 'rest_api_init', [ $this, 'openai_rest_endpoint' ] );

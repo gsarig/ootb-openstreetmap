@@ -53,7 +53,7 @@
 .ootb-openstreetmap--alert {
 	position: absolute;
 	bottom: 1em;
-	width: calc(100% - 2em);
+	width: calc(100% - 3em);
 	left: 1em;
 	border-radius: 5px;
 	font-size: 13px;
@@ -64,9 +64,14 @@
 	z-index: 9999;
 }
 
+.wp-block-ootb-openstreetmap div.ootb-openstreetmap--alert a {
+	color: #fff;
+}
+
 .ootb-openstreetmap--alert.alert-active {
 	background: rgba(23, 137, 7, 0.84);
 }
+
 .ootb-openstreetmap--alert.alert-error {
 	background: rgba(198, 0, 0, 0.84);
 }
@@ -142,6 +147,16 @@
 	border: none;
 	color: #000;
 	box-shadow: none;
+}
+
+.ootb-openstreetmap--searchbox.openai-active {
+	border-color: #fff;
+	box-shadow: 1px 2px 3px #aaa;
+	border-radius: 1em;
+}
+
+.ootb-openstreetmap--searchbox.openai-active .dashicon.dashicons {
+	color: #2aa3c5;
 }
 
 .ootb-openstreetmap--searchbox svg.dashicon {

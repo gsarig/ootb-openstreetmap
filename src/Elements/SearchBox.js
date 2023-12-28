@@ -71,14 +71,19 @@ export default function SearchBox({props}) {
 		if (searchResults && searchResults.length > 0) {
 			return 'no';
 		} else if (openAImode.length) {
-			return 'admin-comments';
+			return 'format-status';
 		} else {
 			return 'search';
 		}
 	}
+
+	let searchBoxClass = "ootb-openstreetmap--searchbox";
+	if (openAImode.length) {
+		searchBoxClass += " openai-active";
+	}
 	return (
 		<Fragment>
-			<div className="ootb-openstreetmap--searchbox">
+			<div className={searchBoxClass}>
 				<TextControl
 					value={keywords}
 					onChange={onTyping}

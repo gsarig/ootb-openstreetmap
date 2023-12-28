@@ -65,6 +65,7 @@ export async function openaiAnswers(props) {
 					setTimeout(() => {
 						setAttributes({
 							openAImode: '',
+							keywords: '',
 						});
 					}, 3000); // Remove the error message after 3 seconds.
 					console.error('There has been a problem with the fetch operation:', JSON.stringify(error));
@@ -90,6 +91,7 @@ export async function openaiAnswers(props) {
 					setTimeout(() => {
 						setAttributes({
 							openAImode: '',
+							keywords: '',
 						});
 					}, 3000); // Remove the error message after 3 seconds.
 				} else {
@@ -115,6 +117,7 @@ export async function openaiAnswers(props) {
 				setTimeout(() => {
 					setAttributes({
 						openAImode: '',
+						keywords: '',
 					});
 				}, 1000); // Wait for the last marker to be added.
 			});
@@ -126,6 +129,7 @@ export async function openaiAnswers(props) {
 			setTimeout(() => {
 				setAttributes({
 					openAImode: '',
+					keywords: '',
 				});
 			}, 3000); // Remove the error message after 3 seconds.
 			console.error('Error fetching OpenAI response: ' + JSON.stringify(error));

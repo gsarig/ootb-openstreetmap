@@ -64,6 +64,13 @@
 	z-index: 9999;
 }
 
+.ootb-openstreetmap--alert.alert-active {
+	background: rgba(23, 137, 7, 0.84);
+}
+.ootb-openstreetmap--alert.alert-error {
+	background: rgba(198, 0, 0, 0.84);
+}
+
 /* Marker buttons */
 .ootb-openstreetmap--marker-icon-container {
 	border-top: 1px solid #ccc;

@@ -10,6 +10,7 @@ namespace OOTB\Core;
 
 use OOTB\Assets;
 use OOTB\Helper;
+use OOTB\OpenAI;
 use OOTB\Options;
 
 function setup() {
@@ -23,7 +24,7 @@ function setup() {
 
 new Options();
 new Assets();
-
+new OpenAI();
 
 /**
  * Registers the default textdomain.
@@ -42,6 +43,7 @@ function i18n() {
  * through the block editor in the corresponding context.
  *
  * @see https://developer.wordpress.org/reference/functions/register_block_type/
+ * @noinspection PhpUnused
  */
 function openstreetmap_block_init() {
 	register_block_type( OOTB_PLUGIN_PATH . '/build' );
@@ -52,7 +54,7 @@ function openstreetmap_block_init() {
 				[
 					'pluginDirPath'   => OOTB_PLUGIN_PATH,
 					'pluginDirUrl'    => OOTB_PLUGIN_URL,
-					'options'         => get_option( 'ootb_options' ),
+					'options'         => Helper::get_option(),
 					'adminUrl'        => admin_url( 'options-general.php?page=ootb-openstreetmap' ),
 					'providers'       => Helper::providers(),
 					'defaultLocation' => [ Helper::default_location() ],

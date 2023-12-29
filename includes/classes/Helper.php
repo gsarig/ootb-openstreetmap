@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpComposerExtensionStubsInspection */
+
 /**
  * Helper functions
  *
@@ -72,8 +73,8 @@ class Helper {
 		}
 
 		foreach ( $blocks as $block ) {
-			if ( 'core/block' === $block['blockName'] && ! empty( $block['attrs']['ref'] ) ) {
-				if ( has_block( $block_name, $block['attrs']['ref'] ) ) {
+			if ( 'core/block' === $block[ 'blockName' ] && ! empty( $block[ 'attrs' ][ 'ref' ] ) ) {
+				if ( has_block( $block_name, $block[ 'attrs' ][ 'ref' ] ) ) {
 					return true;
 				}
 			}
@@ -101,7 +102,7 @@ class Helper {
 		}
 
 		foreach ( $blocks as $block ) {
-			if ( is_array( $block ) && isset( $block['content'] ) && has_block( $block_name, $block['content'] ) ) {
+			if ( is_array( $block ) && isset( $block[ 'content' ] ) && has_block( $block_name, $block[ 'content' ] ) ) {
 				return true;
 			}
 		}
@@ -127,11 +128,11 @@ class Helper {
 	 * @return array|string[]
 	 */
 	public static function default_location(): array {
-		$options = get_option( 'ootb_options' );
-		if ( ! empty( $options['default_lat'] ) && ! empty( $options['default_lng'] ) ) {
+		$options = self::get_option();
+		if ( ! empty( $options[ 'default_lat' ] ) && ! empty( $options[ 'default_lng' ] ) ) {
 			return [
-				$options['default_lat'],
-				$options['default_lng'],
+				$options[ 'default_lat' ],
+				$options[ 'default_lng' ],
 			];
 		}
 		$timezone = wp_timezone_string();
@@ -176,5 +177,27 @@ class Helper {
 		}
 
 		return 'en';
+	}
+
+	/**
+	 * Get the plugin options.
+	 *
+	 * @param string $option The option name or `all` to return all options, including the API keys.
+	 *
+	 * @return mixed
+	 */
+	public static function get_option( string $option = '' ) {
+		$options = get_option( 'ootb_options' );
+		if ( 'all' === $option ) {
+			return $options;
+		}
+		if ( ! empty( $option ) ) {
+			return $options[ $option ] ?? '';
+		}
+
+		// We don't want to expose the OpenAI API key to the client.
+		unset( $options[ 'api_openai' ] );
+
+		return $options;
 	}
 }

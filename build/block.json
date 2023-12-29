@@ -113,6 +113,10 @@
     "searchCount": {
       "type": "number",
       "default": 0
+    },
+    "openAImode": {
+      "type": "string",
+      "default": ""
     }
   },
   "textdomain": "ootb-openstreetmap",

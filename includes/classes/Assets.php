@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpComposerExtensionStubsInspection */
 /**
  * Assets
  *
@@ -16,7 +16,7 @@ class Assets {
 	public function frontend() {
 
 		if ( Helper::has_block_in_frontend( OOTB_BLOCK_NAME ) ) {
-			$options        = get_option( 'ootb_options' );
+			$options        = Helper::get_option();
 			$handle_leaflet = 'leaflet';
 			$dependencies   = [ $handle_leaflet ];
 			$params         = [

@@ -12,6 +12,7 @@ use OOTB\Assets;
 use OOTB\Helper;
 use OOTB\OpenAI;
 use OOTB\Options;
+use OOTB\Query;
 
 function setup() {
 	$n = function ( $function ) {
@@ -25,6 +26,7 @@ function setup() {
 new Options();
 new Assets();
 new OpenAI();
+new Query();
 
 /**
  * Registers the default textdomain.
@@ -58,6 +60,7 @@ function openstreetmap_block_init() {
 					'adminUrl'        => admin_url( 'options-general.php?page=ootb-openstreetmap' ),
 					'providers'       => Helper::providers(),
 					'defaultLocation' => [ Helper::default_location() ],
+					'ajax_url'        => admin_url( 'admin-ajax.php' ),
 				]
 			),
 			'before'

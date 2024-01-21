@@ -200,4 +200,28 @@ class Helper {
 
 		return $options;
 	}
+
+	/**
+	 * Get the post types that support the block editor.
+	 *
+	 * @return array
+	 */
+	public static function get_post_types(): array {
+		$args                    = [
+			'public' => true
+		];
+		$post_types              = get_post_types( $args, 'objects' );
+		$block_editor_post_types = [];
+
+		foreach ( $post_types as $post_type ) {
+			if ( post_type_supports( $post_type->name, 'editor' ) ) {
+				$block_editor_post_types[] = [
+					'label' => $post_type->label,
+					'value' => $post_type->name,
+				];
+			}
+		}
+
+		return $block_editor_post_types;
+	}
 }

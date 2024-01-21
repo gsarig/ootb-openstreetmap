@@ -203,3 +203,34 @@
 .wp-block-create-block-ootb-openstreetmap {
 	border: 1px dotted #f00;
 }
+
+/* Server-side Render overlay */
+.ootb-server-side-rendered {
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: rgba(0, 0, 0, 0.4);
+	backdrop-filter: blur(8px);
+	width: 100%;
+	height: 100%;
+	z-index: 99999;
+	display: flex;
+	flex-flow: column;
+	justify-content: center;
+	color: #fff;
+	text-shadow: 1px 1px 3px #000;
+}
+
+.ootb-server-side-rendered span {
+	text-align: center;
+	width: 100%;
+}
+
+.ootb-server-side-rendered div {
+	text-align: center;
+	padding-top: 1rem;
+}
+
+.ootb-server-side-rendered button {
+	box-shadow: 1px 1px 6px #000;
+}

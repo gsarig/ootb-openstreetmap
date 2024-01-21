@@ -15,20 +15,15 @@ class Query {
 	}
 
 	public function ajax_call() {
-		if ( isset( $_POST[ 'post_id' ] ) && is_numeric( $_POST[ 'post_id' ] ) ) {
-			$post_id = absint( $_POST[ 'post_id' ] );
-		} else {
-			$post_id = 0;
-		}
-
-		$data = self::get_markers( $post_id );
-
+		$post_id = ( isset( $_POST[ 'post_id' ] ) && is_numeric( $_POST[ 'post_id' ] ) ) ? absint( $_POST[ 'post_id' ] ) : 0;
+		$args    = ( ! empty( $_POST[ 'query_args' ] ) ) ? json_decode( stripslashes( $_POST[ 'query_args' ] ), true ) : '';
+		$data    = self::get_markers( $post_id, $args );
 		echo json_encode( $data );
 		wp_die();
 	}
 
-	public static function get_markers( $current_post_id = 0 ) {
-		$args  = [
+	public static function get_markers( $current_post_id = 0, $query_args = [] ) {
+		$default_args = [
 			'post_type'              => 'post',
 			'posts_per_page'         => 100,
 			's'                      => '<!-- wp:ootb/openstreetmap ',
@@ -37,7 +32,8 @@ class Query {
 			'update_post_meta_cache' => false,
 			'update_post_term_cache' => false,
 		];
-		$query = new \WP_Query( $args );
+		$args         = wp_parse_args( $query_args, $default_args );
+		$query        = new \WP_Query( $args );
 		if ( empty( $query->posts ) ) {
 			return false;
 		}
@@ -53,7 +49,11 @@ class Query {
 					continue;
 				}
 				$attrs = json_decode( wp_json_encode( $block[ 'attrs' ] ) );
-				if ( empty( $attrs->markers ) ) {
+
+				if (
+					empty( $attrs->markers ) ||
+					( isset( $attrs->serverSideRender ) && true === $attrs->serverSideRender )
+				) {
 					continue;
 				}
 				$markers[] = $attrs->markers;

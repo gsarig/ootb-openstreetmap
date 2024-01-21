@@ -60,7 +60,8 @@ function openstreetmap_block_init() {
 					'adminUrl'        => admin_url( 'options-general.php?page=ootb-openstreetmap' ),
 					'providers'       => Helper::providers(),
 					'defaultLocation' => [ Helper::default_location() ],
-					'ajax_url'        => admin_url( 'admin-ajax.php' ),
+					'ajaxUrl'         => admin_url( 'admin-ajax.php' ),
+					'postTypes'       => Helper::get_post_types(),
 				]
 			),
 			'before'

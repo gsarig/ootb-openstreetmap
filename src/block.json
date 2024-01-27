@@ -121,8 +121,7 @@
 		"queryArgs": {
 			"type": "object",
 			"default": {
-				"post_type": "post",
-				"posts_per_page": 100
+				"post_type": "post"
 			}
 		},
 		"serverSideRender": {

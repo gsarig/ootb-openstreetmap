@@ -32,7 +32,7 @@ const queryMarkers = (props, postId) => {
 			setAttributes({
 				markers: queriedMarkers,
 				shouldUpdateBounds: true,
-				serverSideRender: true,
+				serverSideRender: false,
 			});
 		})
 		.catch((error) => {

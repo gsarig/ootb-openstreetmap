@@ -1,12 +1,12 @@
+// noinspection NpmUsedModulesInstalled,JSUnresolvedVariable
+
 import {__} from '@wordpress/i18n';
 import Controls from './Controls/Controls';
 import SearchBox from './Elements/SearchBox';
 import LeafletMap from './Elements/LeafletMap';
 import Alert from './Elements/Alert';
-import {Button} from '@wordpress/components';
-
-// noinspection NpmUsedModulesInstalled
 import {useBlockProps} from '@wordpress/block-editor';
+import QuerySyncButton from "./Controls/QuerySyncButton";
 
 export default function edit(props) {
 	const {
@@ -15,7 +15,6 @@ export default function edit(props) {
 			queryArgs,
 			serverSideRender
 		},
-		setAttributes,
 	} = props;
 	const blockProps = useBlockProps({
 		className: (addingMarker || '')
@@ -37,23 +36,10 @@ export default function edit(props) {
 			{serverSideRender ? (
 				<div className="ootb-server-side-rendered">
 					<span>
-						{__('Updates automatically from the latest ' + queryArgs?.posts_per_page + ' ' + selectedPostTypeName(), 'ootb-openstreetmap')}
+						{__('Updates automatically from the latest ' + selectedPostTypeName(), 'ootb-openstreetmap')}
 					</span>
 					<div>
-						<Button
-							icon="controls-repeat"
-							iconPosition="left"
-							variant="primary"
-							onClick={
-								() => {
-									setAttributes({
-										serverSideRender: false,
-									});
-								}
-							}
-						>
-							{__('Stop syncing', 'ootb-openstreetmap')}
-						</Button>
+						<QuerySyncButton props={props} variant="primary"/>
 					</div>
 				</div>
 			) : null}

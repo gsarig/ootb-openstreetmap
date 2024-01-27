@@ -48,7 +48,11 @@ function i18n() {
  * @noinspection PhpUnused
  */
 function openstreetmap_block_init() {
-	register_block_type( OOTB_PLUGIN_PATH . '/build' );
+	register_block_type( OOTB_PLUGIN_PATH . '/build',
+		[
+			'render_callback' => '\OOTB\Query::render_callback'
+		]
+	);
 	if ( is_admin() ) {
 		wp_add_inline_script(
 			'ootb-openstreetmap-editor-script',

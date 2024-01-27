@@ -1,12 +1,10 @@
 // noinspection NpmUsedModulesInstalled,JSUnresolvedVariable
 
 import {__} from '@wordpress/i18n';
-import {queryMarkers} from "../Helpers/queryMarkers";
-import {BaseControl, Button, SelectControl, __experimentalNumberControl as NumberControl} from '@wordpress/components';
+import {BaseControl, SelectControl} from '@wordpress/components';
+import QuerySyncButton from "./QuerySyncButton";
 
-const {withSelect} = wp.data;
-
-function ImportControl({props, postId}) {
+export default function QueryControl({props}) {
 	const {
 		attributes: {
 			queryArgs,
@@ -15,21 +13,9 @@ function ImportControl({props, postId}) {
 		setAttributes,
 	} = props;
 
-	const label = serverSideRender ? __('Automatically fetching from posts', 'ootb-openstreetmap') : __('Get from posts', 'ootb-openstreetmap');
-	const help = serverSideRender ? __('Markers are automatically fetched from existing posts. By hitting "Stop syncing" the block will stop automatic updating with new markers, and you will be able to manually edit it.', 'ootb-openstreetmap') : __('Fetch locations from existing posts.', 'ootb-openstreetmap');
-	const icon = serverSideRender ? 'controls-repeat' : 'admin-post';
+	const label = serverSideRender ? __('Automatically fetching from existing entries', 'ootb-openstreetmap') : __('Get from existing entries', 'ootb-openstreetmap');
+	const help = serverSideRender ? __('Markers are automatically fetched from existing entries. By hitting "Stop syncing" the block will stop automatic updating with new markers, and you will be able to manually edit it.', 'ootb-openstreetmap') : __('Fetch locations from existing entries.', 'ootb-openstreetmap');
 	const variant = serverSideRender ? 'secondary' : 'primary';
-	const buttonText = serverSideRender ? __('Stop syncing', 'ootb-openstreetmap') : __('Fetch locations', 'ootb-openstreetmap');
-
-	const onClickHandler = () => {
-		if (serverSideRender) {
-			setAttributes({
-				serverSideRender: false,
-			});
-		} else {
-			queryMarkers(props, postId);
-		}
-	};
 
 	return (
 		<>
@@ -53,40 +39,13 @@ function ImportControl({props, postId}) {
 									});
 								}}
 							/>
-							<NumberControl
-								label={__('Number of posts', 'ootb-openstreetmap')}
-								value={queryArgs.posts_per_page ?? 100}
-								min={1}
-								max={2000}
-								onChange={(number) => {
-									setAttributes({
-										queryArgs: {
-											...queryArgs,
-											posts_per_page: number,
-										},
-									});
-								}}
-							/>
 						</>
 					) : null}
 
-					<Button
-						icon={icon}
-						iconPosition="left"
-						variant={variant}
-						onClick={onClickHandler}
-					>
-						{buttonText}
-					</Button>
+					<QuerySyncButton props={props} variant={variant}/>
 				</div>
 			</BaseControl>
 			<hr/>
 		</>
 	);
 }
-
-export default withSelect((select, {props}) => {
-	return {
-		postId: select("core/editor").getCurrentPostId(),
-	};
-})(ImportControl);

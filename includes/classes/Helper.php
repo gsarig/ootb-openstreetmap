@@ -207,6 +207,9 @@ class Helper {
 	 * @return array
 	 */
 	public static function get_post_types(): array {
+		if ( has_filter( 'ootb_query_post_type' ) ) {
+			return [];
+		}
 		$args                    = [
 			'public' => true
 		];

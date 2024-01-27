@@ -20,7 +20,6 @@
 		const touchZoom = osmap.getAttribute('data-touchzoom');
 		const doubleClickZoom = osmap.getAttribute('data-doubleclickzoom');
 		const scrollWheelZoom = osmap.getAttribute('data-scrollwheelzoom');
-		const bounds = osmap.getAttribute('data-bounds');
 		const defaultIcon = JSON.parse(decodeURIComponent(escapedDefaultIcon));
 		const locations = JSON.parse(decodeURIComponent(escapedMarkers));
 		const mapType = osmap.getAttribute('data-maptype');
@@ -46,7 +45,7 @@
 			}
 		}
 
-		const map = L.map(osmap, mapOptions).setView(JSON.parse(bounds), parseInt(zoom));
+		const map = initializeMapView(osmap, mapOptions, zoom, locations, escapedDefaultIcon);
 
 		// Set the rest of the map options
 		if ('false' === dragging) {
@@ -101,5 +100,38 @@
 			}
 			marker.addTo(map);
 		}
+	}
+
+	function initializeMapView(osmap, mapOptions, zoom, locations, defaultIconString) {
+		const map = L.map(osmap, mapOptions);
+		const boundsCheck = JSON.parse(osmap.getAttribute('data-bounds'));
+
+		if (boundsCheck[0] !== null && boundsCheck[1] !== null) {
+			map.setView(boundsCheck, parseInt(zoom));
+		} else {
+			let markers = [];
+			locations.forEach(location => {
+				const defaultIcon = JSON.parse(decodeURIComponent(defaultIconString));
+				const markerIcon = structuredClone(defaultIcon);
+				if (location.icon) {
+					markerIcon.iconUrl = location.icon.url;
+				}
+				let marker = L.marker([location.lat, location.lng], {icon: L.icon(markerIcon)});
+				if (location.text) {
+					marker.bindPopup(location.text);
+				}
+				markers.push(marker);
+				marker.addTo(map);
+			});
+
+			// Use markers to calculate bounds.
+			if (markers.length) {
+				// Create a new feature group.
+				let group = new L.featureGroup(markers);
+				// Adjust the map to show all markers.
+				map.fitBounds(group.getBounds());
+			}
+		}
+		return map;
 	}
 })();

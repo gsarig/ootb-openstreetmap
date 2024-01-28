@@ -38,7 +38,7 @@ export default function ImportControl({props}) {
 
 	return (
 		<BaseControl
-			label={__('Import', 'ootb-openstreetmap')}
+			label={__('Import from file', 'ootb-openstreetmap')}
 			help={__('Import locations from a previously exported JSON file.', 'ootb-openstreetmap')}
 		>
 			<FormFileUpload

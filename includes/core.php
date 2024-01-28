@@ -12,6 +12,7 @@ use OOTB\Assets;
 use OOTB\Helper;
 use OOTB\OpenAI;
 use OOTB\Options;
+use OOTB\Query;
 
 function setup() {
 	$n = function ( $function ) {
@@ -25,6 +26,7 @@ function setup() {
 new Options();
 new Assets();
 new OpenAI();
+new Query();
 
 /**
  * Registers the default textdomain.
@@ -46,7 +48,11 @@ function i18n() {
  * @noinspection PhpUnused
  */
 function openstreetmap_block_init() {
-	register_block_type( OOTB_PLUGIN_PATH . '/build' );
+	register_block_type( OOTB_PLUGIN_PATH . '/build',
+		[
+			'render_callback' => '\OOTB\Query::render_callback'
+		]
+	);
 	if ( is_admin() ) {
 		wp_add_inline_script(
 			'ootb-openstreetmap-editor-script',
@@ -58,6 +64,8 @@ function openstreetmap_block_init() {
 					'adminUrl'        => admin_url( 'options-general.php?page=ootb-openstreetmap' ),
 					'providers'       => Helper::providers(),
 					'defaultLocation' => [ Helper::default_location() ],
+					'ajaxUrl'         => admin_url( 'admin-ajax.php' ),
+					'postTypes'       => Helper::get_post_types(),
 				]
 			),
 			'before'

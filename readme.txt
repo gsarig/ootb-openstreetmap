@@ -34,7 +34,7 @@ Instead of manually adding coordinates for each one of your markers, just click-
 * Remembers the zoom that you set when adding the markers and stores it so that you don't set it by hand (which you can do anyway if you prefer).
 * OpenAI integration which allows you to add markers by using commands in natural language. Just say "please" to activate (e.g. "Please, show me where GOT was filmed"). Requires an OpenAI API key. [Read more](https://www.gsarigiannidis.gr/openstreetmap-openai-integration/).
 * Query Maps: Supports creating a map out of maps added on other posts or post types. This can be quite powerful when, for example, you have a custom post type for "Places" with each place having its own map, and you want to dynamically gather-up all the places on a single map.
-* Shortcode support: You can use the shortcode `[ootb_openstreetmap]` to retrieve the aforementioned Query Maps feature (see the FAQ for more info).
+* Shortcode support: You can use the shortcode `[ootb_openstreetmap]` as an alternative way to use the aforementioned Query Maps feature (see the FAQ for more info).
 * Adjust the map height.
 * Change the default marker icon with a custom one.
 * Enable or disable map dragging.
@@ -143,6 +143,9 @@ Keep in mind that the extra args will be merged with the default ones, so you do
 12. Demonstrating the OpenAI integration
 
 == Upgrade Notice ==
+= 2.6.0 =
+Version 2.6.0 adds the option to query maps: This allows you to create a map consisting of other maps, added on other posts or post types. This can be quite powerful when, for example, you have a custom post type for "Places" with each place having its own map, and you want to dynamically gather-up all the places on a single map. A shortcode has also been added as an alternative way to use this feature.
+
 = 2.5.0 =
 Version 2.5.0 adds support for OpenAI integration which allows you to add markers by using commands in natural language. Just say "please" to activate (e.g. "Please, show me where GOT was filmed"). Requires an OpenAI API key.
 

@@ -29,6 +29,17 @@ class Query {
 	}
 
 	/**
+	 * Checks if the posts per page has been overridden by the filter.
+	 *
+	 * @param int $fallback The fallback posts per page.
+	 *
+	 * @return mixed|null
+	 */
+	private static function get_posts_per_page( int $fallback = 100 ) {
+		return apply_filters( 'ootb_query_posts_per_page', $fallback );
+	}
+
+	/**
 	 * Checks if there are any extra args to add to the query, but does not overwrite any existing args.
 	 *
 	 * @param array $args The query args.
@@ -72,7 +83,7 @@ class Query {
 	public static function get_markers( int $current_post_id = 0, array $query_args = [] ) {
 		$default_args = [
 			'post_type'              => self::get_post_type(),
-			'posts_per_page'         => apply_filters( 'ootb_query_posts_per_page', 100 ),
+			'posts_per_page'         => self::get_posts_per_page(),
 			's'                      => '<!-- wp:ootb/openstreetmap ',
 			'fields'                 => 'ids',
 			'no_found_rows'          => true,
@@ -169,7 +180,7 @@ class Query {
 	 * Replace "post" with your desired post_type, "10" with the number of posts you want per page,
 	 * "1,2,3" with your desired post IDs, "400px" with the desired height, and the remaining arguments with your desired settings for the map attributes.
 	 *
-	 * @param array $attrs The attributes for the shortcode.
+	 * @param string|array $attrs The attributes for the shortcode.
 	 *
 	 * @type string $post_type (Optional) The post type to query. Default "post".
 	 * @type int $posts_per_page (Optional) The number of posts per page. Default 10.
@@ -185,15 +196,20 @@ class Query {
 	 *
 	 * @return string Rendered HTML content for the map.
 	 */
-	public function shortcode( array $attrs ) {
-		$assets = new Assets();
-		$assets->frontend_assets();
+	public function shortcode( $attrs ) {
+		if ( is_admin() ) {
+			return '';
+		}
+		if ( ! Helper::has_block_in_frontend( OOTB_BLOCK_NAME ) ) {
+			$assets = new Assets();
+			$assets->frontend_assets();
+		}
 		// Only allow specific attributes.
 		$attrs = shortcode_atts(
 			array_merge(
 				[
 					'post_type'      => 'post',
-					'posts_per_page' => 10,
+					'posts_per_page' => self::get_posts_per_page(),
 					'post_ids'       => '',
 					'height'         => '400px',
 				],

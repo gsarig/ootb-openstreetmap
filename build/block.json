@@ -117,6 +117,16 @@
     "openAImode": {
       "type": "string",
       "default": ""
+    },
+    "queryArgs": {
+      "type": "object",
+      "default": {
+        "post_type": "post"
+      }
+    },
+    "serverSideRender": {
+      "type": "boolean",
+      "default": false
     }
   },
   "textdomain": "ootb-openstreetmap",

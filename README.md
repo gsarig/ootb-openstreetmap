@@ -43,7 +43,7 @@ Instead of manually adding coordinates for each one of your markers, just click-
 * Remembers the zoom that you set when adding the markers and stores it so that you don't set it by hand (which you can do anyway if you prefer).
 * OpenAI integration which allows you to add markers by using commands in natural language. Just say "please" to activate (e.g. "Please, show me where GOT was filmed"). Requires an OpenAI API key. [Read more](https://www.gsarigiannidis.gr/openstreetmap-openai-integration/).
 * Query Maps: Supports creating a map out of maps added on other posts or post types. This can be quite powerful when, for example, you have a custom post type for "Places" with each place having its own map, and you want to dynamically gather-up all the places on a single map.
-* Shortcode support: You can use the shortcode `[ootb_openstreetmap]` as an alternative way to use the aforementioned Query Maps feature (see the FAQ for more info).
+* Shortcode support: You can use the shortcode `[ootb_query]` as an alternative way to use the aforementioned Query Maps feature (see the FAQ for more info).
 * Adjust the map height.
 * Change the default marker icon with a custom one.
 * Enable or disable map dragging.
@@ -88,7 +88,7 @@ First of all, you will need to create an account to [OpenAI](https://openai.com/
 On the block's side panel, Select the "Map data" panel and click on the "Fetch locations" button. This will automatically retrieve on the frontend all the markers from your posts (you can also select a specific post type from the dropdown). The block will be locked from editing, as the markers will be dynamically retrieved from the selected posts. If you don't want that, there is a "Stop syncing" button that will unlock the block, drop the markers on the map and allow you to edit.
 
 ### How can I use the shortcode?
-The shortcode `[ootb_openstreetmap]` allows you to display a dynamic map, which retrieves markers from other posts or post types. Just add it to a post or page and you're good to go. By default, it will fetch the markers from the 100 most recent posts. The shortcode supports the following attributes:
+The shortcode `[ootb_query]` allows you to display a dynamic map, which retrieves markers from other posts or post types. Just add it to a post or page and you're good to go. By default, it will fetch the markers from the 100 most recent posts. The shortcode supports the following attributes:
 * post_type: (Optional) The type of post to query. By default, it is set to `post`.
 * posts_per_page: (Optional) The number of posts to be displayed on page. Default value is `100`.
 * post_ids: (Optional) Comma-separated IDs of the posts to include in the query.
@@ -103,7 +103,7 @@ The shortcode `[ootb_openstreetmap]` allows you to display a dynamic map, which 
 
 Here's an example of how you can use it:
 ```
-[ootb_openstreetmap post_type="post" post_ids="1,2,3,4" height="400px" provider="mapbox" maptype="polygon" touchzoom="true" scrollwheelzoom="true" dragging="true" doubleclickzoom="true" marker="https://www.example.com/my-custom-icon.png"]
+[ootb_query post_type="post" post_ids="1,2,3,4" height="400px" provider="mapbox" maptype="polygon" touchzoom="true" scrollwheelzoom="true" dragging="true" doubleclickzoom="true" marker="https://www.example.com/my-custom-icon.png"]
 ```
 
 ### I want more control. Are there any hooks that I could use?

@@ -20,7 +20,12 @@ function QuerySyncButton({props, postId, variant}) {
 			setAttributes({
 				markers: [],
 				serverSideRender: true,
-				bounds: [],
+				bounds: [
+					[
+						37.97155174977503,
+						23.72656345367432
+					]
+				],
 			});
 		} else {
 			queryMarkers(props, postId);

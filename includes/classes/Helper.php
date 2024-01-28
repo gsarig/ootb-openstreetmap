@@ -227,4 +227,78 @@ class Helper {
 
 		return $block_editor_post_types;
 	}
+
+	/**
+	 * Retrieves the default block attributes in PHP.
+	 *
+	 * @param string $attr_name The attribute name.
+	 *
+	 * @noinspection PhpRedundantOptionalArgumentInspection
+	 * @return array|mixed|string
+	 */
+	public static function default_block_attributes( string $attr_name = '' ) {
+		$file = OOTB_PLUGIN_PATH . 'build/block.json';
+		if ( ! file_exists( $file ) ) {
+			return [];
+		}
+		$json       = file_get_contents( $file );
+		$data       = json_decode( $json, true );
+		$attributes = $data[ 'attributes' ] ?? [];
+		if ( empty( $attributes ) ) {
+			return [];
+		}
+
+		$defaults = array_map( function ( $attr ) {
+			return $attr[ 'default' ];
+		}, $attributes );
+
+		$defaults = array_change_key_case( $defaults, CASE_LOWER );
+		if ( ! empty( $attr_name ) ) {
+			if ( isset( $defaults[ $attr_name ] ) && true === $defaults[ $attr_name ] ) {
+				return 'true';
+			} elseif ( isset( $defaults[ $attr_name ] ) && false === $defaults[ $attr_name ] ) {
+				return 'false';
+			} elseif ( 'bounds' === $attr_name ) {
+				return '[null, null]';
+			} elseif ( 'marker' === $attr_name ) {
+				return self::get_marker_attr_from_url( OOTB_PLUGIN_URL . 'assets/vendor/leaflet/images/marker-icon.png' );
+			} elseif ( isset( $defaults[ $attr_name ] ) && is_array( $defaults[ $attr_name ] ) ) {
+				return json_encode( $defaults[ $attr_name ] );
+			}
+
+			return $defaults[ $attr_name ] ?? null;
+		}
+
+		return $defaults;
+	}
+
+	/**
+	 * Gets the marker attributes from the image URL.
+	 *
+	 * @param string $img_src The image URL.
+	 *
+	 * @return string|void
+	 */
+	public static function get_marker_attr_from_url( string $img_src = '' ) {
+		if ( empty( $img_src ) ) {
+			return '';
+		}
+		$image_size = getimagesize( $img_src );
+		if ( empty( $image_size[ 0 ] ) || empty( $image_size[ 1 ] ) ) {
+			return '';
+		}
+		$width     = $image_size[ 0 ];
+		$height    = $image_size[ 1 ];
+		$jsonArray = [
+			"iconUrl"     => $img_src,
+			"iconAnchor"  => [
+				round( $width / 2 ),
+				$height
+			],
+			"popupAnchor" => [ 0, - $height ]
+		];
+		$jsonStr   = json_encode( $jsonArray );
+
+		return urlencode( $jsonStr );
+	}
 }

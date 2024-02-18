@@ -27,10 +27,18 @@
 		const escapedShapeStyle = osmap.getAttribute('data-shapestyle');
 		const shapeStyle = JSON.parse(decodeURIComponent(escapedShapeStyle));
 		const shapeText = osmap.getAttribute('data-shapetext');
+		const mapboxstyle = osmap.getAttribute('data-mapboxstyle');
 
 		let apiKey = '';
 		if ('mapbox' === provider) {
 			apiKey = options.api_mapbox;
+		}
+
+		let providerUrl = providers[provider].url;
+		if ('mapbox' === provider && mapboxstyle) {
+			providerUrl = JSON.parse(decodeURIComponent(mapboxstyle));
+		} else {
+			providerUrl += apiKey;
 		}
 
 		const mapOptions = {
@@ -61,7 +69,7 @@
 			map.scrollWheelZoom.disable();
 		}
 
-		L.tileLayer(providers[provider].url + apiKey, {
+		L.tileLayer(providerUrl, {
 			attribution: providers[provider].attribution
 		}).addTo(map);
 

@@ -1,7 +1,7 @@
 import {TileLayer} from 'react-leaflet';
 // noinspection NpmUsedModulesInstalled
 import {useEffect, useRef} from '@wordpress/element';
-import createMapboxStyleUrl from "../Helpers/createMapboxStyleUrl";
+import createMapboxStyleUrl from "../../assets/shared/createMapboxStyleUrl";
 
 export default function TileProvider({props}) {
 	const {
@@ -15,6 +15,7 @@ export default function TileProvider({props}) {
 	const {
 		options: {
 			api_mapbox,
+			global_mapbox_style_url,
 		},
 		providers: {
 			openstreetmap,
@@ -27,8 +28,8 @@ export default function TileProvider({props}) {
 	let providerAttribution = openstreetmap.attribution;
 
 	if ('mapbox' === provider && api_mapbox) {
-		providerUrl = mapboxStyleUrl ?
-			createMapboxStyleUrl(mapboxStyleUrl, api_mapbox) :
+		providerUrl = mapboxStyleUrl || global_mapbox_style_url ?
+			createMapboxStyleUrl(mapboxStyleUrl.length ? mapboxStyleUrl : global_mapbox_style_url, api_mapbox) :
 			mapbox.url + api_mapbox;
 		providerAttribution = mapbox.attribution;
 	}

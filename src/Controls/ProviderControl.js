@@ -17,6 +17,7 @@ export default function ProviderControl({props}) {
 		adminUrl,
 		options: {
 			api_mapbox,
+			global_mapbox_style_url,
 		}
 	} = ootbGlobal;
 
@@ -76,14 +77,24 @@ export default function ProviderControl({props}) {
 				}}
 				help={(
 					<span>
-						{createInterpolateElement(
-							__('You can find the style URL in the <mapbox_url>Mapbox Studio</mapbox_url>. There, use the "Share" button, and under "Developer resources", copy the "Style URL". It should look like that: <code>mapbox://styles/username/style-id</code>. For the styles to work, you need to have a Mapbox API key set in the <a>plugin settings</a>.', 'ootb-openstreetmap'),
-							{
-								mapbox_url: <a href="https://studio.mapbox.com/"/>,
-								code: <code/>,
-								a: <a href={adminUrl}/>
-							}
-						)}
+						{
+							global_mapbox_style_url ?
+								createInterpolateElement(
+									__('You can override the style URL set in the <a>plugin settings</a>.', 'ootb-openstreetmap'),
+									{
+										mapbox_url: <a href="https://studio.mapbox.com/"/>,
+										code: <code/>,
+										a: <a href={adminUrl}/>
+									}
+								) :
+								createInterpolateElement(
+									__('You can find the style URL in the <mapbox_url>Mapbox Studio</mapbox_url>. There, use the "Share" button, and under "Developer resources", copy the "Style URL". It should look like that: <code>mapbox://styles/username/style-id</code>. For the styles to work, you need to have a Mapbox API key set in the <a>plugin settings</a>.', 'ootb-openstreetmap'),
+									{
+										mapbox_url: <a href="https://studio.mapbox.com/"/>,
+										code: <code/>,
+										a: <a href={adminUrl}/>
+									}
+								)}
 					</span>
 				)}
 			/>

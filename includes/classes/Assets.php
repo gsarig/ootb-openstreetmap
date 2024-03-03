@@ -80,5 +80,17 @@ class Assets {
 			),
 			'before'
 		);
+
+		add_filter( 'wp_script_attributes', [ $this, 'add_type_attribute' ], 10, 1 );
+
+	}
+
+	function add_type_attribute( $attributes ) {
+		// Only do this for a specific script.
+		if ( isset( $attributes[ 'id' ] ) && $attributes[ 'id' ] === 'ootb-openstreetmap-js' ) {
+			$attributes[ 'type' ] = 'module';
+		}
+
+		return $attributes;
 	}
 }

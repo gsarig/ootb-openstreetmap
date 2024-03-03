@@ -1,4 +1,5 @@
 // noinspection NpmUsedModulesInstalled,JSUnresolvedVariable
+import createMapboxStyleUrl from "./shared/createMapboxStyleUrl.js";
 
 (function () {
 	'use strict';
@@ -27,7 +28,16 @@
 		const escapedShapeStyle = osmap.getAttribute('data-shapestyle');
 		const shapeStyle = JSON.parse(decodeURIComponent(escapedShapeStyle));
 		const shapeText = osmap.getAttribute('data-shapetext');
-		const mapboxstyle = osmap.getAttribute('data-mapboxstyle');
+		const mapboxstyleAttr = osmap.getAttribute('data-mapboxstyle');
+		let mapboxstyle = '';
+		if (mapboxstyleAttr) {
+			mapboxstyle = mapboxstyleAttr;
+		} else {
+			const mapboxstyleGlobal = createMapboxStyleUrl(options.global_mapbox_style_url, options.api_mapbox);
+			if (mapboxstyleGlobal) {
+				mapboxstyle = encodeURIComponent(JSON.stringify(mapboxstyleGlobal));
+			}
+		}
 
 		let apiKey = '';
 		if ('mapbox' === provider) {

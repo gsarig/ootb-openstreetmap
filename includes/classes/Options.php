@@ -83,7 +83,10 @@ class Options {
 					sprintf(
 						wp_kses(
 							__( 'You can find the style URL on <a href="%1$s" target="_blank">Mapbox Studio</a>. There, use the "Share" button, and under "Developer resources", copy the "Style URL". It should look like that: <code>mapbox://styles/username/style-id</code>.', 'ootb-openstreetmap' ),
-							[ 'a' => [ 'href' => [], 'target' => [] ] ]
+							[
+								'a' => [ 'href' => [], 'target' => [] ],
+								'code' => []
+							]
 						),
 						esc_url( 'https://www.mapbox.com/studio/' )
 					),

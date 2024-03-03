@@ -86,6 +86,10 @@
       "type": "string",
       "default": "openstreetmap"
     },
+    "mapboxStyleUrl": {
+      "type": "string",
+      "default": ""
+    },
     "mapType": {
       "type": "string",
       "default": "marker"

@@ -53,7 +53,7 @@ class Options {
 
 		add_settings_section(
 			'ootb_section_settings',
-			esc_html__( 'Map Provider API key', 'ootb-openstreetmap' ),
+			esc_html__( 'Map Providers', 'ootb-openstreetmap' ),
 			[ $this, 'section_settings_callback' ],
 			'ootb'
 		);
@@ -67,6 +67,26 @@ class Options {
 				'label_for'        => 'api_mapbox',
 				'class'            => 'ootb_row',
 				'ootb_custom_data' => 'custom',
+			]
+		);
+		add_settings_field(
+			'global_mapbox_style_url',
+			esc_html__( 'MapBox style', 'ootb-openstreetmap' ),
+			[ $this, 'field_url' ],
+			'ootb',
+			'ootb_section_settings',
+			[
+				'label_for'        => 'global_mapbox_style_url',
+				'class'            => 'ootb_row',
+				'ootb_custom_data' => 'custom',
+				'description'      =>
+					sprintf(
+						wp_kses(
+							__( 'You can find the style URL in the <a href="%1$s" target="_blank">Mapbox Studio</a>. There, use the "Share" button, and under "Developer resources", copy the "Style URL". It should look like that: <code>mapbox://styles/username/style-id</code>.', 'ootb-openstreetmap' ),
+							[ 'a' => [ 'href' => [], 'target' => [] ] ]
+						),
+						esc_url( 'https://www.mapbox.com/studio/' )
+					),
 			]
 		);
 
@@ -266,6 +286,24 @@ class Options {
 		<input type="password" name="ootb_options[<?php echo esc_attr( $args[ 'label_for' ] ); ?>]"
 			   id="<?php echo esc_attr( $args[ 'label_for' ] ); ?>"
 			   value="<?php echo isset( $option[ $args[ 'label_for' ] ] ) ? esc_attr( $option[ $args[ 'label_for' ] ] ) : ''; ?>"/>
+		<?php
+	}
+
+	/**
+	 * A URL field.
+	 *
+	 * @param array $args THe settings args.
+	 *
+	 * @return void
+	 */
+	function field_url( array $args ) {
+		$option = Helper::get_option( 'all' );
+		?>
+		<input type="url" name="ootb_options[<?php echo esc_attr( $args[ 'label_for' ] ); ?>]"
+			   id="<?php echo esc_attr( $args[ 'label_for' ] ); ?>"
+			   value="<?php echo isset( $option[ $args[ 'label_for' ] ] ) ? esc_attr( $option[ $args[ 'label_for' ] ] ) : ''; ?>"
+			   size="60"/>
+		<p class="description"><?php echo $args[ 'description' ]; ?></p>
 		<?php
 	}
 

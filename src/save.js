@@ -1,5 +1,6 @@
 import centerMap from "./Helpers/centerMap";
 import getIcon from "./Helpers/getIcon";
+import createMapboxStyleUrl from "../assets/shared/createMapboxStyleUrl";
 
 export default function save(props, className) {
 	const {
@@ -19,6 +20,7 @@ export default function save(props, className) {
 			shapeColor,
 			shapeWeight,
 			shapeText,
+			mapboxStyleUrl,
 		},
 	} = props;
 	const shapeStyles = {
@@ -26,6 +28,10 @@ export default function save(props, className) {
 		color: shapeColor,
 		weight: shapeWeight
 	}
+	const mapboxApi = ootbGlobal?.options?.api_mapbox ?? null;
+	const mapboxStyle = mapboxStyleUrl && mapboxApi ?
+		createMapboxStyleUrl(mapboxStyleUrl, mapboxApi) :
+		'';
 	return markers ? (
 		<div className={className}>
 			<div className="ootb-openstreetmap--map"
@@ -44,6 +50,7 @@ export default function save(props, className) {
 				 data-doubleclickzoom={doubleClickZoom}
 				 data-scrollwheelzoom={scrollWheelZoom}
 				 data-marker={encodeURIComponent(JSON.stringify(getIcon(props)))}
+				 data-mapboxstyle={mapboxStyle ? encodeURIComponent(JSON.stringify(mapboxStyle)) : null}
 				 style={
 					 {
 						 height: mapHeight + 'px'

@@ -5,7 +5,7 @@ Tags: Map, OpenStreetMap, Leaflet, Google Maps, block
 Requires at least: 5.8.6
 Tested up to: 6.4
 Requires PHP: 7.4
-Stable tag: 2.6.0
+Stable tag: 2.7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,6 +58,10 @@ Instead of manually adding coordinates for each one of your markers, just click-
 No.
 
 That's the point, actually. Just install the plugin and start adding maps. Keep in mind, though, that as stated on the [OpenStreetMap Tile Usage Policy](https://operations.osmfoundation.org/policies/tiles/), OSM’s own servers are run entirely on donated resources and they have strictly limited capacity. Using them on a site with low traffic will probably be fine. Nevertheless, you are advised to create an account to [MapBox](https://www.mapbox.com/) and get a free API Key.
+
+= How can I add a custom Mapbox style? =
+
+You can find the style URL in the [Mapbox Studio](https://www.mapbox.com/studio/). There, use the "Share" button, and under "Developer resources", copy the "Style URL". It should look like that: `mapbox://styles/username/style-id`. You can declare a global style on the plugin's settings, to be used as a default for all the maps, or you can set a custom style for each map, by using the block's settings panel.
 
 = How do I add a new location? =
 
@@ -167,6 +171,9 @@ Version 2.0.0 is a major, almost full, refactoring, both for the build scripts a
 = 1.0 =
 
 == Changelog ==
+= 2.7.0 =
+* [NEW] Adds an option to set custom Mapbox styles using [Mapbox Studio](https://www.mapbox.com/studio/).
+
 = 2.6.0 =
 * [NEW] Adds option to query maps, which allows you to create a map out of maps added on other posts or post types. This can be quite powerful when, for example, you have a custom post type for "Places" with each place having its own map, and you want to dynamically gather-up all the places on a single map.
 * [NEW] Adds shortcode support. You can use the shortcode `[ootb_query]` to retrieve the aforementioned Query Maps feature (see the FAQ for more info).

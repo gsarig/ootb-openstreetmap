@@ -1,4 +1,5 @@
 // noinspection NpmUsedModulesInstalled,JSUnresolvedVariable
+import createMapboxStyleUrl from "./shared/createMapboxStyleUrl.js";
 
 (function () {
 	'use strict';
@@ -27,10 +28,27 @@
 		const escapedShapeStyle = osmap.getAttribute('data-shapestyle');
 		const shapeStyle = JSON.parse(decodeURIComponent(escapedShapeStyle));
 		const shapeText = osmap.getAttribute('data-shapetext');
+		const mapboxstyleAttr = osmap.getAttribute('data-mapboxstyle');
+		let mapboxstyle = '';
+		if (mapboxstyleAttr) {
+			mapboxstyle = mapboxstyleAttr;
+		} else {
+			const mapboxstyleGlobal = createMapboxStyleUrl(options.global_mapbox_style_url, options.api_mapbox);
+			if (mapboxstyleGlobal) {
+				mapboxstyle = encodeURIComponent(JSON.stringify(mapboxstyleGlobal));
+			}
+		}
 
 		let apiKey = '';
 		if ('mapbox' === provider) {
 			apiKey = options.api_mapbox;
+		}
+
+		let providerUrl = providers[provider].url;
+		if ('mapbox' === provider && mapboxstyle) {
+			providerUrl = JSON.parse(decodeURIComponent(mapboxstyle));
+		} else {
+			providerUrl += apiKey;
 		}
 
 		const mapOptions = {
@@ -61,7 +79,7 @@
 			map.scrollWheelZoom.disable();
 		}
 
-		L.tileLayer(providers[provider].url + apiKey, {
+		L.tileLayer(providerUrl, {
 			attribution: providers[provider].attribution
 		}).addTo(map);
 

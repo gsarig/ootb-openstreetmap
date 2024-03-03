@@ -59,6 +59,10 @@ No.
 
 That's the point, actually. Just install the plugin and start adding maps. Keep in mind, though, that as stated on the [OpenStreetMap Tile Usage Policy](https://operations.osmfoundation.org/policies/tiles/), OSM’s own servers are run entirely on donated resources and they have strictly limited capacity. Using them on a site with low traffic will probably be fine. Nevertheless, you are advised to create an account to [MapBox](https://www.mapbox.com/) and get a free API Key.
 
+= How can I add a custom Mapbox style? =
+
+You can find the style URL in the [Mapbox Studio](https://www.mapbox.com/studio/). There, use the "Share" button, and under "Developer resources", copy the "Style URL". It should look like that: `mapbox://styles/username/style-id`. You can declare a global style on the plugin's settings, to be used as a default for all the maps, or you can set a custom style for each map, by using the block's settings panel.
+
 = How do I add a new location? =
 
 To add a location, left-click on the map for a while, until you see the prompt saying "Release to drop a marker here". On browsers that support it, the cursor transforms from hand to crosshair, to make it even more apparent. As long as the prompt is visible, it means that releasing the click will drop the marker at that spot. That slight delay has been added to prevent you from accidentally adding markers all over the place with every click.
@@ -167,6 +171,9 @@ Version 2.0.0 is a major, almost full, refactoring, both for the build scripts a
 = 1.0 =
 
 == Changelog ==
+= 2.7.0 =
+* [NEW] Adds an option to set custom Mapbox styles using [Mapbox Studio](https://www.mapbox.com/studio/).
+
 = 2.6.0 =
 * [NEW] Adds option to query maps, which allows you to create a map out of maps added on other posts or post types. This can be quite powerful when, for example, you have a custom post type for "Places" with each place having its own map, and you want to dynamically gather-up all the places on a single map.
 * [NEW] Adds shortcode support. You can use the shortcode `[ootb_query]` to retrieve the aforementioned Query Maps feature (see the FAQ for more info).

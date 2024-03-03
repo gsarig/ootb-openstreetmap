@@ -61,7 +61,7 @@ That's the point, actually. Just install the plugin and start adding maps. Keep 
 
 = How can I add a custom Mapbox style? =
 
-You can find the style URL in the [Mapbox Studio](https://www.mapbox.com/studio/). There, use the "Share" button, and under "Developer resources", copy the "Style URL". It should look like that: `mapbox://styles/username/style-id`. You can declare a global style on the plugin's settings, to be used as a default for all the maps, or you can set a custom style for each map, by using the block's settings panel.
+You can find the style URL on [Mapbox Studio](https://www.mapbox.com/studio/). There, use the "Share" button, and under "Developer resources", copy the "Style URL". It should look like that: `mapbox://styles/username/style-id`. You can declare a global style on the plugin's settings, to be used as a default for all the maps, or you can set a custom style for each map, by using the block's settings panel.
 
 = How do I add a new location? =
 

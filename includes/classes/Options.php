@@ -59,7 +59,7 @@ class Options {
 		);
 		add_settings_field(
 			'api_mapbox',
-			esc_html__( 'MapBox', 'ootb-openstreetmap' ),
+			esc_html__( 'MapBox API Key', 'ootb-openstreetmap' ),
 			[ $this, 'field_api_key_mapbox' ],
 			'ootb',
 			'ootb_section_settings',
@@ -71,7 +71,7 @@ class Options {
 		);
 		add_settings_field(
 			'global_mapbox_style_url',
-			esc_html__( 'MapBox style', 'ootb-openstreetmap' ),
+			esc_html__( 'MapBox style URL', 'ootb-openstreetmap' ),
 			[ $this, 'field_url' ],
 			'ootb',
 			'ootb_section_settings',
@@ -82,7 +82,7 @@ class Options {
 				'description'      =>
 					sprintf(
 						wp_kses(
-							__( 'You can find the style URL in the <a href="%1$s" target="_blank">Mapbox Studio</a>. There, use the "Share" button, and under "Developer resources", copy the "Style URL". It should look like that: <code>mapbox://styles/username/style-id</code>.', 'ootb-openstreetmap' ),
+							__( 'You can find the style URL on <a href="%1$s" target="_blank">Mapbox Studio</a>. There, use the "Share" button, and under "Developer resources", copy the "Style URL". It should look like that: <code>mapbox://styles/username/style-id</code>.', 'ootb-openstreetmap' ),
 							[ 'a' => [ 'href' => [], 'target' => [] ] ]
 						),
 						esc_url( 'https://www.mapbox.com/studio/' )

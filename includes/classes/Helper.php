@@ -195,8 +195,10 @@ class Helper {
 			return $options[ $option ] ?? '';
 		}
 
-		// We don't want to expose the OpenAI API key to the client.
-		unset( $options[ 'api_openai' ] );
+		if ( ! empty( $options[ 'api_openai' ] ) ) {
+			// We don't want to expose the OpenAI API key to the client.
+			unset( $options[ 'api_openai' ] );
+		}
 
 		return $options;
 	}

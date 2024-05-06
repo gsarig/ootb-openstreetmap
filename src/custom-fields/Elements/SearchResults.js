@@ -13,6 +13,9 @@ export default function SearchResults(props) {
         setKeywords('');
         setSearchResults([]);
         setMapUpdate(true);
+        setTimeout(function () {
+            setMapUpdate(false);
+        }, 1000);
     }
     const resultsList = () => {
         return searchResults.map((item, index) => {

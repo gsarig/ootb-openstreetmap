@@ -29,3 +29,7 @@
     text-align: left;
     width: 100%;
 }
+
+.ootb-openstreetmap--custom-fields-container.pinning .leaflet-container .leaflet-marker-pane img, .ootb-openstreetmap--custom-fields-container.pinning .leaflet-container {
+	cursor: crosshair;
+}

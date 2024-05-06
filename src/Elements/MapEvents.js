@@ -1,7 +1,9 @@
+// noinspection NpmUsedModulesInstalled,NpmUsedModulesInstalled
+
+import {useState} from 'react';
 import {useMapEvents} from "react-leaflet/hooks";
 import {isMobile, isSafari} from "react-device-detect";
 import getBounds from "../Helpers/getBounds";
-// noinspection NpmUsedModulesInstalled
 import {useEffect} from '@wordpress/element';
 import getMarkerFromElelement from "../Helpers/getMarkerFromElelement";
 
@@ -16,9 +18,11 @@ export default function MapEvents({props}) {
 			shouldUpdateBounds,
 			addingMarker,
 			isDraggingMarker,
+			searchResults,
 		},
 		setAttributes
 	} = props;
+	const [searchCount, setSearchCount] = useState(0);
 	const timeout = 300;
 	let delay;
 	const isClicking = (e) => {
@@ -54,7 +58,7 @@ export default function MapEvents({props}) {
 	const addMarker = (e) => {
 		clearTimeout(delay);
 		if (!!addingMarker) {
-			const newMarker = getMarkerFromElelement(props, e);
+			const newMarker = getMarkerFromElelement({searchCount, setSearchCount, searchResults}, e);
 			setAttributes({
 				markers: [
 					...markers,

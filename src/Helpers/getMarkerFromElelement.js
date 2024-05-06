@@ -1,18 +1,12 @@
-export default function getMarkerFromElelement(props, e) {
-	const {
-		attributes: {
-			searchResults,
-			searchCount
-		},
-		setAttributes
-	} = props;
-
+export default function getMarkerFromElelement({searchCount, setSearchCount, searchResults}, e) {
 	const isSearching = ('undefined' !== typeof searchResults && 0 < searchResults.length);
 	let markerLat;
 	let markerLng;
 	let markerText;
+	let markerTextRaw;
 	if (isSearching) {
-		setAttributes({searchCount: searchCount + 1});
+		const updatedSearchCount = searchCount + 1;
+		setSearchCount(updatedSearchCount);
 		const index = e.target.getAttribute('data-index');
 		const {
 			lat,
@@ -22,10 +16,12 @@ export default function getMarkerFromElelement(props, e) {
 		markerLat = lat ?? '';
 		markerLng = lon ?? '';
 		markerText = display_name ? `<p>${display_name}</p>` : '';
+		markerTextRaw = display_name ?? '';
 	} else {
 		markerLat = e.latlng.lat ?? '';
 		markerLng = e.latlng.lng ?? '';
 		markerText = '';
+		markerTextRaw = '';
 	}
 
 	if (!markerLat || !markerLng) {
@@ -36,6 +32,7 @@ export default function getMarkerFromElelement(props, e) {
 		lat: markerLat.toString(),
 		lng: markerLng.toString(),
 		text: markerText,
+		textRaw: markerTextRaw,
 		id: Date.now(),
 	}
 }

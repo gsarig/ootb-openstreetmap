@@ -1,5 +1,7 @@
+// noinspection NpmUsedModulesInstalled,NpmUsedModulesInstalled
+
+import {useState} from 'react';
 import getBounds from '../Helpers/getBounds';
-// noinspection NpmUsedModulesInstalled
 import {Button} from '@wordpress/components';
 import getMarkerFromElelement from "../Helpers/getMarkerFromElelement";
 
@@ -13,8 +15,9 @@ export default function SearchResults({props}) {
 		},
 		setAttributes,
 	} = props;
+	const [searchCount, setSearchCount] = useState(0);
 	const addMarker = (e) => {
-		const newMarker = getMarkerFromElelement(props, e);
+		const newMarker = getMarkerFromElelement({searchCount, setSearchCount, searchResults}, e);
 		setAttributes({
 			markers: [
 				...markers,

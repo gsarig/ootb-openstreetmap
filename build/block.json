@@ -114,10 +114,6 @@
       "type": "boolean",
       "default": false
     },
-    "searchCount": {
-      "type": "number",
-      "default": 0
-    },
     "openAImode": {
       "type": "string",
       "default": ""

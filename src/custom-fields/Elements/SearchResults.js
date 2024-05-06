@@ -4,8 +4,7 @@ import {useState} from 'react';
 import {Button} from '@wordpress/components';
 import getMarkerFromElelement from "../../Helpers/getMarkerFromElelement";
 
-export default function SearchResults(props) {
-    const {setMarker, setMapUpdate, setKeywords, searchResults, setSearchResults} = props;
+export default function SearchResults({setKeywords, searchResults, setSearchResults, setMarker, setMapUpdate}) {
     const [searchCount, setSearchCount] = useState(0);
     const addMarker = (e) => {
         const newMarker = getMarkerFromElelement({searchCount, setSearchCount, searchResults}, e);
@@ -13,9 +12,6 @@ export default function SearchResults(props) {
         setKeywords('');
         setSearchResults([]);
         setMapUpdate(true);
-        setTimeout(function () {
-            setMapUpdate(false);
-        }, 1000);
     }
     const resultsList = () => {
         return searchResults.map((item, index) => {

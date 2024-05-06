@@ -13,6 +13,7 @@ use OOTB\Helper;
 use OOTB\OpenAI;
 use OOTB\Options;
 use OOTB\Query;
+use OOTB\CustomFields;
 
 function setup() {
 	$n = function ( $function ) {
@@ -27,6 +28,7 @@ new Options();
 new Assets();
 new OpenAI();
 new Query();
+new CustomFields();
 
 /**
  * Registers the default textdomain.

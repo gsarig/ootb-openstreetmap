@@ -16,6 +16,8 @@ const OOTBCustomFields = () => (
     </PluginDocumentSettingPanel>
 );
 
-registerPlugin('ootb-custom-fields', {
-    render: OOTBCustomFields,
-});
+if (ootbGlobal?.options?.geodata) {
+    registerPlugin('ootb-custom-fields', {
+        render: OOTBCustomFields,
+    });
+}

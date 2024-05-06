@@ -84,7 +84,7 @@ class Options {
 						wp_kses(
 							__( 'You can find the style URL on <a href="%1$s" target="_blank">Mapbox Studio</a>. There, use the "Share" button, and under "Developer resources", copy the "Style URL". It should look like that: <code>mapbox://styles/username/style-id</code>.', 'ootb-openstreetmap' ),
 							[
-								'a' => [ 'href' => [], 'target' => [] ],
+								'a'    => [ 'href' => [], 'target' => [] ],
 								'code' => []
 							]
 						),
@@ -145,6 +145,35 @@ class Options {
 		);
 
 		add_settings_section(
+			'ootb_section_custom_fields',
+			esc_html__( 'Custom Fields', 'ootb-openstreetmap' ),
+			[ $this, 'section_custom_fields_callback' ],
+			'ootb'
+		);
+
+		add_settings_field(
+			'geodata',
+			esc_html__( 'Location Custom Field', 'ootb-openstreetmap' ),
+			[ $this, 'field_geodata' ],
+			'ootb',
+			'ootb_section_custom_fields',
+			[
+				'label_for'        => 'geodata',
+				'class'            => 'ootb_row',
+				'ootb_custom_data' => 'custom',
+				'label'            => sprintf(
+					wp_kses(
+						__( ' Add a location custom field, to assign a location to each post or post type. The data are stored following the <a href="%1$s" target="_blank">official guidelines</a>.', 'ootb-openstreetmap' ),
+						[
+							'a' => [ 'href' => [], 'target' => [] ],
+						]
+					),
+					esc_url( 'https://codex.wordpress.org/Geodata' )
+				),
+			]
+		);
+
+		add_settings_section(
 			'ootb_section_openai',
 			esc_html__( 'OpenAI settings', 'ootb-openstreetmap' ),
 			[ $this, 'section_openai_callback' ],
@@ -175,11 +204,29 @@ class Options {
 	function field_prevent_default_gestures( array $args ) {
 		$option = Helper::get_option( 'all' );
 		?>
-		<input type="checkbox" name="ootb_options[<?php echo esc_attr( $args[ 'label_for' ] ); ?>]"
-			   id="<?php echo esc_attr( $args[ 'label_for' ] ); ?>"
-			   value="1" <?php checked( ! empty( $option[ $args[ 'label_for' ] ] ), true ); ?> />
-		<label
-			for="<?php echo esc_attr( $args[ 'label_for' ] ); ?>"><?php echo $args[ 'label' ]; ?></label>
+        <input type="checkbox" name="ootb_options[<?php echo esc_attr( $args[ 'label_for' ] ); ?>]"
+               id="<?php echo esc_attr( $args[ 'label_for' ] ); ?>"
+               value="1" <?php checked( ! empty( $option[ $args[ 'label_for' ] ] ), true ); ?> />
+        <label
+                for="<?php echo esc_attr( $args[ 'label_for' ] ); ?>"><?php echo $args[ 'label' ]; ?></label>
+		<?php
+	}
+
+    /**
+	 * The callback method for the option to enable the Geodata.
+	 *
+	 * @param array $args THe settings args.
+	 *
+	 * @return void
+	 */
+	function field_geodata( array $args ) {
+		$option = Helper::get_option( 'all' );
+		?>
+        <input type="checkbox" name="ootb_options[<?php echo esc_attr( $args[ 'label_for' ] ); ?>]"
+               id="<?php echo esc_attr( $args[ 'label_for' ] ); ?>"
+               value="1" <?php checked( ! empty( $option[ $args[ 'label_for' ] ] ), true ); ?> />
+        <label
+                for="<?php echo esc_attr( $args[ 'label_for' ] ); ?>"><?php echo $args[ 'label' ]; ?></label>
 		<?php
 	}
 
@@ -192,11 +239,28 @@ class Options {
 	 */
 	function section_frontend_callback( array $args ) {
 		?>
-		<p id="<?php echo esc_attr( $args[ 'id' ] ); ?>">
+        <p id="<?php echo esc_attr( $args[ 'id' ] ); ?>">
 			<?php
 			echo esc_html__( 'Apply adjustments to the Frontend behavior of the map.', 'ootb-openstreetmap' );
 			?>
-		</p>
+        </p>
+		<?php
+	}
+
+    /**
+	 * The callback method for the Custom Fields section.
+	 *
+	 * @param array $args THe settings args.
+	 *
+	 * @return void
+	 */
+	function section_custom_fields_callback( array $args ) {
+		?>
+        <p id="<?php echo esc_attr( $args[ 'id' ] ); ?>">
+			<?php
+			echo esc_html__( 'Enable support for custom fields.', 'ootb-openstreetmap' );
+			?>
+        </p>
 		<?php
 	}
 
@@ -209,7 +273,7 @@ class Options {
 	 */
 	function section_defaults_callback( array $args ) {
 		?>
-		<p id="<?php echo esc_attr( $args[ 'id' ] ); ?>">
+        <p id="<?php echo esc_attr( $args[ 'id' ] ); ?>">
 			<?php
 			echo sprintf(
 				wp_kses(
@@ -219,7 +283,7 @@ class Options {
 				esc_url( admin_url( 'options-general.php' ) )
 			);
 			?>
-		</p>
+        </p>
 		<?php
 	}
 
@@ -232,9 +296,9 @@ class Options {
 	 */
 	function section_settings_callback( array $args ) {
 		?>
-		<div class="ootb_info">
-			<h3><?php echo esc_html__( 'About OpenStreetMap usage limits', 'ootb-openstreetmap' ); ?></h3>
-			<p id="<?php echo esc_attr( $args[ 'id' ] ); ?>">
+        <div class="ootb_info">
+            <h3><?php echo esc_html__( 'About OpenStreetMap usage limits', 'ootb-openstreetmap' ); ?></h3>
+            <p id="<?php echo esc_attr( $args[ 'id' ] ); ?>">
 				<?php
 				echo sprintf(
 					wp_kses(
@@ -247,15 +311,15 @@ class Options {
 					esc_url( 'https://www.mapbox.com/' )
 				);
 				?>
-			</p>
-			<p class="ootb-colophon"><a href="https://wordpress.org/support/plugin/ootb-openstreetmap/"
-										target="_blank"><?php _e( 'Support forum',
+            </p>
+            <p class="ootb-colophon"><a href="https://wordpress.org/support/plugin/ootb-openstreetmap/"
+                                        target="_blank"><?php _e( 'Support forum',
 						'ootb-openstreetmap' ); ?></a>
-				| <?php echo sprintf( wp_kses( __( 'Plugin created by <a href="%s" target="_blank">Giorgos Sarigiannidis</a>',
+                | <?php echo sprintf( wp_kses( __( 'Plugin created by <a href="%s" target="_blank">Giorgos Sarigiannidis</a>',
 					'ootb-openstreetmap' ),
 					[ 'a' => [ 'href' => [], 'target' => [] ] ] ),
 					esc_url( 'https://www.gsarigiannidis.gr/' ) ); ?></p>
-		</div>
+        </div>
 
 		<?php
 	}
@@ -286,9 +350,9 @@ class Options {
 	function field_api_key_mapbox( array $args ) {
 		$option = Helper::get_option( 'all' );
 		?>
-		<input type="password" name="ootb_options[<?php echo esc_attr( $args[ 'label_for' ] ); ?>]"
-			   id="<?php echo esc_attr( $args[ 'label_for' ] ); ?>"
-			   value="<?php echo isset( $option[ $args[ 'label_for' ] ] ) ? esc_attr( $option[ $args[ 'label_for' ] ] ) : ''; ?>"/>
+        <input type="password" name="ootb_options[<?php echo esc_attr( $args[ 'label_for' ] ); ?>]"
+               id="<?php echo esc_attr( $args[ 'label_for' ] ); ?>"
+               value="<?php echo isset( $option[ $args[ 'label_for' ] ] ) ? esc_attr( $option[ $args[ 'label_for' ] ] ) : ''; ?>"/>
 		<?php
 	}
 
@@ -302,11 +366,11 @@ class Options {
 	function field_url( array $args ) {
 		$option = Helper::get_option( 'all' );
 		?>
-		<input type="url" name="ootb_options[<?php echo esc_attr( $args[ 'label_for' ] ); ?>]"
-			   id="<?php echo esc_attr( $args[ 'label_for' ] ); ?>"
-			   value="<?php echo isset( $option[ $args[ 'label_for' ] ] ) ? esc_attr( $option[ $args[ 'label_for' ] ] ) : ''; ?>"
-			   size="60"/>
-		<p class="description"><?php echo $args[ 'description' ]; ?></p>
+        <input type="url" name="ootb_options[<?php echo esc_attr( $args[ 'label_for' ] ); ?>]"
+               id="<?php echo esc_attr( $args[ 'label_for' ] ); ?>"
+               value="<?php echo isset( $option[ $args[ 'label_for' ] ] ) ? esc_attr( $option[ $args[ 'label_for' ] ] ) : ''; ?>"
+               size="60"/>
+        <p class="description"><?php echo $args[ 'description' ]; ?></p>
 		<?php
 	}
 
@@ -328,9 +392,9 @@ class Options {
 			$default = $defaults[ 1 ] ?? '';
 		}
 		?>
-		<input type="text" name="ootb_options[<?php echo esc_attr( $args[ 'label_for' ] ); ?>]"
-			   id="<?php echo esc_attr( $args[ 'label_for' ] ); ?>" placeholder="<?php echo esc_html( $default ); ?>"
-			   value="<?php echo isset( $option[ $args[ 'label_for' ] ] ) ? esc_attr( $option[ $args[ 'label_for' ] ] ) : $default; ?>"/>
+        <input type="text" name="ootb_options[<?php echo esc_attr( $args[ 'label_for' ] ); ?>]"
+               id="<?php echo esc_attr( $args[ 'label_for' ] ); ?>" placeholder="<?php echo esc_html( $default ); ?>"
+               value="<?php echo isset( $option[ $args[ 'label_for' ] ] ) ? esc_attr( $option[ $args[ 'label_for' ] ] ) : $default; ?>"/>
 		<?php
 	}
 
@@ -343,11 +407,11 @@ class Options {
 	 */
 	function section_openai_callback( array $args ) {
 		?>
-		<p id="<?php echo esc_attr( $args[ 'id' ] ); ?>">
+        <p id="<?php echo esc_attr( $args[ 'id' ] ); ?>">
 			<?php
 			echo esc_html__( 'Set the OpenAI API key.', 'ootb-openstreetmap' );
 			?>
-		</p>
+        </p>
 		<?php
 	}
 
@@ -361,9 +425,9 @@ class Options {
 	function field_api_key_openai( array $args ) {
 		$option = Helper::get_option( 'all' );
 		?>
-		<input type="password" name="ootb_options[<?php echo esc_attr( $args[ 'label_for' ] ); ?>]"
-			   id="<?php echo esc_attr( $args[ 'label_for' ] ); ?>"
-			   value="<?php echo isset( $option[ $args[ 'label_for' ] ] ) ? esc_attr( $option[ $args[ 'label_for' ] ] ) : ''; ?>"/>
+        <input type="password" name="ootb_options[<?php echo esc_attr( $args[ 'label_for' ] ); ?>]"
+               id="<?php echo esc_attr( $args[ 'label_for' ] ); ?>"
+               value="<?php echo isset( $option[ $args[ 'label_for' ] ] ) ? esc_attr( $option[ $args[ 'label_for' ] ] ) : ''; ?>"/>
 		<?php
 	}
 
@@ -380,16 +444,16 @@ class Options {
 		$options = Helper::get_option( 'all' );
 		$current = isset( $options[ 'ootb_field_mode' ] ) && $options[ 'ootb_field_mode' ] ? $options[ 'ootb_field_mode' ] : '';
 		?>
-		<div id="ootb_form" class="wrap" data-current="<?php echo esc_attr( $current ); ?>">
-			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-			<form action="options.php" method="post">
+        <div id="ootb_form" class="wrap" data-current="<?php echo esc_attr( $current ); ?>">
+            <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+            <form action="options.php" method="post">
 				<?php
 				settings_fields( 'ootb' );
 				do_settings_sections( 'ootb' );
 				submit_button( esc_html__( 'Save Settings', 'ootb-openstreetmap' ) );
 				?>
-			</form>
-		</div>
+            </form>
+        </div>
 		<?php
 	}
 

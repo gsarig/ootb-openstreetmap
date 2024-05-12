@@ -3,8 +3,7 @@
 import {useState} from 'react';
 import {__} from '@wordpress/i18n';
 import {TextControl, Button} from '@wordpress/components';
-import {Fragment} from '@wordpress/element';
-import getNominatimSearchUrl from "../../Helpers/getNominatimSearchUrl";
+import getNominatimSearchUrl from '../../Helpers/getNominatimSearchUrl';
 import SearchResults from './SearchResults';
 
 export default function SearchBox(props) {
@@ -60,7 +59,7 @@ export default function SearchBox(props) {
     }
 
     return (
-        <Fragment>
+        <>
             <div className="ootb-openstreetmap--searchbox">
                 <TextControl
                     value={keywords}
@@ -86,6 +85,6 @@ export default function SearchBox(props) {
                 searchResults={searchResults}
                 setSearchResults={setSearchResults}
             />
-        </Fragment>
+        </>
     );
 }

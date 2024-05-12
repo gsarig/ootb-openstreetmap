@@ -1,6 +1,6 @@
-import {useMapEvents} from "react-leaflet";
-import {isMobile, isSafari} from "react-device-detect";
-import getMarkerFromElelement from "../../Helpers/getMarkerFromElelement";
+import {useMapEvents} from 'react-leaflet';
+import {isMobile, isSafari} from 'react-device-detect';
+import getMarkerFromElelement from '../../Helpers/getMarkerFromElelement';
 
 const PIN_UPDATE_TIMEOUT = 300;
 const PIN_HANG_TIMEOUT = PIN_UPDATE_TIMEOUT * 3;
@@ -13,7 +13,11 @@ export default function MapEvents(props) {
             addingMarker,
             setAddingMarker
         },
-        setMarker
+        setMarker,
+        setMapUpdate,
+        setLatitude,
+        setLongitude,
+        setAddress
     } = props;
 
     let delay; // restore declaration of delay
@@ -37,6 +41,7 @@ export default function MapEvents(props) {
     const isDragging = () => {
         clearTimeout(delay); // make sure to clear the timeout
         setAddingMarker('');
+        setMapUpdate(false);
         setIsDraggingMarker(false);
     };
 
@@ -47,9 +52,13 @@ export default function MapEvents(props) {
     const addMarker = (e) => {
         clearTimeout(delay); // make sure to clear the timeout
         if (addingMarker) {
+            setMapUpdate(false);
             const newMarker = getMarkerFromElelement({}, e);
             setMarker(newMarker);
             setAddingMarker('');
+            setLatitude(newMarker?.lat ?? '');
+            setLongitude(newMarker.lng ?? '');
+            setAddress(newMarker?.textRaw ?? '');
             setTimeout(() => setIsDraggingMarker(false), PIN_UPDATE_TIMEOUT * 2);
         }
     };

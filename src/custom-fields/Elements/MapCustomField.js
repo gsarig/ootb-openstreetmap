@@ -1,42 +1,69 @@
 // noinspection NpmUsedModulesInstalled,JSUnresolvedVariable
 
-import {__} from '@wordpress/i18n';
-import {useState} from 'react';
-import MapControl from "./MapControl";
-import {TextControl, TextareaControl} from '@wordpress/components';
+import {useEffect, useState} from 'react';
+import {withSelect, withDispatch} from '@wordpress/data';
+import {compose} from '@wordpress/compose';
+import MapControl from './MapControl';
+import MapValues from './MapValues';
 
-export default function MapCustomField() {
-    const [marker, setMarker] = useState(null);
-    const [address, setAddress] = useState(null);
+function MapCustomField({geoAddress, geoLatitude, geoLongitude, setMetaValues}) {
+    const [marker, setMarker] = useState({lat: geoLatitude, lng: geoLongitude});
+    const [latitude, setLatitude] = useState(geoLatitude);
+    const [longitude, setLongitude] = useState(geoLongitude);
+    const [address, setAddress] = useState(geoAddress);
     const [mapUpdate, setMapUpdate] = useState(false);
     const [addingMarker, setAddingMarker] = useState('');
+    const props = {
+        marker,
+        setMarker,
+        latitude,
+        setLatitude,
+        longitude,
+        setLongitude,
+        address,
+        setAddress,
+        mapUpdate,
+        setMapUpdate,
+        addingMarker,
+        setAddingMarker
+    };
 
-    const updateAddress = (value) => {
-        setMapUpdate(false);
-        setAddress(value);
-    }
-    const props = {marker, setMarker, mapUpdate, setMapUpdate, addingMarker, setAddingMarker};
-    const addressVal = address && !mapUpdate ? address : marker?.textRaw;
+    useEffect(() => {
+        setMapUpdate(true);
+    }, []);
+    useEffect(() => {
+        setMetaValues({
+            'geo_address': address,
+            'geo_latitude': latitude,
+            'geo_longitude': longitude
+        });
+    }, [latitude, longitude, address]);
+
     return (
-        <div
-            className={'ootb-openstreetmap--custom-fields-container ' + addingMarker}
-        >
-            <MapControl {...props}/>
-            <TextControl
-                label={__('Latitude', 'ootb-openstreetmap')}
-                value={marker?.lat ?? ''}
-                readOnly
-            />
-            <TextControl
-                label={__('Longitude', 'ootb-openstreetmap')}
-                value={marker?.lng ?? ''}
-                readOnly
-            />
-            <TextareaControl
-                label={__('Address', 'ootb-openstreetmap')}
-                value={addressVal ?? ''}
-                onChange={updateAddress}
-            />
+        <div className={`ootb-openstreetmap--custom-fields-container ${addingMarker}`}>
+            <MapControl {...props} />
+            <MapValues {...props} />
         </div>
     );
 }
+
+export default compose([
+    withSelect((select) => {
+        const {getEditedPostAttribute} = select('core/editor');
+        const meta = getEditedPostAttribute('meta');
+        return {
+            meta,
+            geoAddress: meta['geo_address'],
+            geoLatitude: meta['geo_latitude'],
+            geoLongitude: meta['geo_longitude'],
+        };
+    }),
+    withDispatch((dispatch, {meta}) => {
+        const {editPost} = dispatch('core/editor');
+        return {
+            setMetaValues: (values) => {
+                editPost({meta: {...meta, ...values}});
+            }
+        }
+    })
+])(MapCustomField);

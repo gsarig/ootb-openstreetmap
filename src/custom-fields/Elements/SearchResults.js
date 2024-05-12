@@ -2,15 +2,20 @@
 
 import {useState} from 'react';
 import {Button} from '@wordpress/components';
-import getMarkerFromElelement from "../../Helpers/getMarkerFromElelement";
+import getMarkerFromElelement from '../../Helpers/getMarkerFromElelement';
 
-export default function SearchResults({setKeywords, searchResults, setSearchResults, setMarker, setMapUpdate}) {
+export default function SearchResults(props) {
+    const {setMarker, setAddress, setLatitude, setLongitude, setMapUpdate, setKeywords, searchResults, setSearchResults} = props;
+
     const [searchCount, setSearchCount] = useState(0);
     const addMarker = (e) => {
         const newMarker = getMarkerFromElelement({searchCount, setSearchCount, searchResults}, e);
-        setMarker(newMarker);
         setKeywords('');
         setSearchResults([]);
+        setMarker(newMarker);
+        setLatitude(newMarker?.lat ?? '');
+        setLongitude(newMarker.lng ?? '');
+        setAddress(newMarker?.textRaw ?? '');
         setMapUpdate(true);
     }
     const resultsList = () => {

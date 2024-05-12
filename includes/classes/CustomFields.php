@@ -26,30 +26,20 @@ class CustomFields {
 			'post',
 			'geo_latitude',
 			[
-				'type'              => 'float',
+				'type'              => 'number',
 				'show_in_rest'      => true,
 				'single'            => true,
-				'sanitize_callback' => 'floatval',
+				'sanitize_callback' => 'sanitize_float',
 			]
 		);
 		register_meta(
 			'post',
 			'geo_longitude',
 			[
-				'type'              => 'float',
+				'type'              => 'number',
 				'show_in_rest'      => true,
 				'single'            => true,
-				'sanitize_callback' => 'floatval',
-			]
-		);
-		register_meta(
-			'post',
-			'geo_public',
-			[
-				'type'              => 'integer',
-				'show_in_rest'      => true,
-				'single'            => true,
-				'sanitize_callback' => 'intval',
+				'sanitize_callback' => 'sanitize_float',
 			]
 		);
 		register_meta(

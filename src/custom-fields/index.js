@@ -9,7 +9,7 @@ import './index.css';
 const OOTBCustomFields = () => (
     <PluginDocumentSettingPanel
         name="ootb-custom-fields"
-        title={__('OOTB Location', 'ootb-openstreetmap')}
+        title={__('Location', 'ootb-openstreetmap')}
         className="ootb-custom-fields"
     >
         <MapCustomField/>

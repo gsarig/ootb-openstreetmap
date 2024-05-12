@@ -1,7 +1,7 @@
 // noinspection NpmUsedModulesInstalled,JSUnresolvedVariable
 
-import SearchBox from "./SearchBox";
-import {MapContainer, Marker, TileLayer} from "react-leaflet";
+import SearchBox from './SearchBox';
+import {MapContainer, Marker, TileLayer} from 'react-leaflet';
 import L from 'leaflet';
 import MapEvents from './MapEvents';
 import MapUpdate from './MapUpdate';
@@ -15,10 +15,8 @@ export default function MapControl(props) {
     const markerLat = marker?.lat ? parseFloat(marker.lat) : null;
     const markerLng = marker?.lng ? parseFloat(marker.lng) : null;
     const markerPosition = markerLat && markerLng ? [markerLat, markerLng] : null;
-
     const [isDraggingMarker, setIsDraggingMarker] = useState(false);
     const draggingProps = {isDraggingMarker, setIsDraggingMarker, addingMarker, setAddingMarker};
-
     const markerIcon = L.icon(
         {
             iconUrl: getFallbackIcon(),
@@ -44,7 +42,7 @@ export default function MapControl(props) {
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                {markerPosition ?
+                {markerPosition &&
                     <>
                         <Marker
                             position={markerPosition}
@@ -54,8 +52,7 @@ export default function MapControl(props) {
                             {...props}
                             markerPosition={markerPosition}
                         />
-                    </>
-                    : null}
+                    </>}
 
             </MapContainer>
         </>

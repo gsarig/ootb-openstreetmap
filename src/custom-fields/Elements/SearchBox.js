@@ -3,7 +3,7 @@
 import {useState} from 'react';
 import {__} from '@wordpress/i18n';
 import {TextControl, Button} from '@wordpress/components';
-import getNominatimSearchUrl from '../../Helpers/getNominatimSearchUrl';
+import getNominatimSearchUrl from '../../common/getNominatimSearchUrl';
 import SearchResults from './SearchResults';
 
 export default function SearchBox(props) {

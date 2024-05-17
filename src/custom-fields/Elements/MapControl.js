@@ -1,13 +1,13 @@
 // noinspection NpmUsedModulesInstalled,JSUnresolvedVariable
 
-import SearchBox from './SearchBox';
-import {MapContainer, Marker, TileLayer} from 'react-leaflet';
+import {useState} from 'react';
 import L from 'leaflet';
+import {MapContainer, Marker, TileLayer} from 'react-leaflet';
+import SearchBox from './SearchBox';
 import MapEvents from './MapEvents';
 import MapUpdate from './MapUpdate';
-import getFallbackIcon from '../../Helpers/getFallbackIcon';
-import getBoundsCenter from '../../Helpers/getBoundsCenter';
-import {useState} from 'react';
+import getFallbackIcon from '../../common/getFallbackIcon';
+import getBoundsCenter from '../../common/getBoundsCenter';
 
 export default function MapControl(props) {
     const {marker, addingMarker, setAddingMarker} = props;

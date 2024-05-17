@@ -50,7 +50,7 @@ function i18n() {
  * @noinspection PhpUnused
  */
 function openstreetmap_block_init() {
-	register_block_type( OOTB_PLUGIN_PATH . '/build',
+	register_block_type( OOTB_PLUGIN_PATH . '/build/block',
 		[
 			'render_callback' => '\OOTB\Query::render_callback'
 		]

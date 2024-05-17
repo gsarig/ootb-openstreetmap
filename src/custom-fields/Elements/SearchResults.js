@@ -2,7 +2,7 @@
 
 import {useState} from 'react';
 import {Button} from '@wordpress/components';
-import getMarkerFromElelement from '../../Helpers/getMarkerFromElelement';
+import getMarkerFromElelement from '../../common/getMarkerFromElelement';
 
 export default function SearchResults(props) {
     const {setMarker, setAddress, setLatitude, setLongitude, setMapUpdate, setKeywords, searchResults, setSearchResults} = props;

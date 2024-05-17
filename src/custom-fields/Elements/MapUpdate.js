@@ -1,4 +1,4 @@
-import {useMap} from "react-leaflet";
+import {useMap} from 'react-leaflet';
 
 export default function MapUpdate(props) {
     const {mapUpdate, markerPosition} = props;

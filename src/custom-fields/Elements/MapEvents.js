@@ -1,6 +1,6 @@
 import {useMapEvents} from 'react-leaflet';
 import {isMobile, isSafari} from 'react-device-detect';
-import getMarkerFromElelement from '../../Helpers/getMarkerFromElelement';
+import getMarkerFromElelement from '../../common/getMarkerFromElelement';
 
 const PIN_UPDATE_TIMEOUT = 300;
 const PIN_HANG_TIMEOUT = PIN_UPDATE_TIMEOUT * 3;

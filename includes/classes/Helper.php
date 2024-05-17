@@ -239,7 +239,7 @@ class Helper {
 	 * @return array|mixed|string
 	 */
 	public static function default_block_attributes( string $attr_name = '' ) {
-		$file = OOTB_PLUGIN_PATH . 'build/block.json';
+		$file = OOTB_PLUGIN_PATH . 'build/block/block.json';
 		if ( ! file_exists( $file ) ) {
 			return [];
 		}

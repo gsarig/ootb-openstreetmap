@@ -127,6 +127,18 @@
 		"serverSideRender": {
 			"type": "boolean",
 			"default": false
+		},
+		"showMapData": {
+			"type": "boolean",
+			"default": true
+		},
+		"showSearchBox": {
+			"type": "boolean",
+			"default": true
+		},
+		"queryCustomFields": {
+			"type": "boolean",
+			"default": false
 		}
 	},
 	"textdomain": "ootb-openstreetmap",

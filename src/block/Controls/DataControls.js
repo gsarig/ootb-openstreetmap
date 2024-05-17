@@ -6,11 +6,20 @@ import ExportControl from './ExportControl';
 import ImportControl from './ImportControl';
 
 export default function DataControls({props}) {
-	return (
-		<Fragment>
-			<QueryControl props={props}/>
-			<ExportControl props={props}/>
-			<ImportControl props={props}/>
-		</Fragment>
-	);
+    const {
+        attributes: {
+            showMapData
+        },
+    } = props;
+    return (
+        <Fragment>
+            <QueryControl props={props}/>
+            {showMapData &&
+                <>
+                    <ExportControl props={props}/>
+                    <ImportControl props={props}/>
+                </>
+            }
+        </Fragment>
+    );
 }

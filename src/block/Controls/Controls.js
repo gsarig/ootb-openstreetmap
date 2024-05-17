@@ -8,26 +8,31 @@ import BehaviorControls from './BehaviorControls';
 import DataControls from './DataControls';
 
 export default function Controls({props}) {
-	return (
-		<InspectorControls>
-			<PanelBody
-				title={__('Main settings', 'ootb-openstreetmap')}
-				initialOpen={true}
-			>
-				<MainControls props={props}/>
-			</PanelBody>
-			<PanelBody
-				title={__('Map behavior', 'ootb-openstreetmap')}
-				initialOpen={false}
-			>
-				<BehaviorControls props={props}/>
-			</PanelBody>
-			<PanelBody
-				title={__('Map data', 'ootb-openstreetmap')}
-				initialOpen={false}
-			>
-				<DataControls props={props}/>
-			</PanelBody>
-		</InspectorControls>
-	);
+    const {
+        attributes: {
+            queryCustomFields
+        },
+    } = props;
+    return (
+        <InspectorControls>
+            <PanelBody
+                title={__('Main settings', 'ootb-openstreetmap')}
+                initialOpen={true}
+            >
+                <MainControls props={props}/>
+            </PanelBody>
+            <PanelBody
+                title={__('Map behavior', 'ootb-openstreetmap')}
+                initialOpen={false}
+            >
+                <BehaviorControls props={props}/>
+            </PanelBody>
+            <PanelBody
+                title={__('Map data', 'ootb-openstreetmap')}
+                initialOpen={!!queryCustomFields}
+            >
+                <DataControls props={props}/>
+            </PanelBody>
+        </InspectorControls>
+    );
 }

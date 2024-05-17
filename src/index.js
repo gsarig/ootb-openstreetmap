@@ -4,3 +4,4 @@
  */
 import './custom-fields';
 import './block';
+import './variations';

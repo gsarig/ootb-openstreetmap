@@ -68,7 +68,7 @@ class Assets {
 
 		wp_enqueue_script(
 			'ootb-openstreetmap',
-			OOTB_PLUGIN_URL . 'assets/ootb-openstreetmap.js',
+			OOTB_PLUGIN_URL . 'assets/js/frontend/ootb-openstreetmap.js',
 			$dependencies,
 			OOTB_VERSION,
 			true

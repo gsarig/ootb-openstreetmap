@@ -77,20 +77,37 @@ class Query {
 	 *
 	 * @param int $current_post_id The current post id.
 	 * @param array $query_args The query args.
+	 * @param bool $query_custom_fields Whether to query custom fields or not.
 	 *
 	 * @return false|string
 	 */
-	public static function get_markers( int $current_post_id = 0, array $query_args = [] ) {
+	public static function get_markers( int $current_post_id = 0, array $query_args = [], bool $query_custom_fields = false ) {
 		$default_args = [
 			'post_type'              => self::get_post_type(),
 			'posts_per_page'         => self::get_posts_per_page(),
-			's'                      => '<!-- wp:ootb/openstreetmap ',
 			'fields'                 => 'ids',
 			'no_found_rows'          => true,
 			'update_post_meta_cache' => false,
 			'update_post_term_cache' => false,
 		];
-		$args         = wp_parse_args( $query_args, $default_args );
+		if ( $query_custom_fields ) {
+			$default_args[ 'meta_query' ] = [
+				'relation' => 'AND',
+				[
+					'key'     => 'geo_latitude',
+					'value'   => '',
+					'compare' => '!=',
+				],
+				[
+					'key'     => 'geo_longitude',
+					'value'   => '',
+					'compare' => '!=',
+				],
+			];
+		} else {
+			$default_args[ 's' ] = '<!-- wp:ootb/openstreetmap ';
+		}
+		$args = wp_parse_args( $query_args, $default_args );
 
 		$query = new WP_Query( self::maybe_extra_args( $args ) );
 
@@ -98,7 +115,7 @@ class Query {
 			return false;
 		}
 
-		return self::get_marker_data( $current_post_id, $query->posts );
+		return self::get_marker_data( $current_post_id, $query->posts, $query_custom_fields );
 
 	}
 
@@ -119,7 +136,8 @@ class Query {
 		$post_id                                  = is_singular() ? get_the_ID() : 0;
 		$markers                                  = Query::get_markers(
 			$post_id,
-			$attributes[ 'queryArgs' ]
+			$attributes[ 'queryArgs' ],
+			$attributes[ 'queryCustomFields' ] ?? false
 		);
 		if ( empty( $markers ) ) {
 			return $content;
@@ -128,10 +146,16 @@ class Query {
 		$escaped_markers = htmlentities( $markers, ENT_QUOTES, 'UTF-8' );
 
 		return preg_replace(
-			'/data-markers=".*?"/',
-			sprintf( 'data-markers="%s"', $escaped_markers ),
+			[
+				'/data-markers=".*?"/',
+				'/data-bounds=".*?"/'
+			],
+			[
+				sprintf( 'data-markers="%s"', $escaped_markers ),
+				'data-bounds="[null,null]"',
+			],
 			$content
-		);
+		);;
 	}
 
 	/**
@@ -139,31 +163,47 @@ class Query {
 	 *
 	 * @param int $current_post_id The current post id.
 	 * @param array $post_ids The post ids.
+	 * @param bool $query_custom_fields Whether to query custom fields or not.
 	 *
 	 * @return false|string
 	 */
-	private static function get_marker_data( int $current_post_id, array $post_ids ) {
+	private static function get_marker_data( int $current_post_id, array $post_ids, bool $query_custom_fields = false ) {
 		$markers = [];
 		foreach ( $post_ids as $post_id ) {
-			if ( $post_id === $current_post_id ) {
-				continue;
-			}
-			$content = get_post_field( 'post_content', $post_id );
-			$blocks  = parse_blocks( $content );
-			foreach ( $blocks as $block ) {
-				if ( $block[ 'blockName' ] !== 'ootb/openstreetmap' || empty( $block[ 'attrs' ] ) ) {
+			if ( $query_custom_fields ) {
+				$latitude  = get_post_meta( $post_id, 'geo_latitude', true );
+				$longitude = get_post_meta( $post_id, 'geo_longitude', true );
+				$address   = get_post_meta( $post_id, 'geo_address', true );
+				if ( empty( $latitude ) || empty( $longitude ) ) {
 					continue;
 				}
-
-				$attrs = json_decode( wp_json_encode( $block[ 'attrs' ] ) );
-
-				if (
-					empty( $attrs->markers ) ||
-					( isset( $attrs->serverSideRender ) && true === $attrs->serverSideRender )
-				) {
+				$markers[][] = (object) [
+					'lat'  => $latitude,
+					'lng'  => $longitude,
+					'text' => $address,
+					'id'   => $post_id,
+				];
+			} else {
+				if ( $post_id === $current_post_id ) {
 					continue;
 				}
-				$markers[] = $attrs->markers;
+				$content = get_post_field( 'post_content', $post_id );
+				$blocks  = parse_blocks( $content );
+				foreach ( $blocks as $block ) {
+					if ( $block[ 'blockName' ] !== 'ootb/openstreetmap' || empty( $block[ 'attrs' ] ) ) {
+						continue;
+					}
+
+					$attrs = json_decode( wp_json_encode( $block[ 'attrs' ] ) );
+
+					if (
+						empty( $attrs->markers ) ||
+						( isset( $attrs->serverSideRender ) && true === $attrs->serverSideRender )
+					) {
+						continue;
+					}
+					$markers[] = $attrs->markers;
+				}
 			}
 		}
 		$flattened_markers = array_merge( ...$markers );

@@ -173,6 +173,20 @@ class Options {
 			]
 		);
 
+		add_settings_field(
+			'geo_post_types',
+			esc_html__( 'Post types', 'ootb-openstreetmap' ),
+			[ $this, 'field_geo_post_types' ],
+			'ootb',
+			'ootb_section_custom_fields',
+			[
+				'label_for'        => 'geo_post_types',
+				'class'            => 'ootb_row ootb--geo_post_types',
+				'ootb_custom_data' => 'custom',
+				'label'            => __( 'Select the post types you want to enable the location custom field for.', 'ootb-openstreetmap' ),
+			]
+		);
+
 		add_settings_section(
 			'ootb_section_openai',
 			esc_html__( 'OpenAI settings', 'ootb-openstreetmap' ),
@@ -212,7 +226,7 @@ class Options {
 		<?php
 	}
 
-    /**
+	/**
 	 * The callback method for the option to enable the Geodata.
 	 *
 	 * @param array $args THe settings args.
@@ -227,6 +241,39 @@ class Options {
                value="1" <?php checked( ! empty( $option[ $args[ 'label_for' ] ] ), true ); ?> />
         <label
                 for="<?php echo esc_attr( $args[ 'label_for' ] ); ?>"><?php echo $args[ 'label' ]; ?></label>
+		<?php
+	}
+
+	/**
+	 * The callback method for the option to enable the Geodata.
+	 *
+	 * @param array $args THe settings args.
+	 *
+	 * @return void
+	 */
+	function field_geo_post_types( array $args ) {
+		$option     = Helper::get_option( 'all' );
+		$post_types = get_post_types( [ 'public' => true ], 'names', 'and' ); // Get public post types
+		?>
+        <fieldset>
+            <legend><?php echo $args[ 'label' ]; ?></legend>
+			<?php
+			foreach ( $post_types as $post_type ) :
+				if ( 'attachment' === $post_type ) {
+					continue;
+				}
+				?>
+                <input type="checkbox"
+                       id="<?php echo esc_attr( $args[ 'label_for' ] ); ?>-<?php echo esc_attr( $post_type ); ?>"
+                       name="ootb_options[<?php echo esc_attr( $args[ 'label_for' ] ); ?>][<?php echo esc_attr( $post_type ); ?>]"
+                       value="1" <?php checked( ! empty( $option[ $args[ 'label_for' ] ][ $post_type ] ), true ); ?> />
+                <label
+                        for="<?php echo esc_attr( $args[ 'label_for' ] ); ?>-<?php echo esc_attr( $post_type ); ?>"><?php echo esc_html( $post_type ); ?></label>
+                <br/>
+			<?php
+			endforeach;
+			?>
+        </fieldset>
 		<?php
 	}
 
@@ -247,7 +294,7 @@ class Options {
 		<?php
 	}
 
-    /**
+	/**
 	 * The callback method for the Custom Fields section.
 	 *
 	 * @param array $args THe settings args.
@@ -490,7 +537,7 @@ class Options {
 	}
 
 	/**
-	 * Enqueue the admin styles.
+	 * Enqueue the admin scripts and styles.
 	 *
 	 * @param string $hook The current admin page.
 	 *
@@ -500,6 +547,14 @@ class Options {
 		if ( 'settings_page_ootb-openstreetmap' !== $hook ) {
 			return;
 		}
+
+		wp_enqueue_script(
+			'ootb-admin-scripts',
+			OOTB_PLUGIN_URL . 'assets/js/admin/settings.js',
+			[],
+			OOTB_VERSION,
+			true
+		);
 
 		wp_enqueue_style(
 			'ootb-admin-styles',

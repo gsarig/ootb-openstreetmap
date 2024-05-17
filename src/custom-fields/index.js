@@ -3,7 +3,9 @@
 import {registerPlugin} from '@wordpress/plugins';
 import {PluginDocumentSettingPanel} from '@wordpress/edit-post';
 import {__} from '@wordpress/i18n';
+import {select, subscribe} from '@wordpress/data';
 import './index.css';
+import supportsGeodata from "../common/supportsGeodata";
 import MapCustomField from "./Elements/MapCustomField";
 
 const OOTBCustomFields = () => (
@@ -15,9 +17,16 @@ const OOTBCustomFields = () => (
         <MapCustomField/>
     </PluginDocumentSettingPanel>
 );
+let unsubscribe = subscribe(function () {
+    const postType = select('core/editor').getCurrentPostType();
 
-if (ootbGlobal?.options?.geodata) {
+    if (supportsGeodata(postType)) {
+        return;
+    }
+
     registerPlugin('ootb-custom-fields', {
         render: OOTBCustomFields,
     });
-}
+
+    unsubscribe();
+});

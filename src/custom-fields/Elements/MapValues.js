@@ -5,6 +5,11 @@ import {TextareaControl} from '@wordpress/components';
 
 export default function MapValues(props) {
     const {latitude, longitude, address, setAddress, setMapUpdate} = props;
+
+    if (!latitude || latitude < 0 || !longitude || longitude < 0) {
+        return;
+    }
+
     const updateAddress = (value) => {
         setAddress(value);
         setMapUpdate(false);
@@ -28,6 +33,7 @@ export default function MapValues(props) {
                 label={__('Address', 'ootb-openstreetmap')}
                 value={address}
                 onChange={updateAddress}
+                placeholder={__('Enter address', 'ootb-openstreetmap')}
             />
         </>
     );

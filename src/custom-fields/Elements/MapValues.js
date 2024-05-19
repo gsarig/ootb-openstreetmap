@@ -6,7 +6,7 @@ import {TextareaControl} from '@wordpress/components';
 export default function MapValues(props) {
     const {latitude, longitude, address, setAddress, setMapUpdate} = props;
 
-    if (!latitude || latitude < 0 || !longitude || longitude < 0) {
+    if (!latitude || latitude === 0 || !longitude || longitude === 0) {
         return;
     }
 

@@ -16,9 +16,17 @@ export default function QueryControl({props}) {
         setAttributes,
     } = props;
 
-    const label = serverSideRender ? __('Automatically fetching from existing entries', 'ootb-openstreetmap') : __('Get from existing entries', 'ootb-openstreetmap');
-    const help = serverSideRender ? __('Markers are automatically fetched from existing entries. By hitting "Stop syncing" the block will stop automatic updating with new markers, and you will be able to manually edit it.', 'ootb-openstreetmap') : __('Fetch locations from existing entries.', 'ootb-openstreetmap');
     const variant = serverSideRender ? 'secondary' : 'primary';
+
+    let label = __('Get from existing entries', 'ootb-openstreetmap');
+    let help = __('Fetch locations from existing posts or post types containing at least one map block.', 'ootb-openstreetmap');
+    if (queryCustomFields) {
+        label = __('Gets posts with locations', 'ootb-openstreetmap');
+        help = __('Markers are automatically fetched from existing posts or post types with locations assigned to them.', 'ootb-openstreetmap');
+    } else if (serverSideRender) {
+        label = __('Gets posts containing the block', 'ootb-openstreetmap');
+        help = __('Markers are automatically fetched from existing posts or post types containing at least one map block. By hitting "Stop syncing" the block will stop automatic updating with new markers, and you will be able to manually edit it.', 'ootb-openstreetmap');
+    }
 
     const selectOptions = queryCustomFields ? getGeoPostTypes() : ootbGlobal?.postTypes;
     return (

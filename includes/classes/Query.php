@@ -137,7 +137,7 @@ class Query {
 		$markers                                  = Query::get_markers(
 			$post_id,
 			$attributes[ 'queryArgs' ],
-			$attributes[ 'queryCustomFields' ] ?? false
+			( isset( $attributes[ 'queryArgs' ][ 'source' ] ) && 'geodata' === $attributes[ 'queryArgs' ][ 'source' ] ) ?? false
 		);
 		if ( empty( $markers ) ) {
 			return $content;
@@ -155,7 +155,7 @@ class Query {
 				'data-bounds="[null,null]"',
 			],
 			$content
-		);;
+		);
 	}
 
 	/**
@@ -222,6 +222,7 @@ class Query {
 	 *
 	 * @param string|array $attrs The attributes for the shortcode.
 	 *
+	 * @type string $source (Optional) The source of the data. Can be either "geodata" or "block" (default).
 	 * @type string $post_type (Optional) The post type to query. Default "post".
 	 * @type int $posts_per_page (Optional) The number of posts per page. Default 10.
 	 * @type string $post_ids (Optional) Comma-separated IDs of posts to include in the query.
@@ -248,6 +249,7 @@ class Query {
 		$attrs = shortcode_atts(
 			array_merge(
 				[
+					'source'         => '',
 					'post_type'      => 'post',
 					'posts_per_page' => self::get_posts_per_page(),
 					'post_ids'       => '',
@@ -259,6 +261,7 @@ class Query {
 
 		// Construct the queryArgs for the render_callback method.
 		$queryArgs = [
+			'source'         => $attrs[ 'source' ],
 			'post_type'      => $attrs[ 'post_type' ],
 			'posts_per_page' => $attrs[ 'posts_per_page' ],
 		];

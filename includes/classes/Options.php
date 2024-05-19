@@ -163,7 +163,7 @@ class Options {
 				'ootb_custom_data' => 'custom',
 				'label'            => sprintf(
 					wp_kses(
-						__( ' Add a location custom field, to assign a location to each post or post type. The data are stored following the <a href="%1$s" target="_blank">official guidelines</a>.', 'ootb-openstreetmap' ),
+						__( 'Enable a location custom field, to store a post\'s or post type\'s location. The data are stored following the <a href="%1$s" target="_blank">official guidelines</a>.', 'ootb-openstreetmap' ),
 						[
 							'a' => [ 'href' => [], 'target' => [] ],
 						]
@@ -183,7 +183,7 @@ class Options {
 				'label_for'        => 'geo_post_types',
 				'class'            => 'ootb_row ootb--geo_post_types',
 				'ootb_custom_data' => 'custom',
-				'label'            => __( 'Select the post types you want to enable the location custom field for.', 'ootb-openstreetmap' ),
+				'label'            => __( 'Select the post types to enable the location custom field:', 'ootb-openstreetmap' ),
 			]
 		);
 

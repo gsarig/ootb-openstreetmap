@@ -35,6 +35,7 @@ Instead of manually adding coordinates for each one of your markers, just click-
 * OpenAI integration which allows you to add markers by using commands in natural language. Just say "please" to activate (e.g. "Please, show me where GOT was filmed"). Requires an OpenAI API key. [Read more](https://www.gsarigiannidis.gr/openstreetmap-openai-integration/).
 * Query Maps: Supports creating a map out of maps added on other posts or post types. This can be quite powerful when, for example, you have a custom post type for "Places" with each place having its own map, and you want to dynamically gather-up all the places on a single map.
 * Shortcode support: You can use the shortcode `[ootb_query]` as an alternative way to use the aforementioned Query Maps feature (see the FAQ for more info).
+* Support for a location custom field, which can be used to store a post's or post type's location, following the [Geodata guidelines](https://codex.wordpress.org/Geodata). Read more in the [v.2.8.0 release notes](https://github.com/gsarig/ootb-openstreetmap/releases/tag/2.8.0).
 * Adjust the map height.
 * Change the default marker icon with a custom one.
 * Enable or disable map dragging.
@@ -86,6 +87,7 @@ On the block's side panel, Select the "Map data" panel and click on the "Fetch l
 
 = How can I use the shortcode? =
 The shortcode `[ootb_query]` allows you to display a dynamic map, which retrieves markers from other posts or post types. Just add it to a post or page and you're good to go. By default, it will fetch the markers from the 100 most recent posts. The shortcode supports the following attributes:
+* source: (Optional) The source of the data. Can be either `geodata`, if you want to retrieve the posts based on their Location custom meta field, or `block`, to retrieve posts containing map blocks in their content. The default option, which will be used if the attribute is omitted, is `block`.
 * post_type: (Optional) The type of post to query. By default, it is set to `post`.
 * posts_per_page: (Optional) The number of posts to be displayed on page. Default value is `100`.
 * post_ids: (Optional) Comma-separated IDs of the posts to include in the query.
@@ -147,6 +149,9 @@ Keep in mind that the extra args will be merged with the default ones, so you do
 12. Demonstrating the OpenAI integration
 
 == Upgrade Notice ==
+= 2.8.0 =
+Version 2.8.0 adds support for the "Location" custom field, which allows you to store a post's or a post type's location.  Read more in the [v.2.8.0 release notes](https://github.com/gsarig/ootb-openstreetmap/releases/tag/2.8.0).
+
 = 2.6.0 =
 Version 2.6.0 adds the option to query maps: This allows you to create a map consisting of other maps, added on other posts or post types. This can be quite powerful when, for example, you have a custom post type for "Places" with each place having its own map, and you want to dynamically gather-up all the places on a single map. A shortcode has also been added as an alternative way to use this feature.
 
@@ -171,6 +176,12 @@ Version 2.0.0 is a major, almost full, refactoring, both for the build scripts a
 = 1.0 =
 
 == Changelog ==
+= 2.8.0 =
+* [NEW] Adds an option to enable a location custom field, which can be used to store a post's or post type's location, following the [Geodata guidelines](https://codex.wordpress.org/Geodata).
+* [NEW] Adds a new block (a Block Variation, to be precise), to display a map that retrieves markers from posts or post types including the location custom field.
+* [FIX] Fixes a PHP warning ([see the report](Reported here: https://wordpress.org/support/topic/automatic-conversion-of-false-to-array-is-deprecated-php-8-1-warning/)).
+* [MAINTENANCE] Updates the build scripts and the plugin's assets.
+
 = 2.7.0 =
 * [NEW] Adds an option to set custom Mapbox styles using [Mapbox Studio](https://www.mapbox.com/studio/).
 

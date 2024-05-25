@@ -113,7 +113,7 @@ export default function MapEvents({props}) {
 				shouldUpdateBounds: false
 			});
 		}
-		if ('undefined' !== typeof map && ('undefined' === typeof mapObj || !mapObj.length || mapObj !== map)) {
+		if ('undefined' !== typeof map && 'undefined' === typeof mapObj) {
 			setAttributes({mapObj: map});
 		}
 		if (true === shouldUpdateZoom && zoom !== map.getZoom()) {

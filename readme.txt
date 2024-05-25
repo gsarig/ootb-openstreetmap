@@ -179,7 +179,8 @@ Version 2.0.0 is a major, almost full, refactoring, both for the build scripts a
 = 2.8.0 =
 * [NEW] Adds an option to enable a location custom field, which can be used to store a post's or post type's location, following the [Geodata guidelines](https://codex.wordpress.org/Geodata).
 * [NEW] Adds a new block (a Block Variation, to be precise), to display a map that retrieves markers from posts or post types including the location custom field.
-* [FIX] Fixes a PHP warning ([see the report](Reported here: https://wordpress.org/support/topic/automatic-conversion-of-false-to-array-is-deprecated-php-8-1-warning/)).
+* [FIX] Fixes a PHP warning ([see the report](https://wordpress.org/support/topic/automatic-conversion-of-false-to-array-is-deprecated-php-8-1-warning/)).
+* [FIX] Fixes a bug which caused an editor crash ([see the report](https://wordpress.org/support/topic/js-error-editor-crash-when-swapping-a-template/)).
 * [MAINTENANCE] Updates the build scripts and the plugin's assets.
 
 = 2.7.0 =

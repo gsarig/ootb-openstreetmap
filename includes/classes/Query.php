@@ -131,13 +131,14 @@ class Query {
 		if ( ( isset( $attributes[ 'serverSideRender' ] ) && ! $attributes[ 'serverSideRender' ] ) && ! empty( $attributes[ 'markers' ] ) ) {
 			return $content;
 		}
+
 		$post_type                                = $attributes[ 'queryArgs' ][ 'post_type' ] ?? '';
 		$attributes[ 'queryArgs' ][ 'post_type' ] = self::get_post_type( $post_type );
 		$post_id                                  = is_singular() ? get_the_ID() : 0;
 		$markers                                  = Query::get_markers(
 			$post_id,
 			$attributes[ 'queryArgs' ],
-			( isset( $attributes[ 'queryArgs' ][ 'source' ] ) && 'geodata' === $attributes[ 'queryArgs' ][ 'source' ] ) ?? false
+			$attributes[ 'queryCustomFields' ] ?? false
 		);
 		if ( empty( $markers ) ) {
 			return $content;

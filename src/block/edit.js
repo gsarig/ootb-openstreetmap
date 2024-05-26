@@ -1,5 +1,6 @@
 // noinspection NpmUsedModulesInstalled,JSUnresolvedVariable
 
+import {useState} from 'react';
 import {__} from '@wordpress/i18n';
 import Controls from './Controls/Controls';
 import SearchBox from './Elements/SearchBox';
@@ -11,13 +12,13 @@ import QuerySyncButton from './Controls/QuerySyncButton';
 export default function edit(props) {
     const {
         attributes: {
-            addingMarker,
             queryArgs,
             serverSideRender,
             showSearchBox,
             queryCustomFields,
         },
     } = props;
+    const [addingMarker, setAddingMarker] = useState('');
     const blockProps = useBlockProps({
         className: (addingMarker || '')
     });
@@ -55,8 +56,8 @@ export default function edit(props) {
             {showSearchBox &&
                 <SearchBox props={props}/>
             }
-            <LeafletMap props={props}/>
-            <Alert props={props}/>
+            <LeafletMap {...props} addingMarker={addingMarker} setAddingMarker={setAddingMarker}/>
+            <Alert {...props} addingMarker={addingMarker}/>
         </div>
     );
 }

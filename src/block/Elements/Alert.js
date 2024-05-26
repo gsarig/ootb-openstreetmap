@@ -1,10 +1,9 @@
 // noinspection NpmUsedModulesInstalled
 import {__, sprintf} from '@wordpress/i18n';
 
-export default function Alert({props}) {
+export default function Alert({addingMarker, ...props}) {
 	const {
 		attributes: {
-			addingMarker,
 			openAImode,
 		},
 	} = props;

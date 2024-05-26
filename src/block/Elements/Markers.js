@@ -11,7 +11,7 @@ import {RichText} from '@wordpress/block-editor';
 import {Button} from '@wordpress/components';
 import IconControl from '../Controls/IconControl';
 
-export default function Markers({props}) {
+export default function Markers({setAddingMarker, props}) {
 	const {
 		attributes: {
 			mapObj,
@@ -60,9 +60,7 @@ export default function Markers({props}) {
 	let clickStarted = null;
 	const onClickStart = () => {
 		clickStarted = new Date();
-		setAttributes({
-			addingMarker: ''
-		});
+		setAddingMarker('');
 	}
 	const onClickEnd = (e) => {
 		if (true !== isDraggingMarker) {

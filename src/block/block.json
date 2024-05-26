@@ -61,10 +61,6 @@
 			"type": "object",
 			"default": null
 		},
-		"addingMarker": {
-			"type": "string",
-			"default": ""
-		},
 		"keywords": {
 			"type": "string",
 			"default": ""

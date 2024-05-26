@@ -6,7 +6,7 @@ import {MapContainer} from 'react-leaflet';
 import MapEvents from './MapEvents';
 import MapUpdate from './MapUpdate';
 
-export default function LeafletMap({props}) {
+export default function LeafletMap({addingMarker, setAddingMarker, ...props}) {
 	const {
 		attributes: {
 			zoom,
@@ -27,10 +27,10 @@ export default function LeafletMap({props}) {
 				}
 			}
 		>
-			<MapEvents props={props}/>
+			<MapEvents props={props} addingMarker={addingMarker} setAddingMarker={setAddingMarker}/>
 			<MapUpdate props={props}/>
 			<TileProvider props={props}/>
-			<Markers props={props}/>
+			<Markers props={props} setAddingMarker={setAddingMarker}/>
 			{'marker' !== mapType ?
 				<Shapes props={props}/>
 				: null}

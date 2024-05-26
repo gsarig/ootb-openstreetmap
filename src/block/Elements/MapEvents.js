@@ -7,7 +7,7 @@ import getBounds from '../Helpers/getBounds';
 import {useEffect, useRef} from '@wordpress/element';
 import getMarkerFromElelement from '../../common/getMarkerFromElelement';
 
-export default function MapEvents({props}) {
+export default function MapEvents({addingMarker, setAddingMarker, props}) {
     const {
         attributes: {
             mapObj,
@@ -16,7 +16,6 @@ export default function MapEvents({props}) {
             showDefaultBounds,
             shouldUpdateZoom,
             shouldUpdateBounds,
-            addingMarker,
             isDraggingMarker,
             searchResults,
         },
@@ -33,12 +32,12 @@ export default function MapEvents({props}) {
         }
         if (false === isDraggingMarker) {
             if (isMobile && !isSafari) {
-                setAttributes({addingMarker: ' pinning'});
+                setAddingMarker(' pinning');
             } else {
                 delay = setTimeout(function () {
-                    setAttributes({addingMarker: ' pinning'});
+                    setAddingMarker(' pinning');
                     setTimeout(function () { // If hangs for too long, stop it.
-                        setAttributes({addingMarker: ''});
+                        setAddingMarker('');
                     }, timeout * 3);
                 }, timeout);
             }
@@ -47,7 +46,8 @@ export default function MapEvents({props}) {
 
     const isDragging = () => {
         clearTimeout(delay);
-        setAttributes({addingMarker: '', isDraggingMarker: false});
+        setAddingMarker('');
+        setAttributes({isDraggingMarker: false});
     }
 
     const stopHovering = () => {
@@ -65,8 +65,8 @@ export default function MapEvents({props}) {
                     ...markers,
                     newMarker,
                 ],
-                addingMarker: '',
             });
+            setAddingMarker('');
             getBounds(props, newMarker, e.target);
             setTimeout(function () {
                 setAttributes({isDraggingMarker: false});

@@ -58,7 +58,7 @@ export default function QueryControl({props}) {
                     }
                 </div>
             </BaseControl>
-            <hr/>
+            {showMapData && <hr/>}
         </>
     );
 }

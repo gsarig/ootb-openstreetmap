@@ -44,6 +44,7 @@ Instead of manually adding coordinates for each one of your markers, just click-
 * OpenAI integration which allows you to add markers by using commands in natural language. Just say "please" to activate (e.g. "Please, show me where GOT was filmed"). Requires an OpenAI API key. [Read more](https://www.gsarigiannidis.gr/openstreetmap-openai-integration/).
 * Query Maps: Supports creating a map out of maps added on other posts or post types. This can be quite powerful when, for example, you have a custom post type for "Places" with each place having its own map, and you want to dynamically gather-up all the places on a single map.
 * Shortcode support: You can use the shortcode `[ootb_query]` as an alternative way to use the aforementioned Query Maps feature (see the FAQ for more info).
+* Support for a location custom field, which can be used to store a post's or post type's location, following the [Geodata guidelines](https://codex.wordpress.org/Geodata). Read more in the [v.2.8.0 release notes](https://github.com/gsarig/ootb-openstreetmap/releases/tag/2.8.0).
 * Adjust the map height.
 * Change the default marker icon with a custom one.
 * Enable or disable map dragging.
@@ -92,6 +93,7 @@ On the block's side panel, Select the "Map data" panel and click on the "Fetch l
 
 ### How can I use the shortcode?
 The shortcode `[ootb_query]` allows you to display a dynamic map, which retrieves markers from other posts or post types. Just add it to a post or page and you're good to go. By default, it will fetch the markers from the 100 most recent posts. The shortcode supports the following attributes:
+* source: (Optional) The source of the data. Can be either `geodata`, if you want to retrieve the posts based on their Location custom meta field, or `block`, to retrieve posts containing map blocks in their content. The default option, which will be used if the attribute is omitted, is `block`.
 * post_type: (Optional) The type of post to query. By default, it is set to `post`.
 * posts_per_page: (Optional) The number of posts to be displayed on page. Default value is `100`.
 * post_ids: (Optional) Comma-separated IDs of the posts to include in the query.

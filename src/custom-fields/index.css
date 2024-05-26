@@ -1,0 +1,35 @@
+.ootb-openstreetmap--custom-fields-container {
+    position: relative;
+}
+
+.ootb-openstreetmap--custom-fields-container .ootb-openstreetmap--searchbox {
+    top: 0.5rem;
+    opacity: 1;
+}
+
+
+.ootb-openstreetmap--custom-fields-container .ootb-openstreetmap--search-results {
+    position: absolute;
+    z-index: 999;
+    background: #fff;
+    top: 48px;
+    opacity: 1;
+    transition: all 200ms ease-in-out;
+    max-width: calc(100% - 5rem);
+    right: 0.5rem;
+    border: 1px solid #1e1e1e;
+    width: 280px;
+    max-height: calc(100% - 70px);
+    overflow-y: auto;
+    text-align: left;
+}
+
+.ootb-openstreetmap--custom-fields-container .ootb-openstreetmap--search-results .components-button {
+    height: auto;
+    text-align: left;
+    width: 100%;
+}
+
+.ootb-openstreetmap--custom-fields-container.pinning .leaflet-container .leaflet-marker-pane img, .ootb-openstreetmap--custom-fields-container.pinning .leaflet-container {
+	cursor: crosshair;
+}

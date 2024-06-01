@@ -138,6 +138,28 @@ add_filter( 'ootb_query_posts_per_page', function() { return 500; } );
   );
 ```
 Keep in mind that the extra args will be merged with the default ones, so you don't have to worry about overriding them. In fact, the args that are required for the query to work, cannot be overridden.
+* `ootb_cf_modal_content`: Allows you to change the content of the modal that appears when you query posts based on their "Location" custom fields. By default, it will display the value set in the Address field. For example, the following code will display the post's title, thumbnail, excerpt and a link to the post:
+```
+add_filter( 'ootb_cf_modal_content', 'my_modal_content', 10, 2 );
+
+function my_modal_content($address, $post_id) {
+
+	return sprintf(
+		'<div>
+			<h3>%1$s</h3>
+			<figure>%2$s</figure>
+			<p>%3$s</p>
+			<p>
+				<a href="%4$s">View post</a>
+			</p>
+		</div>',
+		get_the_title($post_id),
+		get_the_post_thumbnail($post_id, 'thumbnail'),
+		has_excerpt($post_id) ? get_the_excerpt($post_id) : $address,
+		get_the_permalink($post_id)
+	);
+}
+```
 
 ## Screenshots
 

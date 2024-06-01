@@ -181,7 +181,7 @@ class Query {
 				$markers[][] = (object) [
 					'lat'  => $latitude,
 					'lng'  => $longitude,
-					'text' => $address,
+					'text' => wp_kses_post( apply_filters( 'ootb_cf_modal_content', $address, $post_id ) ),
 					'id'   => $post_id,
 				];
 			} else {

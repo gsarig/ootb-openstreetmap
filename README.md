@@ -6,15 +6,20 @@ A map block for WordPress' Gutenberg Editor which uses [OpenStreetMap](https://w
 
 Instead of manually adding coordinates for each one of your markers, just click-and-drop them directly on the map. You want to adjust their position? Just drag them wherever you want. And instead of filling-in custom fields to set each marker's popup content, just open that popup and start writing in it, the Gutenberg way (it supports WYSIWYG editing, with links, images, and all). It even stores the map's zoom level as you use it so that you don't have to set it by hand.
 
+---
+
+👇 [**Jump to the available Hooks**](#hooks)🪝
+
+👇 [**Jump to the available Shortcodes**](#shortcodes)
+
+---
+
 👉 [Read more about the overall UX challenges](https://www.gsarigiannidis.gr/wordpress-gutenberg-map-block-openstreetmap/)
 
 👉 [The challenges of building a user-friendly place search for OpenStreetMap](https://www.gsarigiannidis.gr/openstreetmap-place-search/)
 
 👉 [Lessons learned from integrating OpenAI to a WordPress plugin](https://www.gsarigiannidis.gr/openstreetmap-openai-integration/)
 
----
-
-👇 [Jump to the available Hooks](#hooks)
 
 ## Demos
 
@@ -95,7 +100,8 @@ First of all, you will need to create an account to [OpenAI](https://openai.com/
 ### How can I query maps from other posts or post types?
 On the block's side panel, Select the "Map data" panel and click on the "Fetch locations" button. This will automatically retrieve on the frontend all the markers from your posts (you can also select a specific post type from the dropdown). The block will be locked from editing, as the markers will be dynamically retrieved from the selected posts. If you don't want that, there is a "Stop syncing" button that will unlock the block, drop the markers on the map and allow you to edit.
 
-### How can I use the shortcode?
+## Shortcodes
+### [ootb_query]
 The shortcode `[ootb_query]` allows you to display a dynamic map, which retrieves markers from other posts or post types. Just add it to a post or page and you're good to go. By default, it will fetch the markers from the 100 most recent posts. The shortcode supports the following attributes:
 * source: (Optional) The source of the data. Can be either `geodata`, if you want to retrieve the posts based on their Location custom meta field, or `block`, to retrieve posts containing map blocks in their content. The default option, which will be used if the attribute is omitted, is `block`.
 * post_type: (Optional) The type of post to query. By default, it is set to `post`.
@@ -115,17 +121,22 @@ Here's an example of how you can use it:
 [ootb_query post_type="post" post_ids="1,2,3,4" height="400px" provider="mapbox" maptype="polygon" touchzoom="true" scrollwheelzoom="true" dragging="true" doubleclickzoom="true" marker="https://www.example.com/my-custom-icon.png"]
 ```
 ## Hooks
-### I want more control. Are there any hooks that I could use?
-Glad you asked! There are a few hooks that you can use to further customize the plugin's behavior. Here they are:
-* `ootb_query_post_type`: Allows you to change the post type that the plugin will query for markers. By default, it is set to `post`. You can pass multiple post types as an array. Example:
+There are a few hooks that you can use to further customize the plugin's behavior. Here they are:
+
+### ootb_query_post_type
+Allows you to change the post type that the plugin will query for markers. By default, it is set to `post`. You can pass multiple post types as an array. Example:
 ```
 add_filter( 'ootb_query_post_type', function() { return array( 'post', 'page' ); } );
 ```
-* `ootb_query_posts_per_page`: Allows you to change the number of posts that the plugin will query for markers. By default, it is set to `100`. Example:
+
+### ootb_query_posts_per_page
+Allows you to change the number of posts that the plugin will query for markers. By default, it is set to `100`. Example:
 ```
 add_filter( 'ootb_query_posts_per_page', function() { return 500; } );
 ```
-* `ootb_query_extra_args`: Allows you to add extra arguments to the query that the plugin will use to retrieve markers. By default, it is set to an empty array. Example:
+
+### ootb_query_extra_args
+Allows you to add extra arguments to the query that the plugin will use to retrieve markers. By default, it is set to an empty array. Example:
 ```
   add_filter(
      'ootb_query_extra_args',
@@ -142,7 +153,9 @@ add_filter( 'ootb_query_posts_per_page', function() { return 500; } );
   );
 ```
 Keep in mind that the extra args will be merged with the default ones, so you don't have to worry about overriding them. In fact, the args that are required for the query to work, cannot be overridden.
-* `ootb_cf_modal_content`: Allows you to change the content of the modal that appears when you query posts based on their "Location" custom fields. By default, it will display the value set in the Address field. For example, the following code will display the post's title, thumbnail, excerpt and a link to the post:
+
+### ootb_cf_modal_content
+Allows you to change the content of the modal that appears when you query posts based on their "Location" custom fields. By default, it will display the value set in the Address field. For example, the following code will display the post's title, thumbnail, excerpt and a link to the post:
 ```
 add_filter( 'ootb_cf_modal_content', 'my_modal_content', 10, 2 );
 
@@ -162,7 +175,8 @@ function my_modal_content( $address, $post_id ) {
 	);
 }
 ```
-* `ootb_cf_marker_icon`: Allows you to change the marker icon for posts that have a "Location" custom field. By default, it will use the default marker. For example, the following code will use a custom marker for a post with ID `123`:
+### ootb_cf_marker_icon 
+Allows you to change the marker icon for posts that have a "Location" custom field. By default, it will use the default marker. For example, the following code will use a custom marker for a post with ID `123`:
 ```
 add_filter( 'ootb_cf_marker_icon', 'my_marker_icon', 10, 2 );
 

@@ -22,6 +22,8 @@ Instead of manually adding coordinates for each one of your markers, just click-
 * [Follow the project's development on GitHub](https://github.com/gsarig/ootb-openstreetmap)
 * [Release history](https://github.com/gsarig/ootb-openstreetmap/releases)
 * [Roadmap](https://github.com/users/gsarig/projects/1)
+* [Hooks🪝](https://github.com/gsarig/ootb-openstreetmap?tab=readme-ov-file#hooks)
+* [Shortcodes](https://github.com/gsarig/ootb-openstreetmap?tab=readme-ov-file#shortcodes)
 
 = Features =
 
@@ -86,83 +88,10 @@ First of all, you will need to create an account to [OpenAI](https://openai.com/
 On the block's side panel, Select the "Map data" panel and click on the "Fetch locations" button. This will automatically retrieve on the frontend all the markers from your posts (you can also select a specific post type from the dropdown). The block will be locked from editing, as the markers will be dynamically retrieved from the selected posts. If you don't want that, there is a "Stop syncing" button that will unlock the block, drop the markers on the map and allow you to edit.
 
 = How can I use the shortcode? =
-The shortcode `[ootb_query]` allows you to display a dynamic map, which retrieves markers from other posts or post types. Just add it to a post or page and you're good to go. By default, it will fetch the markers from the 100 most recent posts. The shortcode supports the following attributes:
-* source: (Optional) The source of the data. Can be either `geodata`, if you want to retrieve the posts based on their Location custom meta field, or `block`, to retrieve posts containing map blocks in their content. The default option, which will be used if the attribute is omitted, is `block`.
-* post_type: (Optional) The type of post to query. By default, it is set to `post`.
-* posts_per_page: (Optional) The number of posts to be displayed on page. Default value is `100`.
-* post_ids: (Optional) Comma-separated IDs of the posts to include in the query.
-* height: (Optional) The desired height for the map. Default value is empty, which falls back to `400px`.
-* provider: (Optional) Specifies the map provider. Options are: `openstreetmap`, `mapbox` and `stamen`. The default value is an empty string which falls back to `openstreetmap`.
-* maptype: (Optional) Specifies the type of map. Options are: `markers`, `polygon` and `polyline`. The default value is an empty string, which will fall back to `markers`.
-* touchzoom: (Optional) If set, touch zoom will be enabled on the map. It can be either `true` or `false`. The default value is an empty string, which falls back to `true`.
-* scrollwheelzoom: (Optional) If set, enables zooming on the map with mouse scroll wheel. It can be either `true` or `false`. The default value is an empty string, which falls back to `true`.
-* dragging: (Optional) If set, dragging is enabled on the map. It can be either `true` or `false`. The default value is an empty string, which falls back to `true`.
-* doubleclickzoom: (Optional) If set, allows zooming in on the map with a double click. It can be either `true` or `false`. The default value is an empty string, which falls back to `true`.
-* marker: (Optional) Specifies the marker for the map. This should correspond to the URL of the image that you want to use as the marker's icon (example: `https://www.example.com/my-custom-icon.png`). The default value is an empty string, which retrieves the default marker.
-
-Here's an example of how you can use it:
-```
-[ootb_query post_type="post" post_ids="1,2,3,4" height="400px" provider="mapbox" maptype="polygon" touchzoom="true" scrollwheelzoom="true" dragging="true" doubleclickzoom="true" marker="https://www.example.com/my-custom-icon.png"]
-```
+To see the available shortcodes and the parameters that you can pass, [go here](https://github.com/gsarig/ootb-openstreetmap?tab=readme-ov-file#shortcodes).
 
 = I want more control. Are there any hooks that I could use? =
-Glad you asked! There are a few hooks that you can use to further customize the plugin's behavior. Here they are:
-* `ootb_query_post_type`: Allows you to change the post type that the plugin will query for markers. By default, it is set to `post`. You can pass multiple post types as an array. Example:
-```
-add_filter( 'ootb_query_post_type', function() { return array( 'post', 'page' ); } );
-```
-* `ootb_query_posts_per_page`: Allows you to change the number of posts that the plugin will query for markers. By default, it is set to `100`. Example:
-```
-add_filter( 'ootb_query_posts_per_page', function() { return 500; } );
-```
-* `ootb_query_extra_args`: Allows you to add extra arguments to the query that the plugin will use to retrieve markers. By default, it is set to an empty array. Example:
-```
-  add_filter(
-     'ootb_query_extra_args',
-     function() {
-        return [
-           'tax_query' => [
-           [
-              'taxonomy' => 'people',
-              'field' => 'slug',
-              'terms' => 'bob'
-           ]
-        ];
-     }
-  );
-```
-Keep in mind that the extra args will be merged with the default ones, so you don't have to worry about overriding them. In fact, the args that are required for the query to work, cannot be overridden.
-* `ootb_cf_modal_content`: Allows you to change the content of the modal that appears when you query posts based on their "Location" custom fields. By default, it will display the value set in the Address field. For example, the following code will display the post's title, thumbnail, excerpt and a link to the post:
-```
-add_filter( 'ootb_cf_modal_content', 'my_modal_content', 10, 2 );
-
-function my_modal_content( $address, $post_id ) {
-
-	return sprintf(
-		'<div>
-			<h3>%1$s</h3>
-			<figure>%2$s</figure>
-			<p>%3$s</p>
-			<p><a href="%4$s">View post</a></p>
-		</div>',
-		get_the_title( $post_id ),
-		get_the_post_thumbnail( $post_id, 'thumbnail' ),
-		has_excerpt( $post_id ) ? get_the_excerpt( $post_id ) : $address,
-		get_the_permalink( $post_id )
-	);
-}
-```
-* `ootb_cf_marker_icon`: Allows you to change the marker icon for posts that have a "Location" custom field. By default, it will use the default marker. For example, the following code will use a custom marker for a post with ID `123`:
-```
-add_filter( 'ootb_cf_marker_icon', 'my_marker_icon', 10, 2 );
-
-function my_marker_icon( $icon_url, $post_id ){
-	if( 123 === $post_id ) {
-		$icon_url = 'https://example.com/my-marker.jpg';
-	}
-	return $icon_url;
-}
-```
+Glad you asked! There are a few hooks that you can use to further customize the plugin's behavior. [You can find them here](https://github.com/gsarig/ootb-openstreetmap?tab=readme-ov-file#hooks).
 
 == Screenshots ==
 

@@ -12,6 +12,10 @@ Instead of manually adding coordinates for each one of your markers, just click-
 
 👉 [Lessons learned from integrating OpenAI to a WordPress plugin](https://www.gsarigiannidis.gr/openstreetmap-openai-integration/)
 
+---
+
+👇 [Jump to the available Hooks](#hooks)
+
 ## Demos
 
 ### The main functionality, with drag and drop pins and WYSIWYG editing
@@ -110,7 +114,7 @@ Here's an example of how you can use it:
 ```
 [ootb_query post_type="post" post_ids="1,2,3,4" height="400px" provider="mapbox" maptype="polygon" touchzoom="true" scrollwheelzoom="true" dragging="true" doubleclickzoom="true" marker="https://www.example.com/my-custom-icon.png"]
 ```
-
+## Hooks
 ### I want more control. Are there any hooks that I could use?
 Glad you asked! There are a few hooks that you can use to further customize the plugin's behavior. Here they are:
 * `ootb_query_post_type`: Allows you to change the post type that the plugin will query for markers. By default, it is set to `post`. You can pass multiple post types as an array. Example:
@@ -142,22 +146,31 @@ Keep in mind that the extra args will be merged with the default ones, so you do
 ```
 add_filter( 'ootb_cf_modal_content', 'my_modal_content', 10, 2 );
 
-function my_modal_content($address, $post_id) {
+function my_modal_content( $address, $post_id ) {
 
 	return sprintf(
 		'<div>
 			<h3>%1$s</h3>
 			<figure>%2$s</figure>
 			<p>%3$s</p>
-			<p>
-				<a href="%4$s">View post</a>
-			</p>
+			<p><a href="%4$s">View post</a></p>
 		</div>',
-		get_the_title($post_id),
-		get_the_post_thumbnail($post_id, 'thumbnail'),
-		has_excerpt($post_id) ? get_the_excerpt($post_id) : $address,
-		get_the_permalink($post_id)
+		get_the_title( $post_id ),
+		get_the_post_thumbnail( $post_id, 'thumbnail' ),
+		has_excerpt( $post_id ) ? get_the_excerpt( $post_id ) : $address,
+		get_the_permalink( $post_id )
 	);
+}
+```
+* `ootb_cf_marker_icon`: Allows you to change the marker icon for posts that have a "Location" custom field. By default, it will use the default marker. For example, the following code will use a custom marker for a post with ID `123`:
+```
+add_filter( 'ootb_cf_marker_icon', 'my_marker_icon', 10, 2 );
+
+function my_marker_icon( $icon_url, $post_id ){
+	if( 123 === $post_id ) {
+		$icon_url = 'https://example.com/my-marker.jpg';
+	}
+	return $icon_url;
 }
 ```
 

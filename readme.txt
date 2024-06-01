@@ -136,24 +136,34 @@ Keep in mind that the extra args will be merged with the default ones, so you do
 ```
 add_filter( 'ootb_cf_modal_content', 'my_modal_content', 10, 2 );
 
-function my_modal_content($address, $post_id) {
+function my_modal_content( $address, $post_id ) {
 
 	return sprintf(
 		'<div>
 			<h3>%1$s</h3>
 			<figure>%2$s</figure>
 			<p>%3$s</p>
-			<p>
-				<a href="%4$s">View post</a>
-			</p>
+			<p><a href="%4$s">View post</a></p>
 		</div>',
-		get_the_title($post_id),
-		get_the_post_thumbnail($post_id, 'thumbnail'),
-		has_excerpt($post_id) ? get_the_excerpt($post_id) : $address,
-		get_the_permalink($post_id)
+		get_the_title( $post_id ),
+		get_the_post_thumbnail( $post_id, 'thumbnail' ),
+		has_excerpt( $post_id ) ? get_the_excerpt( $post_id ) : $address,
+		get_the_permalink( $post_id )
 	);
 }
 ```
+* `ootb_cf_marker_icon`: Allows you to change the marker icon for posts that have a "Location" custom field. By default, it will use the default marker. For example, the following code will use a custom marker for a post with ID `123`:
+```
+add_filter( 'ootb_cf_marker_icon', 'my_marker_icon', 10, 2 );
+
+function my_marker_icon( $icon_url, $post_id ){
+	if( 123 === $post_id ) {
+		$icon_url = 'https://example.com/my-marker.jpg';
+	}
+	return $icon_url;
+}
+```
+
 == Screenshots ==
 
 1. Adding markers and rich content
@@ -198,7 +208,7 @@ Version 2.0.0 is a major, almost full, refactoring, both for the build scripts a
 
 == Changelog ==
 = 2.8.2 =
-* [NEW] Adds the `ootb_cf_modal_content` hook, which allows you to change the content of the modal that appears when you query posts based on their "Location" custom fields. For more info, check the plugin's FAQ section.
+* [NEW] Adds the `ootb_cf_modal_content` and `ootb_cf_marker_icon` hooks, which allow you to change the content of the modal that appears when you query posts based on their "Location" custom fields, as well as the marker icon. For more info, check the plugin's FAQ section.
 
 = 2.8.0 =
 * [NEW] Adds an option to enable a location custom field, which can be used to store a post's or post type's location, following the [Geodata guidelines](https://codex.wordpress.org/Geodata).

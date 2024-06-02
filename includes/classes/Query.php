@@ -178,11 +178,13 @@ class Query {
 				if ( empty( $latitude ) || empty( $longitude ) ) {
 					continue;
 				}
+
 				$markers[][] = (object) [
 					'lat'  => $latitude,
 					'lng'  => $longitude,
-					'text' => $address,
+					'text' => wp_kses_post( apply_filters( 'ootb_cf_modal_content', $address, $post_id ) ),
 					'id'   => $post_id,
+					'icon' => self::get_cf_marker_icon( $post_id ),
 				];
 			} else {
 				if ( $post_id === $current_post_id ) {
@@ -340,5 +342,27 @@ class Query {
 			'doubleclickzoom' => '',
 			'marker'          => '',
 		];
+	}
+
+	/**
+	 * Gets the marker icon and allows the user to override it with a hook.
+	 *
+	 * @param int $post_id The post ID.
+	 *
+	 * @return array|null
+	 */
+	private static function get_cf_marker_icon( int $post_id = 0 ): ?array {
+		if ( empty( $post_id ) ) {
+			return null;
+		}
+		$icon_url = apply_filters( 'ootb_cf_marker_icon', '', $post_id );
+		$icon     = null;
+		if ( ! empty( $icon_url ) && filter_var( $icon_url, FILTER_VALIDATE_URL ) ) {
+			$icon = [
+				'url' => esc_url( $icon_url ),
+			];
+		}
+
+		return $icon;
 	}
 }

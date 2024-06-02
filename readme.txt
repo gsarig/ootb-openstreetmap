@@ -5,7 +5,7 @@ Tags: Map, OpenStreetMap, Leaflet, Google Maps, block
 Requires at least: 5.8.6
 Tested up to: 6.5
 Requires PHP: 7.4
-Stable tag: 2.8.1
+Stable tag: 2.8.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,6 +22,8 @@ Instead of manually adding coordinates for each one of your markers, just click-
 * [Follow the project's development on GitHub](https://github.com/gsarig/ootb-openstreetmap)
 * [Release history](https://github.com/gsarig/ootb-openstreetmap/releases)
 * [Roadmap](https://github.com/users/gsarig/projects/1)
+* [Hooks🪝](https://github.com/gsarig/ootb-openstreetmap?tab=readme-ov-file#hooks)
+* [Shortcodes](https://github.com/gsarig/ootb-openstreetmap?tab=readme-ov-file#shortcodes)
 
 = Features =
 
@@ -86,52 +88,10 @@ First of all, you will need to create an account to [OpenAI](https://openai.com/
 On the block's side panel, Select the "Map data" panel and click on the "Fetch locations" button. This will automatically retrieve on the frontend all the markers from your posts (you can also select a specific post type from the dropdown). The block will be locked from editing, as the markers will be dynamically retrieved from the selected posts. If you don't want that, there is a "Stop syncing" button that will unlock the block, drop the markers on the map and allow you to edit.
 
 = How can I use the shortcode? =
-The shortcode `[ootb_query]` allows you to display a dynamic map, which retrieves markers from other posts or post types. Just add it to a post or page and you're good to go. By default, it will fetch the markers from the 100 most recent posts. The shortcode supports the following attributes:
-* source: (Optional) The source of the data. Can be either `geodata`, if you want to retrieve the posts based on their Location custom meta field, or `block`, to retrieve posts containing map blocks in their content. The default option, which will be used if the attribute is omitted, is `block`.
-* post_type: (Optional) The type of post to query. By default, it is set to `post`.
-* posts_per_page: (Optional) The number of posts to be displayed on page. Default value is `100`.
-* post_ids: (Optional) Comma-separated IDs of the posts to include in the query.
-* height: (Optional) The desired height for the map. Default value is empty, which falls back to `400px`.
-* provider: (Optional) Specifies the map provider. Options are: `openstreetmap`, `mapbox` and `stamen`. The default value is an empty string which falls back to `openstreetmap`.
-* maptype: (Optional) Specifies the type of map. Options are: `markers`, `polygon` and `polyline`. The default value is an empty string, which will fall back to `markers`.
-* touchzoom: (Optional) If set, touch zoom will be enabled on the map. It can be either `true` or `false`. The default value is an empty string, which falls back to `true`.
-* scrollwheelzoom: (Optional) If set, enables zooming on the map with mouse scroll wheel. It can be either `true` or `false`. The default value is an empty string, which falls back to `true`.
-* dragging: (Optional) If set, dragging is enabled on the map. It can be either `true` or `false`. The default value is an empty string, which falls back to `true`.
-* doubleclickzoom: (Optional) If set, allows zooming in on the map with a double click. It can be either `true` or `false`. The default value is an empty string, which falls back to `true`.
-* marker: (Optional) Specifies the marker for the map. This should correspond to the URL of the image that you want to use as the marker's icon (example: `https://www.example.com/my-custom-icon.png`). The default value is an empty string, which retrieves the default marker.
-
-Here's an example of how you can use it:
-```
-[ootb_query post_type="post" post_ids="1,2,3,4" height="400px" provider="mapbox" maptype="polygon" touchzoom="true" scrollwheelzoom="true" dragging="true" doubleclickzoom="true" marker="https://www.example.com/my-custom-icon.png"]
-```
+To see the available shortcodes and the parameters that you can pass, [go here](https://github.com/gsarig/ootb-openstreetmap?tab=readme-ov-file#shortcodes).
 
 = I want more control. Are there any hooks that I could use? =
-Glad you asked! There are a few hooks that you can use to further customize the plugin's behavior. Here they are:
-* `ootb_query_post_type`: Allows you to change the post type that the plugin will query for markers. By default, it is set to `post`. You can pass multiple post types as an array. Example:
-```
-add_filter( 'ootb_query_post_type', function() { return array( 'post', 'page' ); } );
-```
-* `ootb_query_posts_per_page`: Allows you to change the number of posts that the plugin will query for markers. By default, it is set to `100`. Example:
-```
-add_filter( 'ootb_query_posts_per_page', function() { return 500; } );
-```
-* `ootb_query_extra_args`: Allows you to add extra arguments to the query that the plugin will use to retrieve markers. By default, it is set to an empty array. Example:
-```
-  add_filter(
-     'ootb_query_extra_args',
-     function() {
-        return [
-           'tax_query' => [
-           [
-              'taxonomy' => 'people',
-              'field' => 'slug',
-              'terms' => 'bob'
-           ]
-        ];
-     }
-  );
-```
-Keep in mind that the extra args will be merged with the default ones, so you don't have to worry about overriding them. In fact, the args that are required for the query to work, cannot be overridden.
+Glad you asked! There are a few hooks that you can use to further customize the plugin's behavior. [You can find them here](https://github.com/gsarig/ootb-openstreetmap?tab=readme-ov-file#hooks).
 
 == Screenshots ==
 
@@ -176,6 +136,9 @@ Version 2.0.0 is a major, almost full, refactoring, both for the build scripts a
 = 1.0 =
 
 == Changelog ==
+= 2.8.2 =
+* [NEW] Adds the `ootb_cf_modal_content` and `ootb_cf_marker_icon` hooks, which allow you to change the content of the modal that appears when you query posts based on their "Location" custom fields, as well as the marker icon. For more info, check the plugin's FAQ section.
+
 = 2.8.0 =
 * [NEW] Adds an option to enable a location custom field, which can be used to store a post's or post type's location, following the [Geodata guidelines](https://codex.wordpress.org/Geodata).
 * [NEW] Adds a new block (a Block Variation, to be precise), to display a map that retrieves markers from posts or post types including the location custom field.

@@ -3,9 +3,9 @@ Contributors: gsarig
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MZR4JSRUMH5EA&source=url
 Tags: Map, OpenStreetMap, Leaflet, Google Maps, block
 Requires at least: 5.8.6
-Tested up to: 6.5
+Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 2.8.2
+Stable tag: 2.8.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -136,6 +136,10 @@ Version 2.0.0 is a major, almost full, refactoring, both for the build scripts a
 = 1.0 =
 
 == Changelog ==
+= 2.8.3 =
+* Bumps support to WordPress 6.7.
+* Fixes a tagging issue in the wordpress.org repo.
+
 = 2.8.2 =
 * [NEW] Adds the `ootb_cf_modal_content` and `ootb_cf_marker_icon` hooks, which allow you to change the content of the modal that appears when you query posts based on their "Location" custom fields, as well as the marker icon. For more info, check the plugin's FAQ section.
 

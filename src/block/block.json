@@ -138,8 +138,21 @@
 			"default": false
 		}
 	},
+	"variations": [
+		{
+			"name": "custom-fields",
+			"title": "OpenStreetMap from custom fields",
+			"icon": "location",
+			"attributes": {
+				"queryCustomFields": true,
+				"showMapData": false,
+				"showSearchBox": false,
+				"serverSideRender": true
+			}
+		}
+	],
 	"textdomain": "ootb-openstreetmap",
-	"editorScript": "file:./index.js",
+	"editorScript": "file:../index.js",
 	"style": "file:./index.css",
 	"script": [
 		"leaflet",

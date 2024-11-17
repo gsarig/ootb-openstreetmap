@@ -246,7 +246,7 @@ class Query {
 		}
 		if ( ! Helper::has_block_in_frontend( OOTB_BLOCK_NAME ) ) {
 			$assets = new Assets();
-			$assets->frontend_assets();
+			$assets->shortcode_assets();
 		}
 		// Only allow specific attributes.
 		$attrs = shortcode_atts(

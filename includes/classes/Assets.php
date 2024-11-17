@@ -10,87 +10,75 @@
 namespace OOTB;
 
 class Assets {
+	public string $handle_ootb_script = 'ootb-openstreetmap-view-script';
+	public string $handle_leaflet = 'leaflet';
+
 	public function __construct() {
+		global $ootb_inline_scripts_tracking;
+		$ootb_inline_scripts_tracking = [];
 		add_action( 'enqueue_block_assets', [ $this, 'frontend' ] );
 	}
 
 	public function frontend() {
-		if ( Helper::has_block_in_frontend( OOTB_BLOCK_NAME ) ) {
-			$this->frontend_assets();
-		}
+		$this->frontend_assets();
+		$this->script_variables();
+	}
+
+	public function shortcode_assets() {
+		wp_enqueue_style( 'ootb-openstreetmap-style', '', $this->handle_leaflet );
+		wp_enqueue_script( $this->handle_leaflet );
+		wp_enqueue_script( $this->handle_ootb_script );
 	}
 
 	public function frontend_assets() {
-		$options        = Helper::get_option();
-		$handle_leaflet = 'leaflet';
-		$dependencies   = [ $handle_leaflet ];
-		$params         = [
-			'providers' => Helper::providers(),
-			'options'   => $options,
-		];
-		wp_enqueue_style(
-			$handle_leaflet,
-			OOTB_PLUGIN_URL . 'assets/vendor/leaflet/leaflet.css',
-			[],
-			OOTB_SCRIPT_VERSION[ $handle_leaflet ]
-		);
-		wp_enqueue_script(
-			$handle_leaflet,
+		wp_register_script(
+			$this->handle_leaflet,
 			OOTB_PLUGIN_URL . 'assets/vendor/leaflet/leaflet.js',
 			[],
-			OOTB_SCRIPT_VERSION[ $handle_leaflet ],
+			OOTB_SCRIPT_VERSION[ $this->handle_leaflet ],
 			true
 		);
 
+		if ( ! empty( Helper::get_option( 'prevent_default_gestures' ) ) ) {
+			$handle_gesture_handling = 'leaflet-gesture-handling';
+			wp_register_script(
+				$handle_gesture_handling,
+				OOTB_PLUGIN_URL . 'assets/vendor/leaflet-gesture-handling/leaflet-gesture-handling.js',
+				[ $this->handle_leaflet ],
+				OOTB_SCRIPT_VERSION[ $handle_gesture_handling ],
+				true
+			);
+		}
+	}
+
+	public function script_variables() {
+		global $ootb_inline_scripts_tracking;
+		// Do not proceed if the script is already present.
+		if ( in_array( $this->handle_ootb_script, $ootb_inline_scripts_tracking, true ) ) {
+			return;
+		}
+		$options = Helper::get_option();
+		$params  = [
+			'providers' => Helper::providers(),
+			'options'   => $options,
+		];
+
 		if ( ! empty( $options[ 'prevent_default_gestures' ] ) ) {
-			$handle_gesture_handling            = 'leaflet-gesture-handling';
-			$dependencies[]                     = $handle_gesture_handling;
 			$params[ 'gestureHandlingOptions' ] = apply_filters(
 				'ootb_gesture_handling_options',
 				[
 					'locale' => Helper::get_gesture_handling_locale(),
 				]
 			);
-			wp_enqueue_style(
-				$handle_gesture_handling,
-				OOTB_PLUGIN_URL . 'assets/vendor/leaflet-gesture-handling/leaflet-gesture-handling.css',
-				[],
-				OOTB_SCRIPT_VERSION[ $handle_gesture_handling ]
-			);
-			wp_enqueue_script(
-				$handle_gesture_handling,
-				OOTB_PLUGIN_URL . 'assets/vendor/leaflet-gesture-handling/leaflet-gesture-handling.js',
-				[ $handle_leaflet ],
-				OOTB_SCRIPT_VERSION[ $handle_gesture_handling ],
-				true
-			);
 		}
 
-		wp_enqueue_script(
-			'ootb-openstreetmap',
-			OOTB_PLUGIN_URL . 'assets/js/frontend/ootb-openstreetmap.js',
-			$dependencies,
-			OOTB_VERSION,
-			true
-		);
-		wp_add_inline_script( 'ootb-openstreetmap',
+		$ootb_inline_scripts_tracking[] = $this->handle_ootb_script;
+		wp_add_inline_script( $this->handle_ootb_script,
 			sprintf(
 				'const ootb = %s',
 				wp_json_encode( $params )
 			),
 			'before'
 		);
-
-		add_filter( 'wp_script_attributes', [ $this, 'add_type_attribute' ], 10, 1 );
-
-	}
-
-	function add_type_attribute( $attributes ) {
-		// Only do this for a specific script.
-		if ( isset( $attributes[ 'id' ] ) && $attributes[ 'id' ] === 'ootb-openstreetmap-js' ) {
-			$attributes[ 'type' ] = 'module';
-		}
-
-		return $attributes;
 	}
 }

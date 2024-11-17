@@ -14,6 +14,10 @@
       "full"
     ]
   },
+  "usesContext": [
+    "postId",
+    "postType"
+  ],
   "keywords": [
     "Map block",
     "Open Street Maps",
@@ -137,8 +141,32 @@
       "default": false
     }
   },
+  "variations": [
+    {
+      "name": "custom-fields",
+      "title": "OpenStreetMap from custom fields",
+      "icon": "location",
+      "attributes": {
+        "queryCustomFields": true,
+        "showMapData": false,
+        "showSearchBox": false,
+        "serverSideRender": true
+      }
+    }
+  ],
   "textdomain": "ootb-openstreetmap",
   "editorScript": "file:../index.js",
-  "editorStyle": "file:../index.css",
-  "style": "file:./style-index.css"
+  "style": "file:../index.css",
+  "script": [
+    "leaflet",
+    "leaflet-gesture-handling"
+  ],
+  "viewScript": [
+    "file:./view.js",
+    "ootb-openstreetmap"
+  ],
+  "viewStyle": [
+    "file:./view.css",
+    "ootb-openstreetmap"
+  ]
 }

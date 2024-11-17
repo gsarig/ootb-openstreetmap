@@ -2,6 +2,7 @@
 /** * The following styles get applied inside the editor only. */
 .block-editor-block-list__block[data-type="ootb/openstreetmap"] {
 	z-index: 1;
+	width: 100%;
 }
 
 .block-editor-block-list__block[data-type="ootb/openstreetmap"].is-selected .ootb-openstreetmap--search-results {

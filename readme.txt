@@ -2,10 +2,10 @@
 Contributors: gsarig
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MZR4JSRUMH5EA&source=url
 Tags: Map, OpenStreetMap, Leaflet, Google Maps, block
-Requires at least: 5.8.6
-Tested up to: 6.5
+Requires at least: 6.5
+Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 2.8.2
+Stable tag: 2.8.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -109,6 +109,9 @@ Glad you asked! There are a few hooks that you can use to further customize the 
 12. Demonstrating the OpenAI integration
 
 == Upgrade Notice ==
+= 2.8.3 =
+Version 2.8.3 makes changes to the way the scripts are loaded, and bumps the minimum WordPress version to 6.5. If you are using an older WordPress version, please update WordPress first, before trying to update the plugin.
+
 = 2.8.0 =
 Version 2.8.0 adds support for the "Location" custom field, which allows you to store a post's or a post type's location.  Read more in the [v.2.8.0 release notes](https://github.com/gsarig/ootb-openstreetmap/releases/tag/2.8.0).
 
@@ -136,6 +139,13 @@ Version 2.0.0 is a major, almost full, refactoring, both for the build scripts a
 = 1.0 =
 
 == Changelog ==
+= 2.8.3 =
+* Bumps support to WordPress 6.7.
+* Bumps minimum supported WordPress version to 6.5.
+* Fixes a tagging issue in the wordpress.org repo.
+* Partially fixes a bug where the block wouldn't display on the Full Site Editor's template parts. There is still a bug where dragging doesn't work well when the block is used in a template part, and was disabled as a temporary workaround.
+* Improves the way the frontend scripts are loaded (requires at least WordPress v.6.5 amd above).
+
 = 2.8.2 =
 * [NEW] Adds the `ootb_cf_modal_content` and `ootb_cf_marker_icon` hooks, which allow you to change the content of the modal that appears when you query posts based on their "Location" custom fields, as well as the marker icon. For more info, check the plugin's FAQ section.
 

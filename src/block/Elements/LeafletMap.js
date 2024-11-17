@@ -6,7 +6,7 @@ import {MapContainer} from 'react-leaflet';
 import MapEvents from './MapEvents';
 import MapUpdate from './MapUpdate';
 
-export default function LeafletMap({addingMarker, setAddingMarker, ...props}) {
+export default function LeafletMap({inBlockEditor, addingMarker, setAddingMarker, ...props}) {
 	const {
 		attributes: {
 			zoom,
@@ -20,6 +20,7 @@ export default function LeafletMap({addingMarker, setAddingMarker, ...props}) {
 		<MapContainer
 			center={centerMap(props)}
 			zoom={zoom}
+			dragging={inBlockEditor} // Dragging doesn't work well when the block is used in a template part. Disabling it as a temporary workaround.
 			bounds={bounds}
 			style={
 				{

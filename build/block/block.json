@@ -156,7 +156,7 @@
   ],
   "textdomain": "ootb-openstreetmap",
   "editorScript": "file:../index.js",
-  "style": "file:./index.css",
+  "style": "file:../index.css",
   "script": [
     "leaflet",
     "leaflet-gesture-handling"

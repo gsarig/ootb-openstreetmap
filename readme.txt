@@ -109,6 +109,9 @@ Glad you asked! There are a few hooks that you can use to further customize the 
 12. Demonstrating the OpenAI integration
 
 == Upgrade Notice ==
+= 2.8.3 =
+Version 2.8.3 makes changes to the way the scripts are loaded, and bumps the minimum WordPress version to 6.5. If you are using an older WordPress version, please update WordPress first, before trying to update the plugin.
+
 = 2.8.0 =
 Version 2.8.0 adds support for the "Location" custom field, which allows you to store a post's or a post type's location.  Read more in the [v.2.8.0 release notes](https://github.com/gsarig/ootb-openstreetmap/releases/tag/2.8.0).
 

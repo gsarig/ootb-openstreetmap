@@ -139,6 +139,8 @@ Version 2.0.0 is a major, almost full, refactoring, both for the build scripts a
 = 2.8.3 =
 * Bumps support to WordPress 6.7.
 * Fixes a tagging issue in the wordpress.org repo.
+* Partially fixes a bug where the block wouldn't display on the Full Site Editor's template parts. There is still a bug where dragging doesn't work well when the block is used in a template part, and was disabled as a temporary workaround.
+* Improves the way the frontend scripts are loaded.
 
 = 2.8.2 =
 * [NEW] Adds the `ootb_cf_modal_content` and `ootb_cf_marker_icon` hooks, which allow you to change the content of the modal that appears when you query posts based on their "Location" custom fields, as well as the marker icon. For more info, check the plugin's FAQ section.

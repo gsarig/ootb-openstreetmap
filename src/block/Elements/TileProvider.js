@@ -1,7 +1,7 @@
 import {TileLayer} from 'react-leaflet';
 // noinspection NpmUsedModulesInstalled
 import {useEffect, useRef} from '@wordpress/element';
-import createMapboxStyleUrl from '../../../assets/js/shared/createMapboxStyleUrl';
+import createMapboxStyleUrl from '../../common/createMapboxStyleUrl';
 
 export default function TileProvider({props}) {
 	const {

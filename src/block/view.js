@@ -1,5 +1,5 @@
 // noinspection NpmUsedModulesInstalled,JSUnresolvedVariable
-import createMapboxStyleUrl from "../shared/createMapboxStyleUrl.js";
+import createMapboxStyleUrl from "../common/createMapboxStyleUrl.js";
 
 (function () {
 	'use strict';

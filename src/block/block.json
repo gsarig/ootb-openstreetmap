@@ -14,6 +14,7 @@
 			"full"
 		]
 	},
+	"usesContext": [ "postId", "postType" ],
 	"keywords": [
 		"Map block",
 		"Open Street Maps",
@@ -138,7 +139,12 @@
 		}
 	},
 	"textdomain": "ootb-openstreetmap",
-	"editorScript": "file:../index.js",
-	"editorStyle": "file:../index.css",
-	"style": "file:./style-index.css"
+	"editorScript": "file:./index.js",
+	"style": "file:./index.css",
+	"script": [
+		"leaflet",
+		"leaflet-gesture-handling"
+	],
+	"viewScript": [ "file:./view.js", "ootb-openstreetmap" ],
+	"viewStyle": [ "file:./view.css", "ootb-openstreetmap" ]
 }

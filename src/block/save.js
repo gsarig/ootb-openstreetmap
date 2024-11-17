@@ -1,6 +1,6 @@
 import centerMap from './Helpers/centerMap';
 import getIcon from './Helpers/getIcon';
-import createMapboxStyleUrl from '../../assets/js/shared/createMapboxStyleUrl';
+import createMapboxStyleUrl from '../common/createMapboxStyleUrl';
 
 export default function save(props, className) {
 	const {

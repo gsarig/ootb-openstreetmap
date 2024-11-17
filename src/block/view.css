@@ -1,4 +1,6 @@
 /** * The following styles get applied both on the front of your site * and in the editor. */
+@import "../../assets/vendor/leaflet-gesture-handling/leaflet-gesture-handling.css";
+
 .ootb-openstreetmap--map {
   width: 100%;
 }

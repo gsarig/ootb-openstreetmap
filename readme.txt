@@ -2,7 +2,7 @@
 Contributors: gsarig
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MZR4JSRUMH5EA&source=url
 Tags: Map, OpenStreetMap, Leaflet, Google Maps, block
-Requires at least: 5.8.6
+Requires at least: 6.5
 Tested up to: 6.7
 Requires PHP: 7.4
 Stable tag: 2.8.3
@@ -138,9 +138,10 @@ Version 2.0.0 is a major, almost full, refactoring, both for the build scripts a
 == Changelog ==
 = 2.8.3 =
 * Bumps support to WordPress 6.7.
+* Bumps minimum supported WordPress version to 6.5.
 * Fixes a tagging issue in the wordpress.org repo.
 * Partially fixes a bug where the block wouldn't display on the Full Site Editor's template parts. There is still a bug where dragging doesn't work well when the block is used in a template part, and was disabled as a temporary workaround.
-* Improves the way the frontend scripts are loaded.
+* Improves the way the frontend scripts are loaded (requires at least WordPress v.6.5 amd above).
 
 = 2.8.2 =
 * [NEW] Adds the `ootb_cf_modal_content` and `ootb_cf_marker_icon` hooks, which allow you to change the content of the modal that appears when you query posts based on their "Location" custom fields, as well as the marker icon. For more info, check the plugin's FAQ section.

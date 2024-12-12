@@ -280,10 +280,12 @@ class Query {
 			'queryArgs'        => $queryArgs,
 		];
 
+		$escaped_attrs = array_map( 'esc_attr', $attrs );
+
 		$content = sprintf(
 			'<div class="ootb-openstreetmap--map" %1$s style="height: %2$s;"></div>',
-			self::default_attrs( $attrs ),
-			$attrs[ 'height' ]
+			self::default_attrs( $escaped_attrs ),
+			$escaped_attrs[ 'height' ]
 		);
 
 		return $this->render_callback( $render_callback_attrs, $content );

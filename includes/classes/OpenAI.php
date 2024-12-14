@@ -48,7 +48,7 @@ class OpenAI {
 		$response = wp_safe_remote_post( $this->url, [
 			'method'  => 'POST',
 			'headers' => $headers,
-			'body'    => json_encode( $body ),
+			'body'    => wp_json_encode( $body ),
 			'timeout' => 15  // In seconds
 		] );
 

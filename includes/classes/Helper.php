@@ -17,11 +17,6 @@ class Helper {
 	 */
 	public static function providers() {
 		$json_file = OOTB_PLUGIN_PATH . 'assets/providers.json';
-		if ( ! function_exists( 'wp_json_file_decode' ) ) {
-			$request = file_get_contents( $json_file );
-
-			return json_decode( $request );
-		}
 
 		return wp_json_file_decode( $json_file );
 	}
@@ -140,11 +135,11 @@ class Helper {
 		if ( false === strpos( $timezone, '/' ) ) {
 			return self::fallback_location();
 		}
-		if ( function_exists( 'wp_json_file_decode' ) ) {
-			$defaults = wp_json_file_decode( OOTB_PLUGIN_PATH . '/assets/defaults.json', true );
-		} else {
-			$defaults = json_decode( file_get_contents( OOTB_PLUGIN_PATH . '/assets/defaults.json' ) );
-		}
+
+		$defaults = wp_json_file_decode( OOTB_PLUGIN_PATH . '/assets/defaults.json', [
+			'associative' => true,
+		] );
+
 		$column = array_column( $defaults, 'timezone' );
 		$entry  = array_search( $timezone, $column );
 		if ( empty( $defaults[ $entry ] ) || empty( $defaults[ $entry ]->lat ) || empty( $defaults[ $entry ]->lng ) ) {
@@ -243,8 +238,10 @@ class Helper {
 		if ( ! file_exists( $file ) ) {
 			return [];
 		}
-		$json       = file_get_contents( $file );
-		$data       = json_decode( $json, true );
+
+		$data       = wp_json_file_decode( $file, [
+			'associative' => true,
+		] );
 		$attributes = $data[ 'attributes' ] ?? [];
 		if ( empty( $attributes ) ) {
 			return [];
@@ -265,7 +262,7 @@ class Helper {
 			} elseif ( 'marker' === $attr_name ) {
 				return self::get_marker_attr_from_url( OOTB_PLUGIN_URL . 'assets/vendor/leaflet/images/marker-icon.png' );
 			} elseif ( isset( $defaults[ $attr_name ] ) && is_array( $defaults[ $attr_name ] ) ) {
-				return json_encode( $defaults[ $attr_name ] );
+				return wp_json_encode( $defaults[ $attr_name ] );
 			}
 
 			return $defaults[ $attr_name ] ?? null;
@@ -299,7 +296,7 @@ class Helper {
 			],
 			"popupAnchor" => [ 0, - $height ]
 		];
-		$jsonStr   = json_encode( $jsonArray );
+		$jsonStr   = wp_json_encode( $jsonArray );
 
 		return urlencode( $jsonStr );
 	}

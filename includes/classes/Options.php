@@ -82,6 +82,7 @@ class Options {
 				'description'      =>
 					sprintf(
 						wp_kses(
+							/* translators: %1$s is the URL to the Mapbox Studio page */
 							__( 'You can find the style URL on <a href="%1$s" target="_blank">Mapbox Studio</a>. There, use the "Share" button, and under "Developer resources", copy the "Style URL". It should look like that: <code>mapbox://styles/username/style-id</code>.', 'ootb-openstreetmap' ),
 							[
 								'a'    => [ 'href' => [], 'target' => [] ],
@@ -162,12 +163,8 @@ class Options {
 				'class'            => 'ootb_row',
 				'ootb_custom_data' => 'custom',
 				'label'            => sprintf(
-					wp_kses(
+					/* translators: %1$s is the URL to the WordPress documentation about Geodata */
 						__( 'Enable a location custom field, to store a post\'s or post type\'s location. The data are stored following the <a href="%1$s" target="_blank">official guidelines</a>.', 'ootb-openstreetmap' ),
-						[
-							'a' => [ 'href' => [], 'target' => [] ],
-						]
-					),
 					esc_url( 'https://codex.wordpress.org/Geodata' )
 				),
 			]
@@ -222,7 +219,7 @@ class Options {
                id="<?php echo esc_attr( $args[ 'label_for' ] ); ?>"
                value="1" <?php checked( ! empty( $option[ $args[ 'label_for' ] ] ), true ); ?> />
         <label
-                for="<?php echo esc_attr( $args[ 'label_for' ] ); ?>"><?php echo $args[ 'label' ]; ?></label>
+                for="<?php echo esc_attr( $args[ 'label_for' ] ); ?>"><?php echo esc_html( $args[ 'label' ] ); ?></label>
 		<?php
 	}
 
@@ -239,8 +236,19 @@ class Options {
         <input type="checkbox" name="ootb_options[<?php echo esc_attr( $args[ 'label_for' ] ); ?>]"
                id="<?php echo esc_attr( $args[ 'label_for' ] ); ?>"
                value="1" <?php checked( ! empty( $option[ $args[ 'label_for' ] ] ), true ); ?> />
-        <label
-                for="<?php echo esc_attr( $args[ 'label_for' ] ); ?>"><?php echo $args[ 'label' ]; ?></label>
+		<label for="<?php echo esc_attr( $args[ 'label_for' ] ); ?>">
+			<?php
+			echo wp_kses(
+				$args[ 'label' ],
+				[
+					'a' => [
+						'href'   => [],
+						'target' => []
+					],
+				]
+			);
+			?>
+		</label>
 		<?php
 	}
 
@@ -256,7 +264,7 @@ class Options {
 		$post_types = get_post_types( [ 'public' => true ], 'names', 'and' ); // Get public post types
 		?>
         <fieldset>
-            <legend><?php echo $args[ 'label' ]; ?></legend>
+            <legend><?php echo esc_html( $args[ 'label' ] ); ?></legend>
 			<?php
 			foreach ( $post_types as $post_type ) :
 				if ( 'attachment' === $post_type ) {
@@ -324,6 +332,7 @@ class Options {
 			<?php
 			echo sprintf(
 				wp_kses(
+					/* translators: %1$s is the URL to the site's General options (Settings/General) */
 					__( 'Set the default coordinates when you add a new block and no marker is yet set. The plugin will try to guess the default location based on the <a href="%1$s">site\'s timezone</a>, but because there is no easy way to match against a specific database of coordinates, it can get it wrong. You can override these values here.', 'ootb-openstreetmap' ),
 					[ 'a' => [ 'href' => [] ] ]
 				),
@@ -349,6 +358,7 @@ class Options {
 				<?php
 				echo sprintf(
 					wp_kses(
+						/* translators: %1$s is the URL to the OpenStreetMap Tile Usage Policy and %1$s is the URL to the Mapbox homepage */
 						__( 'As stated on the <a href="%1$s" target="_blank">OpenStreetMap Tile Usage Policy</a>, OSM’s own servers are run entirely on donated resources and they have strictly limited capacity. Using them on a site with low traffic will probably be fine. Nevertheless, you are advised to create an account to <a href="%2$s" target="_blank">MapBox</a> and get a free API Key.',
 							'ootb-openstreetmap'
 						),
@@ -359,13 +369,22 @@ class Options {
 				);
 				?>
             </p>
-            <p class="ootb-colophon"><a href="https://wordpress.org/support/plugin/ootb-openstreetmap/"
-                                        target="_blank"><?php _e( 'Support forum',
-						'ootb-openstreetmap' ); ?></a>
-                | <?php echo sprintf( wp_kses( __( 'Plugin created by <a href="%s" target="_blank">Giorgos Sarigiannidis</a>',
-					'ootb-openstreetmap' ),
-					[ 'a' => [ 'href' => [], 'target' => [] ] ] ),
-					esc_url( 'https://www.gsarigiannidis.gr/' ) ); ?></p>
+            <p class="ootb-colophon">
+				<a href="https://wordpress.org/support/plugin/ootb-openstreetmap/" target="_blank">
+					<?php esc_html_e( 'Support forum', 'ootb-openstreetmap' ); ?>
+				</a>
+                |
+				<?php
+				echo sprintf(
+					wp_kses(
+						/* translators: %s is the URL to the plugin creator's website */
+						__( 'Plugin created by <a href="%s" target="_blank">Giorgos Sarigiannidis</a>', 'ootb-openstreetmap' ),
+						[ 'a' => [ 'href' => [], 'target' => [] ] ]
+					),
+					esc_url( 'https://www.gsarigiannidis.gr/' )
+				);
+				?>
+			</p>
         </div>
 
 		<?php
@@ -417,7 +436,17 @@ class Options {
                id="<?php echo esc_attr( $args[ 'label_for' ] ); ?>"
                value="<?php echo isset( $option[ $args[ 'label_for' ] ] ) ? esc_attr( $option[ $args[ 'label_for' ] ] ) : ''; ?>"
                size="60"/>
-        <p class="description"><?php echo $args[ 'description' ]; ?></p>
+		<p class="description">
+			<?php
+			echo wp_kses(
+				$args[ 'description' ],
+				[
+					'a'    => [ 'href' => [], 'target' => [] ],
+					'code' => []
+				]
+			);
+			?>
+		</p>
 		<?php
 	}
 
@@ -441,7 +470,7 @@ class Options {
 		?>
         <input type="text" name="ootb_options[<?php echo esc_attr( $args[ 'label_for' ] ); ?>]"
                id="<?php echo esc_attr( $args[ 'label_for' ] ); ?>" placeholder="<?php echo esc_html( $default ); ?>"
-               value="<?php echo isset( $option[ $args[ 'label_for' ] ] ) ? esc_attr( $option[ $args[ 'label_for' ] ] ) : $default; ?>"/>
+               value="<?php echo isset( $option[ $args[ 'label_for' ] ] ) ? esc_attr( $option[ $args[ 'label_for' ] ] ) : esc_attr( $default ); ?>"/>
 		<?php
 	}
 

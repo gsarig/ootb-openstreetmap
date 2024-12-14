@@ -61,14 +61,47 @@ class Query {
 	 * @return void
 	 */
 	public function handle_ajax_call() {
-		$post_id = $_POST[ 'post_id' ] ?? 0;
-		$post_id = is_numeric( $post_id ) ? absint( $post_id ) : 0;
+		// Verify the nonce before processing the request.
+		if ( ! isset( $_POST[ 'nonce' ] ) || ! check_ajax_referer( 'ootb_get_markers_nonce', 'nonce', false ) ) {
+			wp_send_json_error( [ 'message' => __( 'Nonce verification failed.', 'ootb-openstreetmap' ) ] );
+		}
 
-		$args = $_POST[ 'query_args' ] ?? '';
-		$args = ! empty( $args ) ? json_decode( stripslashes( $args ), true ) : '';
+		// Sanitize and validate the `post_id`.
+		$post_id = isset( $_POST[ 'post_id' ] ) && is_numeric( $_POST[ 'post_id' ] )
+			? absint( $_POST[ 'post_id' ] )
+			: 0;
 
+		$raw_query_args = isset( $_POST[ 'query_args' ] )
+			? sanitize_text_field( wp_unslash( $_POST[ 'query_args' ] ) )
+			: '';
+
+		$args = ! empty( $raw_query_args )
+			? json_decode( $raw_query_args, true )
+			: [];
+
+		// Sanitize each element in the array.
+		if ( is_array( $args ) ) {
+			$args = array_map( 'sanitize_text_field', $args );
+		} else {
+			// Handle invalid or non-decodable JSON input.
+			wp_send_json_error( [ 'message' => __( 'Invalid query arguments provided.', 'ootb-openstreetmap' ) ] );
+		}
+
+		if ( empty( $post_id ) ) {
+			wp_send_json_error( [ 'message' => __( 'Invalid input provided.', 'ootb-openstreetmap' ) ] );
+		}
+
+		// Get the data.
 		$data = self::get_markers( $post_id, $args );
-		echo json_encode( $data );
+
+		// Return the data as JSON response.
+		if ( $data ) {
+			wp_send_json_success( $data );
+		} else {
+			wp_send_json_error( [ 'message' => __( 'No markers found.', 'ootb-openstreetmap' ) ] );
+		}
+
+		// Always die (ensures WordPress doesn’t output additional content).
 		wp_die();
 	}
 
@@ -91,6 +124,7 @@ class Query {
 			'update_post_term_cache' => false,
 		];
 		if ( $query_custom_fields ) {
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 			$default_args[ 'meta_query' ] = [
 				'relation' => 'AND',
 				[

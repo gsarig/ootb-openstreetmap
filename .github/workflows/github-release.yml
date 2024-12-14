@@ -4,7 +4,11 @@ on:
   push:
     tags:
       - "*"
-
+  workflow_dispatch:  # Allow manual triggering
+    inputs:
+      tag_name:
+        description: 'Tag name to rerun'
+        required: true
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -12,10 +16,21 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Determine Tag Name
+        id: determine_tag
+        run: |
+          # Use the tag from either GITHUB_REF or the manual input
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+              tag="${{ inputs.tag_name }}"
+          else
+              tag="${GITHUB_REF#refs/tags/}"
+          fi
+
+          echo "Tag: $tag"
+          echo "tag=$tag" >> $GITHUB_ENV
+
       -   name: Prepare Plugin ZIP
           run: |
-              tag="${GITHUB_REF#refs/tags/}"
-
               plugin_name=$(basename "$PWD")
               mkdir -p "$plugin_name"
               rsync -av --exclude-from='.distignore' ./ "$plugin_name/"
@@ -25,8 +40,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          tag="${GITHUB_REF#refs/tags/}"
-
           gh release create "$tag" \
             --title="Release $tag" \
             --draft \

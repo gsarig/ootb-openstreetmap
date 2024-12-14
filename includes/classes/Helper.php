@@ -13,12 +13,45 @@ class Helper {
 	/**
 	 * Asset Providers.
 	 *
+	 * @param array $options Options to be used with json_decode().
+	 *
 	 * @return mixed
 	 */
-	public static function providers() {
+	public static function providers( array $options = [] ): mixed {
 		$json_file = OOTB_PLUGIN_PATH . 'assets/providers.json';
 
-		return wp_json_file_decode( $json_file );
+		return wp_json_file_decode( $json_file, $options );
+	}
+
+	/**
+	 * The valid map types.
+	 *
+	 * @return string[]
+	 */
+	public static function map_types(): array {
+		return [ 'markers', 'polygon', 'polyline' ];
+	}
+
+	/**
+	 * Get the default values.
+	 *
+	 * @param string $key The key to check.
+	 *
+	 * @return string
+	 */
+	public static function get_default( string $key = '' ): string {
+		if ( empty( $key ) ) {
+			return '';
+		}
+		$defaults = [
+			'height'    => '400px',
+			'post_type' => 'post',
+		];
+		if ( empty( $defaults[ $key ] ) ) {
+			return '';
+		}
+
+		return $defaults[ $key ];
 	}
 
 	/**
@@ -299,5 +332,45 @@ class Helper {
 		$jsonStr   = wp_json_encode( $jsonArray );
 
 		return urlencode( $jsonStr );
+	}
+
+	public static function sanitize_attrs( array $attrs ): array {
+		$valid_args = [
+			'source',
+			'post_type',
+			'posts_per_page',
+			'post_ids',
+			'height',
+			'provider',
+			'maptype',
+			'touchzoom',
+			'scrollwheelzoom',
+			'dragging',
+			'doubleclickzoom',
+			'marker',
+		];
+
+		foreach ( $attrs as $key => $value ) {
+			if ( ! in_array( $key, $valid_args, true ) ) {
+				unset( $attrs[ $key ] );
+			}
+			$attrs[ $key ] = match ( $key ) {
+				'source' => in_array( $value, [ 'geodata', 'block' ], true ) ? $value : '',
+				'post_type' => in_array( $value, array_column( self::get_post_types(), 'value' ), true ) ? $value : self::get_default('post_type'),
+				'posts_per_page' => ( is_int( $value ) || $value === - 1 ) ? $value : Query::get_posts_per_page(),
+				'post_ids' => ( preg_match( '/^(\d+,)*\d+$/', $value ) === 1 ) ? $value : '',
+				'height' => ( preg_match( '/^\d+px$/', $value ) === 1 ) ? $value : self::get_default( 'height' ),
+				'provider' => in_array( $value, array_keys( self::providers( [ 'associative' => true ] ) ), true ) ? $value : '',
+				'maptype' => in_array( $value, self::map_types(), true ) ? $value : '',
+				'touchzoom', 'scrollwheelzoom', 'dragging', 'doubleclickzoom' => in_array( $value, [
+					'true',
+					'false'
+				], true ) ? $value : '',
+				'marker' => ( filter_var( $value, FILTER_VALIDATE_URL ) !== false ) ? $value : '',
+				default => $value,
+			};
+		}
+
+		return $attrs;
 	}
 }

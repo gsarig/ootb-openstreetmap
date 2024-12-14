@@ -35,7 +35,7 @@ class Query {
 	 *
 	 * @return mixed|null
 	 */
-	private static function get_posts_per_page( int $fallback = 100 ) {
+	public static function get_posts_per_page( int $fallback = 100 ): mixed {
 		return apply_filters( 'ootb_query_posts_per_page', $fallback );
 	}
 
@@ -287,10 +287,10 @@ class Query {
 			array_merge(
 				[
 					'source'         => '',
-					'post_type'      => 'post',
+					'post_type'      => Helper::get_default( 'post_type' ),
 					'posts_per_page' => self::get_posts_per_page(),
 					'post_ids'       => '',
-					'height'         => '400px',
+					'height'         => Helper::get_default( 'height' ),
 				],
 				self::overridable_attrs()
 			)
@@ -314,7 +314,7 @@ class Query {
 			'queryArgs'        => $queryArgs,
 		];
 
-		$escaped_attrs = array_map( 'esc_attr', $attrs );
+		$escaped_attrs = array_map( 'esc_attr', Helper::sanitize_attrs( $attrs ) );
 
 		$content = sprintf(
 			'<div class="ootb-openstreetmap--map" %1$s style="height: %2$s;"></div>',

@@ -3,7 +3,7 @@
         'name' => 'ootb/openstreetmap',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '4a91e119807e9317b38834b750192cab2b79a7af',
+        'reference' => '3de27c3dd887d69f6cb0e6c474ef062e4a779bef',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'ootb/openstreetmap' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '4a91e119807e9317b38834b750192cab2b79a7af',
+            'reference' => '3de27c3dd887d69f6cb0e6c474ef062e4a779bef',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

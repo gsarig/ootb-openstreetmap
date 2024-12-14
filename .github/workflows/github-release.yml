@@ -12,15 +12,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Prepare Plugin ZIP
-        run: |
-          tag="${GITHUB_REF#refs/tags/}"
+      -   name: Prepare Plugin ZIP
+          run: |
+              tag="${GITHUB_REF#refs/tags/}"
 
-          mkdir -p plugin
-          rsync -av --exclude-from='.distignore' ./ plugin/
-          cd plugin
-          zip -r "../plugin-${tag}.zip" ./*
-          cd ..
+              plugin_name=$(basename "$PWD")
+              mkdir -p "$plugin_name"
+              rsync -av --exclude-from='.distignore' ./ "$plugin_name/"
+              zip -r "${plugin_name}-${tag}.zip" "$plugin_name"
 
       - name: Create release
         env:
@@ -31,4 +30,4 @@ jobs:
           gh release create "$tag" \
             --title="Release $tag" \
             --draft \
-            "plugin-${tag}.zip"
+            "${plugin_name}-${tag}.zip"

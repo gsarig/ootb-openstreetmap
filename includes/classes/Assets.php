@@ -25,7 +25,7 @@ class Assets {
 	}
 
 	public function shortcode_assets() {
-		wp_enqueue_style( 'ootb-openstreetmap-style', '', $this->handle_leaflet );
+		wp_enqueue_style( 'ootb-openstreetmap-style', '', $this->handle_leaflet, OOTB_SCRIPT_VERSION['leaflet'] );
 		wp_enqueue_script( $this->handle_leaflet );
 		wp_enqueue_script( $this->handle_ootb_script );
 	}

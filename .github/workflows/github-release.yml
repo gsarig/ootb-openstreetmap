@@ -1,0 +1,33 @@
+name: Release WordPress Plugin
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      -   name: Prepare Plugin ZIP
+          run: |
+              tag="${GITHUB_REF#refs/tags/}"
+
+              plugin_name=$(basename "$PWD")
+              mkdir -p "$plugin_name"
+              rsync -av --exclude-from='.distignore' ./ "$plugin_name/"
+              zip -r "${plugin_name}-${tag}.zip" "$plugin_name"
+
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag="${GITHUB_REF#refs/tags/}"
+
+          gh release create "$tag" \
+            --title="Release $tag" \
+            --draft \
+            "${plugin_name}-${tag}.zip"

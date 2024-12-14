@@ -4,8 +4,8 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: Map, OpenStreetMap, Leaflet, Google Maps, block
 Requires at least: 6.5
 Tested up to: 6.7
-Requires PHP: 7.4
-Stable tag: 2.8.4
+Requires PHP: 8.1
+Stable tag: 2.8.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -116,7 +116,7 @@ Version 2.8.3 makes changes to the way the scripts are loaded, and bumps the min
 Version 2.8.0 adds support for the "Location" custom field, which allows you to store a post's or a post type's location.  Read more in the [v.2.8.0 release notes](https://github.com/gsarig/ootb-openstreetmap/releases/tag/2.8.0).
 
 = 2.6.0 =
-Version 2.6.0 adds the option to query maps: This allows you to create a map consisting of other maps, added on other posts or post types. This can be quite powerful when, for example, you have a custom post type for "Places" with each place having its own map, and you want to dynamically gather-up all the places on a single map. A shortcode has also been added as an alternative way to use this feature.
+Version 2.6.0 adds the option to query maps: This allows you to create a map consisting of other maps, added on other posts or post types.
 
 = 2.5.0 =
 Version 2.5.0 adds support for OpenAI integration which allows you to add markers by using commands in natural language. Just say "please" to activate (e.g. "Please, show me where GOT was filmed"). Requires an OpenAI API key.
@@ -134,11 +134,15 @@ Version 2.2.0 adds support for import and export locations [read more](https://g
 Version 2.1.0 introduces 2 new, powerful features: support for polygons, and polylines.
 
 = 2.0.0 =
-Version 2.0.0 is a major, almost full, refactoring, both for the build scripts and the codebase. The changes should be backwards compatible and your already existing blocks should keep working as expected. If you notice any issues, though, please report them to the plugin's [support forum](https://wordpress.org/support/plugin/ootb-openstreetmap/).
+Version 2.0.0 is a major, almost full, refactoring, both for the build scripts and the codebase. The changes should be backwards compatible and your already existing blocks should keep working as expected.
 
 = 1.0 =
 
 == Changelog ==
+= 2.8.5 =
+* Various fixes to ensure that it passes the checks of the "Plugin Check" plugin.
+* Drops support for legacy PHP versions. The minimum requirement is PHP 8.1.
+
 = 2.8.4 =
 * Security update. Fixes a vulnerability which allows authenticated attackers with contributor permissions or above to insert JavaScript that triggers when accessing the web-page by mouse.
 

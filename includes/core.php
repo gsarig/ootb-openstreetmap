@@ -68,6 +68,7 @@ function openstreetmap_block_init() {
 					'defaultLocation' => [ Helper::default_location() ],
 					'ajaxUrl'         => admin_url( 'admin-ajax.php' ),
 					'postTypes'       => Helper::get_post_types(),
+					'nonce'           => wp_create_nonce( 'ootb_get_markers_nonce' ),
 				]
 			),
 			'before'

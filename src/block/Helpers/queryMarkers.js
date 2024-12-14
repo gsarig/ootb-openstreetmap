@@ -12,8 +12,8 @@ const queryMarkers = (props, postId) => {
 		action: 'ootb_get_markers',
 		post_id: postId,
 		query_args: JSON.stringify(queryArgs),
+		nonce: ootbGlobal.nonce,
 	});
-
 	fetch(ootbGlobal.ajaxUrl, {
 		method: 'POST',
 		body: formData,
@@ -25,7 +25,7 @@ const queryMarkers = (props, postId) => {
 			return response.json();
 		})
 		.then(response => {
-			const queriedMarkers = validMarkers(response);
+			const queriedMarkers = validMarkers(response?.data);
 			if (!queriedMarkers) {
 				return;
 			}

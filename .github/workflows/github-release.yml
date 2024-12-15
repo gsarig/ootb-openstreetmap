@@ -31,7 +31,7 @@ jobs:
 
       -   name: Prepare Plugin ZIP
           run: |
-              plugin_name=$(basename "$PWD")
+              plugin_name="ootb-openstreetmap"
               mkdir -p "$plugin_name"
               rsync -av --exclude-from='.distignore' ./ "$plugin_name/"
               zip -r "${plugin_name}-${tag}.zip" "$plugin_name"

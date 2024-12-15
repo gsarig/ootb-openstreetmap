@@ -4,6 +4,7 @@ README.md
 /node_modules
 /src
 /.wordpress-org
+/.idea
 
 .distignore
 .eslintrc.js

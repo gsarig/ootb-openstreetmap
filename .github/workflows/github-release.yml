@@ -43,4 +43,4 @@ jobs:
           gh release create "$tag" \
             --title="Release $tag" \
             --draft \
-            -- "${plugin_name}-${tag}.zip"
+            -- "ootb-openstreetmap-${tag}.zip"

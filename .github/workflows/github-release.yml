@@ -29,12 +29,18 @@ jobs:
           echo "Tag: $tag"
           echo "tag=$tag" >> $GITHUB_ENV
 
-      -   name: Prepare Plugin ZIP
-          run: |
-              plugin_name="ootb-openstreetmap"
-              mkdir -p "$plugin_name"
-              rsync -av --exclude-from='.distignore' ./ "$plugin_name/"
-              zip -r "${plugin_name}-${tag}.zip" "$plugin_name"
+      - name: Prepare Plugin ZIP
+        run: |
+          plugin_name="ootb-openstreetmap"
+          mkdir -p "$plugin_name"
+
+          # Sync files but exclude the ZIP file itself and the output directory
+          rsync -av --exclude=".distignore" \
+                    --exclude="${plugin_name}-${tag}.zip" \
+                    --exclude="$plugin_name/" ./ "$plugin_name/"
+
+          # Create the ZIP
+          zip -r "${plugin_name}-${tag}.zip" "$plugin_name"
 
       - name: Create release
         env:

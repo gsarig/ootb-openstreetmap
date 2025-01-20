@@ -21,6 +21,7 @@
 	"dependencies": {
 		"@raruto/leaflet-gesture-handling": "^1.4.4",
 		"leaflet": "^1.9.4",
+		"node-fetch": "^3.3.2",
 		"react-device-detect": "^2.2.3",
 		"react-leaflet": "^4.2.1"
 	}

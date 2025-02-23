@@ -104,7 +104,7 @@ export async function openaiAnswers(props) {
 				setAttributes({
 					openAImode: 'error',
 				});
-				console.error('Error parsing OpenAI response');
+				console.error('Error parsing AI response');
 			}
 			let tasks = results?.map((place, index) =>
 				new Promise(resolve => setTimeout(() => {
@@ -132,6 +132,6 @@ export async function openaiAnswers(props) {
 					keywords: '',
 				});
 			}, 3000); // Remove the error message after 3 seconds.
-			console.error('Error fetching OpenAI response: ' + JSON.stringify(error));
+			console.error('Error fetching AI response: ' + JSON.stringify(error));
 		});
 }

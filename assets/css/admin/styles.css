@@ -23,7 +23,8 @@
 	vertical-align: top;
 }
 
-#ootb_form input[type="text"] {
+#ootb_form input[type="text"],
+#ootb_form input[type="password"] {
 	width: 100%;
 }
 

@@ -524,7 +524,7 @@ class Options {
 		?>
 		<p id="<?php echo esc_attr( $args[ 'id' ] ); ?>">
 			<?php
-			echo esc_html__( 'Set the OpenAI API key.', 'ootb-openstreetmap' );
+			echo esc_html__( 'Set the credentials for your AI provider. Defaults to OpenAI, but you can use any provider.', 'ootb-openstreetmap' );
 			?>
 		</p>
 		<?php

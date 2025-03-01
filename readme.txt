@@ -142,6 +142,9 @@ Version 2.0.0 is a major, almost full, refactoring, both for the build scripts a
 = 1.0 =
 
 == Changelog ==
+= 2.8.6 =
+Adds support for more AI Providers, besides OpenAI (OpenAI is kept as the default).
+
 = 2.8.5 =
 * Various fixes to ensure that it passes the checks of the "Plugin Check" plugin.
 * Drops support for legacy PHP versions. The minimum requirement is PHP 8.1.

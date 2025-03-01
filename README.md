@@ -37,7 +37,7 @@ Instead of manually adding coordinates for each one of your markers, just click-
 
 ![Demo GIF](.wordpress-org/screenshot-10.gif)
 
-### OpenAI integration in action:
+### AI integration in action:
 
 ![Demo GIF](.wordpress-org/screenshot-12.gif)
 
@@ -50,7 +50,7 @@ Instead of manually adding coordinates for each one of your markers, just click-
 * [Dead-simple interface](https://www.gsarigiannidis.gr/wordpress-gutenberg-map-block-openstreetmap/). Don't search for coordinates and don't get overwhelmed by too many fields when using multiple markers. Just point and click on the map to add your marker where you want it and edit it's popup content directly from there.
 * [Place search](https://www.gsarigiannidis.gr/openstreetmap-place-search/). Find locations by typing keywords.
 * Remembers the zoom that you set when adding the markers and stores it so that you don't set it by hand (which you can do anyway if you prefer).
-* OpenAI integration which allows you to add markers by using commands in natural language. Just say "please" to activate (e.g. "Please, show me where GOT was filmed"). Requires an OpenAI API key. [Read more](https://www.gsarigiannidis.gr/openstreetmap-openai-integration/).
+* AI integration which allows you to add markers by using commands in natural language. Just say "please" to activate (e.g. "Please, show me where GOT was filmed"). Requires an API key from an AI provider. [Read more](https://www.gsarigiannidis.gr/openstreetmap-openai-integration/).
 * Query Maps: Supports creating a map out of maps added on other posts or post types. This can be quite powerful when, for example, you have a custom post type for "Places" with each place having its own map, and you want to dynamically gather-up all the places on a single map.
 * Shortcode support: You can use the shortcode `[ootb_query]` as an alternative way to use the aforementioned Query Maps feature (see the FAQ for more info).
 * Support for a location custom field, which can be used to store a post's or post type's location, following the [Geodata guidelines](https://codex.wordpress.org/Geodata). Read more in the [v.2.8.0 release notes](https://github.com/gsarig/ootb-openstreetmap/releases/tag/2.8.0).
@@ -93,9 +93,9 @@ Click on the marker to open up its popup. There, you will see the "Remove" butto
 
 Check under the "Map behavior" section, at the blocks' settings at the sidebar on the right. It's toggled off by default, that's probably why you missed it.
 
-### How does the OpenAI integration work?
+### How does the AI integration work?
 
-First of all, you will need to create an account to [OpenAI](https://openai.com/) and get an API key. Then, go to the plugin's settings page and paste your key there. After that, you can start adding markers by using commands in natural language. Just say "please" to activate (e.g. "Please, show me where GOT was filmed"). Please keep in mind, though, that it's like asking ChatGPT: the answers you get might not always be 100% reliable, and you should always double-check to confirm their accuracy. [Read more](https://www.gsarigiannidis.gr/openstreetmap-openai-integration/).
+First of all, you will need to create an account to an AI provider (like [OpenAI](https://openai.com/), [Gemini](https://gemini.google.com/), (Anthropic)[https://console.anthropic.com/] or similar) and get an API key. Then, go to the plugin's settings page and paste your API provider's endpoint URL, Model and API key there. After that, you can start adding markers by using commands in natural language. Just say "please" to activate (e.g. "Please, show me where GOT was filmed"). Please keep in mind, though, that it's like asking ChatGPT, Claude or any other AI Assistant: the answers you get might not always be 100% reliable, and you should always double-check to confirm their accuracy. [Read more](https://www.gsarigiannidis.gr/openstreetmap-openai-integration/).
 
 ### How can I query maps from other posts or post types?
 On the block's side panel, Select the "Map data" panel and click on the "Fetch locations" button. This will automatically retrieve on the frontend all the markers from your posts (you can also select a specific post type from the dropdown). The block will be locked from editing, as the markers will be dynamically retrieved from the selected posts. If you don't want that, there is a "Stop syncing" button that will unlock the block, drop the markers on the map and allow you to edit.
@@ -175,7 +175,7 @@ function my_modal_content( $address, $post_id ) {
 	);
 }
 ```
-### ootb_cf_marker_icon 
+### ootb_cf_marker_icon
 Allows you to change the marker icon for posts that have a "Location" custom field. By default, it will use the default marker. For example, the following code will use a custom marker for a post with ID `123`:
 ```
 add_filter( 'ootb_cf_marker_icon', 'my_marker_icon', 10, 2 );

@@ -15,6 +15,11 @@
 	opacity: 1;
 }
 
+/* Make sure marker icons can be clicked */
+.block-editor-block-list__block[data-type="ootb/openstreetmap"] .leaflet-marker-icon {
+	pointer-events: auto;
+}
+
 .wp-block-ootb-openstreetmap {
 	position: relative;
 }

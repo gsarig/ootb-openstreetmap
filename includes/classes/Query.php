@@ -239,6 +239,11 @@ class Query {
 					) {
 						continue;
 					}
+					foreach ( $attrs->markers as $marker ) {
+						if ( isset( $marker->text ) ) {
+							$marker->text = wp_kses_post( apply_filters( 'ootb_block_marker_text', $marker->text ) );
+						}
+					}
 					$markers[] = $attrs->markers;
 				}
 			}

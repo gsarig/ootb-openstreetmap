@@ -175,6 +175,38 @@ function my_modal_content( $address, $post_id ) {
 	);
 }
 ```
+Keep in mind that this filter will only work for the queries based on the "Location" custom fields. If you want to modify the content of the markers on standard blocks, see the next hook.
+
+### ootb_block_marker_text
+This filter allows customizing the text content that appears in marker popups. It's particularly useful when querying maps from other posts, as it provides the ability to customize the popup content for each marker. The filter accepts three parameters:
+* `$marker_text`: The original text content of the marker.
+* `$post_id`: The ID of the post where the marker was defined.
+* `$current_post_id` The ID of the current post where the map is being displayed.
+
+Example:
+```
+add_filter( 'ootb_block_marker_text', 'customize_marker_text', 10, 3 );
+
+function customize_marker_text($text, $post_id, $current_post_id) {
+
+    // Only modify content if we're showing markers from other posts
+    if ($post_id !== $current_post_id) {
+        // Get post title and URL
+        $post_title = get_the_title( $post_id );
+        $post_url   = get_permalink( $post_id );
+
+        // Add a simple header with link above the original content
+        $text = sprintf('<h4><a href="%s">%s</a></h4>%s',
+		esc_url($post_url),
+		esc_html($post_title),
+		$text
+	);
+    }
+
+    return $text;
+}
+```
+
 ### ootb_cf_marker_icon
 Allows you to change the marker icon for posts that have a "Location" custom field. By default, it will use the default marker. For example, the following code will use a custom marker for a post with ID `123`:
 ```

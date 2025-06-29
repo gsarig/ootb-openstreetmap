@@ -239,6 +239,32 @@ class Query {
 					) {
 						continue;
 					}
+					foreach ( $attrs->markers as $marker ) {
+						if ( isset( $marker->text ) ) {
+							$marker->text = wp_kses_post(
+							/**
+							 * Filters the modal content of markers.
+							 *
+							 * This filter allows customizing the text content that appears in marker popups
+							 * It's particularly useful when querying maps from other posts, as it provides
+							 * the ability to customize the popup content for each marker.
+							 *
+							 * @param string $marker_text The original text content of the marker.
+							 * @param int $post_id The ID of the post where the marker was defined.
+							 * @param int $current_post_id The ID of the current post where the map is being displayed.
+							 *
+							 * @since 2.8.8
+							 *
+							 */
+								apply_filters(
+									'ootb_block_marker_text',
+									$marker->text,
+									$post_id,
+									$current_post_id
+								)
+							);
+						}
+					}
 					$markers[] = $attrs->markers;
 				}
 			}

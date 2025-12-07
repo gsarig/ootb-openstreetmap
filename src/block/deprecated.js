@@ -2,8 +2,188 @@ import centerMapDeprecated from './Deprecated/centerMapDeprecated';
 import getIconDeprecated from './Deprecated/getIconDeprecated';
 import getIcon from './Helpers/getIcon';
 import centerMap from './Helpers/centerMap';
+import createMapboxStyleUrl from '../common/createMapboxStyleUrl';
 
 const deprecated = [
+	{
+		attributes: {
+			mapHeight: {
+				type: 'integer',
+				default: 400,
+			},
+			markers: {
+				type: 'array',
+				default: [],
+			},
+			zoom: {
+				type: 'integer',
+				default: 8,
+			},
+			minZoom: {
+				type: 'integer',
+				default: 2,
+			},
+			maxZoom: {
+				type: 'integer',
+				default: 18,
+			},
+			dragging: {
+				type: 'boolean',
+				default: true,
+			},
+			touchZoom: {
+				type: 'boolean',
+				default: true,
+			},
+			doubleClickZoom: {
+				type: 'boolean',
+				default: true,
+			},
+			scrollWheelZoom: {
+				type: 'boolean',
+				default: true,
+			},
+			defaultIcon: {
+				type: 'object',
+				default: null,
+			},
+			keywords: {
+				type: 'string',
+				default: '',
+			},
+			showDefaultBounds: {
+				type: 'boolean',
+				default: true,
+			},
+			bounds: {
+				type: 'array',
+				default: [
+					[37.97155174977503, 23.72656345367432]
+				],
+			},
+			provider: {
+				type: 'string',
+				default: 'openstreetmap',
+			},
+			mapboxStyleUrl: {
+				type: 'string',
+				default: '',
+			},
+			mapType: {
+				type: 'string',
+				default: 'marker'
+			},
+			showMarkers: {
+				type: 'boolean',
+				default: true
+			},
+			shapeColor: {
+				type: 'string',
+				default: '#008EFF'
+			},
+			shapeWeight: {
+				type: 'integer',
+				default: 3
+			},
+			shapeText: {
+				type: 'string',
+				default: '',
+			},
+			isDraggingMarker: {
+				type: 'boolean',
+				default: false
+			},
+			openAImode: {
+				type: 'string',
+				default: ''
+			},
+			queryArgs: {
+				type: 'object',
+				default: {
+					post_type: 'post'
+				}
+			},
+			serverSideRender: {
+				type: 'boolean',
+				default: false
+			},
+			showMapData: {
+				type: 'boolean',
+				default: true
+			},
+			showSearchBox: {
+				type: 'boolean',
+				default: true
+			},
+			queryCustomFields: {
+				type: 'boolean',
+				"default": false
+			},
+		},
+		supports: {
+			className: false,
+			align: ['wide', 'full'],
+		},
+		save(props, className) {
+		const {
+		attributes: {
+			mapHeight,
+			markers,
+			zoom,
+			minZoom,
+			maxZoom,
+			dragging,
+			touchZoom,
+			doubleClickZoom,
+			scrollWheelZoom,
+			provider,
+			mapType,
+			showMarkers,
+			shapeColor,
+			shapeWeight,
+			shapeText,
+			mapboxStyleUrl,
+		},
+	} = props;
+			const shapeStyles = {
+				fillColor: shapeColor,
+				color: shapeColor,
+				weight: shapeWeight
+			}
+			const mapboxApi = ootbGlobal?.options?.api_mapbox ?? null;
+			const mapboxStyle = mapboxStyleUrl && mapboxApi ?
+				createMapboxStyleUrl(mapboxStyleUrl, mapboxApi) :
+				'';
+			return markers ? (
+				<div className={className}>
+					<div className="ootb-openstreetmap--map"
+						 data-provider={provider}
+						 data-maptype={mapType}
+						 data-showmarkers={showMarkers}
+						 data-shapestyle={encodeURIComponent(JSON.stringify(shapeStyles))}
+						 data-shapetext={shapeText}
+						 data-markers={encodeURIComponent(JSON.stringify(markers))} // Escape because of the potential HTML in the output.
+						 data-bounds={JSON.stringify(centerMap(props))}
+						 data-zoom={zoom}
+						 data-minzoom={minZoom}
+						 data-maxzoom={maxZoom}
+						 data-dragging={dragging}
+						 data-touchzoom={touchZoom}
+						 data-doubleclickzoom={doubleClickZoom}
+						 data-scrollwheelzoom={scrollWheelZoom}
+						 data-marker={encodeURIComponent(JSON.stringify(getIcon(props)))}
+						 data-mapboxstyle={mapboxStyle ? encodeURIComponent(JSON.stringify(mapboxStyle)) : null}
+						 style={
+							 {
+								 height: mapHeight + 'px'
+							 }
+						 }
+					>
+					</div>
+				</div>
+			) : null;
+		}
+	},
 	{
 		attributes: {
 			mapHeight: {

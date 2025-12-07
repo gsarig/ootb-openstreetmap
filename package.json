@@ -20,6 +20,7 @@
 	},
 	"dependencies": {
 		"@raruto/leaflet-gesture-handling": "^1.4.4",
+		"@wordpress/block-editor": "^15.9.0",
 		"leaflet": "^1.9.4",
 		"react-device-detect": "^2.2.3",
 		"react-leaflet": "^4.2.1"

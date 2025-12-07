@@ -1,6 +1,7 @@
 import centerMap from './Helpers/centerMap';
 import getIcon from './Helpers/getIcon';
 import createMapboxStyleUrl from '../common/createMapboxStyleUrl';
+import { useBlockProps } from '@wordpress/block-editor';
 
 export default function save(props, className) {
 	const {
@@ -33,7 +34,7 @@ export default function save(props, className) {
 		createMapboxStyleUrl(mapboxStyleUrl, mapboxApi) :
 		'';
 	return markers ? (
-		<div className={className}>
+		<div {...useBlockProps.save({className})}>
 			<div className="ootb-openstreetmap--map"
 				 data-provider={provider}
 				 data-maptype={mapType}

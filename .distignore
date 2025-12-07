@@ -5,6 +5,8 @@ README.md
 /src
 /.wordpress-org
 /.idea
+/bin
+
 
 .distignore
 .eslintrc.js

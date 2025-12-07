@@ -1,6 +1,6 @@
 {
 	"name": "ootb-openstreetmap",
-	"version": "2.8.7",
+	"version": "2.8.9",
 	"description": "A map block for the Gutenberg Editor using OpenStreetMaps and Leaflet that needs no API keys and works out of the box.",
 	"author": "The WordPress Contributors",
 	"license": "GPL-2.0-or-later",

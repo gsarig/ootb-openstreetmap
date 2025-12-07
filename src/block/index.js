@@ -2,10 +2,11 @@
  * BLOCK: openstreetmap
  *
  */
+import '../../assets/vendor/leaflet/leaflet.css';
 import './index.css';
 import './view.css';
 // noinspection NpmUsedModulesInstalled
-import {registerBlockType} from '@wordpress/blocks';
+import { registerBlockType } from '@wordpress/blocks';
 import metadata from './block.json';
 
 /**

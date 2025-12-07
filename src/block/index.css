@@ -1,4 +1,4 @@
-@import "../../assets/vendor/leaflet/leaflet.css";
+
 /** * The following styles get applied inside the editor only. */
 .block-editor-block-list__block[data-type="ootb/openstreetmap"] {
 	z-index: 1;

@@ -1,6 +1,6 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
-	"apiVersion": 3,
+	"apiVersion": 2,
 	"name": "ootb/openstreetmap",
 	"version": "2.8.9",
 	"title": "OpenStreetMap by Out of the Block",

@@ -43,6 +43,10 @@ const deprecated = [
 				type: 'boolean',
 				default: true,
 			},
+			fullscreen: {
+				type: 'boolean',
+				default: false,
+			},
 			defaultIcon: {
 				type: 'object',
 				default: null,

@@ -39,6 +39,24 @@ class Assets {
 			true
 		);
 
+		wp_register_style(
+			'leaflet-fullscreen-style',
+			OOTB_PLUGIN_URL . 'assets/vendor/leaflet-fullscreen/leaflet.fullscreen.css',
+			[],
+			OOTB_SCRIPT_VERSION
+		);
+
+		wp_register_script(
+			'leaflet-fullscreen-script',
+			OOTB_PLUGIN_URL . 'assets/vendor/leaflet-fullscreen/Leaflet.fullscreen.js',
+			[ $this->handle_leaflet ],
+			OOTB_SCRIPT_VERSION,
+			true
+		);
+
+		wp_enqueue_style( 'leaflet-fullscreen-style' );
+		wp_enqueue_script( 'leaflet-fullscreen-script' );
+
 		if ( ! empty( Helper::get_option( 'prevent_default_gestures' ) ) ) {
 			$handle_gesture_handling = 'leaflet-gesture-handling';
 			wp_register_script(

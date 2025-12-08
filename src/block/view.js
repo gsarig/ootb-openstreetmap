@@ -21,6 +21,7 @@ import createMapboxStyleUrl from "../common/createMapboxStyleUrl.js";
 		const touchZoom = osmap.getAttribute('data-touchzoom');
 		const doubleClickZoom = osmap.getAttribute('data-doubleclickzoom');
 		const scrollWheelZoom = osmap.getAttribute('data-scrollwheelzoom');
+		const fullscreen = osmap.getAttribute('data-fullscreen');
 		const defaultIcon = JSON.parse(decodeURIComponent(escapedDefaultIcon));
 		const locations = JSON.parse(decodeURIComponent(escapedMarkers));
 		const mapType = osmap.getAttribute('data-maptype');
@@ -77,6 +78,9 @@ import createMapboxStyleUrl from "../common/createMapboxStyleUrl.js";
 		}
 		if ('false' === scrollWheelZoom) {
 			map.scrollWheelZoom.disable();
+		}
+		if ('true' === fullscreen && L.Control.FullScreen) {
+			map.addControl(new L.Control.Fullscreen());
 		}
 
 		L.tileLayer(providerUrl, {

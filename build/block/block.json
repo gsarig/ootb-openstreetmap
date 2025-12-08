@@ -37,6 +37,10 @@
       "type": "integer",
       "default": 8
     },
+    "fullscreen": {
+      "type": "boolean",
+      "default": false
+    },
     "minZoom": {
       "type": "integer",
       "default": 2

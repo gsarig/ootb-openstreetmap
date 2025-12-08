@@ -15,6 +15,7 @@ export default function save(props, className) {
 			touchZoom,
 			doubleClickZoom,
 			scrollWheelZoom,
+			fullscreen,
 			provider,
 			mapType,
 			showMarkers,
@@ -50,6 +51,7 @@ export default function save(props, className) {
 				 data-touchzoom={touchZoom}
 				 data-doubleclickzoom={doubleClickZoom}
 				 data-scrollwheelzoom={scrollWheelZoom}
+				 data-fullscreen={fullscreen}
 				 data-marker={encodeURIComponent(JSON.stringify(getIcon(props)))}
 				 data-mapboxstyle={mapboxStyle ? encodeURIComponent(JSON.stringify(mapboxStyle)) : null}
 				 style={

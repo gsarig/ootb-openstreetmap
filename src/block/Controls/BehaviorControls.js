@@ -13,6 +13,7 @@ export default function BehaviorControls({props}) {
             touchZoom,
             doubleClickZoom,
             scrollWheelZoom,
+            fullscreen,
         },
         setAttributes,
     } = props;
@@ -42,6 +43,12 @@ export default function BehaviorControls({props}) {
                 checked={!!scrollWheelZoom}
                 onChange={() => setAttributes({scrollWheelZoom: !scrollWheelZoom})}
                 help={!!scrollWheelZoom ? _x('Enabled.', 'Scroll Wheel zoom setting', 'ootb-openstreetmap') : _x('Disabled.', 'Scroll Wheel zoom setting', 'ootb-openstreetmap')}
+            />
+            <ToggleControl
+                label={__('Fullscreen mode', 'ootb-openstreetmap')}
+                checked={!!fullscreen}
+                onChange={() => setAttributes({fullscreen: !fullscreen})}
+                help={!!fullscreen ? _x('Enabled.', 'Fullscreen mode setting', 'ootb-openstreetmap') : _x('Disabled.', 'Fullscreen mode setting', 'ootb-openstreetmap')}
             />
             <RangeControl
                 label={__('Minimum Zoom', 'ootb-openstreetmap')}

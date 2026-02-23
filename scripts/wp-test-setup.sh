@@ -35,9 +35,13 @@ wp core install \
   --admin_email="admin@example.com" \
   --skip-email || echo "Already installed."
 
+echo "==> Installing Composer dependencies inside container..."
+docker compose exec -T cli bash -c "cd ${PLUGIN_DIR} && composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-progress"
+
 echo "==> Activating plugin..."
 wp plugin activate ootb-openstreetmap || {
-  echo "WARNING: Plugin activation failed. Continuing anyway..."
+  echo "ERROR: Plugin activation failed."
+  exit 1
 }
 
 echo "==> Setting default plugin options..."

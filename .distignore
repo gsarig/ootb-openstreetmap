@@ -27,6 +27,7 @@ CREDITS.md
 LICENSE.md
 phpcs.xml
 phpstan.neon
+phpstan-bootstrap.php
 phpunit.xml.dist
 playwright.config.ts
 docker-compose.yml

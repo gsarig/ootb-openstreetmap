@@ -33,4 +33,5 @@ if ( file_exists( OOTB_PLUGIN_PATH . 'vendor/autoload.php' ) ) {
 }
 
 require_once OOTB_PLUGIN_INC . '/core.php';
+require_once OOTB_PLUGIN_INC . '/abilities.php';
 \OOTB\Core\setup();

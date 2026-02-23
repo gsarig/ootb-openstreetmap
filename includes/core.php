@@ -14,6 +14,7 @@ use OOTB\OpenAI;
 use OOTB\Options;
 use OOTB\Query;
 use OOTB\CustomFields;
+use OOTB\Abilities;
 
 function setup(): void {
 	$n = function ( $func ) {
@@ -22,6 +23,7 @@ function setup(): void {
 
 	add_action( 'init', $n( 'i18n' ) );
 	add_action( 'init', $n( 'openstreetmap_block_init' ) );
+	add_action( 'wp_abilities_api_init', '\OOTB\Abilities\register_abilities' );
 }
 
 new Options();

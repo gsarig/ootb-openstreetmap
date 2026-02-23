@@ -24,7 +24,7 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: vendor
-          key: composer-v2-${{ runner.os }}-${{ hashFiles('composer.lock') }}
+          key: composer-v2-${{ runner.os }}-${{ hashFiles('**/composer.json', '**/composer.lock') }}
           restore-keys: |
             composer-v2-${{ runner.os }}-
       - run: composer install --no-interaction --prefer-dist --no-progress
@@ -81,7 +81,7 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: vendor
-          key: composer-v2-${{ runner.os }}-${{ hashFiles('composer.lock') }}
+          key: composer-v2-${{ runner.os }}-${{ hashFiles('**/composer.json', '**/composer.lock') }}
           restore-keys: |
             composer-v2-${{ runner.os }}-
       - run: composer install --no-interaction --prefer-dist --no-progress
@@ -117,6 +117,11 @@ jobs:
       - name: Wait for WordPress
         run: |
           until curl -sf http://localhost:8080/wp-login.php > /dev/null; do sleep 3; done
+      - name: Debug container state
+        run: |
+          docker compose ps
+          docker compose logs wordpress
+          docker compose logs cli
       - run: bash scripts/wp-test-setup.sh
       - run: npx playwright test
         env:
@@ -128,6 +133,7 @@ jobs:
           path: |
             playwright-report/
             tests/playwright/screenshots/
+            test-results/
           retention-days: 7
       - if: always()
         run: docker compose down

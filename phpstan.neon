@@ -8,7 +8,7 @@ parameters:
     bootstrapFiles:
         - vendor/autoload.php
     excludePaths:
-        - vendor/
-        - node_modules/
-        - build/
-        - tests/
+        - vendor/ (?)
+        - node_modules/ (?)
+        - build/ (?)
+        - tests/ (?)

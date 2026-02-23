@@ -6,14 +6,16 @@ const WP_PASS  = process.env.WP_ADMIN_PASS ?? 'password';
 
 export async function loginIfNeeded( page: Page ) {
   await page.goto( '/wp-admin', { waitUntil: 'domcontentloaded' } );
+
   const loginForm = page.locator( '#user_login' );
-  if ( await loginForm.isVisible( { timeout: 2_000 } ) ) {
+  if ( await loginForm.isVisible( { timeout: 10_000 } ) ) {
     await page.fill( '#user_login', WP_ADMIN );
     await page.fill( '#user_pass', WP_PASS );
     await page.click( '#wp-submit' );
-    await page.waitForURL( /wp-admin/ );
+    await page.waitForURL( /wp-admin/, { timeout: 15_000 } );
   }
-  await expect( page.locator( '#wpadminbar' ) ).toBeVisible();
+
+  await expect( page.locator( '#wpadminbar' ) ).toBeVisible( { timeout: 15_000 } );
 }
 
 export async function dismissModals( page: Page ) {

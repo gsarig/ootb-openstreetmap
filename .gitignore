@@ -10,6 +10,5 @@
 /playwright-report/
 /tests/phpunit/fixtures/
 /vendor/
-/composer.lock
 /.phpunit.result.cache
 /test-results/

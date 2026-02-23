@@ -94,15 +94,12 @@ class Query {
 		// Get the data.
 		$data = self::get_markers( $post_id, $args );
 
-		// Return the data as JSON response.
+		// Return the data as JSON response (wp_send_json_* functions call wp_die() automatically).
 		if ( $data ) {
 			wp_send_json_success( $data );
 		} else {
 			wp_send_json_error( [ 'message' => __( 'No markers found.', 'ootb-openstreetmap' ) ] );
 		}
-
-		// Always die (ensures WordPress doesn’t output additional content).
-		wp_die();
 	}
 
 	/**

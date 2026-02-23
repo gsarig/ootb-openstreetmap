@@ -30,7 +30,7 @@ class CustomFields {
 				'show_in_rest'      => true,
 				'single'            => true,
 				'sanitize_callback' => static function ( $value ) {
-					return sanitize_float( $value );
+					return (float) $value;
 				},
 			]
 		);
@@ -42,7 +42,7 @@ class CustomFields {
 				'show_in_rest'      => true,
 				'single'            => true,
 				'sanitize_callback' => static function ( $value ) {
-					return sanitize_float( $value );
+					return (float) $value;
 				},
 			]
 		);

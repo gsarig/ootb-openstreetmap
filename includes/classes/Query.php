@@ -1,7 +1,8 @@
-<?php /** @noinspection PhpComposerExtensionStubsInspection */
-
+<?php
 /**
- * Query Maps
+ * Query Maps for post-based marker display.
+ *
+ * @noinspection PhpComposerExtensionStubsInspection
  *
  * @since   2.6.0
  * @package ootb-openstreetmap
@@ -58,21 +59,22 @@ class Query {
 
 	/**
 	 * Handles the ajax call to get the markers.
+	 *
 	 * @return void
 	 */
 	public function handle_ajax_call() {
 		// Verify the nonce before processing the request.
-		if ( ! isset( $_POST[ 'nonce' ] ) || ! check_ajax_referer( 'ootb_get_markers_nonce', 'nonce', false ) ) {
+		if ( ! isset( $_POST['nonce'] ) || ! check_ajax_referer( 'ootb_get_markers_nonce', 'nonce', false ) ) {
 			wp_send_json_error( [ 'message' => __( 'Nonce verification failed.', 'ootb-openstreetmap' ) ] );
 		}
 
 		// Sanitize and validate the `post_id`.
-		$post_id = isset( $_POST[ 'post_id' ] ) && is_numeric( $_POST[ 'post_id' ] )
-			? absint( $_POST[ 'post_id' ] )
+		$post_id = isset( $_POST['post_id'] ) && is_numeric( $_POST['post_id'] )
+			? absint( $_POST['post_id'] )
 			: 0;
 
-		$raw_query_args = isset( $_POST[ 'query_args' ] )
-			? sanitize_text_field( wp_unslash( $_POST[ 'query_args' ] ) )
+		$raw_query_args = isset( $_POST['query_args'] )
+			? sanitize_text_field( wp_unslash( $_POST['query_args'] ) )
 			: '';
 
 		$args = ! empty( $raw_query_args )
@@ -105,9 +107,9 @@ class Query {
 	/**
 	 * Gets the markers from the query.
 	 *
-	 * @param int $current_post_id The current post id.
+	 * @param int                  $current_post_id The current post id.
 	 * @param array<string, mixed> $query_args The query args.
-	 * @param bool $query_custom_fields Whether to query custom fields or not.
+	 * @param bool                 $query_custom_fields Whether to query custom fields or not.
 	 *
 	 * @return false|string
 	 */
@@ -122,7 +124,7 @@ class Query {
 		];
 		if ( $query_custom_fields ) {
 			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-			$default_args[ 'meta_query' ] = [
+			$default_args['meta_query'] = [
 				'relation' => 'AND',
 				[
 					'key'     => 'geo_latitude',
@@ -136,7 +138,7 @@ class Query {
 				],
 			];
 		} else {
-			$default_args[ 's' ] = '<!-- wp:ootb/openstreetmap ';
+			$default_args['s'] = '<!-- wp:ootb/openstreetmap ';
 		}
 		$args = wp_parse_args( $query_args, $default_args );
 
@@ -147,29 +149,28 @@ class Query {
 		}
 
 		return self::get_marker_data( $current_post_id, $query->posts, $query_custom_fields );
-
 	}
 
 	/**
 	 * The render callback for the block.
 	 *
 	 * @param array<string, mixed> $attributes The block attributes.
-	 * @param string $content The block content.
+	 * @param string               $content The block content.
 	 *
 	 * @return array<int|string, string>|string|null
 	 */
 	public static function render_callback( array $attributes, string $content ) {
-		if ( ( isset( $attributes[ 'serverSideRender' ] ) && ! $attributes[ 'serverSideRender' ] ) && ! empty( $attributes[ 'markers' ] ) ) {
+		if ( ( isset( $attributes['server_side_render'] ) && ! $attributes['server_side_render'] ) && ! empty( $attributes['markers'] ) ) {
 			return $content;
 		}
 
-		$post_type                                = $attributes[ 'queryArgs' ][ 'post_type' ] ?? '';
-		$attributes[ 'queryArgs' ][ 'post_type' ] = self::get_post_type( $post_type );
-		$post_id                                  = is_singular() ? get_the_ID() : 0;
-		$markers                                  = Query::get_markers(
+		$post_type                             = $attributes['query_args']['post_type'] ?? '';
+		$attributes['query_args']['post_type'] = self::get_post_type( $post_type );
+		$post_id                               = is_singular() ? get_the_ID() : 0;
+		$markers                               = self::get_markers(
 			$post_id,
-			$attributes[ 'queryArgs' ],
-			$attributes[ 'queryCustomFields' ] ?? false
+			$attributes['query_args'],
+			$attributes['query_custom_fields'] ?? false
 		);
 		if ( empty( $markers ) ) {
 			return $content;
@@ -180,7 +181,7 @@ class Query {
 		return preg_replace(
 			[
 				'/data-markers=".*?"/',
-				'/data-bounds=".*?"/'
+				'/data-bounds=".*?"/',
 			],
 			[
 				sprintf( 'data-markers="%s"', $escaped_markers ),
@@ -193,9 +194,9 @@ class Query {
 	/**
 	 * Gets the marker data from the post ids.
 	 *
-	 * @param int $current_post_id The current post id.
+	 * @param int             $current_post_id The current post id.
 	 * @param array<int, int> $post_ids The post ids.
-	 * @param bool $query_custom_fields Whether to query custom fields or not.
+	 * @param bool            $query_custom_fields Whether to query custom fields or not.
 	 *
 	 * @return false|string
 	 */
@@ -218,21 +219,21 @@ class Query {
 					'icon' => self::get_cf_marker_icon( $post_id ),
 				];
 			} else {
-				if ( $post_id === $current_post_id ) {
+				if ( $current_post_id === $post_id ) {
 					continue;
 				}
 				$content = get_post_field( 'post_content', $post_id );
 				$blocks  = parse_blocks( $content );
 				foreach ( $blocks as $block ) {
-					if ( $block[ 'blockName' ] !== 'ootb/openstreetmap' || empty( $block[ 'attrs' ] ) ) {
+					if ( 'ootb/openstreetmap' !== $block['blockName'] || empty( $block['attrs'] ) ) {
 						continue;
 					}
 
-					$attrs = json_decode( wp_json_encode( $block[ 'attrs' ] ) );
+					$attrs = json_decode( wp_json_encode( $block['attrs'] ) );
 
 					if (
 						empty( $attrs->markers ) ||
-						( isset( $attrs->serverSideRender ) && true === $attrs->serverSideRender )
+						( isset( $attrs->server_side_render ) && true === $attrs->server_side_render )
 					) {
 						continue;
 					}
@@ -251,7 +252,6 @@ class Query {
 							 * @param int $current_post_id The ID of the current post where the map is being displayed.
 							 *
 							 * @since 2.8.8
-							 *
 							 */
 								apply_filters(
 									'ootb_block_marker_text',
@@ -316,25 +316,27 @@ class Query {
 					'height'         => Helper::get_default( 'height' ),
 				],
 				self::overridable_attrs()
-			)
-			, $attrs, 'ootb_query' );
+			),
+			$attrs,
+			'ootb_query'
+		);
 
-		// Construct the queryArgs for the render_callback method.
-		$queryArgs = [
-			'source'         => $attrs[ 'source' ],
-			'post_type'      => $attrs[ 'post_type' ],
-			'posts_per_page' => $attrs[ 'posts_per_page' ],
+		// Construct the query_args for the render_callback method.
+		$query_args = [
+			'source'         => $attrs['source'],
+			'post_type'      => $attrs['post_type'],
+			'posts_per_page' => $attrs['posts_per_page'],
 		];
 
 		// Check if specific posts are requested
-		if ( $attrs[ 'post_ids' ] !== '' ) {
-			$post_ids                = array_map( 'intval', explode( ',', $attrs[ 'post_ids' ] ) );
-			$queryArgs[ 'post__in' ] = $post_ids;
+		if ( '' !== $attrs['post_ids'] ) {
+			$post_ids               = array_map( 'intval', explode( ',', $attrs['post_ids'] ) );
+			$query_args['post__in'] = $post_ids;
 		}
 
 		$render_callback_attrs = [
-			'serverSideRender' => true,
-			'queryArgs'        => $queryArgs,
+			'server_side_render' => true,
+			'query_args'         => $query_args,
 		];
 
 		$escaped_attrs = array_map( 'esc_attr', Helper::sanitize_attrs( $attrs ) );
@@ -342,7 +344,7 @@ class Query {
 		$content = sprintf(
 			'<div class="ootb-openstreetmap--map" %1$s style="height: %2$s;"></div>',
 			self::default_attrs( $escaped_attrs ),
-			$escaped_attrs[ 'height' ]
+			$escaped_attrs['height']
 		);
 
 		return $this->render_callback( $render_callback_attrs, $content );
@@ -389,6 +391,7 @@ class Query {
 
 	/**
 	 * Returns the attributes that can be overridden.
+	 *
 	 * @return string[]
 	 */
 	private static function overridable_attrs(): array {

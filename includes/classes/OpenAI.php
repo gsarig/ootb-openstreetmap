@@ -1,7 +1,8 @@
-<?php /** @noinspection PhpComposerExtensionStubsInspection */
-
+<?php
 /**
- * OpenAI integration
+ * OpenAI integration for location search.
+ *
+ * @noinspection PhpComposerExtensionStubsInspection
  *
  * @since   2.5.0
  * @package ootb-openstreetmap
@@ -30,7 +31,7 @@ class OpenAI {
 			'url'   => 'https://api.openai.com/v1/chat/completions',
 			'model' => 'gpt-3.5-turbo',
 		];
-		if ( empty( $field ) || ! isset ( $defaults[ $field ] ) ) {
+		if ( empty( $field ) || ! isset( $defaults[ $field ] ) ) {
 			return $defaults;
 		}
 
@@ -43,13 +44,17 @@ class OpenAI {
 	 * @return void
 	 */
 	public function openai_rest_endpoint(): void {
-		register_rest_route( 'ootb-openstreetmap/v1', '/openai/', [
-			'methods'             => 'POST',
-			'callback'            => [ $this, 'openai_callback' ],
-			'permission_callback' => function () {
-				return current_user_can( 'edit_posts' );
-			}
-		] );
+		register_rest_route(
+			'ootb-openstreetmap/v1',
+			'/openai/',
+			[
+				'methods'             => 'POST',
+				'callback'            => [ $this, 'openai_callback' ],
+				'permission_callback' => function () {
+					return current_user_can( 'edit_posts' );
+				},
+			]
+		);
 	}
 
 	/**
@@ -66,24 +71,30 @@ class OpenAI {
 		$api_model  = ! empty( Helper::get_option( 'api_ai_model' ) ) ? Helper::get_option( 'api_ai_model' ) : self::ai_api_defaults( 'model' );
 		$headers    = [
 			'Authorization' => 'Bearer ' . $api_key,
-			'Content-Type'  => 'application/json'
+			'Content-Type'  => 'application/json',
 		];
 		$body       = [
 			'model'    => $api_model,
 			'messages' => [
 				[
 					'role'    => 'system',
-					'content' => $this->context
+					'content' => $this->context,
 				],
-				[ 'role' => 'user', 'content' => $parameters[ 'prompt' ] ]
-			]
+				[
+					'role'    => 'user',
+					'content' => $parameters['prompt'],
+				],
+			],
 		];
-		$response   = wp_safe_remote_post( $api_url, [
-			'method'  => 'POST',
-			'headers' => $headers,
-			'body'    => wp_json_encode( $body ),
-			'timeout' => 15  // In seconds
-		] );
+		$response   = wp_safe_remote_post(
+			$api_url,
+			[
+				'method'  => 'POST',
+				'headers' => $headers,
+				'body'    => wp_json_encode( $body ),
+				'timeout' => 15,  // In seconds
+			]
+		);
 
 		if ( is_wp_error( $response ) ) {
 			return new \WP_Error(

@@ -1,7 +1,8 @@
-<?php /** @noinspection PhpComposerExtensionStubsInspection */
-
+<?php
 /**
- * Assets
+ * Assets class for managing plugin assets.
+ *
+ * @noinspection PhpComposerExtensionStubsInspection
  *
  * @since   2.0.0
  * @package ootb-openstreetmap
@@ -11,7 +12,7 @@ namespace OOTB;
 
 class Assets {
 	public string $handle_ootb_script = 'ootb-openstreetmap-view-script';
-	public string $handle_leaflet = 'leaflet';
+	public string $handle_leaflet     = 'leaflet';
 
 	public function __construct() {
 		global $ootb_inline_scripts_tracking;
@@ -63,8 +64,8 @@ class Assets {
 			'options'   => $options,
 		];
 
-		if ( ! empty( $options[ 'prevent_default_gestures' ] ) ) {
-			$params[ 'gestureHandlingOptions' ] = apply_filters(
+		if ( ! empty( $options['prevent_default_gestures'] ) ) {
+			$params['gestureHandlingOptions'] = apply_filters(
 				'ootb_gesture_handling_options',
 				[
 					'locale' => Helper::get_gesture_handling_locale(),
@@ -73,7 +74,8 @@ class Assets {
 		}
 
 		$ootb_inline_scripts_tracking[] = $this->handle_ootb_script;
-		wp_add_inline_script( $this->handle_ootb_script,
+		wp_add_inline_script(
+			$this->handle_ootb_script,
 			sprintf(
 				'const ootb = %s',
 				wp_json_encode( $params )

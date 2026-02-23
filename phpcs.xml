@@ -12,7 +12,23 @@
     <exclude-pattern>tests/*</exclude-pattern>
 
     <rule ref="WordPress">
+        <!-- Allow short array syntax [] instead of array() -->
         <exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+
+        <!-- PSR-4 autoloading uses class-name-based filenames, not WP's class- prefix convention -->
+        <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+        <exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+
+        <!-- Doc comment requirements are overly strict for modern OOP code -->
+        <exclude name="Squiz.Commenting.FileComment.Missing"/>
+        <exclude name="Squiz.Commenting.FileComment.MissingPackageTag"/>
+        <exclude name="Squiz.Commenting.ClassComment.Missing"/>
+        <exclude name="Squiz.Commenting.FunctionComment.Missing"/>
+        <exclude name="Squiz.Commenting.FunctionComment.MissingParamTag"/>
+        <exclude name="Squiz.Commenting.FunctionComment.MissingParamComment"/>
+        <exclude name="Squiz.Commenting.FunctionComment.MissingReturn"/>
+        <exclude name="Squiz.Commenting.VariableComment.Missing"/>
+        <exclude name="Squiz.Commenting.InlineComment.InvalidEndChar"/>
     </rule>
 
     <config name="minimum_supported_wp_version" value="6.5"/>

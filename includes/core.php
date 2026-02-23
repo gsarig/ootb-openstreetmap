@@ -16,8 +16,8 @@ use OOTB\Query;
 use OOTB\CustomFields;
 
 function setup(): void {
-	$n = function ( $function ) {
-		return __NAMESPACE__ . "\\$function";
+	$n = function ( $func ) {
+		return __NAMESPACE__ . "\\$func";
 	};
 
 	add_action( 'init', $n( 'i18n' ) );
@@ -50,9 +50,10 @@ function i18n() {
  * @noinspection PhpUnused
  */
 function openstreetmap_block_init(): void {
-	register_block_type( OOTB_PLUGIN_PATH . '/build/block',
+	register_block_type(
+		OOTB_PLUGIN_PATH . '/build/block',
 		[
-			'render_callback' => '\OOTB\Query::render_callback'
+			'render_callback' => '\OOTB\Query::render_callback',
 		]
 	);
 	if ( is_admin() ) {

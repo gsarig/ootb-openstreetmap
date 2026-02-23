@@ -1,7 +1,8 @@
-<?php /** @noinspection PhpComposerExtensionStubsInspection */
-
+<?php
 /**
- * Helper functions
+ * Helper functions for plugin operations.
+ *
+ * @noinspection PhpComposerExtensionStubsInspection
  *
  * @since   1.2
  * @package ootb-openstreetmap
@@ -67,18 +68,18 @@ class Helper {
 		}
 
 		return (
-			       has_block( $block_name ) ||
-			       self::has_block_in_reusable( $block_name ) ||
-			       self::has_block_in_widget( $block_name )
-		       )
-		       && ! is_admin();
+					has_block( $block_name ) ||
+					self::has_block_in_reusable( $block_name ) ||
+					self::has_block_in_widget( $block_name )
+				)
+				&& ! is_admin();
 	}
 
 	/**
 	 * Check if the block exists in a reusable block.
 	 *
 	 * @param string $block_name The block name.
-	 * @param int $post_id The post ID.
+	 * @param int    $post_id The post ID.
 	 *
 	 * @return bool
 	 */
@@ -101,8 +102,8 @@ class Helper {
 		}
 
 		foreach ( $blocks as $block ) {
-			if ( 'core/block' === $block[ 'blockName' ] && ! empty( $block[ 'attrs' ][ 'ref' ] ) ) {
-				if ( has_block( $block_name, $block[ 'attrs' ][ 'ref' ] ) ) {
+			if ( 'core/block' === $block['blockName'] && ! empty( $block['attrs']['ref'] ) ) {
+				if ( has_block( $block_name, $block['attrs']['ref'] ) ) {
 					return true;
 				}
 			}
@@ -130,7 +131,7 @@ class Helper {
 		}
 
 		foreach ( $blocks as $block ) {
-			if ( is_array( $block ) && isset( $block[ 'content' ] ) && has_block( $block_name, $block[ 'content' ] ) ) {
+			if ( is_array( $block ) && isset( $block['content'] ) && has_block( $block_name, $block['content'] ) ) {
 				return true;
 			}
 		}
@@ -145,8 +146,8 @@ class Helper {
 	 */
 	public static function fallback_location(): array {
 		return [
-			"37.97155174977503",
-			"23.72656345367432",
+			'37.97155174977503',
+			'23.72656345367432',
 		];
 	}
 
@@ -157,10 +158,10 @@ class Helper {
 	 */
 	public static function default_location(): array {
 		$options = self::get_option();
-		if ( ! empty( $options[ 'default_lat' ] ) && ! empty( $options[ 'default_lng' ] ) ) {
+		if ( ! empty( $options['default_lat'] ) && ! empty( $options['default_lng'] ) ) {
 			return [
-				$options[ 'default_lat' ],
-				$options[ 'default_lng' ],
+				$options['default_lat'],
+				$options['default_lng'],
 			];
 		}
 		$timezone = wp_timezone_string();
@@ -169,9 +170,12 @@ class Helper {
 			return self::fallback_location();
 		}
 
-		$defaults = wp_json_file_decode( OOTB_PLUGIN_PATH . '/assets/defaults.json', [
-			'associative' => true,
-		] );
+		$defaults = wp_json_file_decode(
+			OOTB_PLUGIN_PATH . '/assets/defaults.json',
+			[
+				'associative' => true,
+			]
+		);
 
 		$column = array_column( $defaults, 'timezone' );
 		$entry  = array_search( $timezone, $column, true );
@@ -223,9 +227,9 @@ class Helper {
 			return $options[ $option ] ?? '';
 		}
 
-		if ( ! empty( $options[ 'api_openai' ] ) ) {
+		if ( ! empty( $options['api_openai'] ) ) {
 			// We don't want to expose the OpenAI API key to the client.
-			unset( $options[ 'api_openai' ] );
+			unset( $options['api_openai'] );
 		}
 
 		return $options;
@@ -241,7 +245,7 @@ class Helper {
 			return [];
 		}
 		$args                    = [
-			'public' => true
+			'public' => true,
 		];
 		$post_types              = get_post_types( $args, 'objects' );
 		$block_editor_post_types = [];
@@ -272,17 +276,23 @@ class Helper {
 			return [];
 		}
 
-		$data       = wp_json_file_decode( $file, [
-			'associative' => true,
-		] );
-		$attributes = $data[ 'attributes' ] ?? [];
+		$data       = wp_json_file_decode(
+			$file,
+			[
+				'associative' => true,
+			]
+		);
+		$attributes = $data['attributes'] ?? [];
 		if ( empty( $attributes ) ) {
 			return [];
 		}
 
-		$defaults = array_map( function ( $attr ) {
-			return $attr[ 'default' ];
-		}, $attributes );
+		$defaults = array_map(
+			function ( $attr ) {
+				return $attr['default'];
+			},
+			$attributes
+		);
 
 		$defaults = array_change_key_case( $defaults, CASE_LOWER );
 		if ( ! empty( $attr_name ) ) {
@@ -316,22 +326,22 @@ class Helper {
 			return '';
 		}
 		$image_size = getimagesize( $img_src );
-		if ( empty( $image_size[ 0 ] ) || empty( $image_size[ 1 ] ) ) {
+		if ( empty( $image_size[0] ) || empty( $image_size[1] ) ) {
 			return '';
 		}
-		$width     = $image_size[ 0 ];
-		$height    = $image_size[ 1 ];
-		$jsonArray = [
-			"iconUrl"     => $img_src,
-			"iconAnchor"  => [
+		$width      = $image_size[0];
+		$height     = $image_size[1];
+		$json_array = [
+			'iconUrl'     => $img_src,
+			'iconAnchor'  => [
 				round( $width / 2 ),
-				$height
+				$height,
 			],
-			"popupAnchor" => [ 0, - $height ]
+			'popupAnchor' => [ 0, - $height ],
 		];
-		$jsonStr   = wp_json_encode( $jsonArray );
+		$json_str   = wp_json_encode( $json_array );
 
-		return urlencode( $jsonStr );
+		return rawurlencode( $json_str );
 	}
 
 	/**
@@ -363,16 +373,19 @@ class Helper {
 			}
 			$attrs[ $key ] = match ( $key ) {
 				'source' => in_array( $value, [ 'geodata', 'block' ], true ) ? $value : '',
-				'post_type' => in_array( $value, array_column( self::get_post_types(), 'value' ), true ) ? $value : self::get_default('post_type'),
-				'posts_per_page' => ( is_int( $value ) || ( is_numeric( $value ) && (int) $value === - 1 ) ) ? $value : Query::get_posts_per_page(),
+				'post_type' => in_array( $value, array_column( self::get_post_types(), 'value' ), true ) ? $value : self::get_default( 'post_type' ),
+				'posts_per_page' => ( is_int( $value ) || ( is_numeric( $value ) && - 1 === (int) $value ) ) ? $value : Query::get_posts_per_page(),
 				'post_ids' => ( preg_match( '/^(\d+,)*\d+$/', $value ) === 1 ) ? $value : '',
 				'height' => ( preg_match( '/^\d+px$/', $value ) === 1 ) ? $value : self::get_default( 'height' ),
 				'provider' => in_array( $value, array_keys( self::providers( [ 'associative' => true ] ) ), true ) ? $value : '',
 				'maptype' => in_array( $value, self::map_types(), true ) ? $value : '',
-				'touchzoom', 'scrollwheelzoom', 'dragging', 'doubleclickzoom' => in_array( $value, [
-					'true',
-					'false'
-				], true ) ? $value : '',
+				'touchzoom', 'scrollwheelzoom', 'dragging', 'doubleclickzoom' => in_array(
+					$value,
+					[
+						'true',
+						'false',
+					], true
+				) ? $value : '',
 				'marker' => ( filter_var( $value, FILTER_VALIDATE_URL ) !== false ) ? $value : '',
 				default => $value,
 			};

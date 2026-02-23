@@ -1,7 +1,8 @@
-<?php /** @noinspection PhpComposerExtensionStubsInspection */
-
+<?php
 /**
- * Custom fields
+ * Custom fields registration and management.
+ *
+ * @noinspection PhpComposerExtensionStubsInspection
  *
  * @since   2.8.0
  * @package ootb-openstreetmap

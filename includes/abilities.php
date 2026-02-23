@@ -209,12 +209,13 @@ function execute_add_map_to_post( array $args ): array|\WP_Error {
 /**
  * Builds the serialised block string that WordPress stores in post_content.
  *
- * @param float                             $lat              Centre latitude.
- * @param float                             $lng              Centre longitude.
- * @param int                               $zoom             Zoom level.
- * @param int                               $map_height       Map height in px.
- * @param string                            $provider         Tile provider slug.
- * @param array<int, array<string, string>> $markers          Normalised marker list.
+ * @param float                            $lat              Centre latitude.
+ * @param float                            $lng              Centre longitude.
+ * @param int                              $zoom             Zoom level.
+ * @param int                              $map_height       Map height in px.
+ * @param string                           $provider         Tile provider slug.
+ * @param array<int, array<string, mixed>> $markers          Normalised marker list.
+ * @param bool                             $gesture_handling Whether gesture handling is on.
  * @return string Serialised block markup.
  */
 function build_block_markup(
@@ -224,6 +225,7 @@ function build_block_markup(
 	int $map_height,
 	string $provider,
 	array $markers,
+	bool $gesture_handling
 ): string {
 	// Block comment attributes (what the editor stores and uses to reconstruct UI state).
 	$block_attrs = [
@@ -242,6 +244,7 @@ function build_block_markup(
 		'zoom'              => $zoom,
 		'showDefaultBounds' => false,
 		'bounds'            => [ [ (string) $lat, (string) $lng ] ],
+		'gestureHandling'   => $gesture_handling,
 	];
 
 	// Default Leaflet marker icon - required by view.js.

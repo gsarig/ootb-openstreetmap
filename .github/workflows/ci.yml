@@ -24,8 +24,9 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: vendor
-          key: composer-v2-${{ hashFiles('composer.lock') }}
-          restore-keys: composer-v2-
+          key: composer-v2-${{ runner.os }}-${{ hashFiles('**/composer.json', '**/composer.lock') }}
+          restore-keys: |
+            composer-v2-${{ runner.os }}-
       - run: composer install --no-interaction --prefer-dist --no-progress
       - run: vendor/bin/phpstan analyse --no-progress --error-format=checkstyle | cs2pr
       - run: vendor/bin/phpcs --report=checkstyle | cs2pr
@@ -80,8 +81,9 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: vendor
-          key: composer-v2-${{ hashFiles('composer.lock') }}
-          restore-keys: composer-v2-
+          key: composer-v2-${{ runner.os }}-${{ hashFiles('**/composer.json', '**/composer.lock') }}
+          restore-keys: |
+            composer-v2-${{ runner.os }}-
       - run: composer install --no-interaction --prefer-dist --no-progress
       - run: bash bin/install-wp-tests.sh wordpress_test wordpress wordpress 127.0.0.1 latest
         env:

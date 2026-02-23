@@ -15,7 +15,7 @@ use OOTB\Options;
 use OOTB\Query;
 use OOTB\CustomFields;
 
-function setup() {
+function setup(): void {
 	$n = function ( $function ) {
 		return __NAMESPACE__ . "\\$function";
 	};
@@ -49,7 +49,7 @@ function i18n() {
  * @see https://developer.wordpress.org/reference/functions/register_block_type/
  * @noinspection PhpUnused
  */
-function openstreetmap_block_init() {
+function openstreetmap_block_init(): void {
 	register_block_type( OOTB_PLUGIN_PATH . '/build/block',
 		[
 			'render_callback' => '\OOTB\Query::render_callback'

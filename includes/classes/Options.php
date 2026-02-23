@@ -247,7 +247,7 @@ class Options {
 	/**
 	 * The callback method for the option to prevent default gestures.
 	 *
-	 * @param array $args THe settings args.
+	 * @param array<string, mixed> $args THe settings args.
 	 *
 	 * @return void
 	 */
@@ -265,7 +265,7 @@ class Options {
 	/**
 	 * The callback method for the option to enable the Geodata.
 	 *
-	 * @param array $args THe settings args.
+	 * @param array<string, mixed> $args THe settings args.
 	 *
 	 * @return void
 	 */
@@ -292,9 +292,9 @@ class Options {
 	}
 
 	/**
-	 * The callback method for the option to enable the Geodata.
+	 * The callback method for the option to enable the location custom field for post types.
 	 *
-	 * @param array $args THe settings args.
+	 * @param array<string, mixed> $args THe settings args.
 	 *
 	 * @return void
 	 */
@@ -327,7 +327,7 @@ class Options {
 	/**
 	 * The callback method for the frontend behavior section.
 	 *
-	 * @param array $args THe settings args.
+	 * @param array<string, mixed> $args THe settings args.
 	 *
 	 * @return void
 	 */
@@ -344,7 +344,7 @@ class Options {
 	/**
 	 * The callback method for the Custom Fields section.
 	 *
-	 * @param array $args THe settings args.
+	 * @param array<string, mixed> $args THe settings args.
 	 *
 	 * @return void
 	 */
@@ -361,7 +361,7 @@ class Options {
 	/**
 	 * The callback method for the default coordinates.
 	 *
-	 * @param array $args THe settings args.
+	 * @param array<string, mixed> $args THe settings args.
 	 *
 	 * @return void
 	 */
@@ -385,7 +385,7 @@ class Options {
 	/**
 	 * The Section Settings Callback method.
 	 *
-	 * @param array $args THe settings args.
+	 * @param array<string, mixed> $args THe settings args.
 	 *
 	 * @return void
 	 */
@@ -448,7 +448,7 @@ class Options {
 	/**
 	 * The Mapbox API key field.
 	 *
-	 * @param array $args THe settings args.
+	 * @param array<string, mixed> $args THe settings args.
 	 *
 	 * @return void
 	 */
@@ -464,7 +464,7 @@ class Options {
 	/**
 	 * A URL field.
 	 *
-	 * @param array $args THe settings args.
+	 * @param array<string, mixed> $args THe settings args.
 	 *
 	 * @return void
 	 */
@@ -492,7 +492,7 @@ class Options {
 	/**
 	 * The default coordinates.
 	 *
-	 * @param array $args The settings args.
+	 * @param array<string, mixed> $args The settings args.
 	 *
 	 * @return void
 	 */
@@ -516,7 +516,7 @@ class Options {
 	/**
 	 * The callback method for the OpenAI section.
 	 *
-	 * @param array $args THe settings args.
+	 * @param array<string, mixed> $args THe settings args.
 	 *
 	 * @return void
 	 */
@@ -533,7 +533,7 @@ class Options {
 	/**
 	 * Renders a text input field for API AI settings.
 	 *
-	 * @param array $args Array of arguments for the field, including:
+	 * @param array<string, mixed> $args Array of arguments for the field, including:
 	 *                    - 'label_for' (string): The ID and name attribute for the input.
 	 *                    - 'default' (string): Default placeholder value for the input field.
 	 *                    - 'description' (string, optional): Description displayed below the input field.
@@ -554,9 +554,9 @@ class Options {
 	}
 
 	/**
-	 * The Mapbox API key field.
+	 * The OpenAI API key field.
 	 *
-	 * @param array $args THe settings args.
+	 * @param array<string, mixed> $args THe settings args.
 	 *
 	 * @return void
 	 */
@@ -601,9 +601,9 @@ class Options {
 	/**
 	 * Sanitize Options.
 	 *
-	 * @param array $input The Options to sanitize.
+	 * @param array<string, mixed> $input The Options to sanitize.
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	function sanitize_options( array $input ): array {
 		// Sanitize api_mapbox.

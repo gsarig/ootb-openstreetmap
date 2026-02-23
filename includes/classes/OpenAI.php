@@ -22,7 +22,7 @@ class OpenAI {
 	 *
 	 * @param string $field Optional. Specifies a particular configuration field to retrieve. Defaults to an empty string.
 	 *
-	 * @return array|string Returns an array of default configuration values if no specific field is requested.
+	 * @return array<string, string>|string Returns an array of default configuration values if no specific field is requested.
 	 *                      Returns a string containing the value of the requested field if it exists.
 	 */
 	public static function ai_api_defaults( string $field = '' ): array|string {

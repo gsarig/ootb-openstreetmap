@@ -13,7 +13,7 @@ class Helper {
 	/**
 	 * Asset Providers.
 	 *
-	 * @param array $options Options to be used with json_decode().
+	 * @param array<string, mixed> $options Options to be used with json_decode().
 	 *
 	 * @return mixed
 	 */
@@ -96,7 +96,7 @@ class Helper {
 		$content = get_post_field( 'post_content', $post_id );
 		$blocks  = parse_blocks( $content );
 
-		if ( ! is_array( $blocks ) || empty( $blocks ) ) {
+		if ( empty( $blocks ) ) {
 			return false;
 		}
 
@@ -174,7 +174,7 @@ class Helper {
 		] );
 
 		$column = array_column( $defaults, 'timezone' );
-		$entry  = array_search( $timezone, $column );
+		$entry  = array_search( $timezone, $column, true );
 		if ( empty( $defaults[ $entry ] ) || empty( $defaults[ $entry ]->lat ) || empty( $defaults[ $entry ]->lng ) ) {
 			return self::fallback_location();
 		}
@@ -234,7 +234,7 @@ class Helper {
 	/**
 	 * Get the post types that support the block editor.
 	 *
-	 * @return array
+	 * @return array<int, array<string, string>>
 	 */
 	public static function get_post_types(): array {
 		if ( has_filter( 'ootb_query_post_type' ) ) {
@@ -334,6 +334,13 @@ class Helper {
 		return urlencode( $jsonStr );
 	}
 
+	/**
+	 * Sanitize attributes.
+	 *
+	 * @param array<string, mixed> $attrs The attributes to sanitize.
+	 *
+	 * @return array<string, mixed>
+	 */
 	public static function sanitize_attrs( array $attrs ): array {
 		$valid_args = [
 			'source',

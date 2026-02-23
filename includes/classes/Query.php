@@ -42,11 +42,11 @@ class Query {
 	/**
 	 * Checks if there are any extra args to add to the query, but does not overwrite any existing args.
 	 *
-	 * @param array $args The query args.
+	 * @param array<string, mixed> $args The query args.
 	 *
-	 * @return array|null
+	 * @return array<string, mixed>
 	 */
-	private static function maybe_extra_args( array $args = [] ): ?array {
+	private static function maybe_extra_args( array $args = [] ): array {
 		$extra_args = apply_filters( 'ootb_query_extra_args', [] );
 
 		// Get new args that don't exist in the defaults.
@@ -109,7 +109,7 @@ class Query {
 	 * Gets the markers from the query.
 	 *
 	 * @param int $current_post_id The current post id.
-	 * @param array $query_args The query args.
+	 * @param array<string, mixed> $query_args The query args.
 	 * @param bool $query_custom_fields Whether to query custom fields or not.
 	 *
 	 * @return false|string
@@ -156,10 +156,10 @@ class Query {
 	/**
 	 * The render callback for the block.
 	 *
-	 * @param array $attributes The block attributes.
+	 * @param array<string, mixed> $attributes The block attributes.
 	 * @param string $content The block content.
 	 *
-	 * @return array|string|string[]|null
+	 * @return array<int|string, string>|string|null
 	 */
 	public static function render_callback( array $attributes, string $content ) {
 		if ( ( isset( $attributes[ 'serverSideRender' ] ) && ! $attributes[ 'serverSideRender' ] ) && ! empty( $attributes[ 'markers' ] ) ) {
@@ -197,7 +197,7 @@ class Query {
 	 * Gets the marker data from the post ids.
 	 *
 	 * @param int $current_post_id The current post id.
-	 * @param array $post_ids The post ids.
+	 * @param array<int, int> $post_ids The post ids.
 	 * @param bool $query_custom_fields Whether to query custom fields or not.
 	 *
 	 * @return false|string
@@ -283,7 +283,7 @@ class Query {
 	 * Replace "post" with your desired post_type, "10" with the number of posts you want per page,
 	 * "1,2,3" with your desired post IDs, "400px" with the desired height, and the remaining arguments with your desired settings for the map attributes.
 	 *
-	 * @param string|array $attrs The attributes for the shortcode.
+	 * @param string|array<string, mixed> $attrs The attributes for the shortcode.
 	 *
 	 * @type string $source (Optional) The source of the data. Can be either "geodata" or "block" (default).
 	 * @type string $post_type (Optional) The post type to query. Default "post".
@@ -300,7 +300,7 @@ class Query {
 	 *
 	 * @return string Rendered HTML content for the map.
 	 */
-	public function shortcode( $attrs ) {
+	public function shortcode( $attrs ): string {
 		if ( is_admin() ) {
 			return '';
 		}
@@ -354,7 +354,7 @@ class Query {
 	/**
 	 * Gets the default attributes for the map.
 	 *
-	 * @param array $overrides The attributes to override.
+	 * @param array<string, mixed> $overrides The attributes to override.
 	 *
 	 * @return string
 	 */
@@ -411,7 +411,7 @@ class Query {
 	 *
 	 * @param int $post_id The post ID.
 	 *
-	 * @return array|null
+	 * @return array<string, string>|null
 	 */
 	private static function get_cf_marker_icon( int $post_id = 0 ): ?array {
 		if ( empty( $post_id ) ) {

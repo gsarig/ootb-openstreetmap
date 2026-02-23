@@ -19,18 +19,18 @@ class Assets {
 		add_action( 'enqueue_block_assets', [ $this, 'frontend' ] );
 	}
 
-	public function frontend() {
+	public function frontend(): void {
 		$this->frontend_assets();
 		$this->script_variables();
 	}
 
-	public function shortcode_assets() {
-		wp_enqueue_style( 'ootb-openstreetmap-style', '', $this->handle_leaflet, OOTB_SCRIPT_VERSION['leaflet'] );
+	public function shortcode_assets(): void {
+		wp_enqueue_style( 'ootb-openstreetmap-style', '', [ $this->handle_leaflet ], OOTB_SCRIPT_VERSION['leaflet'] );
 		wp_enqueue_script( $this->handle_leaflet );
 		wp_enqueue_script( $this->handle_ootb_script );
 	}
 
-	public function frontend_assets() {
+	public function frontend_assets(): void {
 		wp_register_script(
 			$this->handle_leaflet,
 			OOTB_PLUGIN_URL . 'assets/vendor/leaflet/leaflet.js',
@@ -51,7 +51,7 @@ class Assets {
 		}
 	}
 
-	public function script_variables() {
+	public function script_variables(): void {
 		global $ootb_inline_scripts_tracking;
 		// Do not proceed if the script is already present.
 		if ( in_array( $this->handle_ootb_script, $ootb_inline_scripts_tracking, true ) ) {

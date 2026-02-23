@@ -5,3 +5,11 @@
 /.idea/vcs.xml
 /node_modules/
 /.idea/
+/tests/phpunit/coverage/
+/tests/playwright/screenshots/
+/playwright-report/
+/tests/phpunit/fixtures/
+/vendor/
+/composer.lock
+/.phpunit.result.cache
+/test-results/

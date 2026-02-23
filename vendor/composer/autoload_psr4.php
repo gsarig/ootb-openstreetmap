@@ -6,5 +6,22 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'SzepeViktor\\PHPStan\\WordPress\\' => array($vendorDir . '/szepeviktor/phpstan-wordpress/src'),
+    'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
+    'Symfony\\Polyfill\\Intl\\Normalizer\\' => array($vendorDir . '/symfony/polyfill-intl-normalizer'),
+    'Symfony\\Polyfill\\Intl\\Grapheme\\' => array($vendorDir . '/symfony/polyfill-intl-grapheme'),
+    'Symfony\\Polyfill\\Ctype\\' => array($vendorDir . '/symfony/polyfill-ctype'),
+    'Symfony\\Component\\Yaml\\' => array($vendorDir . '/symfony/yaml'),
+    'Symfony\\Component\\String\\' => array($vendorDir . '/symfony/string'),
+    'Symfony\\Component\\Serializer\\' => array($vendorDir . '/symfony/serializer'),
+    'Symfony\\Component\\PropertyInfo\\' => array($vendorDir . '/symfony/property-info'),
+    'Symfony\\Component\\PropertyAccess\\' => array($vendorDir . '/symfony/property-access'),
+    'Spatie\\Snapshots\\' => array($vendorDir . '/spatie/phpunit-snapshot-assertions/src'),
+    'PhpParser\\' => array($vendorDir . '/nikic/php-parser/lib/PhpParser'),
+    'PHPStan\\ExtensionInstaller\\' => array($vendorDir . '/phpstan/extension-installer/src'),
+    'PHPCSStandards\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\' => array($vendorDir . '/dealerdirect/phpcodesniffer-composer-installer/src'),
+    'OOTB\\Tests\\' => array($baseDir . '/tests/phpunit'),
     'OOTB\\' => array($baseDir . '/includes/classes'),
+    'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),
+    'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
 );

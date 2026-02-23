@@ -6,7 +6,9 @@ README.md
 /.wordpress-org
 /.idea
 /bin
-
+/tests
+/docker
+/docs/tests
 
 .distignore
 .eslintrc.js
@@ -24,3 +26,15 @@ LICENSE.md
 package-lock.json
 package.json
 README.md
+phpcs.xml
+phpstan.neon
+phpunit.xml.dist
+playwright.config.ts
+docker-compose.yml
+TESTING.md
+phpcs.xml
+phpstan.neon
+phpunit.xml.dist
+playwright.config.ts
+docker-compose.yml
+TESTING.md

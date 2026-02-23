@@ -80,8 +80,8 @@ class AbilitiesTest extends WP_UnitTestCase {
 		$this->assertIsArray( $result );
 
 		$post = get_post( $post_id );
-		$this->assertStringContainsString( '"lat":"51.5074"', $post->post_content );
-		$this->assertStringContainsString( '"lng":"-0.1278"', $post->post_content );
+		// Centre is stored in bounds, not as top-level lat/lng.
+		$this->assertStringContainsString( '"bounds":[["51.5074","-0.1278"]]', $post->post_content );
 		$this->assertStringContainsString( '"zoom":12', $post->post_content );
 	}
 
@@ -112,10 +112,9 @@ class AbilitiesTest extends WP_UnitTestCase {
 		$this->assertIsArray( $result );
 
 		$post = get_post( $post_id );
-		$this->assertStringContainsString( 'marker-1', $post->post_content );
-		$this->assertStringContainsString( 'marker-2', $post->post_content );
-		$this->assertStringContainsString( 'London', $post->post_content );
-		$this->assertStringContainsString( 'Paris', $post->post_content );
+		// Markers now use numeric timestamp IDs, not string slugs.
+		$this->assertStringContainsString( 'Capital of England', $post->post_content );
+		$this->assertStringContainsString( 'Capital of France', $post->post_content );
 	}
 
 	public function test_execute_callback_centers_on_first_marker_when_no_explicit_center(): void {
@@ -173,9 +172,10 @@ class AbilitiesTest extends WP_UnitTestCase {
 		$this->assertIsArray( $result );
 
 		$post = get_post( $post_id );
-		$this->assertStringContainsString( '"provider":"mapbox"', $post->post_content );
-		$this->assertStringContainsString( '"mapHeight":600', $post->post_content );
-		$this->assertStringContainsString( 'height: 600px', $post->post_content );
+		// provider and mapHeight are no longer in the block comment attrs,
+		// but provider appears in the inner HTML data-provider attribute.
+		$this->assertStringContainsString( 'data-provider="mapbox"', $post->post_content );
+		$this->assertStringContainsString( 'height:600px', $post->post_content );
 	}
 
 	public function test_execute_callback_clamps_zoom_levels(): void {
@@ -244,6 +244,6 @@ class AbilitiesTest extends WP_UnitTestCase {
 		$this->assertStringContainsString( 'wp-block-ootb-openstreetmap', $markup );
 		$this->assertStringContainsString( 'data-provider="openstreetmap"', $markup );
 		$this->assertStringContainsString( 'data-zoom="10"', $markup );
-		$this->assertStringContainsString( 'height: 400px', $markup );
+		$this->assertStringContainsString( 'height:400px', $markup );
 	}
 }

@@ -9,7 +9,7 @@ parameters:
         - vendor/autoload.php
         - phpstan-bootstrap.php
     excludePaths:
-        - vendor/ (?)
-        - node_modules/ (?)
-        - build/ (?)
-        - tests/ (?)
+        - vendor/
+        - node_modules/
+        - build/
+        - tests/

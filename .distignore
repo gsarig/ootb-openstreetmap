@@ -10,7 +10,6 @@ README.md
 /tests
 /docker
 /docs/tests
-/vendor
 
 .distignore
 .eslintrc.js

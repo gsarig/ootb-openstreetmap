@@ -230,16 +230,17 @@ function build_block_markup(
 	// Block comment attributes (what the editor stores and uses to reconstruct UI state).
 	$block_attrs = [
 		'markers'           => array_map(
-			static function ( array $m ): array {
+			static function ( array $m, int $index ): array {
 				return [
-					'id'      => (int) substr( (string) ( microtime( true ) * 1000 ), 0, 13 ),
+					'id'      => (int) ( microtime( true ) * 1000 ) + $index,
 					'lat'     => $m['lat'],
 					'lng'     => $m['lng'],
 					'text'    => $m['content'],
 					'textRaw' => $m['content'],
 				];
 			},
-			$markers
+			$markers,
+			array_keys( $markers )
 		),
 		'zoom'              => $zoom,
 		'showDefaultBounds' => false,

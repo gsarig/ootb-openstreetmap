@@ -173,7 +173,7 @@ class Helper {
 		$defaults = wp_json_file_decode(
 			OOTB_PLUGIN_PATH . '/assets/defaults.json',
 			[
-				'associative' => true,
+				'associative' => false,
 			]
 		);
 

@@ -12,6 +12,12 @@ WP_CORE_DIR="${WP_CORE_DIR:-/tmp/wordpress}"
 if [[ "$WP_VERSION" == "latest" ]]; then
   WP_VERSION=$(curl -s https://api.wordpress.org/core/version-check/1.7/ \
     | grep -o '"version":"[^"]*"' | head -1 | cut -d'"' -f4) || true
+elif [[ "$WP_VERSION" =~ ^[0-9]+\.[0-9]+$ ]]; then
+  # Resolve X.Y to the latest X.Y.Z patch — GitHub tags don't have bare X.Y entries
+  RESOLVED=$(curl -s "https://api.wordpress.org/core/version-check/1.7/" \
+    | grep -o '"version":"[^"]*"' | cut -d'"' -f4 \
+    | grep "^${WP_VERSION}\." | head -1) || true
+  [[ -n "$RESOLVED" ]] && WP_VERSION="$RESOLVED"
 fi
 
 download() {

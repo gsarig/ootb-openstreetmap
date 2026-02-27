@@ -625,6 +625,98 @@ class BlockAttributeSnapshotTest extends WP_UnitTestCase {
 		$this->assertMatchesSnapshot( $normalized );
 	}
 
+	/**
+	 * Stamen provider — uses the Stamen tile service (watercolor style).
+	 * The data-provider attribute value differs from openstreetmap and mapbox.
+	 */
+	public function test_block_render_passthrough_with_stamen_provider(): void {
+		$markers = [
+			[ 'id' => 'st1', 'lat' => '37.9838', 'lng' => '23.7275', 'title' => 'Stamen marker', 'content' => '', 'icon' => '' ],
+		];
+		$html    = $this->build_block_html(
+			[
+				'provider'        => 'stamen',
+				'mapType'         => 'marker',
+				'showMarkers'     => true,
+				'shapeColor'      => '#008EFF',
+				'shapeWeight'     => 3,
+				'shapeText'       => '',
+				'markers'         => $markers,
+				'bounds'          => '[[37.9838,23.7275]]',
+				'zoom'            => 13,
+				'minZoom'         => 2,
+				'maxZoom'         => 18,
+				'dragging'        => true,
+				'touchZoom'       => true,
+				'doubleClickZoom' => true,
+				'scrollWheelZoom' => true,
+				'mapHeight'       => 400,
+			]
+		);
+
+		$output     = render_block(
+			[
+				'blockName'    => 'ootb/openstreetmap',
+				'attrs'        => [
+					'provider' => 'stamen',
+					'markers'  => $markers,
+				],
+				'innerHTML'    => $html,
+				'innerContent' => [ $html ],
+			]
+		);
+		$normalized = $this->normalize_output( $output );
+		$this->assertMatchesSnapshot( $normalized );
+	}
+
+	/**
+	 * Custom marker icon — a non-default icon object in data-marker.
+	 * Exercises the passthrough of the defaultIcon block attribute (set via save.js)
+	 * into the data-marker HTML attribute, which the PHP render_callback preserves.
+	 */
+	public function test_block_render_passthrough_with_custom_marker_icon(): void {
+		$custom_icon = [
+			'iconUrl'     => 'https://example.com/custom-pin.png',
+			'iconAnchor'  => [ 16, 32 ],
+			'popupAnchor' => [ 0, -32 ],
+		];
+		$markers     = [
+			[ 'id' => 'ci1', 'lat' => '37.9838', 'lng' => '23.7275', 'title' => 'Custom icon marker', 'content' => 'Marker with a custom icon', 'icon' => '' ],
+		];
+		$html        = $this->build_block_html(
+			[
+				'provider'        => 'openstreetmap',
+				'mapType'         => 'marker',
+				'showMarkers'     => true,
+				'shapeColor'      => '#008EFF',
+				'shapeWeight'     => 3,
+				'shapeText'       => '',
+				'markers'         => $markers,
+				'bounds'          => '[[37.9838,23.7275]]',
+				'zoom'            => 13,
+				'minZoom'         => 2,
+				'maxZoom'         => 18,
+				'dragging'        => true,
+				'touchZoom'       => true,
+				'doubleClickZoom' => true,
+				'scrollWheelZoom' => true,
+				'mapHeight'       => 400,
+				'marker'          => $custom_icon,
+			]
+		);
+
+		$output     = render_block(
+			[
+				'blockName'    => 'ootb/openstreetmap',
+				'attrs'        => [ 'markers' => $markers ],
+				'innerHTML'    => $html,
+				'innerContent' => [ $html ],
+			]
+		);
+		$normalized = $this->normalize_output( $output );
+		$this->assertMatchesSnapshot( $normalized );
+	}
+
 	// =========================================================================
 	// Helpers
 	// =========================================================================

@@ -374,7 +374,7 @@ class Helper {
 			$attrs[ $key ] = match ( $key ) {
 				'source' => in_array( $value, [ 'geodata', 'block' ], true ) ? $value : '',
 				'post_type' => in_array( $value, array_column( self::get_post_types(), 'value' ), true ) ? $value : self::get_default( 'post_type' ),
-				'posts_per_page' => ( is_int( $value ) || ( is_numeric( $value ) && - 1 === (int) $value ) ) ? $value : Query::get_posts_per_page(),
+				'posts_per_page' => ( is_int( $value ) || ( is_numeric( $value ) && -1 === (int) $value ) ) ? $value : Query::get_posts_per_page(),
 				'post_ids' => ( preg_match( '/^(\d+,)*\d+$/', $value ) === 1 ) ? $value : '',
 				'height' => ( preg_match( '/^\d+px$/', $value ) === 1 ) ? $value : self::get_default( 'height' ),
 				'provider' => in_array( $value, array_keys( self::providers( [ 'associative' => true ] ) ), true ) ? $value : '',

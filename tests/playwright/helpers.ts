@@ -33,7 +33,7 @@ export async function dismissModals( page: Page ) {
 }
 
 export async function insertBlock( page: Page ) {
-  await page.click( 'button[aria-label="Block Inserter"]' );
+  await page.click( 'button[aria-label="Block Inserter"], button[aria-label="Toggle block inserter"]' );
   await page.fill( '.block-editor-inserter__search input', 'OpenStreetMap' );
   const blockItem = page.locator( '.block-editor-block-types-list__item', {
     hasText: 'OpenStreetMap',

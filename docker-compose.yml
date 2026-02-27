@@ -16,7 +16,7 @@ services:
       retries: 10
 
   wordpress:
-    image: wordpress:php8.1-apache
+    image: ${WP_IMAGE:-wordpress:php8.1-apache}
     restart: unless-stopped
     depends_on:
       db:

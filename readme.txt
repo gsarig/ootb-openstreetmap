@@ -2,7 +2,7 @@
 Contributors: gsarig
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MZR4JSRUMH5EA&source=url
 Tags: Map, OpenStreetMap, Leaflet, Google Maps, block
-Requires at least: 6.5
+Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 8.1
 Stable tag: 2.8.9

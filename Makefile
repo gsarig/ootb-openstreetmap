@@ -1,5 +1,7 @@
 .PHONY: up down setup test lint phpunit update-snapshots playwright build composer-install test-docker lint-docker phpunit-docker
 
+WP_VERSION ?= latest
+
 up:
 	docker compose up -d --wait
 
@@ -16,7 +18,7 @@ build:
 test-docker: up composer-install
 	docker compose exec -T cli bash -c "cd /var/www/html/wp-content/plugins/ootb-openstreetmap && vendor/bin/phpstan analyse --no-progress"
 	docker compose exec -T cli bash -c "cd /var/www/html/wp-content/plugins/ootb-openstreetmap && vendor/bin/phpcs"
-	docker compose exec -T cli bash -c "cd /var/www/html/wp-content/plugins/ootb-openstreetmap && bash bin/install-wp-tests.sh wordpress_test wordpress wordpress db latest"
+	docker compose exec -T cli bash -c "cd /var/www/html/wp-content/plugins/ootb-openstreetmap && bash bin/install-wp-tests.sh wordpress_test wordpress wordpress db $(WP_VERSION)"
 	docker compose exec -T cli bash -c "cd /var/www/html/wp-content/plugins/ootb-openstreetmap && vendor/bin/phpunit"
 
 lint-docker: up composer-install
@@ -24,7 +26,7 @@ lint-docker: up composer-install
 	docker compose exec -T cli bash -c "cd /var/www/html/wp-content/plugins/ootb-openstreetmap && vendor/bin/phpcs"
 
 phpunit-docker: up composer-install
-	docker compose exec -T cli bash -c "cd /var/www/html/wp-content/plugins/ootb-openstreetmap && bash bin/install-wp-tests.sh wordpress_test wordpress wordpress db latest"
+	docker compose exec -T cli bash -c "cd /var/www/html/wp-content/plugins/ootb-openstreetmap && bash bin/install-wp-tests.sh wordpress_test wordpress wordpress db $(WP_VERSION)"
 	docker compose exec -T cli bash -c "cd /var/www/html/wp-content/plugins/ootb-openstreetmap && vendor/bin/phpunit"
 
 composer-install:
@@ -48,7 +50,7 @@ update-snapshots:
 	UPDATE_SNAPSHOTS=1 vendor/bin/phpunit --testsuite snapshot
 
 update-snapshots-docker: up composer-install
-	docker compose exec -T cli bash -c "cd /var/www/html/wp-content/plugins/ootb-openstreetmap && bash bin/install-wp-tests.sh wordpress_test wordpress wordpress db latest"
+	docker compose exec -T cli bash -c "cd /var/www/html/wp-content/plugins/ootb-openstreetmap && bash bin/install-wp-tests.sh wordpress_test wordpress wordpress db $(WP_VERSION)"
 	docker compose exec -T cli bash -c "cd /var/www/html/wp-content/plugins/ootb-openstreetmap && UPDATE_SNAPSHOTS=1 vendor/bin/phpunit --testsuite snapshot"
 
 playwright: setup

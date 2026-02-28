@@ -274,6 +274,10 @@ class Query {
 				}
 			}
 		}
+		if ( empty( $markers ) ) {
+			return false;
+		}
+
 		$flattened_markers = array_merge( ...$markers );
 
 		return wp_json_encode( $flattened_markers );

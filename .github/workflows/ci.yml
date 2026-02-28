@@ -48,7 +48,7 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm audit --audit-level=high --omit=dev
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: build-assets
           path: build/
@@ -103,7 +103,7 @@ jobs:
       - run: vendor/bin/phpunit --coverage-clover=tests/phpunit/coverage/clover.xml
         env:
           WP_TESTS_DIR: /tmp/wordpress-tests-lib
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: phpunit-coverage-wp-${{ matrix.wp-version }}-php-${{ matrix.php-version }}
           path: tests/phpunit/coverage/
@@ -156,7 +156,7 @@ jobs:
       - run: npx playwright test
         env:
           WP_BASE_URL: http://localhost:8080
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: playwright-report-wp-${{ matrix.wp-label }}
@@ -235,7 +235,7 @@ jobs:
         env:
           WP_BASE_URL: http://localhost:8080
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: artifact-playwright-report

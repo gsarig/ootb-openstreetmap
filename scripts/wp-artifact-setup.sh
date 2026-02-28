@@ -21,7 +21,7 @@ until curl -sf "${WP_URL}/wp-login.php" > /dev/null 2>&1 || [ $TRIES -ge $MAX_TR
   sleep 2
   TRIES=$((TRIES + 1))
   if [ $((TRIES % 10)) -eq 0 ]; then
-    echo "    Still waiting... ($TRIES seconds)"
+    echo "    Still waiting... ($((TRIES * 2)) seconds elapsed)"
   fi
 done
 

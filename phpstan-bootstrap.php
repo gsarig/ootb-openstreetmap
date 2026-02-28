@@ -6,6 +6,6 @@
  * so that static analysis can resolve them without a full WP environment.
  */
 
-define( 'OOTB_PLUGIN_URL', '' );
-define( 'OOTB_PLUGIN_PATH', '' );
-define( 'OOTB_PLUGIN_BASENAME', '' );
+defined( 'OOTB_PLUGIN_URL' )      || define( 'OOTB_PLUGIN_URL', '' );
+defined( 'OOTB_PLUGIN_PATH' )     || define( 'OOTB_PLUGIN_PATH', '' );
+defined( 'OOTB_PLUGIN_BASENAME' ) || define( 'OOTB_PLUGIN_BASENAME', '' );

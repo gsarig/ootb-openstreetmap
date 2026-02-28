@@ -34,6 +34,13 @@ ootb_cf_modal_content, ootb_block_marker_text, ootb_cf_marker_icon),
 shortcode attributes, or block attribute names is a **breaking change**.
 Flag it clearly before implementing and confirm it is intentional.
 
+### Distribution Zip Is the Real Artefact
+The plugin is deployed from a zip built via the artifact pipeline, not directly from GitHub.
+Before any release merge to master, the `artifact-playwright` CI job must pass. Never treat
+green source tests as confirmation the distribution zip is correct — they are tested separately.
+The artifact job builds the zip with `bin/build-zip.sh` (identical to what `release.yml` deploys),
+installs it into a clean WordPress instance via WP-CLI, and runs the full Playwright suite against it.
+
 ### Snapshot Tests Are the Rendered Output Contract
 PHPUnit snapshot tests in tests/phpunit/snapshot/ define the expected HTML output of the block.
 If an implementation changes the rendered HTML in any way, the snapshots will fail.
@@ -217,12 +224,17 @@ These are part of the public API — do not change signatures or remove without 
 ## CI Pipeline (GitHub Actions)
 
 ```
-static-analysis + js-build + security (parallel)
-        |               |
-    phpunit         playwright
-  (waits for       (waits for
-   js-build)        js-build)
+static-analysis + js-build + security + artifact-playwright (parallel)
+                       |                        |
+               phpunit + playwright         builds its own zip
+             (wait for js-build)         installs to clean WP
+                                         runs Playwright on zip
 ```
+
+- `artifact-playwright` runs independently — it does not reuse `js-build` assets.
+  It builds the full distribution zip from scratch to test exactly what gets deployed.
+- Version consistency check (PHP header / package.json / readme.txt) runs first in the
+  artifact job and fails fast if versions are out of sync.
 
 CI runs identical commands to local. If something passes locally but fails in CI,
 reset stale Docker volumes: docker compose down -v && make setup

@@ -106,8 +106,7 @@ Tests the actual zip that WordPress.org serves, not your source code. Lives in t
 - `version` in `package.json`
 - `Stable tag:` in `readme.txt`
 
-**Still to do — add to CLAUDE.md:**
-> The plugin is deployed from a zip built via the artifact pipeline, not directly from GitHub. Before any release merge to master, the artifact test must pass. Never treat green source tests as confirmation the distribution zip is correct — they are tested separately.
+**Added to CLAUDE.md** under Critical Development Rules — "Distribution Zip Is the Real Artefact".
 
 ### 2.3 Copy review agent
 
@@ -374,7 +373,7 @@ Do not try to build everything at once. This is the recommended order, each step
 | 3 | Snapshot tests | Done — BlockSnapshotTest, BlockAttributeSnapshotTest (12 cases), QuerySnapshotTest |
 | 4 | Fix release.yml + build-zip.sh | Done — build steps added, dev vendor no longer deployed |
 | 5 | Artifact test CI job | Done — docker-compose.artifact.yml, wp-artifact-setup.sh, artifact-playwright job in ci.yml |
-| 6 | Add artifact note to CLAUDE.md | Pending — see §2.2 |
+| 6 | Add artifact note to CLAUDE.md | Done |
 | 7 | GitHub Project | One-time manual setup in GitHub UI |
 | 8 | Create ootb-dev-tools | `mkdir`, `git init`, done — empty repo ready for scripts |
 | 9 | compatibility-check.js | First script — self-contained, proves tooling works |

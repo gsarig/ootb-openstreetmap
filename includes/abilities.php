@@ -227,8 +227,11 @@ function build_block_markup(
 	array $markers,
 	bool $gesture_handling
 ): string {
+	$provider_slug = ( 'mapbox' === $provider ) ? 'mapbox' : 'openstreetmap';
+
 	// Block comment attributes (what the editor stores and uses to reconstruct UI state).
 	// Use the same block_id that data-markers will use so both stay in sync.
+	// Include every non-default value so the editor can correctly reconstruct UI state.
 	$block_attrs = [
 		'markers'           => array_map(
 			static function ( array $m ): array {
@@ -243,6 +246,8 @@ function build_block_markup(
 			$markers
 		),
 		'zoom'              => $zoom,
+		'mapHeight'         => $map_height,
+		'provider'          => $provider_slug,
 		'showDefaultBounds' => false,
 		'bounds'            => [ [ (string) $lat, (string) $lng ] ],
 		'gestureHandling'   => $gesture_handling,
@@ -292,8 +297,6 @@ function build_block_markup(
 
 	// data-bounds is plain JSON (view.js uses JSON.parse without decodeURIComponent).
 	$data_bounds = (string) wp_json_encode( [ $lat, $lng ] );
-
-	$provider_slug = ( 'mapbox' === $provider ) ? 'mapbox' : 'openstreetmap';
 
 	$inner_html = sprintf(
 		'<div class="wp-block-ootb-openstreetmap">'

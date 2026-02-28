@@ -8,7 +8,6 @@
 /tests/phpunit/coverage/
 /tests/playwright/screenshots/
 /playwright-report/
-/tests/phpunit/fixtures/
 /vendor/
 /.phpunit.result.cache
 /test-results/

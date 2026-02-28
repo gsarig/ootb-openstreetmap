@@ -73,8 +73,11 @@ class Query {
 			? absint( $_POST['post_id'] )
 			: 0;
 
+		// Use wp_unslash() only — sanitize_text_field() can corrupt JSON by
+		// stripping or normalising characters that are valid inside JSON strings.
+		// Individual values are sanitized after json_decode() below.
 		$raw_query_args = isset( $_POST['query_args'] )
-			? sanitize_text_field( wp_unslash( $_POST['query_args'] ) )
+			? wp_unslash( $_POST['query_args'] ) // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			: '';
 
 		$args = ! empty( $raw_query_args )

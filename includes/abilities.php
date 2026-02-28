@@ -172,8 +172,9 @@ function execute_add_map_to_post( array $args ): array|\WP_Error {
 		];
 	}
 
-	$centre_lat = (float) ( $args['lat'] ?? ( $markers[0]['lat'] ?? 37.9715 ) );
-	$centre_lng = (float) ( $args['lng'] ?? ( $markers[0]['lng'] ?? 23.7266 ) );
+	$fallback   = \OOTB\Helper::fallback_location();
+	$centre_lat = (float) ( $args['lat'] ?? ( $markers[0]['lat'] ?? (float) $fallback[0] ) );
+	$centre_lng = (float) ( $args['lng'] ?? ( $markers[0]['lng'] ?? (float) $fallback[1] ) );
 
 	$block_markup = build_block_markup(
 		$centre_lat,

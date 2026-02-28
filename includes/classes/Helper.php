@@ -330,7 +330,7 @@ class Helper {
 		if ( ! filter_var( $img_src, FILTER_VALIDATE_URL ) ) {
 			return '';
 		}
-		$url_host = wp_parse_url( $img_src, PHP_URL_HOST );
+		$url_host  = wp_parse_url( $img_src, PHP_URL_HOST );
 		$site_host = wp_parse_url( get_home_url(), PHP_URL_HOST );
 		if ( $url_host !== $site_host ) {
 			return '';

@@ -55,7 +55,7 @@ make playwright    # Browser smoke tests
 
 Three containers:
 - **db**: MySQL 8.0 database
-- **wordpress**: WordPress 6.5 + PHP 8.1
+- **wordpress**: WordPress 6.6 + PHP 8.1
 - **cli**: WP-CLI for automation
 
 WordPress available at `http://localhost:8080` (admin / password)

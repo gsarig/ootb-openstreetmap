@@ -55,7 +55,7 @@ and wait for explicit confirmation before running make update-snapshots.
 - **PHP** 8.1+ — block rendering, REST endpoints, settings, shortcodes
 - **JavaScript** (ES modules) — Gutenberg block editor (React), Leaflet.js frontend
 - **Leaflet.js** — map rendering library
-- **WordPress** 6.5+ with Gutenberg block API
+- **WordPress** 6.6+ with Gutenberg block API
 - **Composer** — PHP dependencies and dev tools
 - **npm** — JS build pipeline
 

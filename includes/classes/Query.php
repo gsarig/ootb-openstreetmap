@@ -165,13 +165,16 @@ class Query {
 			return $content;
 		}
 
-		$post_type                             = $attributes['query_args']['post_type'] ?? '';
-		$attributes['query_args']['post_type'] = self::get_post_type( $post_type );
-		$post_id                               = is_singular() ? get_the_ID() : 0;
-		$markers                               = self::get_markers(
+		$query_args         = $attributes['query_args'] ?? $attributes['queryArgs'] ?? [];
+		$query_args         = is_array( $query_args ) ? $query_args : [];
+		$query_custom_flags = $attributes['query_custom_fields'] ?? $attributes['queryCustomFields'] ?? false;
+		$post_type         = $query_args['post_type'] ?? '';
+		$query_args['post_type'] = self::get_post_type( $post_type );
+		$post_id           = is_singular() ? get_the_ID() : 0;
+		$markers           = self::get_markers(
 			$post_id,
-			$attributes['query_args'],
-			$attributes['query_custom_fields'] ?? false
+			$query_args,
+			$query_custom_flags
 		);
 		if ( empty( $markers ) ) {
 			return $content;

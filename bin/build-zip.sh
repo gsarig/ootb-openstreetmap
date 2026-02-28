@@ -39,51 +39,40 @@ BUILD_DIR="${PLUGIN_SLUG}"
 
 echo "Building $ZIP_NAME..."
 
-# 2. Build Assets
+# 2. Build Assets (mirrors release.yml before 10up deploy)
 # ------------------------------------------------------------------------------
 echo "Installing JS dependencies and building assets..."
 npm ci && npm run build
+
+echo "Installing production Composer dependencies..."
+composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-progress
 
 # 3. Cleanup Previous Builds
 # ------------------------------------------------------------------------------
 rm -rf "$BUILD_DIR"
 rm -f "$ZIP_NAME"
 
-# 4. Create Build Directory & Copy Files
+# 4. Copy Files (same rules as 10up: .distignore only)
 # ------------------------------------------------------------------------------
 mkdir -p "$BUILD_DIR"
 
-# Check for .distignore
+# 10up uses: rsync -rc --exclude-from=.distignore $GITHUB_WORKSPACE/ trunk/
+# We add --exclude for BUILD_DIR and *.zip only (avoids self-copy and stray zips).
 RSYNC_EXCLUDE=""
 if [ -f ".distignore" ]; then
 	RSYNC_EXCLUDE="--exclude-from=.distignore"
 fi
 
-# Sync files to the build directory.
-# Exclude root vendor/ only (not assets/vendor/ which has Leaflet) — Composer vendor
-# is regenerated from scratch with --no-dev below.
 rsync -av $RSYNC_EXCLUDE \
 	--exclude="${BUILD_DIR}" \
 	--exclude="*.zip" \
-	--exclude="/vendor/" \
 	./ "$BUILD_DIR/"
 
-# 5. Install Production Composer Dependencies
+# 5. Create Zip
 # ------------------------------------------------------------------------------
-# composer.json and composer.lock are distignored, so copy them in temporarily,
-# run composer inside the build directory (leaving the workspace vendor/ untouched),
-# then remove the manifest files before zipping.
-echo "Installing production Composer dependencies..."
-cp composer.json composer.lock "$BUILD_DIR/"
-(cd "$BUILD_DIR" && composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-progress)
-rm "$BUILD_DIR/composer.json" "$BUILD_DIR/composer.lock"
-
-# 6. Create Zip
-# ------------------------------------------------------------------------------
-# Zip the build directory
 zip -q -r "$ZIP_NAME" "$BUILD_DIR"
 
-# 7. Cleanup
+# 6. Cleanup
 # ------------------------------------------------------------------------------
 rm -rf "$BUILD_DIR"
 

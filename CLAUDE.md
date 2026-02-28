@@ -221,6 +221,42 @@ These are part of the public API — do not change signatures or remove without 
 
 ---
 
+## Release Procedure
+
+When asked to **"deploy the release"**, execute the following steps in order — do not skip any, do not push anything.
+
+### Steps (automated)
+
+1. **Confirm the target version** — ask if not told explicitly.
+2. **Update all four version strings** to the new version:
+   - ` * Version:` header in `ootb-openstreetmap.php`
+   - `OOTB_VERSION` constant in `ootb-openstreetmap.php`
+   - `"version"` in `package.json`
+   - `"version"` in `src/block/block.json`
+   - `Stable tag:` in `readme.txt`
+3. **Add a changelog entry** at the top of the `== Changelog ==` section in `readme.txt`:
+   ```
+   = X.Y.Z =
+   * ...user-facing changes...
+   ```
+4. **Commit** all changed files with message: `Bump version to X.Y.Z and update changelog`
+5. **Create a git tag**: `git tag X.Y.Z`
+
+### Steps (manual — you do these)
+
+After the above is done, report:
+
+> Done. Now run:
+> ```
+> git push origin --tags
+> git push origin master
+> ```
+
+### Version consistency rule
+All five locations must match exactly before tagging. The `artifact-playwright` CI job checks three of them (PHP header, `package.json`, `readme.txt`) and fails fast if they diverge.
+
+---
+
 ## CI Pipeline (GitHub Actions)
 
 ```

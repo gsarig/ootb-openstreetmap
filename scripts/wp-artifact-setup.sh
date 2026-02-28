@@ -50,13 +50,18 @@ CLI_CONTAINER=$(docker compose -f "${COMPOSE_FILE}" ps -q cli)
 docker cp /tmp/ootb-artifact/plugin.zip "${CLI_CONTAINER}:/tmp/plugin.zip"
 
 echo "==> Extracting plugin into wp-content/plugins/..."
-docker compose -f "${COMPOSE_FILE}" exec -T cli php -r "
+# Run as root — the CLI image defaults to www-data, which may not have write
+# access to wp-content/plugins/ in a fresh Docker volume. Root always can.
+docker compose -f "${COMPOSE_FILE}" exec -T -u root cli php -r "
   \$z = new ZipArchive;
   if (\$z->open('/tmp/plugin.zip') !== true) { fwrite(STDERR, 'ERROR: Could not open zip.' . PHP_EOL); exit(1); }
   \$z->extractTo('/var/www/html/wp-content/plugins/');
   \$z->close();
   echo 'Plugin extracted.' . PHP_EOL;
 "
+# Restore www-data ownership so WordPress can manage the plugin normally.
+docker compose -f "${COMPOSE_FILE}" exec -T -u root cli \
+  chown -R www-data:www-data /var/www/html/wp-content/plugins/ootb-openstreetmap
 
 echo "==> Activating plugin..."
 wp plugin activate ootb-openstreetmap || {

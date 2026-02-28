@@ -39,12 +39,17 @@ BUILD_DIR="${PLUGIN_SLUG}"
 
 echo "Building $ZIP_NAME..."
 
-# 2. Cleanup Previous Builds
+# 2. Build Assets
+# ------------------------------------------------------------------------------
+echo "Installing JS dependencies and building assets..."
+npm ci && npm run build
+
+# 3. Cleanup Previous Builds
 # ------------------------------------------------------------------------------
 rm -rf "$BUILD_DIR"
 rm -f "$ZIP_NAME"
 
-# 3. Create Build Directory & Copy Files
+# 4. Create Build Directory & Copy Files
 # ------------------------------------------------------------------------------
 mkdir -p "$BUILD_DIR"
 
@@ -54,19 +59,31 @@ if [ -f ".distignore" ]; then
 	RSYNC_EXCLUDE="--exclude-from=.distignore"
 fi
 
-# Sync files to the build directory
-# Exclude the build directory itself and the final zip
+# Sync files to the build directory.
+# Exclude vendor/ here — it will be regenerated from scratch with --no-dev below,
+# so there is no point copying the dev-heavy workspace copy first.
 rsync -av $RSYNC_EXCLUDE \
 	--exclude="${BUILD_DIR}" \
 	--exclude="*.zip" \
+	--exclude="vendor/" \
 	./ "$BUILD_DIR/"
 
-# 4. Create Zip
+# 5. Install Production Composer Dependencies
+# ------------------------------------------------------------------------------
+# composer.json and composer.lock are distignored, so copy them in temporarily,
+# run composer inside the build directory (leaving the workspace vendor/ untouched),
+# then remove the manifest files before zipping.
+echo "Installing production Composer dependencies..."
+cp composer.json composer.lock "$BUILD_DIR/"
+(cd "$BUILD_DIR" && composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-progress)
+rm "$BUILD_DIR/composer.json" "$BUILD_DIR/composer.lock"
+
+# 6. Create Zip
 # ------------------------------------------------------------------------------
 # Zip the build directory
 zip -q -r "$ZIP_NAME" "$BUILD_DIR"
 
-# 5. Cleanup
+# 7. Cleanup
 # ------------------------------------------------------------------------------
 rm -rf "$BUILD_DIR"
 

@@ -158,6 +158,84 @@ jobs:
       - if: always()
         run: docker compose down
 
+  artifact-playwright:
+    name: Artifact Playwright Test
+    runs-on: ubuntu-latest
+    env:
+      WP_IMAGE: wordpress:php8.1-apache
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          tools: composer
+          coverage: none
+
+      - name: Verify version consistency
+        run: |
+          PHP_VER=$(grep -m1 "Version:" ootb-openstreetmap.php | awk '{print $NF}' | tr -d '\r')
+          PKG_VER=$(node -p "require('./package.json').version")
+          README_VER=$(grep "Stable tag:" readme.txt | awk '{print $NF}' | tr -d '\r')
+          echo "PHP header:   $PHP_VER"
+          echo "package.json: $PKG_VER"
+          echo "readme.txt:   $README_VER"
+          if [ "$PHP_VER" != "$PKG_VER" ] || [ "$PHP_VER" != "$README_VER" ]; then
+            echo "ERROR: Version mismatch — all three must match before releasing."
+            exit 1
+          fi
+          echo "All versions consistent: $PHP_VER"
+
+      - name: Build artifact zip
+        run: bash bin/build-zip.sh
+
+      - name: Stage artifact for Docker
+        run: |
+          mkdir -p /tmp/ootb-artifact
+          cp ootb-openstreetmap-*.zip /tmp/ootb-artifact/plugin.zip
+
+      - name: Install Playwright browser
+        run: npx playwright install chromium --with-deps
+
+      - name: Start WordPress (no source volume mount)
+        run: docker compose -f docker-compose.artifact.yml up -d
+
+      - name: Wait for WordPress
+        run: |
+          until curl -sf http://localhost:8080/wp-login.php > /dev/null; do sleep 3; done
+
+      - name: Debug container state
+        run: |
+          docker compose -f docker-compose.artifact.yml ps
+          docker compose -f docker-compose.artifact.yml logs wordpress
+          docker compose -f docker-compose.artifact.yml logs cli
+
+      - name: Setup WordPress and install plugin from zip
+        run: bash scripts/wp-artifact-setup.sh
+
+      - name: Run Playwright tests
+        run: npx playwright test
+        env:
+          WP_BASE_URL: http://localhost:8080
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: artifact-playwright-report
+          path: |
+            playwright-report/
+            tests/playwright/screenshots/
+            test-results/
+          retention-days: 7
+
+      - if: always()
+        run: docker compose -f docker-compose.artifact.yml down
+
   security:
     name: CodeQL Security Scan
     runs-on: ubuntu-latest

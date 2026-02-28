@@ -1,0 +1,69 @@
+# Standalone Docker Compose for artifact testing.
+# Used by the artifact-playwright CI job and can be run locally via:
+#   docker compose -f docker-compose.artifact.yml up -d
+#
+# Key differences from docker-compose.yml:
+# - No source directory volume mount — the plugin is installed from the built zip.
+# - /tmp/ootb-artifact is mounted read-only into the CLI container so WP-CLI
+#   can install the zip with: wp plugin install /tmp/ootb-artifact/plugin.zip
+
+services:
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wordpress_test
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  wordpress:
+    image: ${WP_IMAGE:-wordpress:php8.1-apache}
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: wordpress_test
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DEBUG: "1"
+    volumes:
+      - wp_data:/var/www/html
+      - ./docker/mu-plugins:/var/www/html/wp-content/mu-plugins
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/wp-login.php"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  cli:
+    image: wordpress:cli-php8.1
+    restart: "no"
+    depends_on:
+      wordpress:
+        condition: service_healthy
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: wordpress_test
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+    volumes:
+      - wp_data:/var/www/html
+      - ./docker/php.ini:/usr/local/etc/php/conf.d/ootb-memory.ini
+      - /tmp/ootb-artifact:/tmp/ootb-artifact:ro
+    entrypoint: ["tail", "-f", "/dev/null"]
+
+volumes:
+  db_data:
+  wp_data:

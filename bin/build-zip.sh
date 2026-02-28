@@ -60,12 +60,12 @@ if [ -f ".distignore" ]; then
 fi
 
 # Sync files to the build directory.
-# Exclude vendor/ here — it will be regenerated from scratch with --no-dev below,
-# so there is no point copying the dev-heavy workspace copy first.
+# Exclude root vendor/ only (not assets/vendor/ which has Leaflet) — Composer vendor
+# is regenerated from scratch with --no-dev below.
 rsync -av $RSYNC_EXCLUDE \
 	--exclude="${BUILD_DIR}" \
 	--exclude="*.zip" \
-	--exclude="vendor/" \
+	--exclude="/vendor/" \
 	./ "$BUILD_DIR/"
 
 # 5. Install Production Composer Dependencies

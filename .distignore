@@ -5,11 +5,21 @@ README.md
 /src
 /.wordpress-org
 /.idea
+/.claude
 /bin
 /scripts
 /tests
 /docker
-/docs/tests
+/docs
+/zip-extract
+/test-results
+.phpunit.result.cache
+CLAUDE.md
+debug-plugin.php
+debug-wp.php
+docker-compose.artifact.yml
+ootb-implementation-plan.md
+assets/vendor/leaflet/reference-1.6.0*.html
 
 .distignore
 .eslintrc.js

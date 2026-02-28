@@ -39,34 +39,40 @@ BUILD_DIR="${PLUGIN_SLUG}"
 
 echo "Building $ZIP_NAME..."
 
-# 2. Cleanup Previous Builds
+# 2. Build Assets (mirrors release.yml before 10up deploy)
+# ------------------------------------------------------------------------------
+echo "Installing JS dependencies and building assets..."
+npm ci && npm run build
+
+echo "Installing production Composer dependencies..."
+composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-progress
+
+# 3. Cleanup Previous Builds
 # ------------------------------------------------------------------------------
 rm -rf "$BUILD_DIR"
 rm -f "$ZIP_NAME"
 
-# 3. Create Build Directory & Copy Files
+# 4. Copy Files (same rules as 10up: .distignore only)
 # ------------------------------------------------------------------------------
 mkdir -p "$BUILD_DIR"
 
-# Check for .distignore
+# 10up uses: rsync -rc --exclude-from=.distignore $GITHUB_WORKSPACE/ trunk/
+# We add --exclude for BUILD_DIR and *.zip only (avoids self-copy and stray zips).
 RSYNC_EXCLUDE=""
 if [ -f ".distignore" ]; then
 	RSYNC_EXCLUDE="--exclude-from=.distignore"
 fi
 
-# Sync files to the build directory
-# Exclude the build directory itself and the final zip
 rsync -av $RSYNC_EXCLUDE \
 	--exclude="${BUILD_DIR}" \
 	--exclude="*.zip" \
 	./ "$BUILD_DIR/"
 
-# 4. Create Zip
+# 5. Create Zip
 # ------------------------------------------------------------------------------
-# Zip the build directory
 zip -q -r "$ZIP_NAME" "$BUILD_DIR"
 
-# 5. Cleanup
+# 6. Cleanup
 # ------------------------------------------------------------------------------
 rm -rf "$BUILD_DIR"
 

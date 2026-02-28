@@ -2,10 +2,10 @@
 Contributors: gsarig
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MZR4JSRUMH5EA&source=url
 Tags: Map, OpenStreetMap, Leaflet, Google Maps, block
-Requires at least: 6.5
+Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 2.8.9
+Stable tag: 2.9.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,6 +142,11 @@ Version 2.0.0 is a major, almost full, refactoring, both for the build scripts a
 = 1.0 =
 
 == Changelog ==
+= 2.9.0 =
+* Adds support for the WordPress Abilities API.
+* Bumps minimum supported WordPress version to 6.6.
+* Fixes a bug where empty markers could cause an error.
+
 = 2.8.9 =
 * Fixes a bug where the block alignment wasn't respected.
 * Build script updates.

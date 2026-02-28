@@ -15,13 +15,14 @@ use OOTB\Options;
 use OOTB\Query;
 use OOTB\CustomFields;
 
-function setup() {
-	$n = function ( $function ) {
-		return __NAMESPACE__ . "\\$function";
+function setup(): void {
+	$n = function ( $func ) {
+		return __NAMESPACE__ . "\\$func";
 	};
 
 	add_action( 'init', $n( 'i18n' ) );
 	add_action( 'init', $n( 'openstreetmap_block_init' ) );
+	add_action( 'wp_abilities_api_init', '\OOTB\Abilities\register_abilities' );
 }
 
 new Options();
@@ -49,10 +50,11 @@ function i18n() {
  * @see https://developer.wordpress.org/reference/functions/register_block_type/
  * @noinspection PhpUnused
  */
-function openstreetmap_block_init() {
-	register_block_type( OOTB_PLUGIN_PATH . '/build/block',
+function openstreetmap_block_init(): void {
+	register_block_type(
+		OOTB_PLUGIN_PATH . '/build/block',
 		[
-			'render_callback' => '\OOTB\Query::render_callback'
+			'render_callback' => '\OOTB\Query::render_callback',
 		]
 	);
 	if ( is_admin() ) {

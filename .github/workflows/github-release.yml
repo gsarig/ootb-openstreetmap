@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Determine Tag Name
         id: determine_tag
@@ -29,25 +29,33 @@ jobs:
           echo "Tag: $tag"
           echo "tag=$tag" >> $GITHUB_ENV
 
-      -   name: Prepare Plugin ZIP
-          run: |
-              plugin_name="ootb-openstreetmap"
-              mkdir -p "$plugin_name"
+      - name: Install JS dependencies and build
+        run: |
+          npm ci
+          npm run build
 
-              # Create exclusion rules from `.distignore`
-              if [[ -f ".distignore" ]]; then
-                rsync_exclude_option="--exclude-from=.distignore"
-              else
-                rsync_exclude_option=""
-              fi
+      - name: Install Composer dependencies (production only)
+        run: composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-progress
 
-              # Sync files but exclude the ZIP file itself and the output directory
-              rsync -av $rsync_exclude_option \
-                  --exclude="${plugin_name}-${tag}.zip" \
-                  --exclude="$plugin_name/" ./ "$plugin_name/"
+      - name: Prepare Plugin ZIP
+        run: |
+            plugin_name="ootb-openstreetmap"
+            mkdir -p "$plugin_name"
 
-              # Create the ZIP
-              zip -r "${plugin_name}-${tag}.zip" "$plugin_name"
+            # Create exclusion rules from `.distignore`
+            if [[ -f ".distignore" ]]; then
+              rsync_exclude_option="--exclude-from=.distignore"
+            else
+              rsync_exclude_option=""
+            fi
+
+            # Sync files but exclude the ZIP file itself and the output directory
+            rsync -av $rsync_exclude_option \
+                --exclude="${plugin_name}-${tag}.zip" \
+                --exclude="$plugin_name/" ./ "$plugin_name/"
+
+            # Create the ZIP
+            zip -r "${plugin_name}-${tag}.zip" "$plugin_name"
 
       - name: Create release
         env:

@@ -16,6 +16,7 @@
 		"postinstall": "cp -r ./node_modules/@raruto/leaflet-gesture-handling/dist/* ./assets/vendor/leaflet-gesture-handling && cp -r ./node_modules/leaflet/dist/* ./assets/vendor/leaflet"
 	},
 	"devDependencies": {
+		"@playwright/test": "^1.56.1",
 		"@wordpress/scripts": "^30.27.0"
 	},
 	"dependencies": {

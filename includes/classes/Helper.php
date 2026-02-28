@@ -179,7 +179,7 @@ class Helper {
 
 		$column = array_column( $defaults, 'timezone' );
 		$entry  = array_search( $timezone, $column, true );
-		if ( empty( $defaults[ $entry ] ) || empty( $defaults[ $entry ]->lat ) || empty( $defaults[ $entry ]->lng ) ) {
+		if ( false === $entry || empty( $defaults[ $entry ] ) || empty( $defaults[ $entry ]->lat ) || empty( $defaults[ $entry ]->lng ) ) {
 			return self::fallback_location();
 		}
 

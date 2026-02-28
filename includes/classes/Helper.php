@@ -330,9 +330,28 @@ class Helper {
 		if ( ! filter_var( $img_src, FILTER_VALIDATE_URL ) ) {
 			return '';
 		}
-		$url_host  = wp_parse_url( $img_src, PHP_URL_HOST );
-		$site_host = wp_parse_url( get_home_url(), PHP_URL_HOST );
-		if ( $url_host !== $site_host ) {
+		$url_host = wp_parse_url( $img_src, PHP_URL_HOST );
+		if ( empty( $url_host ) ) {
+			return '';
+		}
+
+		// Normalize a host by stripping a leading "www." for comparison.
+		$normalize_host = static function ( string $host ): string {
+			return str_starts_with( $host, 'www.' ) ? substr( $host, 4 ) : $host;
+		};
+
+		$url_host_normalized = $normalize_host( strtolower( $url_host ) );
+
+		// Build the list of allowed same-site hosts (home, site, content).
+		$allowed_hosts = [];
+		foreach ( [ get_home_url(), get_site_url(), content_url() ] as $origin_url ) {
+			$origin_host = wp_parse_url( $origin_url, PHP_URL_HOST );
+			if ( ! empty( $origin_host ) ) {
+				$allowed_hosts[] = $normalize_host( strtolower( $origin_host ) );
+			}
+		}
+
+		if ( ! in_array( $url_host_normalized, array_unique( $allowed_hosts ), true ) ) {
 			return '';
 		}
 		$image_size = @getimagesize( $img_src ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged

@@ -228,19 +228,19 @@ function build_block_markup(
 	bool $gesture_handling
 ): string {
 	// Block comment attributes (what the editor stores and uses to reconstruct UI state).
+	// Use the same block_id that data-markers will use so both stay in sync.
 	$block_attrs = [
 		'markers'           => array_map(
-			static function ( array $m, int $index ): array {
+			static function ( array $m ): array {
 				return [
-					'id'      => (int) ( microtime( true ) * 1000 ) + $index,
+					'id'      => $m['block_id'],
 					'lat'     => $m['lat'],
 					'lng'     => $m['lng'],
 					'text'    => $m['content'],
 					'textRaw' => $m['content'],
 				];
 			},
-			$markers,
-			array_keys( $markers )
+			$markers
 		),
 		'zoom'              => $zoom,
 		'showDefaultBounds' => false,

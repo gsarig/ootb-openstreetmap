@@ -41,9 +41,26 @@ wp core install \
   --admin_email="admin@example.com" \
   --skip-email || echo "Already installed."
 
-echo "==> Installing plugin from artifact zip..."
-wp plugin install /tmp/ootb-artifact/plugin.zip --activate || {
-  echo "ERROR: Plugin installation from zip failed."
+echo "==> Copying artifact zip into CLI container..."
+# docker cp is more reliable than a bind-mount for /tmp paths across environments.
+# wp plugin install is intentionally avoided: it routes through WordPress's upgrade
+# machinery which requires a writable wp-content/upgrade directory (often absent
+# in fresh Docker installs). Extracting directly sidesteps that entirely.
+CLI_CONTAINER=$(docker compose -f "${COMPOSE_FILE}" ps -q cli)
+docker cp /tmp/ootb-artifact/plugin.zip "${CLI_CONTAINER}:/tmp/plugin.zip"
+
+echo "==> Extracting plugin into wp-content/plugins/..."
+docker compose -f "${COMPOSE_FILE}" exec -T cli php -r "
+  \$z = new ZipArchive;
+  if (\$z->open('/tmp/plugin.zip') !== true) { fwrite(STDERR, 'ERROR: Could not open zip.' . PHP_EOL); exit(1); }
+  \$z->extractTo('/var/www/html/wp-content/plugins/');
+  \$z->close();
+  echo 'Plugin extracted.' . PHP_EOL;
+"
+
+echo "==> Activating plugin..."
+wp plugin activate ootb-openstreetmap || {
+  echo "ERROR: Plugin activation failed."
   exit 1
 }
 

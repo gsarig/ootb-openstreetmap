@@ -4,8 +4,8 @@
 #
 # Key differences from docker-compose.yml:
 # - No source directory volume mount — the plugin is installed from the built zip.
-# - /tmp/ootb-artifact is mounted read-only into the CLI container so WP-CLI
-#   can install the zip with: wp plugin install /tmp/ootb-artifact/plugin.zip
+# - The zip is delivered via `docker cp` in wp-artifact-setup.sh (not a volume
+#   mount), which is more reliable across environments than bind-mounting /tmp.
 
 services:
   db:
@@ -61,7 +61,6 @@ services:
     volumes:
       - wp_data:/var/www/html
       - ./docker/php.ini:/usr/local/etc/php/conf.d/ootb-memory.ini
-      - /tmp/ootb-artifact:/tmp/ootb-artifact:ro
     entrypoint: ["tail", "-f", "/dev/null"]
 
 volumes:

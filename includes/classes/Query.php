@@ -230,9 +230,9 @@ class Query {
 						continue;
 					}
 
-					$block_attrs  = $block['attrs'];
-					$server_side  = $block_attrs['serverSideRender'] ?? $block_attrs['server_side_render'] ?? null;
-					$attrs        = json_decode( wp_json_encode( $block_attrs ) );
+					$block_attrs = $block['attrs'];
+					$server_side = $block_attrs['serverSideRender'] ?? $block_attrs['server_side_render'] ?? null;
+					$attrs       = json_decode( wp_json_encode( $block_attrs ) );
 					if (
 						empty( $attrs->markers ) ||
 						( true === $server_side )

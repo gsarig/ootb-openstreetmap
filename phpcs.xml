@@ -29,6 +29,9 @@
         <exclude name="Squiz.Commenting.FunctionComment.MissingReturn"/>
         <exclude name="Squiz.Commenting.VariableComment.Missing"/>
         <exclude name="Squiz.Commenting.InlineComment.InvalidEndChar"/>
+
+        <!-- Alignment rule is pedantic; causes more churn than value -->
+        <exclude name="Generic.Formatting.MultipleStatementAlignment"/>
     </rule>
 
     <config name="minimum_supported_wp_version" value="6.6"/>

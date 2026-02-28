@@ -317,15 +317,25 @@ class Helper {
 	/**
 	 * Gets the marker attributes from the image URL.
 	 *
+	 * Only processes same-origin URLs to prevent SSRF. External URLs return empty.
+	 *
 	 * @param string $img_src The image URL.
 	 *
-	 * @return string|void
+	 * @return string
 	 */
-	public static function get_marker_attr_from_url( string $img_src = '' ) {
+	public static function get_marker_attr_from_url( string $img_src = '' ): string {
 		if ( empty( $img_src ) ) {
 			return '';
 		}
-		$image_size = getimagesize( $img_src );
+		if ( ! filter_var( $img_src, FILTER_VALIDATE_URL ) ) {
+			return '';
+		}
+		$url_host = wp_parse_url( $img_src, PHP_URL_HOST );
+		$site_host = wp_parse_url( get_home_url(), PHP_URL_HOST );
+		if ( $url_host !== $site_host ) {
+			return '';
+		}
+		$image_size = @getimagesize( $img_src ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		if ( empty( $image_size[0] ) || empty( $image_size[1] ) ) {
 			return '';
 		}

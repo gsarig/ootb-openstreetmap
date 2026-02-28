@@ -14,7 +14,6 @@ use OOTB\OpenAI;
 use OOTB\Options;
 use OOTB\Query;
 use OOTB\CustomFields;
-use OOTB\Abilities;
 
 function setup(): void {
 	$n = function ( $func ) {

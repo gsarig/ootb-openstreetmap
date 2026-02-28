@@ -160,7 +160,8 @@ class Query {
 	 * @return array<int|string, string>|string|null
 	 */
 	public static function render_callback( array $attributes, string $content ) {
-		if ( ( isset( $attributes['server_side_render'] ) && ! $attributes['server_side_render'] ) && ! empty( $attributes['markers'] ) ) {
+		$server_side = $attributes['server_side_render'] ?? $attributes['serverSideRender'] ?? null;
+		if ( ( true === $server_side || null === $server_side ) === false && ! empty( $attributes['markers'] ) ) {
 			return $content;
 		}
 
@@ -231,9 +232,10 @@ class Query {
 
 					$attrs = json_decode( wp_json_encode( $block['attrs'] ) );
 
+					$server_side = $attrs->serverSideRender ?? $attrs->server_side_render ?? null;
 					if (
 						empty( $attrs->markers ) ||
-						( isset( $attrs->server_side_render ) && true === $attrs->server_side_render )
+						( true === $server_side )
 					) {
 						continue;
 					}

@@ -5,7 +5,7 @@
  * Registers plugin capabilities for AI agents, the command palette,
  * and automation tools via the WordPress Abilities API.
  *
- * @since   2.9.0
+ * @since   2.8.9
  * @package ootb-openstreetmap
  */
 

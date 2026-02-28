@@ -31,7 +31,7 @@
         <exclude name="Squiz.Commenting.InlineComment.InvalidEndChar"/>
     </rule>
 
-    <config name="minimum_supported_wp_version" value="6.5"/>
+    <config name="minimum_supported_wp_version" value="6.6"/>
 
     <rule ref="WordPress.WP.I18n">
         <properties>

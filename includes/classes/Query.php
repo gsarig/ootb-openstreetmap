@@ -219,7 +219,7 @@ class Query {
 				}
 
 				$text = apply_filters( 'ootb_cf_modal_content', $address, $post_id );
-				if ( empty( $text ) && ! has_filter( 'ootb_cf_modal_content' ) ) {
+				if ( empty( $text ) && false === has_filter( 'ootb_cf_modal_content' ) ) {
 					$thumbnail = get_the_post_thumbnail( $post_id, 'thumbnail' );
 					$text      = sprintf( '<a href="%s">%s</a>', esc_url( (string) get_permalink( $post_id ) ), esc_html( get_the_title( $post_id ) ) );
 					if ( ! empty( $thumbnail ) ) {
@@ -440,16 +440,21 @@ class Query {
 	 * @return array<string, array<string, bool>>
 	 */
 	private static function kses_allowed_popup(): array {
-		$allowed        = wp_kses_allowed_html( 'post' );
-		$allowed['img'] = array_merge(
-			$allowed['img'] ?? [],
-			[
-				'srcset'        => true,
-				'sizes'         => true,
-				'decoding'      => true,
-				'fetchpriority' => true,
-			]
-		);
+		static $allowed = null;
+
+		if ( null === $allowed ) {
+			$allowed        = wp_kses_allowed_html( 'post' );
+			$allowed['img'] = array_merge(
+				$allowed['img'] ?? [],
+				[
+					'srcset'        => true,
+					'sizes'         => true,
+					'decoding'      => true,
+					'fetchpriority' => true,
+				]
+			);
+		}
+
 		return $allowed;
 	}
 

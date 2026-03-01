@@ -31,6 +31,7 @@ class QueryCustomFieldsSnapshotTest extends WP_UnitTestCase {
 	use MatchesSnapshots;
 
 	private int $post_id = 0;
+	private int $attachment_id = 0;
 
 	protected function getSnapshotDirectory(): string {
 		return __DIR__ . '/../fixtures';
@@ -40,6 +41,10 @@ class QueryCustomFieldsSnapshotTest extends WP_UnitTestCase {
 		if ( $this->post_id ) {
 			wp_delete_post( $this->post_id, true );
 			$this->post_id = 0;
+		}
+		if ( $this->attachment_id ) {
+			wp_delete_post( $this->attachment_id, true );
+			$this->attachment_id = 0;
 		}
 		remove_all_filters( 'ootb_cf_modal_content' );
 		remove_all_filters( 'post_thumbnail_html' );
@@ -100,8 +105,8 @@ class QueryCustomFieldsSnapshotTest extends WP_UnitTestCase {
 		);
 
 		// Attach a real (but imageless) attachment so get_post_thumbnail_id() returns non-zero.
-		$attachment_id = self::factory()->post->create( [ 'post_type' => 'attachment' ] );
-		update_post_meta( $this->post_id, '_thumbnail_id', $attachment_id );
+		$this->attachment_id = self::factory()->post->create( [ 'post_type' => 'attachment' ] );
+		update_post_meta( $this->post_id, '_thumbnail_id', $this->attachment_id );
 
 		// Return controlled thumbnail HTML via filter — no real image file needed.
 		$test_post_id = $this->post_id;

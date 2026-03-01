@@ -147,6 +147,33 @@ class QueryCustomFieldsSnapshotTest extends WP_UnitTestCase {
 		$this->assertMatchesSnapshot( $this->normalize_markers( $result ) );
 	}
 
+	/**
+	 * When ootb_cf_modal_content is hooked but intentionally returns empty (e.g.
+	 * to suppress popups), the fallback must NOT trigger — the empty string is
+	 * preserved. This verifies the has_filter() guard introduced to address the
+	 * public filter semantics concern.
+	 */
+	public function test_cf_marker_text_filter_returning_empty_preserves_empty(): void {
+		$this->post_id = $this->create_post_with_geodata(
+			[
+				'latitude'  => '37.9838',
+				'longitude' => '23.7275',
+			]
+		);
+
+		add_filter(
+			'ootb_cf_modal_content',
+			static function () {
+				return '';
+			}
+		);
+
+		$result = Query::get_markers( 0, [], true );
+
+		$this->assertIsString( $result );
+		$this->assertMatchesSnapshot( $this->normalize_markers( $result ) );
+	}
+
 	// =========================================================================
 	// Helpers
 	// =========================================================================

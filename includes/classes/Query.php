@@ -219,7 +219,7 @@ class Query {
 				}
 
 				$text = apply_filters( 'ootb_cf_modal_content', $address, $post_id );
-				if ( empty( $text ) ) {
+				if ( empty( $text ) && ! has_filter( 'ootb_cf_modal_content' ) ) {
 					$thumbnail = get_the_post_thumbnail( $post_id, 'thumbnail' );
 					$text      = sprintf( '<a href="%s">%s</a>', esc_url( (string) get_permalink( $post_id ) ), esc_html( get_the_title( $post_id ) ) );
 					if ( ! empty( $thumbnail ) ) {

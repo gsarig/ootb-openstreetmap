@@ -218,10 +218,19 @@ class Query {
 					continue;
 				}
 
+				$text = apply_filters( 'ootb_cf_modal_content', $address, $post_id );
+				if ( empty( $text ) ) {
+					$thumbnail = get_the_post_thumbnail( $post_id, 'thumbnail' );
+					$text      = sprintf( '<a href="%s">%s</a>', esc_url( (string) get_permalink( $post_id ) ), esc_html( get_the_title( $post_id ) ) );
+					if ( ! empty( $thumbnail ) ) {
+						$text = $thumbnail . $text;
+					}
+				}
+
 				$markers[][] = (object) [
 					'lat'  => $latitude,
 					'lng'  => $longitude,
-					'text' => wp_kses_post( apply_filters( 'ootb_cf_modal_content', $address, $post_id ) ),
+					'text' => wp_kses_post( $text ),
 					'id'   => $post_id,
 					'icon' => self::get_cf_marker_icon( $post_id ),
 				];

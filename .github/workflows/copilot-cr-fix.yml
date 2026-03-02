@@ -1,0 +1,236 @@
+name: Copilot CR Auto-Fix
+
+on:
+  pull_request_review:
+    types: [submitted]
+
+permissions:
+  contents: write      # push fixup commit
+  pull-requests: write # post comments and replies
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    if: github.event.review.user.login == 'copilot-pull-request-reviewer[bot]'
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Apply Copilot suggestions via Claude
+        uses: actions/github-script@v7
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs   = require('fs');
+            const path = require('path');
+            const { execSync } = require('child_process');
+
+            const ws       = process.env.GITHUB_WORKSPACE;
+            const owner    = context.repo.owner;
+            const repo     = context.repo.repo;
+            const prNumber = context.payload.pull_request.number;
+            const reviewId = context.payload.review.id;
+
+            // ── System prompt (inlined from agents/cr-fix.md) ────────────────
+            const SYSTEM_PROMPT = `You are a code fix agent for the OOTB OpenStreetMap WordPress plugin.
+            You have been given a set of Copilot code review comments on a pull request.
+
+            Your job is to evaluate each comment and either apply the fix or skip it.
+            You must reply to every comment — never leave one without a response.
+
+            ## Primary reference
+            Read CLAUDE.md before evaluating any comment. All fixes must comply with it.
+
+            ## Apply the fix when
+            - It is a correctness issue (bug, typo, undefined variable, wrong return type)
+            - It aligns with CLAUDE.md conventions
+            - It only affects files already changed in this PR
+            - It does not touch public API surface (hooks, shortcode attributes, block attributes)
+            - It does not require snapshot fixture updates
+
+            ## Skip the fix and reply when
+            - It contradicts CLAUDE.md
+            - It would change a public API
+            - It is stylistic preference only
+            - It requires changes outside this PR's scope
+            - It requires snapshot fixture updates — flag these explicitly for the author
+            - You are not confident what the correct fix is
+
+            ## Reply format for applied fixes
+            > Applied: [one sentence describing the change and why it addresses the comment]
+
+            ## Reply format for skipped fixes
+            > Skipped: [one sentence explaining why — reference the specific CLAUDE.md rule
+            > or reason. Mark as resolved.]
+
+            ## Reply format for ambiguous comments
+            > Unclear: [one sentence describing the ambiguity]. Skipped — please clarify
+            > and I will re-evaluate.
+
+            ## Never
+            - Apply a fix without leaving a reply
+            - Update snapshot fixtures — always flag these for the author instead
+            - Modify files outside the PR's current diff
+            - Change anything that affects the public plugin API
+
+            ## Response format
+            You MUST respond with valid JSON only — no prose, no markdown fences.
+            Schema:
+            {
+              "commits": [{ "path": "...", "content": "..." }],
+              "replies": [{ "comment_id": 123, "body": "..." }],
+              "summary": "..."
+            }`;
+
+            try {
+              // ── Step 2: Collect context ──────────────────────────────────────
+
+              const allComments = await github.paginate(
+                github.rest.pulls.listReviewComments,
+                { owner, repo, pull_number: prNumber, per_page: 100 }
+              );
+              const comments = allComments.filter(c => c.pull_request_review_id === reviewId);
+
+              if (comments.length === 0) {
+                core.info('No review comments found for this Copilot review. Exiting.');
+                return;
+              }
+
+              const { data: prFiles } = await github.rest.pulls.listFiles({
+                owner, repo, pull_number: prNumber, per_page: 100,
+              });
+              const changedPaths = new Set(prFiles.map(f => f.filename));
+
+              const commentedPaths = [...new Set(comments.map(c => c.path))];
+              const files = [];
+              for (const filePath of commentedPaths) {
+                if (!changedPaths.has(filePath)) {
+                  core.warning(`${filePath} has comments but is not in the PR diff — skipping.`);
+                  continue;
+                }
+                try {
+                  const content = fs.readFileSync(path.join(ws, filePath), 'utf8');
+                  files.push({ path: filePath, content });
+                } catch (e) {
+                  core.warning(`Could not read ${filePath}: ${e.message}`);
+                }
+              }
+
+              let claudeMd = '';
+              try {
+                claudeMd = fs.readFileSync(path.join(ws, 'CLAUDE.md'), 'utf8');
+              } catch (e) {
+                core.warning('Could not read CLAUDE.md');
+              }
+
+              // ── Step 3: Call Anthropic API ───────────────────────────────────
+
+              const userMessage = JSON.stringify({
+                claude_md: claudeMd,
+                pr_number: prNumber,
+                comments: comments.map(c => ({
+                  id: c.id,
+                  path: c.path,
+                  line: c.line ?? c.original_line,
+                  body: c.body,
+                  diff_hunk: c.diff_hunk,
+                })),
+                files,
+              });
+
+              core.info('Calling Anthropic API...');
+              const apiRes = await fetch('https://api.anthropic.com/v1/messages', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'x-api-key': process.env.ANTHROPIC_API_KEY,
+                  'anthropic-version': '2023-06-01',
+                },
+                body: JSON.stringify({
+                  model: 'claude-sonnet-4-6',
+                  max_tokens: 8192,
+                  system: SYSTEM_PROMPT,
+                  messages: [{ role: 'user', content: userMessage }],
+                }),
+              });
+
+              if (!apiRes.ok) {
+                const errText = await apiRes.text();
+                throw new Error(`Anthropic API error ${apiRes.status}: ${errText}`);
+              }
+
+              const apiData = await apiRes.json();
+
+              // ── Step 4: Parse response ───────────────────────────────────────
+
+              const rawText = apiData.content[0].text;
+              let result;
+              try {
+                result = JSON.parse(rawText);
+              } catch (_) {
+                const match = rawText.match(/\{[\s\S]*\}/);
+                if (match) {
+                  result = JSON.parse(match[0]);
+                } else {
+                  throw new Error(`Could not parse API response as JSON:\n${rawText}`);
+                }
+              }
+
+              const { commits = [], replies = [], summary = '(no summary provided)' } = result;
+
+              // ── Step 5: Apply changes and commit ─────────────────────────────
+
+              if (commits.length > 0) {
+                for (const { path: filePath, content } of commits) {
+                  fs.writeFileSync(path.join(ws, filePath), content, 'utf8');
+                  execSync(`git add "${filePath}"`, { cwd: ws });
+                }
+                const msgFile = path.join(ws, '.git', '_copilot_fix_msg');
+                fs.writeFileSync(msgFile, `fixup: apply Copilot CR suggestions\n\n${summary}`);
+                execSync(`git commit -F "${msgFile}"`, { cwd: ws });
+                execSync('git push', { cwd: ws });
+                core.info('Pushed fixup commit.');
+              } else {
+                core.info('No file changes — skipping commit.');
+              }
+
+              // ── Step 6: Post replies ──────────────────────────────────────────
+
+              for (const { comment_id, body } of replies) {
+                try {
+                  await github.rest.pulls.createReplyForReviewComment({
+                    owner, repo, pull_number: prNumber, comment_id, body,
+                  });
+                } catch (e) {
+                  core.warning(`Failed to reply to comment ${comment_id}: ${e.message}`);
+                }
+              }
+
+              // ── Step 7: Post PR summary comment ──────────────────────────────
+
+              await github.rest.issues.createComment({
+                owner, repo, issue_number: prNumber,
+                body: `🤖 **Copilot CR Auto-Fix**\n\n${summary}\n\nSee individual comment replies for per-suggestion details.`,
+              });
+
+            } catch (error) {
+              core.error(error.message);
+              try {
+                await github.rest.issues.createComment({
+                  owner, repo, issue_number: prNumber,
+                  body: `🤖 **Copilot CR Auto-Fix** encountered an error\n\n\`\`\`\n${error.message}\n\`\`\`\n\nCheck the [workflow run](${process.env.GITHUB_SERVER_URL}/${owner}/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}) for details.`,
+                });
+              } catch (_) {}
+              core.setFailed(error.message);
+            }

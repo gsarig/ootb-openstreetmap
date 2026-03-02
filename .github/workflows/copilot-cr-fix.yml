@@ -11,7 +11,13 @@ permissions:
 jobs:
   fix:
     runs-on: ubuntu-latest
-    if: github.event.review.user.login == 'copilot-pull-request-reviewer[bot]'
+    if: >-
+      github.event.review.user.login == 'copilot-pull-request-reviewer[bot]' &&
+      github.event.pull_request.draft == false &&
+      github.event.pull_request.user.login == 'gsarig' &&
+      github.event.pull_request.base.ref != 'master' &&
+      !startsWith(github.event.pull_request.base.ref, 'release/') &&
+      contains(github.event.pull_request.labels.*.name, 'ai-fix')
 
     steps:
       - uses: actions/checkout@v4
@@ -225,11 +231,12 @@ jobs:
               });
 
             } catch (error) {
+              // Full error (may contain API details) goes to Actions log only — not public
               core.error(error.message);
               try {
                 await github.rest.issues.createComment({
                   owner, repo, issue_number: prNumber,
-                  body: `🤖 **Copilot CR Auto-Fix** encountered an error\n\n\`\`\`\n${error.message}\n\`\`\`\n\nCheck the [workflow run](${process.env.GITHUB_SERVER_URL}/${owner}/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}) for details.`,
+                  body: `🤖 **Copilot CR Auto-Fix** encountered an error. Check the [workflow run](${process.env.GITHUB_SERVER_URL}/${owner}/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}) for details.`,
                 });
               } catch (_) {}
               core.setFailed(error.message);

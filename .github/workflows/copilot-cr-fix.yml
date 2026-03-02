@@ -12,7 +12,8 @@ jobs:
   fix:
     runs-on: ubuntu-latest
     if: >-
-      github.event.review.user.login == 'copilot-pull-request-reviewer[bot]' &&
+      github.event.review.user.login == 'copilot-pull-request-reviewer' &&
+      github.event.review.user.type == 'Bot' &&
       github.event.pull_request.draft == false &&
       github.event.pull_request.user.login == 'gsarig' &&
       github.event.pull_request.base.ref != 'master' &&
@@ -40,7 +41,7 @@ jobs:
           script: |
             const fs   = require('fs');
             const path = require('path');
-            const { execSync } = require('child_process');
+            const { execSync, execFileSync } = require('child_process');
 
             const ws       = process.env.GITHUB_WORKSPACE;
             const owner    = context.repo.owner;
@@ -113,9 +114,10 @@ jobs:
                 return;
               }
 
-              const { data: prFiles } = await github.rest.pulls.listFiles({
-                owner, repo, pull_number: prNumber, per_page: 100,
-              });
+              const prFiles = await github.paginate(
+                github.rest.pulls.listFiles,
+                { owner, repo, pull_number: prNumber, per_page: 100 }
+              );
               const changedPaths = new Set(prFiles.map(f => f.filename));
 
               const commentedPaths = [...new Set(comments.map(c => c.path))];
@@ -193,25 +195,46 @@ jobs:
                 }
               }
 
-              const { commits = [], replies = [], summary = '(no summary provided)' } = result;
+              const { commits = [], replies = [], summary: rawSummary = '(no summary provided)' } = result;
+              const summary = rawSummary.slice(0, 2000);
 
               // ── Step 5: Apply changes and commit ─────────────────────────────
 
+              let pushFailed = false;
               if (commits.length > 0) {
                 for (const { path: filePath, content } of commits) {
-                  fs.writeFileSync(path.join(ws, filePath), content, 'utf8');
-                  execSync(`git add "${filePath}"`, { cwd: ws });
+                  // Must be in the PR's changed paths
+                  if (!changedPaths.has(filePath)) {
+                    core.warning(`Skipping file not in PR changed paths: ${filePath}`);
+                    continue;
+                  }
+                  // Path traversal guard
+                  const resolvedPath = path.resolve(ws, filePath);
+                  if (!resolvedPath.startsWith(ws + path.sep)) {
+                    core.warning(`Refusing to write outside workspace: ${filePath}`);
+                    continue;
+                  }
+                  fs.mkdirSync(path.dirname(resolvedPath), { recursive: true });
+                  fs.writeFileSync(resolvedPath, content, 'utf8');
+                  // Use execFileSync (array args) to avoid shell injection
+                  execFileSync('git', ['add', filePath], { cwd: ws });
                 }
                 const msgFile = path.join(ws, '.git', '_copilot_fix_msg');
                 fs.writeFileSync(msgFile, `fixup: apply Copilot CR suggestions\n\n${summary}`);
                 execSync(`git commit -F "${msgFile}"`, { cwd: ws });
-                execSync('git push', { cwd: ws });
-                core.info('Pushed fixup commit.');
+                // Push in its own try/catch so replies are always posted
+                try {
+                  execSync('git push', { cwd: ws });
+                  core.info('Pushed fixup commit.');
+                } catch (pushErr) {
+                  pushFailed = true;
+                  core.error(`git push failed: ${pushErr.message}`);
+                }
               } else {
                 core.info('No file changes — skipping commit.');
               }
 
-              // ── Step 6: Post replies ──────────────────────────────────────────
+              // ── Step 6: Post replies (always, even if push failed) ────────────
 
               for (const { comment_id, body } of replies) {
                 try {
@@ -229,6 +252,10 @@ jobs:
                 owner, repo, issue_number: prNumber,
                 body: `🤖 **Copilot CR Auto-Fix**\n\n${summary}\n\nSee individual comment replies for per-suggestion details.`,
               });
+
+              if (pushFailed) {
+                core.setFailed('git push failed — see Actions log for details.');
+              }
 
             } catch (error) {
               // Full error (may contain API details) goes to Actions log only — not public

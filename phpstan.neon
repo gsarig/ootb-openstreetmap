@@ -1,0 +1,15 @@
+parameters:
+    level: 6
+    parallel:
+        maximumNumberOfProcesses: 1
+    paths:
+        - includes/
+        - ootb-openstreetmap.php
+    bootstrapFiles:
+        - vendor/autoload.php
+        - phpstan-bootstrap.php
+    excludePaths:
+        - vendor/ (?)
+        - node_modules/ (?)
+        - build/ (?)
+        - tests/ (?)

@@ -8,9 +8,30 @@ jobs:
     name: "build"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - name: Install SVN ( Subversion )
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Build JS assets
+        run: npm ci && npm run build
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          tools: composer
+          coverage: none
+
+      - name: Install production Composer dependencies
+        run: composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-progress
+
+      - name: Install SVN
         run: sudo apt-get update && sudo apt-get install -y subversion
+
       - name: WordPress Plugin Deploy
         uses: 10up/action-wordpress-plugin-deploy@stable
         env:

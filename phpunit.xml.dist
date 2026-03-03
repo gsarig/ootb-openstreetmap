@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<phpunit
+    bootstrap="tests/phpunit/bootstrap.php"
+    backupGlobals="false"
+    colors="true"
+>
+    <testsuites>
+        <testsuite name="snapshot">
+            <directory>tests/phpunit/snapshot</directory>
+        </testsuite>
+        <testsuite name="integration">
+            <directory>tests/phpunit/integration</directory>
+        </testsuite>
+    </testsuites>
+
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">includes</directory>
+        </include>
+        <report>
+            <html outputDirectory="tests/phpunit/coverage"/>
+            <clover outputFile="tests/phpunit/coverage/clover.xml"/>
+        </report>
+    </coverage>
+</phpunit>

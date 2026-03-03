@@ -1,7 +1,8 @@
-<?php /** @noinspection PhpComposerExtensionStubsInspection */
-
+<?php
 /**
- * Custom fields
+ * Custom fields registration and management.
+ *
+ * @noinspection PhpComposerExtensionStubsInspection
  *
  * @since   2.8.0
  * @package ootb-openstreetmap
@@ -18,7 +19,7 @@ class CustomFields {
 	/**
 	 * Register meta field.
 	 */
-	public function register_meta() {
+	public function register_meta(): void {
 		if ( ! Helper::get_option( 'geodata' ) ) {
 			return;
 		}
@@ -29,7 +30,9 @@ class CustomFields {
 				'type'              => 'number',
 				'show_in_rest'      => true,
 				'single'            => true,
-				'sanitize_callback' => 'sanitize_float',
+				'sanitize_callback' => static function ( $value ) {
+					return (float) $value;
+				},
 			]
 		);
 		register_meta(
@@ -39,7 +42,9 @@ class CustomFields {
 				'type'              => 'number',
 				'show_in_rest'      => true,
 				'single'            => true,
-				'sanitize_callback' => 'sanitize_float',
+				'sanitize_callback' => static function ( $value ) {
+					return (float) $value;
+				},
 			]
 		);
 		register_meta(

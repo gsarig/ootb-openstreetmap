@@ -1,7 +1,8 @@
-<?php /** @noinspection PhpComposerExtensionStubsInspection */
-
+<?php
 /**
- * Helper functions
+ * Helper functions for plugin operations.
+ *
+ * @noinspection PhpComposerExtensionStubsInspection
  *
  * @since   1.2
  * @package ootb-openstreetmap
@@ -13,7 +14,7 @@ class Helper {
 	/**
 	 * Asset Providers.
 	 *
-	 * @param array $options Options to be used with json_decode().
+	 * @param array<string, mixed> $options Options to be used with json_decode().
 	 *
 	 * @return mixed
 	 */
@@ -67,18 +68,18 @@ class Helper {
 		}
 
 		return (
-			       has_block( $block_name ) ||
-			       self::has_block_in_reusable( $block_name ) ||
-			       self::has_block_in_widget( $block_name )
-		       )
-		       && ! is_admin();
+					has_block( $block_name ) ||
+					self::has_block_in_reusable( $block_name ) ||
+					self::has_block_in_widget( $block_name )
+				)
+				&& ! is_admin();
 	}
 
 	/**
 	 * Check if the block exists in a reusable block.
 	 *
 	 * @param string $block_name The block name.
-	 * @param int $post_id The post ID.
+	 * @param int    $post_id The post ID.
 	 *
 	 * @return bool
 	 */
@@ -96,13 +97,13 @@ class Helper {
 		$content = get_post_field( 'post_content', $post_id );
 		$blocks  = parse_blocks( $content );
 
-		if ( ! is_array( $blocks ) || empty( $blocks ) ) {
+		if ( empty( $blocks ) ) {
 			return false;
 		}
 
 		foreach ( $blocks as $block ) {
-			if ( 'core/block' === $block[ 'blockName' ] && ! empty( $block[ 'attrs' ][ 'ref' ] ) ) {
-				if ( has_block( $block_name, $block[ 'attrs' ][ 'ref' ] ) ) {
+			if ( 'core/block' === $block['blockName'] && ! empty( $block['attrs']['ref'] ) ) {
+				if ( has_block( $block_name, $block['attrs']['ref'] ) ) {
 					return true;
 				}
 			}
@@ -130,7 +131,7 @@ class Helper {
 		}
 
 		foreach ( $blocks as $block ) {
-			if ( is_array( $block ) && isset( $block[ 'content' ] ) && has_block( $block_name, $block[ 'content' ] ) ) {
+			if ( is_array( $block ) && isset( $block['content'] ) && has_block( $block_name, $block['content'] ) ) {
 				return true;
 			}
 		}
@@ -145,8 +146,8 @@ class Helper {
 	 */
 	public static function fallback_location(): array {
 		return [
-			"37.97155174977503",
-			"23.72656345367432",
+			'37.97155174977503',
+			'23.72656345367432',
 		];
 	}
 
@@ -157,10 +158,10 @@ class Helper {
 	 */
 	public static function default_location(): array {
 		$options = self::get_option();
-		if ( ! empty( $options[ 'default_lat' ] ) && ! empty( $options[ 'default_lng' ] ) ) {
+		if ( ! empty( $options['default_lat'] ) && ! empty( $options['default_lng'] ) ) {
 			return [
-				$options[ 'default_lat' ],
-				$options[ 'default_lng' ],
+				$options['default_lat'],
+				$options['default_lng'],
 			];
 		}
 		$timezone = wp_timezone_string();
@@ -169,13 +170,16 @@ class Helper {
 			return self::fallback_location();
 		}
 
-		$defaults = wp_json_file_decode( OOTB_PLUGIN_PATH . '/assets/defaults.json', [
-			'associative' => true,
-		] );
+		$defaults = wp_json_file_decode(
+			OOTB_PLUGIN_PATH . '/assets/defaults.json',
+			[
+				'associative' => false,
+			]
+		);
 
 		$column = array_column( $defaults, 'timezone' );
-		$entry  = array_search( $timezone, $column );
-		if ( empty( $defaults[ $entry ] ) || empty( $defaults[ $entry ]->lat ) || empty( $defaults[ $entry ]->lng ) ) {
+		$entry  = array_search( $timezone, $column, true );
+		if ( false === $entry || empty( $defaults[ $entry ] ) || empty( $defaults[ $entry ]->lat ) || empty( $defaults[ $entry ]->lng ) ) {
 			return self::fallback_location();
 		}
 
@@ -223,9 +227,9 @@ class Helper {
 			return $options[ $option ] ?? '';
 		}
 
-		if ( ! empty( $options[ 'api_openai' ] ) ) {
+		if ( ! empty( $options['api_openai'] ) ) {
 			// We don't want to expose the OpenAI API key to the client.
-			unset( $options[ 'api_openai' ] );
+			unset( $options['api_openai'] );
 		}
 
 		return $options;
@@ -234,14 +238,14 @@ class Helper {
 	/**
 	 * Get the post types that support the block editor.
 	 *
-	 * @return array
+	 * @return array<int, array<string, string>>
 	 */
 	public static function get_post_types(): array {
 		if ( has_filter( 'ootb_query_post_type' ) ) {
 			return [];
 		}
 		$args                    = [
-			'public' => true
+			'public' => true,
 		];
 		$post_types              = get_post_types( $args, 'objects' );
 		$block_editor_post_types = [];
@@ -272,17 +276,23 @@ class Helper {
 			return [];
 		}
 
-		$data       = wp_json_file_decode( $file, [
-			'associative' => true,
-		] );
-		$attributes = $data[ 'attributes' ] ?? [];
+		$data       = wp_json_file_decode(
+			$file,
+			[
+				'associative' => true,
+			]
+		);
+		$attributes = $data['attributes'] ?? [];
 		if ( empty( $attributes ) ) {
 			return [];
 		}
 
-		$defaults = array_map( function ( $attr ) {
-			return $attr[ 'default' ];
-		}, $attributes );
+		$defaults = array_map(
+			function ( $attr ) {
+				return $attr['default'];
+			},
+			$attributes
+		);
 
 		$defaults = array_change_key_case( $defaults, CASE_LOWER );
 		if ( ! empty( $attr_name ) ) {
@@ -307,33 +317,69 @@ class Helper {
 	/**
 	 * Gets the marker attributes from the image URL.
 	 *
+	 * Only processes same-origin URLs to prevent SSRF. External URLs return empty.
+	 *
 	 * @param string $img_src The image URL.
 	 *
-	 * @return string|void
+	 * @return string
 	 */
-	public static function get_marker_attr_from_url( string $img_src = '' ) {
+	public static function get_marker_attr_from_url( string $img_src = '' ): string {
 		if ( empty( $img_src ) ) {
 			return '';
 		}
-		$image_size = getimagesize( $img_src );
-		if ( empty( $image_size[ 0 ] ) || empty( $image_size[ 1 ] ) ) {
+		if ( ! filter_var( $img_src, FILTER_VALIDATE_URL ) ) {
 			return '';
 		}
-		$width     = $image_size[ 0 ];
-		$height    = $image_size[ 1 ];
-		$jsonArray = [
-			"iconUrl"     => $img_src,
-			"iconAnchor"  => [
-				round( $width / 2 ),
-				$height
-			],
-			"popupAnchor" => [ 0, - $height ]
-		];
-		$jsonStr   = wp_json_encode( $jsonArray );
+		$url_host = wp_parse_url( $img_src, PHP_URL_HOST );
+		if ( empty( $url_host ) ) {
+			return '';
+		}
 
-		return urlencode( $jsonStr );
+		// Normalize a host by stripping a leading "www." for comparison.
+		$normalize_host = static function ( string $host ): string {
+			return str_starts_with( $host, 'www.' ) ? substr( $host, 4 ) : $host;
+		};
+
+		$url_host_normalized = $normalize_host( strtolower( $url_host ) );
+
+		// Build the list of allowed same-site hosts (home, site, content).
+		$allowed_hosts = [];
+		foreach ( [ get_home_url(), get_site_url(), content_url() ] as $origin_url ) {
+			$origin_host = wp_parse_url( $origin_url, PHP_URL_HOST );
+			if ( ! empty( $origin_host ) ) {
+				$allowed_hosts[] = $normalize_host( strtolower( $origin_host ) );
+			}
+		}
+
+		if ( ! in_array( $url_host_normalized, array_unique( $allowed_hosts ), true ) ) {
+			return '';
+		}
+		$image_size = @getimagesize( $img_src ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		if ( empty( $image_size[0] ) || empty( $image_size[1] ) ) {
+			return '';
+		}
+		$width      = $image_size[0];
+		$height     = $image_size[1];
+		$json_array = [
+			'iconUrl'     => $img_src,
+			'iconAnchor'  => [
+				round( $width / 2 ),
+				$height,
+			],
+			'popupAnchor' => [ 0, - $height ],
+		];
+		$json_str   = wp_json_encode( $json_array );
+
+		return rawurlencode( $json_str );
 	}
 
+	/**
+	 * Sanitize attributes.
+	 *
+	 * @param array<string, mixed> $attrs The attributes to sanitize.
+	 *
+	 * @return array<string, mixed>
+	 */
 	public static function sanitize_attrs( array $attrs ): array {
 		$valid_args = [
 			'source',
@@ -357,8 +403,8 @@ class Helper {
 			}
 			$attrs[ $key ] = match ( $key ) {
 				'source' => in_array( $value, [ 'geodata', 'block' ], true ) ? $value : '',
-				'post_type' => in_array( $value, array_column( self::get_post_types(), 'value' ), true ) ? $value : self::get_default('post_type'),
-				'posts_per_page' => ( is_int( $value ) || $value === - 1 ) ? $value : Query::get_posts_per_page(),
+				'post_type' => in_array( $value, array_column( self::get_post_types(), 'value' ), true ) ? $value : self::get_default( 'post_type' ),
+				'posts_per_page' => ( is_int( $value ) || ( is_numeric( $value ) && ( (int) $value >= 0 || -1 === (int) $value ) ) ) ? (int) $value : Query::get_posts_per_page(),
 				'post_ids' => ( preg_match( '/^(\d+,)*\d+$/', $value ) === 1 ) ? $value : '',
 				'height' => ( preg_match( '/^\d+px$/', $value ) === 1 ) ? $value : self::get_default( 'height' ),
 				'provider' => in_array( $value, array_keys( self::providers( [ 'associative' => true ] ) ), true ) ? $value : '',
@@ -367,6 +413,13 @@ class Helper {
 					'true',
 					'false'
 				], true ) ? $value : '',
+				'touchzoom', 'scrollwheelzoom', 'dragging', 'doubleclickzoom' => in_array(
+					$value,
+					[
+						'true',
+						'false',
+					], true
+				) ? $value : '',
 				'marker' => ( filter_var( $value, FILTER_VALIDATE_URL ) !== false ) ? $value : '',
 				default => $value,
 			};

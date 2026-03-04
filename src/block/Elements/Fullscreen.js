@@ -2,7 +2,6 @@ import { useEffect } from '@wordpress/element';
 import { useMap } from 'react-leaflet/hooks';
 import L from 'leaflet';
 import '../../../assets/vendor/leaflet-fullscreen/leaflet.fullscreen.css';
-import '../../../assets/vendor/leaflet-fullscreen/Leaflet.fullscreen.js';
 
 export default function Fullscreen({ fullscreen }) {
 	const map = useMap();

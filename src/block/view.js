@@ -79,7 +79,7 @@ import createMapboxStyleUrl from "../common/createMapboxStyleUrl.js";
 		if ('false' === scrollWheelZoom) {
 			map.scrollWheelZoom.disable();
 		}
-		if ('true' === fullscreen && L.Control.FullScreen) {
+		if ('true' === fullscreen && L.Control.Fullscreen) {
 			map.addControl(new L.Control.Fullscreen());
 		}
 

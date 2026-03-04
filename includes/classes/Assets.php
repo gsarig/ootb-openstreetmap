@@ -44,14 +44,14 @@ class Assets {
 			'leaflet-fullscreen-style',
 			OOTB_PLUGIN_URL . 'assets/vendor/leaflet-fullscreen/leaflet.fullscreen.css',
 			[],
-			OOTB_SCRIPT_VERSION
+			OOTB_VERSION
 		);
 
 		wp_register_script(
 			'leaflet-fullscreen-script',
 			OOTB_PLUGIN_URL . 'assets/vendor/leaflet-fullscreen/Leaflet.fullscreen.js',
 			[ $this->handle_leaflet ],
-			OOTB_SCRIPT_VERSION,
+			OOTB_VERSION,
 			true
 		);
 

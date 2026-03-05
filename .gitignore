@@ -11,3 +11,5 @@
 /vendor/
 /.phpunit.result.cache
 /test-results/
+/build/
+/tmp/

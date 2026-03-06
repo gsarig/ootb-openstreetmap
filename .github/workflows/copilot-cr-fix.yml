@@ -48,6 +48,52 @@ jobs:
           --health-retries=10
 
     steps:
+      - name: Validate PR and review inputs
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const owner    = context.repo.owner;
+            const repo     = context.repo.repo;
+            const prNumber = parseInt(context.payload.inputs.pr_number, 10);
+            const reviewId = parseInt(context.payload.inputs.review_id, 10);
+            const headRef  = context.payload.inputs.head_ref;
+
+            const { data: pr } = await github.rest.pulls.get({ owner, repo, pull_number: prNumber });
+
+            if (pr.draft) {
+              core.setFailed(`PR #${prNumber} is a draft — refusing to run auto-fix.`);
+              return;
+            }
+            if (pr.user.login !== 'gsarig') {
+              core.setFailed(`PR #${prNumber} author is '${pr.user.login}', not 'gsarig' — refusing to run auto-fix.`);
+              return;
+            }
+            if (pr.base.ref === 'master' || pr.base.ref === 'main') {
+              core.setFailed(`PR #${prNumber} targets '${pr.base.ref}' — refusing to run auto-fix on default branch PRs.`);
+              return;
+            }
+            if (pr.head.repo.fork) {
+              core.setFailed(`PR #${prNumber} is from a fork — refusing to run auto-fix.`);
+              return;
+            }
+            if (pr.head.ref !== headRef) {
+              core.setFailed(`Input head_ref '${headRef}' does not match PR head ref '${pr.head.ref}' — refusing to run.`);
+              return;
+            }
+            const labels = pr.labels.map(l => l.name);
+            if (!labels.includes('ai-fix')) {
+              core.setFailed(`PR #${prNumber} does not have the 'ai-fix' label — refusing to run auto-fix.`);
+              return;
+            }
+            const { data: review } = await github.rest.pulls.getReview({
+              owner, repo, pull_number: prNumber, review_id: reviewId,
+            });
+            if (review.user.login !== 'copilot-pull-request-reviewer[bot]' || review.user.type !== 'Bot') {
+              core.setFailed(`Review ${reviewId} is not from Copilot bot (found '${review.user.login}') — refusing to run auto-fix.`);
+              return;
+            }
+
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -204,29 +250,37 @@ jobs:
 
             async function resolveThreads(commentIds) {
               const idSet = new Set(commentIds);
-              let threads;
-              try {
-                const result = await github.graphql(`
-                  query($owner: String!, $repo: String!, $pr: Int!) {
-                    repository(owner: $owner, name: $repo) {
-                      pullRequest(number: $pr) {
-                        reviewThreads(first: 100) {
-                          nodes {
-                            id
-                            isResolved
-                            comments(first: 1) {
-                              nodes { databaseId }
+              const threads = [];
+              let cursor = null;
+              let hasNextPage = true;
+              while (hasNextPage) {
+                try {
+                  const result = await github.graphql(`
+                    query($owner: String!, $repo: String!, $pr: Int!, $after: String) {
+                      repository(owner: $owner, name: $repo) {
+                        pullRequest(number: $pr) {
+                          reviewThreads(first: 100, after: $after) {
+                            pageInfo { hasNextPage endCursor }
+                            nodes {
+                              id
+                              isResolved
+                              comments(first: 1) {
+                                nodes { databaseId }
+                              }
                             }
                           }
                         }
                       }
                     }
-                  }
-                `, { owner, repo, pr: prNumber });
-                threads = result.repository.pullRequest.reviewThreads.nodes;
-              } catch (e) {
-                core.warning(`Could not fetch review threads: ${e.message}`);
-                return;
+                  `, { owner, repo, pr: prNumber, after: cursor });
+                  const page = result.repository.pullRequest.reviewThreads;
+                  threads.push(...page.nodes);
+                  hasNextPage = page.pageInfo.hasNextPage;
+                  cursor = page.pageInfo.endCursor;
+                } catch (e) {
+                  core.warning(`Could not fetch review threads: ${e.message}`);
+                  return;
+                }
               }
               for (const thread of threads) {
                 if (thread.isResolved) continue;
@@ -354,6 +408,12 @@ jobs:
             // ── Main ───────────────────────────────────────────────────────────
 
             if (!process.env.ANTHROPIC_API_KEY) {
+              try {
+                await github.rest.issues.createComment({
+                  owner, repo, issue_number: prNumber,
+                  body: `🤖 **Copilot CR Auto-Fix** could not run: \`ANTHROPIC_API_KEY\` secret is not configured.\n\nTo resolve this, add the \`ANTHROPIC_API_KEY\` secret to the repository settings, then remove and re-apply the \`ai-fix\` label to re-trigger.\n<!-- copilot-cr-fix:${reviewId} -->`,
+                });
+              } catch (_) {}
               core.setFailed('ANTHROPIC_API_KEY secret is not set.');
               return;
             }

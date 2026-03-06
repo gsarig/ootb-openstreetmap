@@ -68,9 +68,10 @@ jobs:
                 }
 
                 // Check the review has inline comments
-                const { data: allComments } = await github.rest.pulls.listReviewComments({
-                  owner, repo, pull_number: issue.number, per_page: 100,
-                });
+                const allComments = await github.paginate(
+                  github.rest.pulls.listReviewComments,
+                  { owner, repo, pull_number: issue.number, per_page: 100 },
+                );
                 const reviewComments = allComments.filter(
                   c => c.pull_request_review_id === review.id
                 );

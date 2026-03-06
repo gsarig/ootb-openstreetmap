@@ -1,0 +1,95 @@
+name: Copilot Review Poller
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch: {}
+
+permissions:
+  actions: write
+  pull-requests: read
+  issues: read
+
+concurrency:
+  group: copilot-poller
+  cancel-in-progress: false
+
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Find unprocessed Copilot reviews
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const owner = context.repo.owner;
+            const repo  = context.repo.repo;
+
+            // Fetch open PRs with ai-fix label
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
+              owner, repo, state: 'open', labels: 'ai-fix', per_page: 100,
+            });
+
+            for (const issue of issues) {
+              if (!issue.pull_request) continue;
+
+              const { data: pr } = await github.rest.pulls.get({
+                owner, repo, pull_number: issue.number,
+              });
+
+              // Apply the same guards as the fix workflow
+              if (pr.draft) continue;
+              if (pr.user.login !== 'gsarig') continue;
+              if (pr.base.ref === 'master' || pr.base.ref === 'main') continue;
+              if (pr.head.repo.fork) continue;
+
+              // Get all reviews on this PR
+              const reviews = await github.paginate(github.rest.pulls.listReviews, {
+                owner, repo, pull_number: issue.number, per_page: 100,
+              });
+
+              const copilotReviews = reviews.filter(
+                r => r.user.login === 'copilot-pull-request-reviewer[bot]' && r.user.type === 'Bot'
+              );
+              if (copilotReviews.length === 0) continue;
+
+              // Get existing PR comments to detect already-processed reviews
+              const comments = await github.paginate(github.rest.issues.listComments, {
+                owner, repo, issue_number: issue.number, per_page: 100,
+              });
+
+              // Process most recent Copilot review first
+              for (const review of [...copilotReviews].reverse()) {
+                const marker = `<!-- copilot-cr-fix:${review.id} -->`;
+                if (comments.some(c => c.body && c.body.includes(marker))) {
+                  core.info(`PR #${issue.number} review ${review.id} already processed — skipping.`);
+                  continue;
+                }
+
+                // Check the review has inline comments
+                const { data: allComments } = await github.rest.pulls.listReviewComments({
+                  owner, repo, pull_number: issue.number, per_page: 100,
+                });
+                const reviewComments = allComments.filter(
+                  c => c.pull_request_review_id === review.id
+                );
+                if (reviewComments.length === 0) {
+                  core.info(`PR #${issue.number} review ${review.id} has no inline comments — skipping.`);
+                  continue;
+                }
+
+                core.info(`Triggering fix for PR #${issue.number}, review ${review.id}`);
+                await github.rest.actions.createWorkflowDispatch({
+                  owner, repo,
+                  workflow_id: 'copilot-cr-fix.yml',
+                  ref: 'master',
+                  inputs: {
+                    pr_number: String(issue.number),
+                    review_id:  String(review.id),
+                    head_ref:   pr.head.ref,
+                  },
+                });
+                break; // one review at a time per PR
+              }
+            }

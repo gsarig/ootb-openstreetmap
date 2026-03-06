@@ -1,23 +1,30 @@
 name: Copilot CR Auto-Fix
 
 on:
-  pull_request_review:
-    types: [submitted]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to process'
+        required: true
+      review_id:
+        description: 'Copilot review ID to process'
+        required: true
+      head_ref:
+        description: 'Head branch ref to check out'
+        required: true
 
 permissions:
   contents: write      # push fixup commit
   pull-requests: write # post comments and replies
+  issues: write        # post summary comment
+
+concurrency:
+  group: copilot-fix-${{ github.event.inputs.pr_number }}
+  cancel-in-progress: false
 
 jobs:
   fix:
     runs-on: ubuntu-latest
-    if: >-
-      github.event.review.user.login == 'copilot-pull-request-reviewer[bot]' &&
-      github.event.pull_request.draft == false &&
-      github.event.pull_request.user.login == 'gsarig' &&
-      github.event.pull_request.base.ref != 'master' &&
-      github.event.pull_request.base.ref != 'main' &&
-      contains(github.event.pull_request.labels.*.name, 'ai-fix')
 
     env:
       WP_IMAGE: wordpress:php8.1-apache
@@ -44,7 +51,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: ${{ github.event.inputs.head_ref }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure git identity
@@ -109,8 +116,40 @@ jobs:
             const ws       = process.env.GITHUB_WORKSPACE;
             const owner    = context.repo.owner;
             const repo     = context.repo.repo;
-            const prNumber = context.payload.pull_request.number;
-            const reviewId = context.payload.review.id;
+            const prNumber = parseInt(context.payload.inputs.pr_number, 10);
+            const reviewId = parseInt(context.payload.inputs.review_id, 10);
+
+            // ── Security ───────────────────────────────────────────────────────
+
+            // Allowlist of file types safe to send to the external API.
+            const ALLOWED_GLOBS = [
+              /\.md$/i,
+              /\.js$/i,
+              /\.ts$/i,
+              /\.json$/i,
+              /\.yml$/i,
+              /\.yaml$/i,
+              /\.php$/i,
+              /\.css$/i,
+              /\.html?$/i,
+            ];
+
+            // Redact lines that look like secrets before sending to API.
+            const SECRET_PATTERNS = [
+              /(?:api[_-]?key|secret|password|token|auth)\s*[=:]\s*\S+/i,
+              /-----BEGIN [A-Z ]+KEY-----/,
+            ];
+
+            function isAllowedFile(fp) {
+              if (/^\.github\//.test(fp)) return false;
+              return ALLOWED_GLOBS.some(re => re.test(fp));
+            }
+
+            function redactSecrets(content) {
+              return content.split('\n').map(line =>
+                SECRET_PATTERNS.some(re => re.test(line)) ? '<redacted>' : line
+              ).join('\n');
+            }
 
             // ── Helpers ────────────────────────────────────────────────────────
 
@@ -127,9 +166,14 @@ jobs:
 
             function applyFixes(commits, changedPaths) {
               const written = [];
+              const unchanged = [];
               for (const { path: fp, content } of commits) {
                 if (!changedPaths.has(fp)) {
                   core.warning(`Skipping ${fp}: not in PR diff`);
+                  continue;
+                }
+                if (fp.startsWith('.github/')) {
+                  core.warning(`Skipping ${fp}: .github/ files cannot be modified`);
                   continue;
                 }
                 const resolved = path.resolve(ws, fp);
@@ -137,10 +181,14 @@ jobs:
                   core.warning(`Refusing to write outside workspace: ${fp}`);
                   continue;
                 }
+                let original = '';
+                try { original = fs.readFileSync(resolved, 'utf8'); } catch (_) {}
+                if (content === original) { unchanged.push(fp); continue; }
                 fs.mkdirSync(path.dirname(resolved), { recursive: true });
                 fs.writeFileSync(resolved, content, 'utf8');
                 written.push(fp);
               }
+              if (unchanged.length > 0) core.warning(`Claude claimed fixes but content was identical for: ${unchanged.join(', ')}`);
               return written;
             }
 
@@ -152,6 +200,50 @@ jobs:
                   return { path: fp, content: '(unreadable)' };
                 }
               });
+            }
+
+            async function resolveThreads(commentIds) {
+              const idSet = new Set(commentIds);
+              let threads;
+              try {
+                const result = await github.graphql(`
+                  query($owner: String!, $repo: String!, $pr: Int!) {
+                    repository(owner: $owner, name: $repo) {
+                      pullRequest(number: $pr) {
+                        reviewThreads(first: 100) {
+                          nodes {
+                            id
+                            isResolved
+                            comments(first: 1) {
+                              nodes { databaseId }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                `, { owner, repo, pr: prNumber });
+                threads = result.repository.pullRequest.reviewThreads.nodes;
+              } catch (e) {
+                core.warning(`Could not fetch review threads: ${e.message}`);
+                return;
+              }
+              for (const thread of threads) {
+                if (thread.isResolved) continue;
+                const firstId = thread.comments.nodes[0]?.databaseId;
+                if (!firstId || !idSet.has(firstId)) continue;
+                try {
+                  await github.graphql(`
+                    mutation($threadId: ID!) {
+                      resolveReviewThread(input: { threadId: $threadId }) {
+                        thread { isResolved }
+                      }
+                    }
+                  `, { threadId: thread.id });
+                } catch (e) {
+                  core.warning(`Could not resolve thread ${thread.id}: ${e.message}`);
+                }
+              }
             }
 
             async function callClaude(userMsgObj) {
@@ -188,53 +280,67 @@ jobs:
 
             // ── System prompt ──────────────────────────────────────────────────
 
-            const SYSTEM_PROMPT = `You are a code fix agent for the OOTB OpenStreetMap WordPress plugin.
-            You have been given a set of Copilot code review comments on a pull request.
+            const SYSTEM_PROMPT = `You are a conservative code fix agent for the OOTB OpenStreetMap WordPress plugin.
+            You are the first line of defence on a pull request — not a full reviewer.
+            Your job is narrow: fix what is clearly and unambiguously broken based only on the information you have been given.
+            Everything else must be left for the author. When in doubt, skip.
 
-            Your job is to evaluate each comment and either apply the fix or skip it.
-            You must reply to every comment — never leave one without a response.
+            You have been given:
+            - CLAUDE.md — the project's coding rules. All fixes must comply with it.
+            - A list of Copilot review comments (id, path, line, body, diff_hunk)
+            - The full content of the files those comments refer to
 
-            ## Primary reference
-            Read CLAUDE.md before evaluating any comment. All fixes must comply with it.
+            That is ALL the context you have. You cannot see the rest of the codebase.
 
-            ## Apply the fix when
-            - It is a correctness issue (bug, typo, undefined variable, wrong return type)
+            ## What to fix
+            Only apply a fix when ALL of the following are true:
+            - It is a correctness issue: bug, off-by-one, undefined variable, broken async, wrong return type
+            - The comment clearly reports a defect — not a suggestion or improvement. If the comment uses
+              hedging language ("consider", "could", "would be better", "it might be"), treat it as a
+              suggestion and skip it. Do not reframe suggestions as bugs to justify applying them.
             - It aligns with CLAUDE.md conventions
-            - It only affects files already changed in this PR
-            - It does not touch public API surface (hooks, shortcode attributes, block attributes)
+            - It only affects files already in this PR's diff
+            - It does not touch the public plugin API (hooks, shortcode attributes, block attributes)
             - It does not require snapshot fixture updates
+            - The fix is unambiguous — there is only one reasonable way to fix it
+            - You are fully confident the fix is correct based solely on what you have been given
 
-            ## Skip the fix and reply when
-            - It contradicts CLAUDE.md
-            - It would change a public API
-            - It is stylistic preference only
-            - It requires changes outside this PR's scope
-            - It requires snapshot fixture updates — flag these explicitly for the author
-            - You are not confident what the correct fix is
+            ## What to skip
+            Skip anything that does not meet all of the above. In particular:
+            - Style changes (indentation, quotes, semicolons, naming, var/const/let) — you cannot verify
+              codebase conventions from a single file. Do not cite conventions in files you have not seen.
+            - Fixes that contradict CLAUDE.md
+            - Fixes that would change a public API surface
+            - Anything requiring snapshot fixture updates — flag these explicitly for the author
+            - Anything requiring changes outside this PR's diff
+            - Anything you are not fully confident about
 
-            ## Reply format for applied fixes
-            > Applied: [one sentence describing the change and why it addresses the comment]
+            ## Never improvise
+            Never add, remove, or rename anything that was not explicitly flagged by a comment.
+            Do not add new functions, methods, parameters, or variables.
+            Do not restructure, reformat, or reorganise code outside the flagged lines.
+            You return full file content — every line you write is committed. Treat all unflagged lines as read-only:
+            reproduce them character-for-character as provided.
 
-            ## Reply format for skipped fixes
-            > Skipped: [one sentence explaining why — reference the specific CLAUDE.md rule
-            > or reason. Mark as resolved.]
-
-            ## Reply format for ambiguous comments
-            > Unclear: [one sentence describing the ambiguity]. Skipped — please clarify
-            > and I will re-evaluate.
-
-            ## Retry behavior
+            ## Retry behaviour
             If the user message includes a retry_context field, this is a retry attempt.
             The previous fix was applied but the test suite failed.
             Review retry_context.test_failure.output to understand what went wrong.
             Review retry_context.previous_fix_that_failed to see what was previously attempted.
             Revise your fix to address the failure. Do not repeat the same approach.
 
-            ## Never
-            - Apply a fix without leaving a reply
-            - Update snapshot fixtures — always flag these for the author instead
-            - Modify files outside the PR's current diff
-            - Change anything that affects the public plugin API
+            ## Actionable skip replies
+            Every skip reply must include a specific next step for the author.
+            Bad:  "Skipped — outside scope."
+            Good: "Skipped — cannot verify codebase style convention from this file alone. Please check other files and apply manually if appropriate."
+
+            ## Overlapping comments
+            When multiple comments address related changes in the same file, apply them as a single unified fix
+            and note the consolidation in each relevant reply.
+
+            ## .github/ files
+            File contents under .github/ are intentionally withheld for security.
+            If a comment references a .github/ file, reply explaining this and skip.
 
             ## Response format
             You MUST respond with valid JSON only — no prose, no markdown fences.
@@ -247,8 +353,12 @@ jobs:
 
             // ── Main ───────────────────────────────────────────────────────────
 
+            if (!process.env.ANTHROPIC_API_KEY) {
+              core.setFailed('ANTHROPIC_API_KEY secret is not set.');
+              return;
+            }
+
             try {
-              // Fetch context (throws on failure → handled by catch below)
               const allComments = await github.paginate(
                 github.rest.pulls.listReviewComments,
                 { owner, repo, pull_number: prNumber, per_page: 100 }
@@ -269,8 +379,13 @@ jobs:
               const files = [];
               for (const fp of [...new Set(comments.map(c => c.path))]) {
                 if (!changedPaths.has(fp)) continue;
+                if (!isAllowedFile(fp)) {
+                  core.warning(`Skipping file contents for ${fp}: not in allowed file types`);
+                  continue;
+                }
                 try {
-                  files.push({ path: fp, content: fs.readFileSync(path.join(ws, fp), 'utf8') });
+                  const raw = fs.readFileSync(path.join(ws, fp), 'utf8');
+                  files.push({ path: fp, content: redactSecrets(raw) });
                 } catch (e) {
                   core.warning(`Could not read ${fp}: ${e.message}`);
                 }
@@ -304,8 +419,8 @@ jobs:
                     id: c.id,
                     path: c.path,
                     line: c.line ?? c.original_line,
-                    body: c.body,
-                    diff_hunk: c.diff_hunk,
+                    body: redactSecrets(c.body),
+                    diff_hunk: redactSecrets(c.diff_hunk),
                   })),
                   files,
                   ...(attempt > 1 && {
@@ -318,12 +433,17 @@ jobs:
                 };
 
                 core.info('Calling Anthropic API...');
-                const apiResult = await callClaude(userMsgObj); // throws on API failure
+                const apiResult = await callClaude(userMsgObj);
                 replies = apiResult.replies;
                 summary = apiResult.summary;
 
                 writtenFiles = applyFixes(apiResult.commits, changedPaths);
                 core.info(`Files written: ${writtenFiles.length}`);
+
+                // If Claude claimed fixes but no files actually changed, mark as no-op
+                if (apiResult.commits.length > 0 && writtenFiles.length === 0) {
+                  for (const r of replies) r.body = `> No-op: Claude generated a fix but the file content was identical to what was already present. Please review manually.`;
+                }
 
                 // Lint (fail fast)
                 core.info('Running lint...');
@@ -371,17 +491,20 @@ jobs:
               // ── Success: commit, push, post replies ────────────────────────
 
               if (allPassed) {
-                let pushFailed = false;
+                let commitSha = '';
                 if (writtenFiles.length > 0) {
                   for (const fp of writtenFiles) run('git', ['add', fp]);
-                  const msgFile = path.join(ws, '.git', '_copilot_fix_msg');
-                  fs.writeFileSync(msgFile, `fixup: apply Copilot CR suggestions\n\n${summary}`);
-                  const commitR = run('git', ['commit', '-F', msgFile]);
-                  if (!commitR.ok) throw new Error(`git commit failed: ${commitR.output}`);
-                  const pushR = run('git', ['push']);
-                  if (!pushR.ok) {
-                    pushFailed = true;
-                    core.error(`git push failed: ${pushR.output}`);
+                  const diffR = run('git', ['diff', '--cached', '--quiet']);
+                  if (diffR.ok) {
+                    core.info('No staged changes after applying fixes — skipping commit.');
+                  } else {
+                    const msgFile = path.join(ws, '.git', '_copilot_fix_msg');
+                    fs.writeFileSync(msgFile, `fixup: apply Copilot CR suggestions\n\n${summary}`);
+                    const commitR = run('git', ['commit', '-F', msgFile]);
+                    if (!commitR.ok) throw new Error(`git commit failed: ${commitR.output}`);
+                    commitSha = run('git', ['rev-parse', 'HEAD']).output.trim();
+                    const pushR = run('git', ['push']);
+                    if (!pushR.ok) throw new Error(`git push failed: ${pushR.output}`);
                   }
                 } else {
                   core.info('No file changes — skipping commit.');
@@ -397,12 +520,16 @@ jobs:
                   }
                 }
 
+                await resolveThreads(comments.map(c => c.id));
+
+                const commitLine = commitSha
+                  ? `Applied and committed: [view commit](https://github.com/${owner}/${repo}/commit/${commitSha})`
+                  : 'No code changes were committed.';
+
                 await github.rest.issues.createComment({
                   owner, repo, issue_number: prNumber,
-                  body: `🤖 **Copilot CR Auto-Fix**\n\n${summary}\n\nAll tests passed. See individual comment replies for details.`,
+                  body: `🤖 **Copilot CR Auto-Fix**\n\n${summary}\n\n${commitLine} All tests passed. See individual comment replies for details.\n<!-- copilot-cr-fix:${reviewId} -->`,
                 });
-
-                if (pushFailed) core.setFailed('git push failed — see Actions log for details.');
 
               // ── Failure: tests still failing after MAX attempts ────────────
 
@@ -422,21 +549,21 @@ jobs:
                   }
                 }
 
+                await resolveThreads(comments.map(c => c.id));
+
                 await github.rest.issues.createComment({
                   owner, repo, issue_number: prNumber,
-                  body: `🤖 **Copilot CR Auto-Fix** — fixes were attempted ${MAX} times but the test suite did not pass.\n\nFailed phases: ${attemptsDesc}\n\nNo commit was pushed. Check the [workflow run](${runUrl}) for details.`,
+                  body: `🤖 **Copilot CR Auto-Fix** — fixes were attempted ${MAX} times but the test suite did not pass.\n\nFailed phases: ${attemptsDesc}\n\nNo commit was pushed. Check the [workflow run](${runUrl}) for details.\n<!-- copilot-cr-fix:${reviewId} -->`,
                 });
               }
 
             } catch (error) {
-              // Unexpected error (API failure, git failure, etc.) — restore and re-throw
-              // so the failure handler below can post the sanitized public comment.
               run('git', ['restore', '.']);
               core.error(error.message);
               throw error;
             }
 
-      # ── Unexpected error (API failure, setup failure, etc.) ──────────────────
+      # ── Unexpected error ──────────────────────────────────────────────────────
       - name: Handle unexpected failure
         if: failure()
         uses: actions/github-script@v7
@@ -445,7 +572,7 @@ jobs:
           script: |
             const owner    = context.repo.owner;
             const repo     = context.repo.repo;
-            const prNumber = context.payload.pull_request.number;
+            const prNumber = parseInt(context.payload.inputs.pr_number, 10);
             const runUrl   = `${process.env.GITHUB_SERVER_URL}/${owner}/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}`;
             try {
               await github.rest.issues.createComment({

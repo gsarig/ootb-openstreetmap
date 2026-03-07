@@ -26,6 +26,9 @@ jobs:
             const owner = context.repo.owner;
             const repo  = context.repo.repo;
 
+            const { data: repoInfo } = await github.rest.repos.get({ owner, repo });
+            const defaultBranch = repoInfo.default_branch;
+
             // Fetch open PRs with ai-fix label
             const issues = await github.paginate(github.rest.issues.listForRepo, {
               owner, repo, state: 'open', labels: 'ai-fix', per_page: 100,
@@ -84,7 +87,7 @@ jobs:
                 await github.rest.actions.createWorkflowDispatch({
                   owner, repo,
                   workflow_id: 'copilot-cr-fix.yml',
-                  ref: 'master',
+                  ref: defaultBranch,
                   inputs: {
                     pr_number: String(issue.number),
                     review_id:  String(review.id),

@@ -55,15 +55,15 @@ jobs:
           script: |
             const owner    = context.repo.owner;
             const repo     = context.repo.repo;
-            const prNumber = parseInt(context.payload.inputs.pr_number, 10);
-            const reviewId = parseInt(context.payload.inputs.review_id, 10);
-            const headRef  = (context.payload.inputs.head_ref || '').trim();
+            const prInput     = (context.payload.inputs.pr_number || '').trim();
+            const reviewInput = (context.payload.inputs.review_id  || '').trim();
+            const headRef     = (context.payload.inputs.head_ref   || '').trim();
 
-            if (!Number.isFinite(prNumber)) {
+            if (!/^\d+$/.test(prInput)) {
               core.setFailed(`Invalid pr_number '${context.payload.inputs.pr_number}' — expected a numeric PR number.`);
               return;
             }
-            if (!Number.isFinite(reviewId)) {
+            if (!/^\d+$/.test(reviewInput)) {
               core.setFailed(`Invalid review_id '${context.payload.inputs.review_id}' — expected a numeric review ID.`);
               return;
             }
@@ -71,6 +71,9 @@ jobs:
               core.setFailed(`Invalid head_ref '${context.payload.inputs.head_ref}' — expected a non-empty branch ref.`);
               return;
             }
+
+            const prNumber = Number(prInput);
+            const reviewId = Number(reviewInput);
 
             const { data: repoInfo } = await github.rest.repos.get({ owner, repo });
             const defaultBranch = repoInfo.default_branch;
@@ -108,6 +111,27 @@ jobs:
             if (review.user.login !== 'copilot-pull-request-reviewer[bot]' || review.user.type !== 'Bot') {
               core.setFailed(`Review ${reviewId} is not from Copilot bot (found '${review.user.login}') — refusing to run auto-fix.`);
               return;
+            }
+
+      - name: Check required secrets
+        uses: actions/github-script@v7
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            if (!process.env.ANTHROPIC_API_KEY) {
+              const owner    = context.repo.owner;
+              const repo     = context.repo.repo;
+              const prNumber = Number((context.payload.inputs.pr_number || '').trim());
+              const reviewId = Number((context.payload.inputs.review_id  || '').trim());
+              try {
+                await github.rest.issues.createComment({
+                  owner, repo, issue_number: prNumber,
+                  body: `🤖 **Copilot CR Auto-Fix** could not run: \`ANTHROPIC_API_KEY\` secret is not configured.\n\nTo resolve this, add the \`ANTHROPIC_API_KEY\` secret to the repository settings, then manually re-run the **Copilot CR Auto-Fix** workflow for this PR from the Actions tab, or request a new Copilot review to generate a new review ID.\n<!-- copilot-cr-fix:${reviewId} -->`,
+                });
+              } catch (_) {}
+              core.setFailed('ANTHROPIC_API_KEY secret is not set.');
             }
 
       - uses: actions/checkout@v4
@@ -426,17 +450,6 @@ jobs:
             }`;
 
             // ── Main ───────────────────────────────────────────────────────────
-
-            if (!process.env.ANTHROPIC_API_KEY) {
-              try {
-                await github.rest.issues.createComment({
-                  owner, repo, issue_number: prNumber,
-                  body: `🤖 **Copilot CR Auto-Fix** could not run: \`ANTHROPIC_API_KEY\` secret is not configured.\n\nTo resolve this, add the \`ANTHROPIC_API_KEY\` secret to the repository settings, then remove and re-apply the \`ai-fix\` label to re-trigger.\n<!-- copilot-cr-fix:${reviewId} -->`,
-                });
-              } catch (_) {}
-              core.setFailed('ANTHROPIC_API_KEY secret is not set.');
-              return;
-            }
 
             try {
               const allComments = await github.paginate(

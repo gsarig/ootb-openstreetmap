@@ -80,6 +80,10 @@ jobs:
 
             const { data: pr } = await github.rest.pulls.get({ owner, repo, pull_number: prNumber });
 
+            if (pr.state !== 'open') {
+              core.setFailed(`PR #${prNumber} is not open (state: '${pr.state}') — refusing to run auto-fix.`);
+              return;
+            }
             if (pr.draft) {
               core.setFailed(`PR #${prNumber} is a draft — refusing to run auto-fix.`);
               return;
@@ -253,7 +257,16 @@ jobs:
             function applyFixes(commits, changedPaths) {
               const written = [];
               const unchanged = [];
-              for (const { path: fp, content } of commits) {
+              if (!Array.isArray(commits)) {
+                core.warning('Expected "commits" to be an array; skipping file writes.');
+                return written;
+              }
+              for (const commit of commits) {
+                if (!commit || typeof commit.path !== 'string' || typeof commit.content !== 'string') {
+                  core.warning(`Skipping malformed commit entry: ${JSON.stringify(commit)}`);
+                  continue;
+                }
+                const { path: fp, content } = commit;
                 if (!changedPaths.has(fp)) {
                   core.warning(`Skipping ${fp}: not in PR diff`);
                   continue;
@@ -609,8 +622,14 @@ jobs:
                   core.info('No file changes — skipping commit.');
                 }
 
+                const safeReplies = Array.isArray(replies) ? replies : [];
                 const repliedIds = [];
-                for (const { comment_id, body } of replies) {
+                for (const reply of safeReplies) {
+                  if (!reply || !Number.isFinite(reply.comment_id) || typeof reply.body !== 'string') {
+                    core.warning(`Skipping malformed reply entry: ${JSON.stringify(reply)}`);
+                    continue;
+                  }
+                  const { comment_id, body } = reply;
                   try {
                     await github.rest.pulls.createReplyForReviewComment({
                       owner, repo, pull_number: prNumber, comment_id, body,
@@ -639,8 +658,14 @@ jobs:
                 const runUrl = `${process.env.GITHUB_SERVER_URL}/${owner}/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}`;
                 const attemptsDesc = attemptLog.map(a => `attempt ${a.attempt}: ${a.phase}`).join(', ');
 
+                const safeReplies = Array.isArray(replies) ? replies : [];
                 const repliedIds = [];
-                for (const { comment_id } of replies) {
+                for (const reply of safeReplies) {
+                  if (!reply || !Number.isFinite(reply.comment_id)) {
+                    core.warning(`Skipping malformed reply entry: ${JSON.stringify(reply)}`);
+                    continue;
+                  }
+                  const { comment_id } = reply;
                   try {
                     await github.rest.pulls.createReplyForReviewComment({
                       owner, repo, pull_number: prNumber, comment_id,

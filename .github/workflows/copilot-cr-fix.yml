@@ -57,7 +57,20 @@ jobs:
             const repo     = context.repo.repo;
             const prNumber = parseInt(context.payload.inputs.pr_number, 10);
             const reviewId = parseInt(context.payload.inputs.review_id, 10);
-            const headRef  = context.payload.inputs.head_ref;
+            const headRef  = (context.payload.inputs.head_ref || '').trim();
+
+            if (!Number.isFinite(prNumber)) {
+              core.setFailed(`Invalid pr_number '${context.payload.inputs.pr_number}' — expected a numeric PR number.`);
+              return;
+            }
+            if (!Number.isFinite(reviewId)) {
+              core.setFailed(`Invalid review_id '${context.payload.inputs.review_id}' — expected a numeric review ID.`);
+              return;
+            }
+            if (!headRef) {
+              core.setFailed(`Invalid head_ref '${context.payload.inputs.head_ref}' — expected a non-empty branch ref.`);
+              return;
+            }
 
             const { data: repoInfo } = await github.rest.repos.get({ owner, repo });
             const defaultBranch = repoInfo.default_branch;
@@ -497,7 +510,10 @@ jobs:
                         ...f,
                         content: redactSecrets(f.content),
                       })),
-                      test_failure: previousFailure,
+                      test_failure: previousFailure ? {
+                        ...previousFailure,
+                        output: redactSecrets(previousFailure.output),
+                      } : null,
                     },
                   }),
                 };

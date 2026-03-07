@@ -62,6 +62,12 @@ jobs:
                 owner, repo, issue_number: issue.number, per_page: 100,
               });
 
+              // Fetch all inline comments once per PR (reused across reviews)
+              const allInlineComments = await github.paginate(
+                github.rest.pulls.listReviewComments,
+                { owner, repo, pull_number: issue.number, per_page: 100 },
+              );
+
               // Process most recent Copilot review first
               for (const review of [...copilotReviews].reverse()) {
                 const marker = `<!-- copilot-cr-fix:${review.id} -->`;
@@ -71,11 +77,7 @@ jobs:
                 }
 
                 // Check the review has inline comments
-                const allComments = await github.paginate(
-                  github.rest.pulls.listReviewComments,
-                  { owner, repo, pull_number: issue.number, per_page: 100 },
-                );
-                const reviewComments = allComments.filter(
+                const reviewComments = allInlineComments.filter(
                   c => c.pull_request_review_id === review.id
                 );
                 if (reviewComments.length === 0) {

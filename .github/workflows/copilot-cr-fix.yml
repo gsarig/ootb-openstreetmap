@@ -454,7 +454,7 @@ jobs:
                 github.rest.pulls.listFiles,
                 { owner, repo, pull_number: prNumber, per_page: 100 }
               );
-              const changedPaths = new Set(prFiles.map(f => f.filename));
+              const changedPaths = new Set(prFiles.filter(f => f.status !== 'removed').map(f => f.filename));
 
               const files = [];
               for (const fp of [...new Set(comments.map(c => c.path))]) {
@@ -596,17 +596,19 @@ jobs:
                   core.info('No file changes — skipping commit.');
                 }
 
+                const repliedIds = [];
                 for (const { comment_id, body } of replies) {
                   try {
                     await github.rest.pulls.createReplyForReviewComment({
                       owner, repo, pull_number: prNumber, comment_id, body,
                     });
+                    repliedIds.push(comment_id);
                   } catch (e) {
                     core.warning(`Reply failed for ${comment_id}: ${e.message}`);
                   }
                 }
 
-                await resolveThreads(comments.map(c => c.id));
+                await resolveThreads(repliedIds);
 
                 const commitLine = commitSha
                   ? `Applied and committed: [view commit](https://github.com/${owner}/${repo}/commit/${commitSha})`
@@ -624,18 +626,20 @@ jobs:
                 const runUrl = `${process.env.GITHUB_SERVER_URL}/${owner}/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}`;
                 const attemptsDesc = attemptLog.map(a => `attempt ${a.attempt}: ${a.phase}`).join(', ');
 
+                const repliedIds = [];
                 for (const { comment_id } of replies) {
                   try {
                     await github.rest.pulls.createReplyForReviewComment({
                       owner, repo, pull_number: prNumber, comment_id,
                       body: `> Tests failed after ${MAX} attempts (${attemptsDesc}) — no commit was pushed. See the [workflow run](${runUrl}) for details.`,
                     });
+                    repliedIds.push(comment_id);
                   } catch (e) {
                     core.warning(`Reply failed for ${comment_id}: ${e.message}`);
                   }
                 }
 
-                await resolveThreads(comments.map(c => c.id));
+                await resolveThreads(repliedIds);
 
                 await github.rest.issues.createComment({
                   owner, repo, issue_number: prNumber,
@@ -659,10 +663,12 @@ jobs:
             const owner    = context.repo.owner;
             const repo     = context.repo.repo;
             const prNumber = parseInt(context.payload.inputs.pr_number, 10);
+            const reviewId = parseInt(context.payload.inputs.review_id, 10);
             const runUrl   = `${process.env.GITHUB_SERVER_URL}/${owner}/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}`;
+            const marker   = Number.isFinite(reviewId) ? `\n<!-- copilot-cr-fix:${reviewId} -->` : '';
             try {
               await github.rest.issues.createComment({
                 owner, repo, issue_number: prNumber,
-                body: `🤖 **Copilot CR Auto-Fix** encountered an error. Check the [workflow run](${runUrl}) for details.`,
+                body: `🤖 **Copilot CR Auto-Fix** encountered an unexpected error. Check the [workflow run](${runUrl}) for details.${marker}`,
               });
             } catch (_) {}

@@ -182,7 +182,7 @@ jobs:
 
             // Redact lines that look like secrets before sending to API.
             const SECRET_PATTERNS = [
-              /(?:api[_-]?key|secret|password|token|auth)\s*[=:]\s*\S+/i,
+              /(?:api[_-]?key|secret|password|token|\bauth\b)\s*[=:]\s*\S+/i,
               /-----BEGIN [A-Z ]+KEY-----/,
             ];
 
@@ -220,6 +220,10 @@ jobs:
                 }
                 if (fp.startsWith('.github/')) {
                   core.warning(`Skipping ${fp}: .github/ files cannot be modified`);
+                  continue;
+                }
+                if (!isAllowedFile(fp)) {
+                  core.warning(`Skipping ${fp}: file type is not in the allowlist`);
                   continue;
                 }
                 const resolved = path.resolve(ws, fp);

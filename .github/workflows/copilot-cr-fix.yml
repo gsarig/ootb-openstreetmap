@@ -555,7 +555,9 @@ jobs:
 
                 // If Claude claimed fixes but no files actually changed, mark as no-op
                 if (commits.length > 0 && writtenFiles.length === 0) {
-                  for (const r of replies) r.body = `> No-op: Claude generated a fix but the file content was identical to what was already present. Please review manually.`;
+                  for (const r of replies) {
+                    if (r && typeof r === 'object') r.body = `> No-op: Claude generated a fix but the file content was identical to what was already present. Please review manually.`;
+                  }
                 }
 
                 // Lint (fail fast)

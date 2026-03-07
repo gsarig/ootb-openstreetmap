@@ -36,6 +36,7 @@ jobs:
 
             for (const issue of issues) {
               if (!issue.pull_request) continue;
+              try {
 
               const { data: pr } = await github.rest.pulls.get({
                 owner, repo, pull_number: issue.number,
@@ -97,5 +98,9 @@ jobs:
                   },
                 });
                 break; // one review at a time per PR
+              }
+
+              } catch (err) {
+                core.warning(`Error processing PR #${issue.number}: ${err.message || err}`);
               }
             }

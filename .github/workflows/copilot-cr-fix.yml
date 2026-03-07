@@ -546,14 +546,15 @@ jobs:
 
                 core.info('Calling Anthropic API...');
                 const apiResult = await callClaude(userMsgObj);
-                replies = apiResult.replies;
+                const commits = Array.isArray(apiResult.commits) ? apiResult.commits : [];
+                replies = Array.isArray(apiResult.replies) ? apiResult.replies : [];
                 summary = apiResult.summary;
 
-                writtenFiles = applyFixes(apiResult.commits, changedPaths);
+                writtenFiles = applyFixes(commits, changedPaths);
                 core.info(`Files written: ${writtenFiles.length}`);
 
                 // If Claude claimed fixes but no files actually changed, mark as no-op
-                if (apiResult.commits.length > 0 && writtenFiles.length === 0) {
+                if (commits.length > 0 && writtenFiles.length === 0) {
                   for (const r of replies) r.body = `> No-op: Claude generated a fix but the file content was identical to what was already present. Please review manually.`;
                 }
 

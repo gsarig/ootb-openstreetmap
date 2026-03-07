@@ -44,7 +44,7 @@ jobs:
               // Apply the same guards as the fix workflow
               if (pr.draft) continue;
               if (pr.user.login !== 'gsarig') continue;
-              if (pr.base.ref === 'master' || pr.base.ref === 'main') continue;
+              if (pr.base.ref === defaultBranch) continue;
               if (pr.head.repo.fork) continue;
 
               // Get all reviews on this PR

@@ -59,6 +59,9 @@ jobs:
             const reviewId = parseInt(context.payload.inputs.review_id, 10);
             const headRef  = context.payload.inputs.head_ref;
 
+            const { data: repoInfo } = await github.rest.repos.get({ owner, repo });
+            const defaultBranch = repoInfo.default_branch;
+
             const { data: pr } = await github.rest.pulls.get({ owner, repo, pull_number: prNumber });
 
             if (pr.draft) {
@@ -69,7 +72,7 @@ jobs:
               core.setFailed(`PR #${prNumber} author is '${pr.user.login}', not 'gsarig' — refusing to run auto-fix.`);
               return;
             }
-            if (pr.base.ref === 'master' || pr.base.ref === 'main') {
+            if (pr.base.ref === defaultBranch) {
               core.setFailed(`PR #${prNumber} targets '${pr.base.ref}' — refusing to run auto-fix on default branch PRs.`);
               return;
             }
@@ -490,7 +493,10 @@ jobs:
                   ...(attempt > 1 && {
                     retry_context: {
                       attempt,
-                      previous_fix_that_failed: previousFixContents,
+                      previous_fix_that_failed: previousFixContents.map(f => ({
+                        ...f,
+                        content: redactSecrets(f.content),
+                      })),
                       test_failure: previousFailure,
                     },
                   }),

@@ -491,7 +491,7 @@ jobs:
                 }
                 try {
                   const raw = fs.readFileSync(path.join(ws, fp), 'utf8');
-                  files.push({ path: fp, content: redactSecrets(raw) });
+                  files.push({ path: fp, content: raw });
                 } catch (e) {
                   core.warning(`Could not read ${fp}: ${e.message}`);
                 }

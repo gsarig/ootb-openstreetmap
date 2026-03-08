@@ -39,4 +39,43 @@ test.describe( 'OOTB OpenStreetMap block — editor', () => {
     ).not.toBeVisible();
   } );
 
+  test( 'fullscreen control appears in the editor when the toggle is enabled', async ({ page }) => {
+    const blockItem = await insertBlock( page );
+    await blockItem.click();
+    await page.keyboard.press( 'Escape' );
+
+    await expect(
+      page.locator( '[data-type="ootb/openstreetmap"] .leaflet-container' ).first()
+    ).toBeVisible( { timeout: 15_000 } );
+
+    // Open the Settings sidebar if not already open
+    const settingsButton = page.locator( 'button[aria-label="Settings"]' ).first();
+    if ( await settingsButton.isVisible() ) {
+      const isPressed = await settingsButton.getAttribute( 'aria-expanded' ) ??
+                        await settingsButton.getAttribute( 'aria-pressed' );
+      if ( isPressed === 'false' ) {
+        await settingsButton.click();
+      }
+    }
+
+    // Expand the "Map behavior" panel (it's closed by default)
+    const behaviorPanel = page.locator( '.components-panel__body-toggle', { hasText: 'Map behavior' } );
+    await expect( behaviorPanel ).toBeVisible( { timeout: 5_000 } );
+    const isOpen = await behaviorPanel.evaluate( el => el.closest( '.components-panel__body' )?.classList.contains( 'is-opened' ) );
+    if ( ! isOpen ) {
+      await behaviorPanel.click();
+    }
+
+    // Enable the Fullscreen mode toggle
+    const fullscreenToggle = page.locator( '.components-toggle-control', { hasText: 'Fullscreen mode' } )
+      .locator( 'input[type="checkbox"]' );
+    await expect( fullscreenToggle ).toBeVisible( { timeout: 5_000 } );
+    await fullscreenToggle.click();
+
+    // The fullscreen control button should now appear in the editor map
+    await expect(
+      page.locator( '[data-type="ootb/openstreetmap"] .leaflet-control-fullscreen' )
+    ).toBeVisible( { timeout: 5_000 } );
+  } );
+
 } );

@@ -4,7 +4,6 @@ on:
   push:
     branches: [master, main]
   pull_request:
-    branches: [master, main]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -17,13 +16,13 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
           tools: composer, cs2pr
           coverage: none
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: vendor
           key: composer-v2-${{ runner.os }}-${{ hashFiles('**/composer.json', '**/composer.lock') }}
@@ -40,7 +39,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -48,7 +47,7 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm audit --audit-level=high --omit=dev
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: build-assets
           path: build/
@@ -80,8 +79,8 @@ jobs:
           --health-timeout=5s
           --health-retries=10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v6
+      - uses: actions/download-artifact@v8
         with:
           name: build-assets
           path: build/
@@ -90,7 +89,7 @@ jobs:
           php-version: ${{ matrix.php-version }}
           extensions: mysqli
           coverage: xdebug
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: vendor
           key: composer-v2-${{ runner.os }}-${{ hashFiles('**/composer.json', '**/composer.lock') }}
@@ -103,7 +102,7 @@ jobs:
       - run: vendor/bin/phpunit --coverage-clover=tests/phpunit/coverage/clover.xml
         env:
           WP_TESTS_DIR: /tmp/wordpress-tests-lib
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: phpunit-coverage-wp-${{ matrix.wp-version }}-php-${{ matrix.php-version }}
           path: tests/phpunit/coverage/
@@ -125,8 +124,8 @@ jobs:
     env:
       WP_IMAGE: ${{ matrix.wp-image }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v6
+      - uses: actions/download-artifact@v8
         with:
           name: build-assets
           path: build/
@@ -156,7 +155,7 @@ jobs:
       - run: npx playwright test
         env:
           WP_BASE_URL: http://localhost:8080
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: playwright-report-wp-${{ matrix.wp-label }}
@@ -176,7 +175,7 @@ jobs:
     env:
       WP_IMAGE: wordpress:php8.1-apache
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: actions/setup-node@v4
         with:
@@ -235,7 +234,7 @@ jobs:
         env:
           WP_BASE_URL: http://localhost:8080
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: artifact-playwright-report
@@ -256,7 +255,7 @@ jobs:
       contents: read
       security-events: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: github/codeql-action/init@v4
         with:
           languages: javascript

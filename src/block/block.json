@@ -2,7 +2,7 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 2,
 	"name": "ootb/openstreetmap",
-	"version": "2.9.0",
+	"version": "2.10.0",
 	"title": "OpenStreetMap by Out of the Block",
 	"category": "common",
 	"icon": "location-alt",
@@ -57,6 +57,10 @@
 		"scrollWheelZoom": {
 			"type": "boolean",
 			"default": true
+		},
+		"fullscreen": {
+			"type": "boolean",
+			"default": false
 		},
 		"defaultIcon": {
 			"type": "object",
@@ -156,8 +160,9 @@
 	"style": "file:../index.css",
 	"script": [
 		"leaflet",
-		"leaflet-gesture-handling"
+		"leaflet-gesture-handling",
+		"leaflet-fullscreen-script"
 	],
 	"viewScript": [ "file:./view.js", "ootb-openstreetmap" ],
-	"viewStyle": [ "file:./view.css", "ootb-openstreetmap" ]
+	"viewStyle": [ "file:./view.css", "ootb-openstreetmap", "leaflet-fullscreen-style" ]
 }

@@ -17,8 +17,8 @@
     "squizlabs/php_codesniffer": "^3.10",
     "wp-coding-standards/wpcs": "^3.1",
     "phpunit/phpunit": "^9.6",
-    "spatie/phpunit-snapshot-assertions": "^4.0",
-    "yoast/phpunit-polyfills": "^2.0",
+    "spatie/phpunit-snapshot-assertions": "^5.3",
+    "yoast/phpunit-polyfills": "^4.0",
     "staabm/annotate-pull-request-from-checkstyle": "^1.8"
   },
   "autoload": {

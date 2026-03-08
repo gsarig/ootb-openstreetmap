@@ -5,6 +5,7 @@ import Shapes from './Shapes';
 import {MapContainer} from 'react-leaflet';
 import MapEvents from './MapEvents';
 import MapUpdate from './MapUpdate';
+import Fullscreen from './Fullscreen';
 
 export default function LeafletMap({inBlockEditor, addingMarker, setAddingMarker, ...props}) {
 	const {
@@ -13,6 +14,7 @@ export default function LeafletMap({inBlockEditor, addingMarker, setAddingMarker
 			bounds,
 			mapHeight,
 			mapType,
+			fullscreen,
 		},
 	} = props;
 
@@ -31,6 +33,7 @@ export default function LeafletMap({inBlockEditor, addingMarker, setAddingMarker
 			<MapEvents props={props} addingMarker={addingMarker} setAddingMarker={setAddingMarker}/>
 			<MapUpdate props={props}/>
 			<TileProvider props={props}/>
+			<Fullscreen fullscreen={fullscreen}/>
 			<Markers props={props} setAddingMarker={setAddingMarker}/>
 			{'marker' !== mapType ?
 				<Shapes props={props}/>

@@ -218,10 +218,22 @@ class Query {
 					continue;
 				}
 
+				$text = apply_filters( 'ootb_cf_modal_content', $address, $post_id );
+				if ( empty( $text ) && false === has_filter( 'ootb_cf_modal_content' ) ) {
+					$thumbnail = get_the_post_thumbnail( $post_id, 'thumbnail' );
+					$text      = sprintf( '<a href="%s">%s</a>', esc_url( (string) get_permalink( $post_id ) ), esc_html( get_the_title( $post_id ) ) );
+					if ( ! empty( $thumbnail ) ) {
+						$text = $thumbnail . $text;
+					}
+					$sanitized_text = wp_kses( $text, self::kses_allowed_popup() );
+				} else {
+					$sanitized_text = wp_kses_post( $text );
+				}
+
 				$markers[][] = (object) [
 					'lat'  => $latitude,
 					'lng'  => $longitude,
-					'text' => wp_kses_post( apply_filters( 'ootb_cf_modal_content', $address, $post_id ) ),
+					'text' => $sanitized_text,
 					'id'   => $post_id,
 					'icon' => self::get_cf_marker_icon( $post_id ),
 				];
@@ -416,6 +428,34 @@ class Query {
 			'doubleclickzoom' => '',
 			'marker'          => '',
 		];
+	}
+
+	/**
+	 * Returns the kses allowlist used for sanitising WordPress-generated popup HTML.
+	 *
+	 * Extends wp_kses_post() with img attributes that WordPress core generates
+	 * (srcset, sizes, decoding, fetchpriority) but that are absent from the default
+	 * post allowlist, so that responsive image markup survives sanitisation.
+	 *
+	 * @return array<string, array<string, bool>>
+	 */
+	private static function kses_allowed_popup(): array {
+		static $allowed = null;
+
+		if ( null === $allowed ) {
+			$allowed        = wp_kses_allowed_html( 'post' );
+			$allowed['img'] = array_merge(
+				$allowed['img'] ?? [],
+				[
+					'srcset'        => true,
+					'sizes'         => true,
+					'decoding'      => true,
+					'fetchpriority' => true,
+				]
+			);
+		}
+
+		return $allowed;
 	}
 
 	/**

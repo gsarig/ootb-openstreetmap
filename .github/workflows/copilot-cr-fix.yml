@@ -1,0 +1,715 @@
+name: Copilot CR Auto-Fix
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to process'
+        required: true
+      review_id:
+        description: 'Copilot review ID to process'
+        required: true
+      head_ref:
+        description: 'Head branch ref to check out'
+        required: true
+
+permissions:
+  contents: write      # push fixup commit
+  pull-requests: write # post comments and replies
+  issues: write        # post summary comment
+
+concurrency:
+  group: copilot-fix-${{ github.event.inputs.pr_number }}
+  cancel-in-progress: false
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+
+    env:
+      WP_IMAGE: wordpress:php8.1-apache
+      WP_TESTS_DIR: /tmp/wordpress-tests-lib
+      WP_BASE_URL: http://localhost:8080
+
+    services:
+      db:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress_test
+          MYSQL_USER: wordpress
+          MYSQL_PASSWORD: wordpress
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -u root -proot"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Validate PR and review inputs
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const owner    = context.repo.owner;
+            const repo     = context.repo.repo;
+            const prInput     = (context.payload.inputs.pr_number || '').trim();
+            const reviewInput = (context.payload.inputs.review_id  || '').trim();
+            const headRef     = (context.payload.inputs.head_ref   || '').trim();
+
+            if (!/^\d+$/.test(prInput)) {
+              core.setFailed(`Invalid pr_number '${context.payload.inputs.pr_number}' — expected a numeric PR number.`);
+              return;
+            }
+            if (!/^\d+$/.test(reviewInput)) {
+              core.setFailed(`Invalid review_id '${context.payload.inputs.review_id}' — expected a numeric review ID.`);
+              return;
+            }
+            if (!headRef) {
+              core.setFailed(`Invalid head_ref '${context.payload.inputs.head_ref}' — expected a non-empty branch ref.`);
+              return;
+            }
+
+            const prNumber = Number(prInput);
+            const reviewId = Number(reviewInput);
+
+            const { data: repoInfo } = await github.rest.repos.get({ owner, repo });
+            const defaultBranch = repoInfo.default_branch;
+
+            const { data: pr } = await github.rest.pulls.get({ owner, repo, pull_number: prNumber });
+
+            if (pr.state !== 'open') {
+              core.setFailed(`PR #${prNumber} is not open (state: '${pr.state}') — refusing to run auto-fix.`);
+              return;
+            }
+            if (pr.draft) {
+              core.setFailed(`PR #${prNumber} is a draft — refusing to run auto-fix.`);
+              return;
+            }
+            if (pr.user.login !== 'gsarig') {
+              core.setFailed(`PR #${prNumber} author is '${pr.user.login}', not 'gsarig' — refusing to run auto-fix.`);
+              return;
+            }
+            if (pr.base.ref === defaultBranch) {
+              core.setFailed(`PR #${prNumber} targets '${pr.base.ref}' — refusing to run auto-fix on default branch PRs.`);
+              return;
+            }
+            if (pr.head.repo.fork) {
+              core.setFailed(`PR #${prNumber} is from a fork — refusing to run auto-fix.`);
+              return;
+            }
+            if (pr.head.ref !== headRef) {
+              core.setFailed(`Input head_ref '${headRef}' does not match PR head ref '${pr.head.ref}' — refusing to run.`);
+              return;
+            }
+            const labels = pr.labels.map(l => l.name);
+            if (!labels.includes('ai-fix')) {
+              core.setFailed(`PR #${prNumber} does not have the 'ai-fix' label — refusing to run auto-fix.`);
+              return;
+            }
+            const { data: review } = await github.rest.pulls.getReview({
+              owner, repo, pull_number: prNumber, review_id: reviewId,
+            });
+            if (review.user.login !== 'copilot-pull-request-reviewer[bot]' || review.user.type !== 'Bot') {
+              core.setFailed(`Review ${reviewId} is not from Copilot bot (found '${review.user.login}') — refusing to run auto-fix.`);
+              return;
+            }
+
+      - name: Check required secrets
+        uses: actions/github-script@v7
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            if (!process.env.ANTHROPIC_API_KEY) {
+              const owner    = context.repo.owner;
+              const repo     = context.repo.repo;
+              const prNumber = Number((context.payload.inputs.pr_number || '').trim());
+              const reviewId = Number((context.payload.inputs.review_id  || '').trim());
+              try {
+                await github.rest.issues.createComment({
+                  owner, repo, issue_number: prNumber,
+                  body: `🤖 **Copilot CR Auto-Fix** could not run: \`ANTHROPIC_API_KEY\` secret is not configured.\n\nTo resolve this, add the \`ANTHROPIC_API_KEY\` secret to the repository settings, then manually re-run the **Copilot CR Auto-Fix** workflow for this PR from the Actions tab, or request a new Copilot review to generate a new review ID.\n<!-- copilot-cr-fix:${reviewId} -->`,
+                });
+              } catch (_) {}
+              core.setFailed('ANTHROPIC_API_KEY secret is not set.');
+            }
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.inputs.head_ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mysqli
+          coverage: none
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          composer install --no-interaction --prefer-dist --no-progress
+          npm ci
+
+      - name: Build JS assets
+        run: npm run build
+
+      - name: Install WordPress test suite
+        run: bash bin/install-wp-tests.sh wordpress_test wordpress wordpress 127.0.0.1 latest
+
+      - name: Start WordPress for Playwright
+        run: docker compose up -d
+
+      - name: Wait for WordPress
+        run: until curl -sf http://localhost:8080/wp-login.php > /dev/null; do sleep 3; done
+
+      - name: Debug WordPress containers
+        run: |
+          docker compose ps
+          docker compose logs wordpress
+          docker compose logs cli
+
+      - name: Setup WordPress test data
+        run: bash scripts/wp-test-setup.sh
+
+      - name: Install Playwright browser
+        run: npx playwright install chromium --with-deps
+
+      # ── Evaluate, fix, test, retry (up to 3 attempts), then commit or report ──
+      - name: Evaluate and fix with retry loop
+        id: main
+        uses: actions/github-script@v7
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            'use strict';
+            const fs = require('fs');
+            const path = require('path');
+            const { spawnSync } = require('child_process');
+
+            const ws       = process.env.GITHUB_WORKSPACE;
+            const owner    = context.repo.owner;
+            const repo     = context.repo.repo;
+            const prNumber = parseInt(context.payload.inputs.pr_number, 10);
+            const reviewId = parseInt(context.payload.inputs.review_id, 10);
+
+            // ── Security ───────────────────────────────────────────────────────
+
+            // Allowlist of file types safe to send to the external API.
+            const ALLOWED_GLOBS = [
+              /\.md$/i,
+              /\.js$/i,
+              /\.ts$/i,
+              /\.json$/i,
+              /\.yml$/i,
+              /\.yaml$/i,
+              /\.php$/i,
+              /\.css$/i,
+              /\.html?$/i,
+            ];
+
+            // Redact lines that look like secrets before sending to API.
+            const SECRET_PATTERNS = [
+              /(?:api[_-]?key|secret|password|token|\bauth\b)\s*[=:]\s*\S+/i,
+              /-----BEGIN [A-Z ]+KEY-----/,
+            ];
+
+            function isAllowedFile(fp) {
+              if (/^\.github\//.test(fp)) return false;
+              return ALLOWED_GLOBS.some(re => re.test(fp));
+            }
+
+            function redactSecrets(content) {
+              return content.split('\n').map(line =>
+                SECRET_PATTERNS.some(re => re.test(line)) ? '<redacted>' : line
+              ).join('\n');
+            }
+
+            // ── Helpers ────────────────────────────────────────────────────────
+
+            function run(cmd, args, env = {}) {
+              const r = spawnSync(cmd, args, {
+                cwd: ws,
+                env: { ...process.env, ...env },
+                encoding: 'utf8',
+                maxBuffer: 10 * 1024 * 1024,
+              });
+              const output = [r.stdout || '', r.stderr || ''].join('\n').trim().slice(0, 5000);
+              return { ok: r.status === 0 && !r.error, output };
+            }
+
+            function applyFixes(commits, changedPaths) {
+              const written = [];
+              const unchanged = [];
+              if (!Array.isArray(commits)) {
+                core.warning('Expected "commits" to be an array; skipping file writes.');
+                return written;
+              }
+              for (const commit of commits) {
+                if (!commit || typeof commit.path !== 'string' || typeof commit.content !== 'string') {
+                  core.warning(`Skipping malformed commit entry: ${JSON.stringify(commit)}`);
+                  continue;
+                }
+                const { path: fp, content } = commit;
+                if (!changedPaths.has(fp)) {
+                  core.warning(`Skipping ${fp}: not in PR diff`);
+                  continue;
+                }
+                if (fp.startsWith('.github/')) {
+                  core.warning(`Skipping ${fp}: .github/ files cannot be modified`);
+                  continue;
+                }
+                if (!isAllowedFile(fp)) {
+                  core.warning(`Skipping ${fp}: file type is not in the allowlist`);
+                  continue;
+                }
+                const resolved = path.resolve(ws, fp);
+                if (!resolved.startsWith(ws + path.sep)) {
+                  core.warning(`Refusing to write outside workspace: ${fp}`);
+                  continue;
+                }
+                let original = '';
+                try { original = fs.readFileSync(resolved, 'utf8'); } catch (_) {}
+                if (content === original) { unchanged.push(fp); continue; }
+                fs.mkdirSync(path.dirname(resolved), { recursive: true });
+                fs.writeFileSync(resolved, content, 'utf8');
+                written.push(fp);
+              }
+              if (unchanged.length > 0) core.warning(`Claude claimed fixes but content was identical for: ${unchanged.join(', ')}`);
+              return written;
+            }
+
+            function readWrittenFiles(writtenFiles) {
+              return writtenFiles.map(fp => {
+                try {
+                  return { path: fp, content: fs.readFileSync(path.join(ws, fp), 'utf8') };
+                } catch (_) {
+                  return { path: fp, content: '(unreadable)' };
+                }
+              });
+            }
+
+            async function resolveThreads(commentIds) {
+              const idSet = new Set(commentIds);
+              const threads = [];
+              let cursor = null;
+              let hasNextPage = true;
+              while (hasNextPage) {
+                try {
+                  const result = await github.graphql(`
+                    query($owner: String!, $repo: String!, $pr: Int!, $after: String) {
+                      repository(owner: $owner, name: $repo) {
+                        pullRequest(number: $pr) {
+                          reviewThreads(first: 100, after: $after) {
+                            pageInfo { hasNextPage endCursor }
+                            nodes {
+                              id
+                              isResolved
+                              comments(first: 1) {
+                                nodes { databaseId }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  `, { owner, repo, pr: prNumber, after: cursor });
+                  const page = result.repository.pullRequest.reviewThreads;
+                  threads.push(...page.nodes);
+                  hasNextPage = page.pageInfo.hasNextPage;
+                  cursor = page.pageInfo.endCursor;
+                } catch (e) {
+                  core.warning(`Could not fetch review threads: ${e.message}`);
+                  return;
+                }
+              }
+              for (const thread of threads) {
+                if (thread.isResolved) continue;
+                const firstId = thread.comments.nodes[0]?.databaseId;
+                if (!firstId || !idSet.has(firstId)) continue;
+                try {
+                  await github.graphql(`
+                    mutation($threadId: ID!) {
+                      resolveReviewThread(input: { threadId: $threadId }) {
+                        thread { isResolved }
+                      }
+                    }
+                  `, { threadId: thread.id });
+                } catch (e) {
+                  core.warning(`Could not resolve thread ${thread.id}: ${e.message}`);
+                }
+              }
+            }
+
+            async function callClaude(userMsgObj) {
+              const apiRes = await fetch('https://api.anthropic.com/v1/messages', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'x-api-key': process.env.ANTHROPIC_API_KEY,
+                  'anthropic-version': '2023-06-01',
+                },
+                body: JSON.stringify({
+                  model: 'claude-sonnet-4-6',
+                  max_tokens: 8192,
+                  system: SYSTEM_PROMPT,
+                  messages: [{ role: 'user', content: JSON.stringify(userMsgObj) }],
+                }),
+              });
+              if (!apiRes.ok) {
+                const err = await apiRes.text();
+                throw new Error(`Anthropic API error ${apiRes.status}: ${err}`);
+              }
+              const data = await apiRes.json();
+              const raw = data.content[0].text;
+              let result;
+              try { result = JSON.parse(raw); }
+              catch (_) {
+                const m = raw.match(/\{[\s\S]*\}/);
+                if (m) result = JSON.parse(m[0]);
+                else throw new Error(`Could not parse API response:\n${raw}`);
+              }
+              const { commits = [], replies = [], summary: s = '(no summary)' } = result;
+              return { commits, replies, summary: s.slice(0, 2000) };
+            }
+
+            // ── System prompt ──────────────────────────────────────────────────
+
+            const SYSTEM_PROMPT = `You are a conservative code fix agent for the OOTB OpenStreetMap WordPress plugin.
+            You are the first line of defence on a pull request — not a full reviewer.
+            Your job is narrow: fix what is clearly and unambiguously broken based only on the information you have been given.
+            Everything else must be left for the author. When in doubt, skip.
+
+            You have been given:
+            - CLAUDE.md — the project's coding rules. All fixes must comply with it.
+            - A list of Copilot review comments (id, path, line, body, diff_hunk)
+            - The full content of the files those comments refer to
+
+            That is ALL the context you have. You cannot see the rest of the codebase.
+
+            ## What to fix
+            Only apply a fix when ALL of the following are true:
+            - It is a correctness issue: bug, off-by-one, undefined variable, broken async, wrong return type
+            - The comment clearly reports a defect — not a suggestion or improvement. If the comment uses
+              hedging language ("consider", "could", "would be better", "it might be"), treat it as a
+              suggestion and skip it. Do not reframe suggestions as bugs to justify applying them.
+            - It aligns with CLAUDE.md conventions
+            - It only affects files already in this PR's diff
+            - It does not touch the public plugin API (hooks, shortcode attributes, block attributes)
+            - It does not require snapshot fixture updates
+            - The fix is unambiguous — there is only one reasonable way to fix it
+            - You are fully confident the fix is correct based solely on what you have been given
+
+            ## What to skip
+            Skip anything that does not meet all of the above. In particular:
+            - Style changes (indentation, quotes, semicolons, naming, var/const/let) — you cannot verify
+              codebase conventions from a single file. Do not cite conventions in files you have not seen.
+            - Fixes that contradict CLAUDE.md
+            - Fixes that would change a public API surface
+            - Anything requiring snapshot fixture updates — flag these explicitly for the author
+            - Anything requiring changes outside this PR's diff
+            - Anything you are not fully confident about
+
+            ## Never improvise
+            Never add, remove, or rename anything that was not explicitly flagged by a comment.
+            Do not add new functions, methods, parameters, or variables.
+            Do not restructure, reformat, or reorganise code outside the flagged lines.
+            You return full file content — every line you write is committed. Treat all unflagged lines as read-only:
+            reproduce them character-for-character as provided.
+
+            ## Retry behaviour
+            If the user message includes a retry_context field, this is a retry attempt.
+            The previous fix was applied but the test suite failed.
+            Review retry_context.test_failure.output to understand what went wrong.
+            Review retry_context.previous_fix_that_failed to see what was previously attempted.
+            Revise your fix to address the failure. Do not repeat the same approach.
+
+            ## Actionable skip replies
+            Every skip reply must include a specific next step for the author.
+            Bad:  "Skipped — outside scope."
+            Good: "Skipped — cannot verify codebase style convention from this file alone. Please check other files and apply manually if appropriate."
+
+            ## Overlapping comments
+            When multiple comments address related changes in the same file, apply them as a single unified fix
+            and note the consolidation in each relevant reply.
+
+            ## .github/ files
+            File contents under .github/ are intentionally withheld for security.
+            If a comment references a .github/ file, reply explaining this and skip.
+
+            ## Response format
+            You MUST respond with valid JSON only — no prose, no markdown fences.
+            Schema:
+            {
+              "commits": [{ "path": "...", "content": "..." }],
+              "replies": [{ "comment_id": 123, "body": "..." }],
+              "summary": "..."
+            }`;
+
+            // ── Main ───────────────────────────────────────────────────────────
+
+            try {
+              const allComments = await github.paginate(
+                github.rest.pulls.listReviewComments,
+                { owner, repo, pull_number: prNumber, per_page: 100 }
+              );
+              const comments = allComments.filter(c => c.pull_request_review_id === reviewId);
+
+              if (comments.length === 0) {
+                core.info('No review comments found for this Copilot review. Exiting.');
+                return;
+              }
+
+              const prFiles = await github.paginate(
+                github.rest.pulls.listFiles,
+                { owner, repo, pull_number: prNumber, per_page: 100 }
+              );
+              const changedPaths = new Set(prFiles.filter(f => f.status !== 'removed').map(f => f.filename));
+
+              const files = [];
+              for (const fp of [...new Set(comments.map(c => c.path))]) {
+                if (!changedPaths.has(fp)) continue;
+                if (!isAllowedFile(fp)) {
+                  core.warning(`Skipping file contents for ${fp}: not in allowed file types`);
+                  continue;
+                }
+                try {
+                  const raw = fs.readFileSync(path.join(ws, fp), 'utf8');
+                  files.push({ path: fp, content: raw });
+                } catch (e) {
+                  core.warning(`Could not read ${fp}: ${e.message}`);
+                }
+              }
+
+              let claudeMd = '';
+              try { claudeMd = fs.readFileSync(path.join(ws, 'CLAUDE.md'), 'utf8'); } catch (_) {}
+
+              // ── Retry loop ─────────────────────────────────────────────────
+
+              const MAX = 3;
+              let writtenFiles = [];
+              let replies = [];
+              let summary = '(no summary)';
+              let allPassed = false;
+              let previousFixContents = [];
+              let previousFailure = null;
+              const attemptLog = [];
+
+              for (let attempt = 1; attempt <= MAX; attempt++) {
+                core.info(`── Attempt ${attempt} of ${MAX} ──`);
+
+                if (attempt > 1) {
+                  run('git', ['restore', '.']);
+                }
+
+                const userMsgObj = {
+                  claude_md: claudeMd,
+                  pr_number: prNumber,
+                  comments: comments.map(c => ({
+                    id: c.id,
+                    path: c.path,
+                    line: c.line ?? c.original_line,
+                    body: redactSecrets(c.body),
+                    diff_hunk: redactSecrets(c.diff_hunk),
+                  })),
+                  files,
+                  ...(attempt > 1 && {
+                    retry_context: {
+                      attempt,
+                      previous_fix_that_failed: previousFixContents.map(f => ({
+                        ...f,
+                        content: redactSecrets(f.content),
+                      })),
+                      test_failure: previousFailure ? {
+                        ...previousFailure,
+                        output: redactSecrets(previousFailure.output),
+                      } : null,
+                    },
+                  }),
+                };
+
+                core.info('Calling Anthropic API...');
+                const apiResult = await callClaude(userMsgObj);
+                const commits = Array.isArray(apiResult.commits) ? apiResult.commits : [];
+                replies = Array.isArray(apiResult.replies) ? apiResult.replies : [];
+                summary = apiResult.summary;
+
+                writtenFiles = applyFixes(commits, changedPaths);
+                core.info(`Files written: ${writtenFiles.length}`);
+
+                // If Claude claimed fixes but no files actually changed, mark as no-op
+                if (commits.length > 0 && writtenFiles.length === 0) {
+                  for (const r of replies) {
+                    if (r && typeof r === 'object') r.body = `> No-op: Claude generated a fix but the file content was identical to what was already present. Please review manually.`;
+                  }
+                }
+
+                // Lint (fail fast)
+                core.info('Running lint...');
+                const phpstan = run('vendor/bin/phpstan', ['analyse', '--no-progress']);
+                const phpcs   = run('vendor/bin/phpcs', []);
+                if (!phpstan.ok || !phpcs.ok) {
+                  const out = [phpstan.output, phpcs.output].join('\n').trim();
+                  core.warning(`Lint failed (attempt ${attempt}):\n${out}`);
+                  attemptLog.push({ attempt, phase: 'lint' });
+                  previousFixContents = readWrittenFiles(writtenFiles);
+                  previousFailure = { phase: 'lint', output: out.slice(0, 3000) };
+                  continue;
+                }
+
+                // PHPUnit
+                core.info('Running PHPUnit...');
+                const phpunit = run('vendor/bin/phpunit', [], {
+                  WP_TESTS_DIR: process.env.WP_TESTS_DIR,
+                });
+                if (!phpunit.ok) {
+                  core.warning(`PHPUnit failed (attempt ${attempt}):\n${phpunit.output}`);
+                  attemptLog.push({ attempt, phase: 'phpunit' });
+                  previousFixContents = readWrittenFiles(writtenFiles);
+                  previousFailure = { phase: 'phpunit', output: phpunit.output.slice(0, 3000) };
+                  continue;
+                }
+
+                // Playwright
+                core.info('Running Playwright...');
+                const playwright = run('npx', ['playwright', 'test'], {
+                  WP_BASE_URL: process.env.WP_BASE_URL,
+                });
+                if (!playwright.ok) {
+                  core.warning(`Playwright failed (attempt ${attempt}):\n${playwright.output}`);
+                  attemptLog.push({ attempt, phase: 'playwright' });
+                  previousFixContents = readWrittenFiles(writtenFiles);
+                  previousFailure = { phase: 'playwright', output: playwright.output.slice(0, 3000) };
+                  continue;
+                }
+
+                allPassed = true;
+                break;
+              }
+
+              // ── Success: commit, push, post replies ────────────────────────
+
+              if (allPassed) {
+                let commitSha = '';
+                if (writtenFiles.length > 0) {
+                  for (const fp of writtenFiles) run('git', ['add', fp]);
+                  const diffR = run('git', ['diff', '--cached', '--quiet']);
+                  if (diffR.ok) {
+                    core.info('No staged changes after applying fixes — skipping commit.');
+                  } else {
+                    const msgFile = path.join(ws, '.git', '_copilot_fix_msg');
+                    fs.writeFileSync(msgFile, `fixup: apply Copilot CR suggestions\n\n${summary}`);
+                    const commitR = run('git', ['commit', '-F', msgFile]);
+                    if (!commitR.ok) throw new Error(`git commit failed: ${commitR.output}`);
+                    commitSha = run('git', ['rev-parse', 'HEAD']).output.trim();
+                    const pushR = run('git', ['push']);
+                    if (!pushR.ok) throw new Error(`git push failed: ${pushR.output}`);
+                  }
+                } else {
+                  core.info('No file changes — skipping commit.');
+                }
+
+                const safeReplies = Array.isArray(replies) ? replies : [];
+                const repliedIds = [];
+                for (const reply of safeReplies) {
+                  if (!reply || !Number.isFinite(reply.comment_id) || typeof reply.body !== 'string') {
+                    core.warning(`Skipping malformed reply entry: ${JSON.stringify(reply)}`);
+                    continue;
+                  }
+                  const { comment_id, body } = reply;
+                  try {
+                    await github.rest.pulls.createReplyForReviewComment({
+                      owner, repo, pull_number: prNumber, comment_id, body,
+                    });
+                    repliedIds.push(comment_id);
+                  } catch (e) {
+                    core.warning(`Reply failed for ${comment_id}: ${e.message}`);
+                  }
+                }
+
+                await resolveThreads(repliedIds);
+
+                const commitLine = commitSha
+                  ? `Applied and committed: [view commit](https://github.com/${owner}/${repo}/commit/${commitSha})`
+                  : 'No code changes were committed.';
+
+                await github.rest.issues.createComment({
+                  owner, repo, issue_number: prNumber,
+                  body: `🤖 **Copilot CR Auto-Fix**\n\n${summary}\n\n${commitLine} All tests passed. See individual comment replies for details.\n<!-- copilot-cr-fix:${reviewId} -->`,
+                });
+
+              // ── Failure: tests still failing after MAX attempts ────────────
+
+              } else {
+                run('git', ['restore', '.']);
+                const runUrl = `${process.env.GITHUB_SERVER_URL}/${owner}/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}`;
+                const attemptsDesc = attemptLog.map(a => `attempt ${a.attempt}: ${a.phase}`).join(', ');
+
+                const safeReplies = Array.isArray(replies) ? replies : [];
+                const repliedIds = [];
+                for (const reply of safeReplies) {
+                  if (!reply || !Number.isFinite(reply.comment_id)) {
+                    core.warning(`Skipping malformed reply entry: ${JSON.stringify(reply)}`);
+                    continue;
+                  }
+                  const { comment_id } = reply;
+                  try {
+                    await github.rest.pulls.createReplyForReviewComment({
+                      owner, repo, pull_number: prNumber, comment_id,
+                      body: `> Tests failed after ${MAX} attempts (${attemptsDesc}) — no commit was pushed. See the [workflow run](${runUrl}) for details.`,
+                    });
+                    repliedIds.push(comment_id);
+                  } catch (e) {
+                    core.warning(`Reply failed for ${comment_id}: ${e.message}`);
+                  }
+                }
+
+                await resolveThreads(repliedIds);
+
+                await github.rest.issues.createComment({
+                  owner, repo, issue_number: prNumber,
+                  body: `🤖 **Copilot CR Auto-Fix** — fixes were attempted ${MAX} times but the test suite did not pass.\n\nFailed phases: ${attemptsDesc}\n\nNo commit was pushed. Check the [workflow run](${runUrl}) for details.\n<!-- copilot-cr-fix:${reviewId} -->`,
+                });
+              }
+
+            } catch (error) {
+              run('git', ['restore', '.']);
+              core.error(error.message);
+              throw error;
+            }
+
+      # ── Unexpected error ──────────────────────────────────────────────────────
+      - name: Handle unexpected failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const owner    = context.repo.owner;
+            const repo     = context.repo.repo;
+            const prNumber = parseInt(context.payload.inputs.pr_number, 10);
+            const reviewId = parseInt(context.payload.inputs.review_id, 10);
+            const runUrl   = `${process.env.GITHUB_SERVER_URL}/${owner}/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}`;
+            const marker   = Number.isFinite(reviewId) ? `\n<!-- copilot-cr-fix:${reviewId} -->` : '';
+            try {
+              await github.rest.issues.createComment({
+                owner, repo, issue_number: prNumber,
+                body: `🤖 **Copilot CR Auto-Fix** encountered an unexpected error. Check the [workflow run](${runUrl}) for details.${marker}`,
+              });
+            } catch (_) {}

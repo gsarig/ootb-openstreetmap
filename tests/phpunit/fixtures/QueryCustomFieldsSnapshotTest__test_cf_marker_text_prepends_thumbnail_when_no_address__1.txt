@@ -1,0 +1,1 @@
+[{"lat":"37.9838","lng":"23.7275","text":"<img class=\"attachment-thumbnail size-thumbnail\" src=\"http:\/\/example.org\/thumbnail.jpg\" \/><a href=\"http:\/\/example.org\/?p=0\">Test CF Post<\/a>","id":0,"icon":null}]

@@ -142,6 +142,9 @@ Version 2.0.0 is a major, almost full, refactoring, both for the build scripts a
 = 1.0 =
 
 == Changelog ==
+= 2.9.1 =
+* Geodata map markers now show the post title (and thumbnail if available) as default popup content when no address or custom filter content is provided.
+
 = 2.9.0 =
 * Adds support for the WordPress Abilities API.
 * Bumps minimum supported WordPress version to 6.6.

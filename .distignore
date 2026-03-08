@@ -41,3 +41,4 @@ phpunit.xml.dist
 playwright.config.ts
 docker-compose.yml
 TESTING.md
+/tmp

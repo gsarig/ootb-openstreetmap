@@ -17,7 +17,7 @@
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.56.1",
-		"@wordpress/scripts": "^30.27.0"
+		"@wordpress/scripts": "^31.6.0"
 	},
 	"overrides": {
 		"serialize-javascript": "7.0.4",

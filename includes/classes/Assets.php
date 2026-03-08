@@ -30,8 +30,6 @@ class Assets {
 	public function shortcode_assets(): void {
 		wp_enqueue_style( 'ootb-openstreetmap-style', '', [ $this->handle_leaflet ], OOTB_SCRIPT_VERSION['leaflet'] );
 		wp_enqueue_script( $this->handle_leaflet );
-		wp_enqueue_style( $this->handle_fullscreen_style );
-		wp_enqueue_script( $this->handle_fullscreen_script );
 		wp_enqueue_script( $this->handle_ootb_script );
 	}
 

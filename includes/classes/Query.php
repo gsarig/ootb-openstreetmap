@@ -426,6 +426,7 @@ class Query {
 			'scrollwheelzoom' => '',
 			'dragging'        => '',
 			'doubleclickzoom' => '',
+			'fullscreen'      => '',
 			'marker'          => '',
 		];
 	}

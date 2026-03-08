@@ -11,8 +11,10 @@
 namespace OOTB;
 
 class Assets {
-	public string $handle_ootb_script = 'ootb-openstreetmap-view-script';
-	public string $handle_leaflet     = 'leaflet';
+	public string $handle_ootb_script      = 'ootb-openstreetmap-view-script';
+	public string $handle_leaflet          = 'leaflet';
+	public string $handle_fullscreen_script = 'leaflet-fullscreen-script';
+	public string $handle_fullscreen_style  = 'leaflet-fullscreen-style';
 
 	public function __construct() {
 		global $ootb_inline_scripts_tracking;
@@ -37,6 +39,21 @@ class Assets {
 			OOTB_PLUGIN_URL . 'assets/vendor/leaflet/leaflet.js',
 			[],
 			OOTB_SCRIPT_VERSION[ $this->handle_leaflet ],
+			true
+		);
+
+		wp_register_style(
+			$this->handle_fullscreen_style,
+			OOTB_PLUGIN_URL . 'assets/vendor/leaflet-fullscreen/leaflet.fullscreen.css',
+			[],
+			OOTB_VERSION
+		);
+
+		wp_register_script(
+			$this->handle_fullscreen_script,
+			OOTB_PLUGIN_URL . 'assets/vendor/leaflet-fullscreen/Leaflet.fullscreen.js',
+			[ $this->handle_leaflet ],
+			OOTB_VERSION,
 			true
 		);
 

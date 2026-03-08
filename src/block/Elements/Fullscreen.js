@@ -1,6 +1,8 @@
 import { useEffect } from '@wordpress/element';
 import { useMap } from 'react-leaflet/hooks';
+import { __ } from '@wordpress/i18n';
 import L from 'leaflet';
+import '../../../assets/vendor/leaflet-fullscreen/Leaflet.fullscreen.js';
 import '../../../assets/vendor/leaflet-fullscreen/leaflet.fullscreen.css';
 
 export default function Fullscreen({ fullscreen }) {
@@ -15,8 +17,8 @@ export default function Fullscreen({ fullscreen }) {
 		if (fullscreen && L.Control.Fullscreen) {
 			fullscreenControl = new L.Control.Fullscreen({
 				title: {
-					'false': 'View Fullscreen',
-					'true': 'Exit Fullscreen'
+					'false': __( 'View Fullscreen', 'ootb-openstreetmap' ),
+					'true': __( 'Exit Fullscreen', 'ootb-openstreetmap' ),
 				}
 			});
 			map.addControl(fullscreenControl);

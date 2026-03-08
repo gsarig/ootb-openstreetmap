@@ -11,8 +11,10 @@
 namespace OOTB;
 
 class Assets {
-	public string $handle_ootb_script = 'ootb-openstreetmap-view-script';
-	public string $handle_leaflet     = 'leaflet';
+	public string $handle_ootb_script      = 'ootb-openstreetmap-view-script';
+	public string $handle_leaflet          = 'leaflet';
+	public string $handle_fullscreen_script = 'leaflet-fullscreen-script';
+	public string $handle_fullscreen_style  = 'leaflet-fullscreen-style';
 
 	public function __construct() {
 		global $ootb_inline_scripts_tracking;
@@ -28,6 +30,8 @@ class Assets {
 	public function shortcode_assets(): void {
 		wp_enqueue_style( 'ootb-openstreetmap-style', '', [ $this->handle_leaflet ], OOTB_SCRIPT_VERSION['leaflet'] );
 		wp_enqueue_script( $this->handle_leaflet );
+		wp_enqueue_style( $this->handle_fullscreen_style );
+		wp_enqueue_script( $this->handle_fullscreen_script );
 		wp_enqueue_script( $this->handle_ootb_script );
 	}
 
@@ -41,22 +45,19 @@ class Assets {
 		);
 
 		wp_register_style(
-			'leaflet-fullscreen-style',
+			$this->handle_fullscreen_style,
 			OOTB_PLUGIN_URL . 'assets/vendor/leaflet-fullscreen/leaflet.fullscreen.css',
 			[],
 			OOTB_VERSION
 		);
 
 		wp_register_script(
-			'leaflet-fullscreen-script',
+			$this->handle_fullscreen_script,
 			OOTB_PLUGIN_URL . 'assets/vendor/leaflet-fullscreen/Leaflet.fullscreen.js',
 			[ $this->handle_leaflet ],
 			OOTB_VERSION,
 			true
 		);
-
-		wp_enqueue_style( 'leaflet-fullscreen-style' );
-		wp_enqueue_script( 'leaflet-fullscreen-script' );
 
 		if ( ! empty( Helper::get_option( 'prevent_default_gestures' ) ) ) {
 			$handle_gesture_handling = 'leaflet-gesture-handling';

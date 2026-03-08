@@ -24,9 +24,12 @@ export default function Fullscreen({ fullscreen }) {
 			map.addControl(fullscreenControl);
 		}
 
-		// Cleanup: Remove control when component unmounts or fullscreen toggles off
+		// Cleanup: Remove control when component unmounts or fullscreen toggles off.
+		// The vendor control's onAdd registers a fullscreenchange listener but provides
+		// no onRemove, so we detach it manually to prevent stale listeners accumulating.
 		return () => {
 			if (fullscreenControl) {
+				map.off('fullscreenchange', fullscreenControl._toggleTitle, fullscreenControl);
 				map.removeControl(fullscreenControl);
 			}
 		};

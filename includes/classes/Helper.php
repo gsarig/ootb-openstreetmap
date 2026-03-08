@@ -394,6 +394,7 @@ class Helper {
 			'dragging',
 			'doubleclickzoom',
 			'marker',
+			'fullscreen',
 		];
 
 		foreach ( $attrs as $key => $value ) {
@@ -408,12 +409,13 @@ class Helper {
 				'height' => ( preg_match( '/^\d+px$/', $value ) === 1 ) ? $value : self::get_default( 'height' ),
 				'provider' => in_array( $value, array_keys( self::providers( [ 'associative' => true ] ) ), true ) ? $value : '',
 				'maptype' => in_array( $value, self::map_types(), true ) ? $value : '',
-				'touchzoom', 'scrollwheelzoom', 'dragging', 'doubleclickzoom' => in_array(
+				'touchzoom', 'scrollwheelzoom', 'dragging', 'doubleclickzoom', 'fullscreen' => in_array(
 					$value,
 					[
 						'true',
 						'false',
-					], true
+					],
+					true
 				) ? $value : '',
 				'marker' => ( filter_var( $value, FILTER_VALIDATE_URL ) !== false ) ? $value : '',
 				default => $value,

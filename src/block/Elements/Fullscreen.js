@@ -1,0 +1,39 @@
+import { useEffect } from '@wordpress/element';
+import { useMap } from 'react-leaflet/hooks';
+import { __ } from '@wordpress/i18n';
+import L from 'leaflet';
+import '../../../assets/vendor/leaflet-fullscreen/Leaflet.fullscreen.js';
+import '../../../assets/vendor/leaflet-fullscreen/leaflet.fullscreen.css';
+
+export default function Fullscreen({ fullscreen }) {
+	const map = useMap();
+
+	useEffect(() => {
+		if (!map) return;
+
+		let fullscreenControl = null;
+
+		// Check if the plugin is loaded and the attribute is true
+		if (fullscreen && L.Control.Fullscreen) {
+			fullscreenControl = new L.Control.Fullscreen({
+				title: {
+					'false': __( 'View Fullscreen', 'ootb-openstreetmap' ),
+					'true': __( 'Exit Fullscreen', 'ootb-openstreetmap' ),
+				}
+			});
+			map.addControl(fullscreenControl);
+		}
+
+		// Cleanup: Remove control when component unmounts or fullscreen toggles off.
+		// The vendor control's onAdd registers a fullscreenchange listener but provides
+		// no onRemove, so we detach it manually to prevent stale listeners accumulating.
+		return () => {
+			if (fullscreenControl) {
+				map.off('fullscreenchange', fullscreenControl._toggleTitle, fullscreenControl);
+				map.removeControl(fullscreenControl);
+			}
+		};
+	}, [map, fullscreen]);
+
+	return null;
+}

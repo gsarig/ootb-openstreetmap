@@ -58,6 +58,10 @@
 			"type": "boolean",
 			"default": true
 		},
+		"fullscreen": {
+			"type": "boolean",
+			"default": false
+		},
 		"defaultIcon": {
 			"type": "object",
 			"default": null
@@ -156,8 +160,9 @@
 	"style": "file:../index.css",
 	"script": [
 		"leaflet",
-		"leaflet-gesture-handling"
+		"leaflet-gesture-handling",
+		"leaflet-fullscreen-script"
 	],
 	"viewScript": [ "file:./view.js", "ootb-openstreetmap" ],
-	"viewStyle": [ "file:./view.css", "ootb-openstreetmap" ]
+	"viewStyle": [ "file:./view.css", "ootb-openstreetmap", "leaflet-fullscreen-style" ]
 }

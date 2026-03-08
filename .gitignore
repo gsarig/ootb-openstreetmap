@@ -1,3 +1,4 @@
+/.claude/
 /.idea/.gitignore
 /.idea/modules.xml
 /.idea/ootb-openstreetmap.iml
@@ -11,3 +12,5 @@
 /vendor/
 /.phpunit.result.cache
 /test-results/
+/build/
+/tmp/

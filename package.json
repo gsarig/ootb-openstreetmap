@@ -19,6 +19,19 @@
 		"@playwright/test": "^1.56.1",
 		"@wordpress/scripts": "^30.27.0"
 	},
+	"overrides": {
+		"serialize-javascript": "7.0.4",
+		"webpack-dev-server": "5.2.3",
+		"markdownlint-cli": {
+			"minimatch": "3.1.5"
+		},
+		"@sentry/node": {
+			"minimatch": "9.0.9"
+		},
+		"@typescript-eslint/typescript-estree": {
+			"minimatch": "9.0.9"
+		}
+	},
 	"dependencies": {
 		"@raruto/leaflet-gesture-handling": "^1.4.4",
 		"@wordpress/block-editor": "^15.9.0",

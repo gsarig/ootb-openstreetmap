@@ -49,7 +49,7 @@ jobs:
 
     steps:
       - name: Validate PR and review inputs
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -118,7 +118,7 @@ jobs:
             }
 
       - name: Check required secrets
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         with:
@@ -192,7 +192,7 @@ jobs:
       # ── Evaluate, fix, test, retry (up to 3 attempts), then commit or report ──
       - name: Evaluate and fix with retry loop
         id: main
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         with:
@@ -697,7 +697,7 @@ jobs:
       # ── Unexpected error ──────────────────────────────────────────────────────
       - name: Handle unexpected failure
         if: failure()
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |

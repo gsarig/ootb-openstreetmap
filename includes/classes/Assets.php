@@ -120,7 +120,7 @@ class Assets {
 
 	public function maybe_enqueue_clustering(): void {
 		foreach ( $this->get_post_contents_for_clustering_scan() as $content ) {
-			if ( ( has_block( 'ootb/openstreetmap', $content ) &&
+			if ( ( str_contains( $content, '<!-- wp:ootb/openstreetmap' ) &&
 					$this->has_clustering_block( parse_blocks( $content ) ) ) ||
 				( has_shortcode( $content, 'ootb_query' ) &&
 					preg_match( '/\[ootb_query[^\]]*\benableclustering\s*=\s*["\']?true\b["\']?/i', $content ) ) ) {

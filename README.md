@@ -285,7 +285,7 @@ add_filter( 'ootb_marker_cluster_options', function( array $options ): array {
 ```
 Note: the `iconCreateFunction`, `spiderfyShapePositions`, and `chunkProgress` options expect JavaScript functions and cannot be set through this filter. To use them, add an inline script targeting the plugin's script handle before it executes. For example, to customise the cluster icon:
 ```
-add_action( 'wp_enqueue_scripts', function() {
+add_action( 'enqueue_block_assets', function() {
     wp_add_inline_script(
         'ootb-openstreetmap-view-script',
         'ootb.clusterOptions = ootb.clusterOptions || {};

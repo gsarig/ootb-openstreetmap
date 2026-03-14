@@ -11,18 +11,23 @@
 namespace OOTB;
 
 class Assets {
-	public string $handle_ootb_script               = 'ootb-openstreetmap-view-script';
-	public string $handle_leaflet                   = 'leaflet';
-	public string $handle_fullscreen_script         = 'leaflet-fullscreen-script';
-	public string $handle_fullscreen_style          = 'leaflet-fullscreen-style';
-	public string $handle_markercluster_script      = 'leaflet-markercluster';
-	public string $handle_markercluster_style       = 'leaflet-markercluster-style';
-	public string $handle_markercluster_style_default = 'leaflet-markercluster-default-style';
+	private const HANDLE_MARKERCLUSTER_SCRIPT        = 'leaflet-markercluster';
+	private const HANDLE_MARKERCLUSTER_STYLE         = 'leaflet-markercluster-style';
+	private const HANDLE_MARKERCLUSTER_STYLE_DEFAULT = 'leaflet-markercluster-default-style';
+
+	public string $handle_ootb_script                 = 'ootb-openstreetmap-view-script';
+	public string $handle_leaflet                     = 'leaflet';
+	public string $handle_fullscreen_script           = 'leaflet-fullscreen-script';
+	public string $handle_fullscreen_style            = 'leaflet-fullscreen-style';
+	public string $handle_markercluster_script        = self::HANDLE_MARKERCLUSTER_SCRIPT;
+	public string $handle_markercluster_style         = self::HANDLE_MARKERCLUSTER_STYLE;
+	public string $handle_markercluster_style_default = self::HANDLE_MARKERCLUSTER_STYLE_DEFAULT;
 
 	public function __construct() {
 		global $ootb_inline_scripts_tracking;
 		$ootb_inline_scripts_tracking = [];
 		add_action( 'enqueue_block_assets', [ $this, 'frontend' ] );
+		add_action( 'enqueue_block_assets', [ $this, 'maybe_enqueue_clustering' ] );
 	}
 
 	public function frontend(): void {
@@ -97,9 +102,9 @@ class Assets {
 	}
 
 	public static function enqueue_clustering(): void {
-		wp_enqueue_style( 'leaflet-markercluster-style' );
-		wp_enqueue_style( 'leaflet-markercluster-default-style' );
-		wp_enqueue_script( 'leaflet-markercluster' );
+		wp_enqueue_style( self::HANDLE_MARKERCLUSTER_STYLE );
+		wp_enqueue_style( self::HANDLE_MARKERCLUSTER_STYLE_DEFAULT );
+		wp_enqueue_script( self::HANDLE_MARKERCLUSTER_SCRIPT );
 
 		// Guarantee the cluster script loads before the view script by injecting
 		// it as a dependency. Without this, WordPress has no ordering constraint
@@ -108,8 +113,22 @@ class Assets {
 		$scripts     = wp_scripts();
 		$view_handle = 'ootb-openstreetmap-view-script';
 		if ( isset( $scripts->registered[ $view_handle ] ) &&
-			! in_array( 'leaflet-markercluster', $scripts->registered[ $view_handle ]->deps, true ) ) {
-			$scripts->registered[ $view_handle ]->deps[] = 'leaflet-markercluster';
+			! in_array( self::HANDLE_MARKERCLUSTER_SCRIPT, $scripts->registered[ $view_handle ]->deps, true ) ) {
+			$scripts->registered[ $view_handle ]->deps[] = self::HANDLE_MARKERCLUSTER_SCRIPT;
+		}
+	}
+
+	public function maybe_enqueue_clustering(): void {
+		$post = get_post();
+		if ( ! ( $post instanceof \WP_Post ) || ! has_blocks( $post->post_content ) ) {
+			return;
+		}
+		foreach ( parse_blocks( $post->post_content ) as $block ) {
+			if ( 'ootb/openstreetmap' === ( $block['blockName'] ?? '' ) &&
+				! empty( $block['attrs']['enableClustering'] ) ) {
+				self::enqueue_clustering();
+				return;
+			}
 		}
 	}
 

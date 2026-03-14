@@ -123,7 +123,7 @@ class Assets {
 			if ( ( has_block( 'ootb/openstreetmap', $content ) &&
 					$this->has_clustering_block( parse_blocks( $content ) ) ) ||
 				( has_shortcode( $content, 'ootb_query' ) &&
-					preg_match( '/\[ootb_query[^\]]*\benableclustering\s*=\s*["\']?true["\']?/i', $content ) ) ) {
+					preg_match( '/\[ootb_query[^\]]*\benableclustering\s*=\s*["\']?true\b["\']?/i', $content ) ) ) {
 				self::enqueue_clustering();
 				return;
 			}

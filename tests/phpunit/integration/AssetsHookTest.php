@@ -16,6 +16,8 @@ use WP_UnitTestCase;
 
 class AssetsHookTest extends WP_UnitTestCase {
 
+	private Assets $assets;
+
 	protected function setUp(): void {
 		parent::setUp();
 
@@ -24,14 +26,18 @@ class AssetsHookTest extends WP_UnitTestCase {
 
 		// Register the handle so wp_add_inline_script has somewhere to attach.
 		wp_register_script( 'ootb-openstreetmap-view-script', 'https://example.com/view.js', [], '1.0', true );
+
+		// Create a single Assets instance for the test; constructor hooks are
+		// removed in tearDown() to avoid polluting other tests.
+		$this->assets = new Assets();
 	}
 
 	protected function tearDown(): void {
 		remove_all_filters( 'ootb_marker_cluster_options' );
 		wp_deregister_script( 'ootb-openstreetmap-view-script' );
-		// The Assets constructor registers enqueue_block_assets hooks; remove
-		// them to prevent accumulation and cross-test side effects.
-		remove_all_actions( 'enqueue_block_assets' );
+		// Remove only the specific hooks registered by this test's Assets instance.
+		remove_action( 'enqueue_block_assets', [ $this->assets, 'frontend' ] );
+		remove_action( 'enqueue_block_assets', [ $this->assets, 'maybe_enqueue_clustering' ] );
 		parent::tearDown();
 	}
 
@@ -60,7 +66,7 @@ class AssetsHookTest extends WP_UnitTestCase {
 	 * clusterOptions must be absent when no filter is registered (default).
 	 */
 	public function test_cluster_options_absent_by_default(): void {
-		( new Assets() )->script_variables();
+		$this->assets->script_variables();
 
 		$this->assertStringNotContainsString( 'clusterOptions', $this->get_inline_script() );
 	}
@@ -73,7 +79,7 @@ class AssetsHookTest extends WP_UnitTestCase {
 			return [];
 		} );
 
-		( new Assets() )->script_variables();
+		$this->assets->script_variables();
 
 		$this->assertStringNotContainsString( 'clusterOptions', $this->get_inline_script() );
 	}
@@ -86,7 +92,7 @@ class AssetsHookTest extends WP_UnitTestCase {
 			return 'invalid';
 		} );
 
-		( new Assets() )->script_variables();
+		$this->assets->script_variables();
 
 		$this->assertStringNotContainsString( 'clusterOptions', $this->get_inline_script() );
 	}
@@ -98,14 +104,14 @@ class AssetsHookTest extends WP_UnitTestCase {
 	public function test_js_only_keys_are_stripped_from_cluster_options(): void {
 		add_filter( 'ootb_marker_cluster_options', static function () {
 			return [
-				'maxClusterRadius'      => 40,
-				'iconCreateFunction'    => 'function(c){return c;}',
+				'maxClusterRadius'       => 40,
+				'iconCreateFunction'     => 'function(c){return c;}',
 				'spiderfyShapePositions' => 'function(n,c){return [];}',
-				'chunkProgress'         => 'function(p,t){return p/t;}',
+				'chunkProgress'          => 'function(p,t){return p/t;}',
 			];
 		} );
 
-		( new Assets() )->script_variables();
+		$this->assets->script_variables();
 
 		$inline = $this->get_inline_script();
 		$this->assertStringContainsString( 'clusterOptions', $inline );
@@ -125,7 +131,7 @@ class AssetsHookTest extends WP_UnitTestCase {
 			];
 		} );
 
-		( new Assets() )->script_variables();
+		$this->assets->script_variables();
 
 		$this->assertStringNotContainsString( 'clusterOptions', $this->get_inline_script() );
 	}
@@ -136,12 +142,12 @@ class AssetsHookTest extends WP_UnitTestCase {
 	public function test_cluster_options_present_when_filter_returns_array(): void {
 		add_filter( 'ootb_marker_cluster_options', static function () {
 			return [
-				'maxClusterRadius'  => 40,
+				'maxClusterRadius'   => 40,
 				'showCoverageOnHover' => false,
 			];
 		} );
 
-		( new Assets() )->script_variables();
+		$this->assets->script_variables();
 
 		$inline = $this->get_inline_script();
 		$this->assertStringContainsString( 'clusterOptions', $inline );

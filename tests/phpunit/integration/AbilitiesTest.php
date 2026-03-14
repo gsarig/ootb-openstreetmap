@@ -246,4 +246,169 @@ class AbilitiesTest extends WP_UnitTestCase {
 		$this->assertStringContainsString( 'data-zoom="10"', $markup );
 		$this->assertStringContainsString( 'height:400px', $markup );
 	}
+
+	public function test_execute_callback_with_enable_clustering(): void {
+		$admin_id = $this->factory()->user->create( [ 'role' => 'administrator' ] );
+		wp_set_current_user( $admin_id );
+
+		$post_id = $this->factory()->post->create();
+
+		\OOTB\Abilities\execute_add_map_to_post( [
+			'post_id'           => $post_id,
+			'enable_clustering' => true,
+		] );
+
+		$post = get_post( $post_id );
+		$this->assertStringContainsString( '"enableClustering":true', $post->post_content );
+		$this->assertStringContainsString( 'data-enableclustering="true"', $post->post_content );
+	}
+
+	public function test_execute_callback_with_map_type(): void {
+		$admin_id = $this->factory()->user->create( [ 'role' => 'administrator' ] );
+		wp_set_current_user( $admin_id );
+
+		$post_id = $this->factory()->post->create();
+
+		\OOTB\Abilities\execute_add_map_to_post( [
+			'post_id'  => $post_id,
+			'map_type' => 'polygon',
+		] );
+
+		$post = get_post( $post_id );
+		$this->assertStringContainsString( '"mapType":"polygon"', $post->post_content );
+		$this->assertStringContainsString( 'data-maptype="polygon"', $post->post_content );
+	}
+
+	public function test_execute_callback_with_fullscreen(): void {
+		$admin_id = $this->factory()->user->create( [ 'role' => 'administrator' ] );
+		wp_set_current_user( $admin_id );
+
+		$post_id = $this->factory()->post->create();
+
+		\OOTB\Abilities\execute_add_map_to_post( [
+			'post_id'    => $post_id,
+			'fullscreen' => true,
+		] );
+
+		$post = get_post( $post_id );
+		$this->assertStringContainsString( '"fullscreen":true', $post->post_content );
+		$this->assertStringContainsString( 'data-fullscreen="true"', $post->post_content );
+	}
+
+	public function test_execute_callback_with_interaction_controls(): void {
+		$admin_id = $this->factory()->user->create( [ 'role' => 'administrator' ] );
+		wp_set_current_user( $admin_id );
+
+		$post_id = $this->factory()->post->create();
+
+		\OOTB\Abilities\execute_add_map_to_post( [
+			'post_id'           => $post_id,
+			'dragging'          => false,
+			'touch_zoom'        => false,
+			'double_click_zoom' => false,
+			'scroll_wheel_zoom' => false,
+		] );
+
+		$post = get_post( $post_id );
+		$this->assertStringContainsString( '"dragging":false', $post->post_content );
+		$this->assertStringContainsString( '"touchZoom":false', $post->post_content );
+		$this->assertStringContainsString( '"doubleClickZoom":false', $post->post_content );
+		$this->assertStringContainsString( '"scrollWheelZoom":false', $post->post_content );
+		$this->assertStringContainsString( 'data-dragging="false"', $post->post_content );
+		$this->assertStringContainsString( 'data-touchzoom="false"', $post->post_content );
+		$this->assertStringContainsString( 'data-doubleclickzoom="false"', $post->post_content );
+		$this->assertStringContainsString( 'data-scrollwheelzoom="false"', $post->post_content );
+	}
+
+	public function test_execute_callback_with_min_max_zoom(): void {
+		$admin_id = $this->factory()->user->create( [ 'role' => 'administrator' ] );
+		wp_set_current_user( $admin_id );
+
+		$post_id = $this->factory()->post->create();
+
+		\OOTB\Abilities\execute_add_map_to_post( [
+			'post_id'  => $post_id,
+			'min_zoom' => 5,
+			'max_zoom' => 15,
+		] );
+
+		$post = get_post( $post_id );
+		$this->assertStringContainsString( '"minZoom":5', $post->post_content );
+		$this->assertStringContainsString( '"maxZoom":15', $post->post_content );
+		$this->assertStringContainsString( 'data-minzoom="5"', $post->post_content );
+		$this->assertStringContainsString( 'data-maxzoom="15"', $post->post_content );
+	}
+
+	public function test_execute_callback_swaps_inverted_min_max_zoom(): void {
+		$admin_id = $this->factory()->user->create( [ 'role' => 'administrator' ] );
+		wp_set_current_user( $admin_id );
+
+		$post_id = $this->factory()->post->create();
+
+		// Passing min > max — they should be swapped, not left invalid.
+		\OOTB\Abilities\execute_add_map_to_post( [
+			'post_id'  => $post_id,
+			'min_zoom' => 15,
+			'max_zoom' => 5,
+		] );
+
+		$post = get_post( $post_id );
+		$this->assertStringContainsString( '"minZoom":5', $post->post_content );
+		$this->assertStringContainsString( '"maxZoom":15', $post->post_content );
+	}
+
+	public function test_execute_callback_clamps_zoom_to_min_max_range(): void {
+		$admin_id = $this->factory()->user->create( [ 'role' => 'administrator' ] );
+		wp_set_current_user( $admin_id );
+
+		$post_id = $this->factory()->post->create();
+
+		// zoom=3 is below min_zoom=8, so it must be clamped up to 8.
+		\OOTB\Abilities\execute_add_map_to_post( [
+			'post_id'  => $post_id,
+			'zoom'     => 3,
+			'min_zoom' => 8,
+			'max_zoom' => 15,
+		] );
+
+		$post = get_post( $post_id );
+		$this->assertStringContainsString( '"zoom":8', $post->post_content );
+	}
+
+	public function test_execute_callback_with_shape_options(): void {
+		$admin_id = $this->factory()->user->create( [ 'role' => 'administrator' ] );
+		wp_set_current_user( $admin_id );
+
+		$post_id = $this->factory()->post->create();
+
+		\OOTB\Abilities\execute_add_map_to_post( [
+			'post_id'      => $post_id,
+			'map_type'     => 'polygon',
+			'shape_color'  => '#FF0000',
+			'shape_weight' => 5,
+			'shape_text'   => 'My polygon',
+		] );
+
+		$post = get_post( $post_id );
+		$this->assertStringContainsString( '"shapeColor":"#FF0000"', $post->post_content );
+		$this->assertStringContainsString( '"shapeWeight":5', $post->post_content );
+		$this->assertStringContainsString( '"shapeText":"My polygon"', $post->post_content );
+		$this->assertStringContainsString( 'data-shapetext="My polygon"', $post->post_content );
+	}
+
+	public function test_execute_callback_with_show_markers_false(): void {
+		$admin_id = $this->factory()->user->create( [ 'role' => 'administrator' ] );
+		wp_set_current_user( $admin_id );
+
+		$post_id = $this->factory()->post->create();
+
+		\OOTB\Abilities\execute_add_map_to_post( [
+			'post_id'      => $post_id,
+			'show_markers' => false,
+		] );
+
+		$post = get_post( $post_id );
+		$this->assertStringContainsString( '"showMarkers":false', $post->post_content );
+		$this->assertStringContainsString( 'data-showmarkers="false"', $post->post_content );
+	}
 }

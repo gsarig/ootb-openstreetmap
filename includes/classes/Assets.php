@@ -139,11 +139,12 @@ class Assets {
 	 * @return string[]
 	 */
 	private function get_post_contents_for_clustering_scan(): array {
-		$post = get_post();
-		if ( $post instanceof \WP_Post ) {
-			return [ $post->post_content ];
+		if ( is_singular() ) {
+			$post = get_post();
+			return ( $post instanceof \WP_Post ) ? [ $post->post_content ] : [];
 		}
 
+		// Non-singular pages (archives, search, home): scan all queried posts.
 		global $wp_query;
 		if ( empty( $wp_query->posts ) || ! is_array( $wp_query->posts ) ) {
 			return [];

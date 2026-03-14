@@ -105,11 +105,11 @@ class Assets {
 		// it as a dependency. Without this, WordPress has no ordering constraint
 		// between the two scripts and may print them in the wrong order, causing
 		// typeof L.markerClusterGroup to be undefined when view.js runs.
-		global $wp_scripts;
+		$scripts     = wp_scripts();
 		$view_handle = 'ootb-openstreetmap-view-script';
-		if ( isset( $wp_scripts->registered[ $view_handle ] ) &&
-			! in_array( 'leaflet-markercluster', $wp_scripts->registered[ $view_handle ]->deps, true ) ) {
-			$wp_scripts->registered[ $view_handle ]->deps[] = 'leaflet-markercluster';
+		if ( isset( $scripts->registered[ $view_handle ] ) &&
+			! in_array( 'leaflet-markercluster', $scripts->registered[ $view_handle ]->deps, true ) ) {
+			$scripts->registered[ $view_handle ]->deps[] = 'leaflet-markercluster';
 		}
 	}
 

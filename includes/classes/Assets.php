@@ -100,6 +100,17 @@ class Assets {
 		wp_enqueue_style( 'leaflet-markercluster-style' );
 		wp_enqueue_style( 'leaflet-markercluster-default-style' );
 		wp_enqueue_script( 'leaflet-markercluster' );
+
+		// Guarantee the cluster script loads before the view script by injecting
+		// it as a dependency. Without this, WordPress has no ordering constraint
+		// between the two scripts and may print them in the wrong order, causing
+		// typeof L.markerClusterGroup to be undefined when view.js runs.
+		global $wp_scripts;
+		$view_handle = 'ootb-openstreetmap-view-script';
+		if ( isset( $wp_scripts->registered[ $view_handle ] ) &&
+			! in_array( 'leaflet-markercluster', $wp_scripts->registered[ $view_handle ]->deps, true ) ) {
+			$wp_scripts->registered[ $view_handle ]->deps[] = 'leaflet-markercluster';
+		}
 	}
 
 	public function script_variables(): void {
@@ -130,13 +141,12 @@ class Assets {
 		 * here (e.g. maxClusterRadius, disableClusteringAtZoom, showCoverageOnHover).
 		 * Note: iconCreateFunction expects a JavaScript function and cannot be set
 		 * through this filter — override it in JavaScript instead.
+		 * Non-array return values are ignored.
 		 *
 		 * @since 2.11.0
-		 *
-		 * @param array<string, mixed> $options Cluster options. Default empty array.
 		 */
 		$cluster_options = apply_filters( 'ootb_marker_cluster_options', [] );
-		if ( ! empty( $cluster_options ) ) {
+		if ( ! empty( $cluster_options ) && is_array( $cluster_options ) ) {
 			$params['clusterOptions'] = $cluster_options;
 		}
 

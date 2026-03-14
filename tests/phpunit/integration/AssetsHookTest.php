@@ -76,6 +76,19 @@ class AssetsHookTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * clusterOptions must be absent when the filter returns a non-array value.
+	 */
+	public function test_cluster_options_absent_when_filter_returns_non_array(): void {
+		add_filter( 'ootb_marker_cluster_options', static function () {
+			return 'invalid';
+		} );
+
+		( new Assets() )->script_variables();
+
+		$this->assertStringNotContainsString( 'clusterOptions', $this->get_inline_script() );
+	}
+
+	/**
 	 * clusterOptions must be present and contain the filtered values.
 	 */
 	public function test_cluster_options_present_when_filter_returns_array(): void {

@@ -288,15 +288,17 @@ Note: the `iconCreateFunction`, `spiderfyShapePositions`, and `chunkProgress` op
 add_action( 'enqueue_block_assets', function() {
     wp_add_inline_script(
         'ootb-openstreetmap-view-script',
-        'ootb.clusterOptions = ootb.clusterOptions || {};
-         ootb.clusterOptions.iconCreateFunction = function( cluster ) {
-             var count = cluster.getChildCount();
-             return L.divIcon( {
-                 html: "<div><span>" + count + "</span></div>",
-                 className: "my-custom-cluster",
-                 iconSize: L.point( 40, 40 ),
-             } );
-         };',
+        'if ( typeof ootb !== "undefined" ) {
+             ootb.clusterOptions = ootb.clusterOptions || {};
+             ootb.clusterOptions.iconCreateFunction = function( cluster ) {
+                 var count = cluster.getChildCount();
+                 return L.divIcon( {
+                     html: "<div><span>" + count + "</span></div>",
+                     className: "my-custom-cluster",
+                     iconSize: L.point( 40, 40 ),
+                 } );
+             };
+         }',
         'before'
     );
 } );

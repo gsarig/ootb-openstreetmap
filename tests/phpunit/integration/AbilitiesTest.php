@@ -339,6 +339,42 @@ class AbilitiesTest extends WP_UnitTestCase {
 		$this->assertStringContainsString( 'data-maxzoom="15"', $post->post_content );
 	}
 
+	public function test_execute_callback_swaps_inverted_min_max_zoom(): void {
+		$admin_id = $this->factory()->user->create( [ 'role' => 'administrator' ] );
+		wp_set_current_user( $admin_id );
+
+		$post_id = $this->factory()->post->create();
+
+		// Passing min > max — they should be swapped, not left invalid.
+		\OOTB\Abilities\execute_add_map_to_post( [
+			'post_id'  => $post_id,
+			'min_zoom' => 15,
+			'max_zoom' => 5,
+		] );
+
+		$post = get_post( $post_id );
+		$this->assertStringContainsString( '"minZoom":5', $post->post_content );
+		$this->assertStringContainsString( '"maxZoom":15', $post->post_content );
+	}
+
+	public function test_execute_callback_clamps_zoom_to_min_max_range(): void {
+		$admin_id = $this->factory()->user->create( [ 'role' => 'administrator' ] );
+		wp_set_current_user( $admin_id );
+
+		$post_id = $this->factory()->post->create();
+
+		// zoom=3 is below min_zoom=8, so it must be clamped up to 8.
+		\OOTB\Abilities\execute_add_map_to_post( [
+			'post_id'  => $post_id,
+			'zoom'     => 3,
+			'min_zoom' => 8,
+			'max_zoom' => 15,
+		] );
+
+		$post = get_post( $post_id );
+		$this->assertStringContainsString( '"zoom":8', $post->post_content );
+	}
+
 	public function test_execute_callback_with_shape_options(): void {
 		$admin_id = $this->factory()->user->create( [ 'role' => 'administrator' ] );
 		wp_set_current_user( $admin_id );

@@ -221,10 +221,18 @@ function execute_add_map_to_post( array $args ): array|\WP_Error {
 	}
 
 	// Normalise and fill defaults.
-	$zoom        = isset( $args['zoom'] ) ? max( 2, min( 18, (int) $args['zoom'] ) ) : 8;
 	$map_height  = isset( $args['map_height'] ) ? (int) $args['map_height'] : 400;
 	$provider    = $args['provider'] ?? 'openstreetmap';
 	$raw_markers = $args['markers'] ?? [];
+
+	// Clamp min/max zoom individually, then ensure min <= max, then clamp
+	// the initial zoom to the resulting range.
+	$min_zoom = isset( $args['min_zoom'] ) ? max( 2, min( 18, (int) $args['min_zoom'] ) ) : 2;
+	$max_zoom = isset( $args['max_zoom'] ) ? max( 2, min( 18, (int) $args['max_zoom'] ) ) : 18;
+	if ( $min_zoom > $max_zoom ) {
+		[ $min_zoom, $max_zoom ] = [ $max_zoom, $min_zoom ];
+	}
+	$zoom = isset( $args['zoom'] ) ? max( $min_zoom, min( $max_zoom, (int) $args['zoom'] ) ) : max( $min_zoom, min( $max_zoom, 8 ) );
 
 	// Build normalised marker list and derive centre from the first marker
 	// when explicit lat/lng are omitted.
@@ -252,8 +260,8 @@ function execute_add_map_to_post( array $args ): array|\WP_Error {
 		'shape_color'       => $args['shape_color'] ?? '#008EFF',
 		'shape_weight'      => isset( $args['shape_weight'] ) ? (int) $args['shape_weight'] : 3,
 		'shape_text'        => $args['shape_text'] ?? '',
-		'min_zoom'          => isset( $args['min_zoom'] ) ? max( 2, min( 18, (int) $args['min_zoom'] ) ) : 2,
-		'max_zoom'          => isset( $args['max_zoom'] ) ? max( 2, min( 18, (int) $args['max_zoom'] ) ) : 18,
+		'min_zoom'          => $min_zoom,
+		'max_zoom'          => $max_zoom,
 		'dragging'          => $args['dragging'] ?? true,
 		'touch_zoom'        => $args['touch_zoom'] ?? true,
 		'double_click_zoom' => $args['double_click_zoom'] ?? true,
@@ -326,8 +334,12 @@ function build_block_markup(
 	$shape_color       = (string) ( $options['shape_color'] ?? '#008EFF' );
 	$shape_weight      = (int) ( $options['shape_weight'] ?? 3 );
 	$shape_text        = (string) ( $options['shape_text'] ?? '' );
-	$min_zoom          = (int) ( $options['min_zoom'] ?? 2 );
-	$max_zoom          = (int) ( $options['max_zoom'] ?? 18 );
+	$min_zoom          = max( 2, min( 18, (int) ( $options['min_zoom'] ?? 2 ) ) );
+	$max_zoom          = max( 2, min( 18, (int) ( $options['max_zoom'] ?? 18 ) ) );
+	if ( $min_zoom > $max_zoom ) {
+		[ $min_zoom, $max_zoom ] = [ $max_zoom, $min_zoom ];
+	}
+	$zoom              = max( $min_zoom, min( $max_zoom, $zoom ) );
 	$dragging          = (bool) ( $options['dragging'] ?? true );
 	$touch_zoom        = (bool) ( $options['touch_zoom'] ?? true );
 	$double_click_zoom = (bool) ( $options['double_click_zoom'] ?? true );

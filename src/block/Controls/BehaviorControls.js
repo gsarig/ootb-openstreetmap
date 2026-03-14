@@ -14,6 +14,7 @@ export default function BehaviorControls({props}) {
             doubleClickZoom,
             scrollWheelZoom,
             fullscreen,
+            enableClustering,
         },
         setAttributes,
     } = props;
@@ -49,6 +50,12 @@ export default function BehaviorControls({props}) {
                 checked={!!fullscreen}
                 onChange={() => setAttributes({fullscreen: !fullscreen})}
                 help={!!fullscreen ? _x('Enabled.', 'Fullscreen mode setting', 'ootb-openstreetmap') : _x('Disabled.', 'Fullscreen mode setting', 'ootb-openstreetmap')}
+            />
+            <ToggleControl
+                label={__('Cluster markers', 'ootb-openstreetmap')}
+                checked={!!enableClustering}
+                onChange={() => setAttributes({enableClustering: !enableClustering})}
+                help={!!enableClustering ? _x('Enabled.', 'Cluster markers setting', 'ootb-openstreetmap') : _x('Disabled.', 'Cluster markers setting', 'ootb-openstreetmap')}
             />
             <RangeControl
                 label={__('Minimum Zoom', 'ootb-openstreetmap')}

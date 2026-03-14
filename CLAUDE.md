@@ -50,6 +50,27 @@ and wait for explicit confirmation before running make update-snapshots.
 
 ---
 
+## Architecture Notes
+
+### render_callback runs for all block renders
+`Query::render_callback` (`includes/core.php`) is registered as the `render_callback` for
+**every** block render, not just shortcodes. It runs the WP_Query path unless the
+`server_side_render` attribute is explicitly set to `false`.
+
+**Implication for test pages**: any page whose block content relies on its static saved HTML
+(e.g. Playwright test fixture pages) must include `"serverSideRender":false` in the block
+comment JSON, or the render callback will replace the static markers with a WP_Query result.
+
+### Script handles are registered on enqueue_block_assets
+All plugin script handles (e.g. `ootb-openstreetmap-view-script`) are registered inside
+`Assets::frontend_assets()`, which runs on `enqueue_block_assets`.
+
+**Implication for examples**: any code example that calls `wp_add_inline_script` targeting
+a plugin handle must hook into `enqueue_block_assets`, not `wp_enqueue_scripts` — otherwise
+the handle doesn't exist yet and the call is silently ignored.
+
+---
+
 ## Stack
 
 - **PHP** 8.1+ — block rendering, REST endpoints, settings, shortcodes

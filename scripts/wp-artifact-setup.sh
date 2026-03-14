@@ -95,9 +95,31 @@ else
     --porcelain
 fi
 
+echo "==> Creating clustering test page..."
+CLUSTER_MARKERS='%5B%7B%22id%22%3A%22mc-1%22%2C%22lat%22%3A%2237.9838%22%2C%22lng%22%3A%2223.7275%22%2C%22title%22%3A%22C1%22%2C%22content%22%3A%22%22%2C%22icon%22%3A%22%22%2C%22text%22%3A%22%22%7D%2C%7B%22id%22%3A%22mc-2%22%2C%22lat%22%3A%2237.9839%22%2C%22lng%22%3A%2223.7276%22%2C%22title%22%3A%22C2%22%2C%22content%22%3A%22%22%2C%22icon%22%3A%22%22%2C%22text%22%3A%22%22%7D%2C%7B%22id%22%3A%22mc-3%22%2C%22lat%22%3A%2237.9837%22%2C%22lng%22%3A%2223.7274%22%2C%22title%22%3A%22C3%22%2C%22content%22%3A%22%22%2C%22icon%22%3A%22%22%2C%22text%22%3A%22%22%7D%5D'
+CLUSTER_BOUNDS='[37.9838,23.7275]'
+CLUSTER_PAGE_CONTENT="<!-- wp:ootb/openstreetmap {\"mapId\":\"ootb-cluster-map-1\",\"lat\":\"37.9838\",\"lng\":\"23.7275\",\"zoom\":12,\"markers\":[{\"id\":\"mc-1\",\"lat\":\"37.9838\",\"lng\":\"23.7275\",\"title\":\"C1\",\"content\":\"\",\"icon\":\"\"},{\"id\":\"mc-2\",\"lat\":\"37.9839\",\"lng\":\"23.7276\",\"title\":\"C2\",\"content\":\"\",\"icon\":\"\"},{\"id\":\"mc-3\",\"lat\":\"37.9837\",\"lng\":\"23.7274\",\"title\":\"C3\",\"content\":\"\",\"icon\":\"\"}],\"provider\":\"OpenStreetMap.Mapnik\",\"enableClustering\":true,\"serverSideRender\":false} -->
+<div class=\"wp-block-ootb-openstreetmap\"><div class=\"ootb-openstreetmap--map\" data-provider=\"openstreetmap\" data-maptype=\"marker\" data-showmarkers=\"true\" data-shapestyle=\"${SHAPE_STYLE}\" data-shapetext=\"\" data-markers=\"${CLUSTER_MARKERS}\" data-bounds=\"${CLUSTER_BOUNDS}\" data-zoom=\"12\" data-minzoom=\"2\" data-maxzoom=\"18\" data-dragging=\"true\" data-touchzoom=\"true\" data-doubleclickzoom=\"true\" data-scrollwheelzoom=\"true\" data-fullscreen=\"false\" data-enableclustering=\"true\" data-marker=\"${MARKER_ICON}\" style=\"height: 400px\"></div></div>
+<!-- /wp:ootb/openstreetmap -->"
+
+EXISTING_CLUSTER_ID=$(wp post list --post_type=page --name=test-map-cluster --field=ID --format=ids 2>/dev/null || true)
+
+if [ -n "${EXISTING_CLUSTER_ID}" ]; then
+  wp post update "${EXISTING_CLUSTER_ID}" --post_content="${CLUSTER_PAGE_CONTENT}" --post_status=publish
+else
+  wp post create \
+    --post_type=page \
+    --post_title="Test Map Cluster" \
+    --post_name="test-map-cluster" \
+    --post_status=publish \
+    --post_content="${CLUSTER_PAGE_CONTENT}" \
+    --porcelain
+fi
+
 echo "==> Flushing rewrites..."
 wp rewrite structure '/%postname%/' --hard
 
 echo ""
 echo "==> Done. WordPress at ${WP_URL} (admin / password)"
 echo "    Test page: ${WP_URL}/test-map/"
+echo "    Clustering test page: ${WP_URL}/test-map-cluster/"

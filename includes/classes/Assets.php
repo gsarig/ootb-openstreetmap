@@ -120,19 +120,45 @@ class Assets {
 
 	public function maybe_enqueue_clustering(): void {
 		$post = get_post();
-		// Cheap pre-check: bail immediately if no OOTB map block is present,
-		// avoiding the more expensive parse_blocks() call on unrelated pages.
-		if ( ! ( $post instanceof \WP_Post ) ||
-			! has_block( 'ootb/openstreetmap', $post->post_content ) ) {
+		if ( ! ( $post instanceof \WP_Post ) ) {
 			return;
 		}
-		foreach ( parse_blocks( $post->post_content ) as $block ) {
+
+		// Blocks: cheap pre-check before the recursive walk.
+		if ( has_block( 'ootb/openstreetmap', $post->post_content ) &&
+			$this->has_clustering_block( parse_blocks( $post->post_content ) ) ) {
+			self::enqueue_clustering();
+			return;
+		}
+
+		// Shortcode: detect [ootb_query enableclustering=true] (or "true") in
+		// the post content so clustering assets reach <head> before wp_head.
+		if ( has_shortcode( $post->post_content, 'ootb_query' ) &&
+			preg_match( '/\[ootb_query[^\]]*\benableclustering\s*=\s*["\']?true["\']?/i', $post->post_content ) ) {
+			self::enqueue_clustering();
+		}
+	}
+
+	/**
+	 * Recursively checks whether any block in the tree has enableClustering set.
+	 *
+	 * @param array<mixed> $blocks
+	 */
+	private function has_clustering_block( array $blocks ): bool {
+		foreach ( $blocks as $block ) {
+			if ( ! is_array( $block ) ) {
+				continue;
+			}
 			if ( 'ootb/openstreetmap' === ( $block['blockName'] ?? '' ) &&
 				! empty( $block['attrs']['enableClustering'] ) ) {
-				self::enqueue_clustering();
-				return;
+				return true;
+			}
+			$inner = $block['innerBlocks'] ?? [];
+			if ( is_array( $inner ) && ! empty( $inner ) && $this->has_clustering_block( $inner ) ) {
+				return true;
 			}
 		}
+		return false;
 	}
 
 	public function script_variables(): void {

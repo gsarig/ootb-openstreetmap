@@ -11,10 +11,13 @@
 namespace OOTB;
 
 class Assets {
-	public string $handle_ootb_script      = 'ootb-openstreetmap-view-script';
-	public string $handle_leaflet          = 'leaflet';
-	public string $handle_fullscreen_script = 'leaflet-fullscreen-script';
-	public string $handle_fullscreen_style  = 'leaflet-fullscreen-style';
+	public string $handle_ootb_script               = 'ootb-openstreetmap-view-script';
+	public string $handle_leaflet                   = 'leaflet';
+	public string $handle_fullscreen_script         = 'leaflet-fullscreen-script';
+	public string $handle_fullscreen_style          = 'leaflet-fullscreen-style';
+	public string $handle_markercluster_script      = 'leaflet-markercluster';
+	public string $handle_markercluster_style       = 'leaflet-markercluster-style';
+	public string $handle_markercluster_style_default = 'leaflet-markercluster-default-style';
 
 	public function __construct() {
 		global $ootb_inline_scripts_tracking;
@@ -59,6 +62,28 @@ class Assets {
 			true
 		);
 
+		wp_register_style(
+			$this->handle_markercluster_style,
+			OOTB_PLUGIN_URL . 'assets/vendor/leaflet-markercluster/MarkerCluster.css',
+			[],
+			OOTB_VERSION
+		);
+
+		wp_register_style(
+			$this->handle_markercluster_style_default,
+			OOTB_PLUGIN_URL . 'assets/vendor/leaflet-markercluster/MarkerCluster.Default.css',
+			[],
+			OOTB_VERSION
+		);
+
+		wp_register_script(
+			$this->handle_markercluster_script,
+			OOTB_PLUGIN_URL . 'assets/vendor/leaflet-markercluster/leaflet.markercluster.js',
+			[ $this->handle_leaflet ],
+			OOTB_VERSION,
+			true
+		);
+
 		if ( ! empty( Helper::get_option( 'prevent_default_gestures' ) ) ) {
 			$handle_gesture_handling = 'leaflet-gesture-handling';
 			wp_register_script(
@@ -69,6 +94,12 @@ class Assets {
 				true
 			);
 		}
+	}
+
+	public static function enqueue_clustering(): void {
+		wp_enqueue_style( 'leaflet-markercluster-style' );
+		wp_enqueue_style( 'leaflet-markercluster-default-style' );
+		wp_enqueue_script( 'leaflet-markercluster' );
 	}
 
 	public function script_variables(): void {
@@ -90,6 +121,23 @@ class Assets {
 					'locale' => Helper::get_gesture_handling_locale(),
 				]
 			);
+		}
+
+		/**
+		 * Filters the options passed to L.markerClusterGroup() on the frontend.
+		 *
+		 * All scalar/array options supported by Leaflet.markercluster can be set
+		 * here (e.g. maxClusterRadius, disableClusteringAtZoom, showCoverageOnHover).
+		 * Note: iconCreateFunction expects a JavaScript function and cannot be set
+		 * through this filter — override it in JavaScript instead.
+		 *
+		 * @since 2.11.0
+		 *
+		 * @param array<string, mixed> $options Cluster options. Default empty array.
+		 */
+		$cluster_options = apply_filters( 'ootb_marker_cluster_options', [] );
+		if ( ! empty( $cluster_options ) ) {
+			$params['clusterOptions'] = $cluster_options;
 		}
 
 		$ootb_inline_scripts_tracking[] = $this->handle_ootb_script;

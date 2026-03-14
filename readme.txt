@@ -31,6 +31,7 @@ Instead of manually adding coordinates for each one of your markers, just click-
 * Support for multiple markers.
 * Support for a different icon per marker.
 * Support for polygons and polylines.
+* Marker clustering: group nearby markers into clusters that expand as you zoom in.
 * [Dead-simple interface](https://www.gsarigiannidis.gr/wordpress-gutenberg-map-block-openstreetmap/). Don't search for coordinates and don't get overwhelmed by too many fields when using multiple markers. Just point and click on the map to add your marker where you want it and edit it's popup content directly from there.
 * [Place search](https://www.gsarigiannidis.gr/openstreetmap-place-search/). Find locations by typing keywords.
 * Remembers the zoom that you set when adding the markers and stores it so that you don't set it by hand (which you can do anyway if you prefer).
@@ -107,6 +108,7 @@ Glad you asked! There are a few hooks that you can use to further customize the 
 10. Adding a polyline
 11. Export and import locations
 12. Demonstrating the OpenAI integration
+13. Marker clustering
 
 == Upgrade Notice ==
 = 2.8.6 =

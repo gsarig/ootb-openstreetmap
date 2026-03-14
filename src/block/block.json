@@ -140,6 +140,10 @@
 		"queryCustomFields": {
 			"type": "boolean",
 			"default": false
+		},
+		"enableClustering": {
+			"type": "boolean",
+			"default": false
 		}
 	},
 	"variations": [

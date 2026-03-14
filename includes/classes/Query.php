@@ -163,6 +163,10 @@ class Query {
 	 * @return array<int|string, string>|string|null
 	 */
 	public static function render_callback( array $attributes, string $content ) {
+		if ( ! empty( $attributes['enableClustering'] ) ) {
+			Assets::enqueue_clustering();
+		}
+
 		$server_side = $attributes['server_side_render'] ?? $attributes['serverSideRender'] ?? null;
 		if ( ( true === $server_side || null === $server_side ) === false && ! empty( $attributes['markers'] ) ) {
 			return $content;
@@ -361,6 +365,7 @@ class Query {
 		$render_callback_attrs = [
 			'server_side_render' => true,
 			'query_args'         => $query_args,
+			'enableClustering'   => 'true' === ( $attrs['enableclustering'] ?? '' ),
 		];
 
 		$escaped_attrs = array_map( 'esc_attr', Helper::sanitize_attrs( $attrs ) );
@@ -420,14 +425,15 @@ class Query {
 	 */
 	private static function overridable_attrs(): array {
 		return [
-			'provider'        => '',
-			'maptype'         => '',
-			'touchzoom'       => '',
-			'scrollwheelzoom' => '',
-			'dragging'        => '',
-			'doubleclickzoom' => '',
-			'fullscreen'      => '',
-			'marker'          => '',
+			'provider'         => '',
+			'maptype'          => '',
+			'touchzoom'        => '',
+			'scrollwheelzoom'  => '',
+			'dragging'         => '',
+			'doubleclickzoom'  => '',
+			'fullscreen'       => '',
+			'enableclustering' => '',
+			'marker'           => '',
 		];
 	}
 

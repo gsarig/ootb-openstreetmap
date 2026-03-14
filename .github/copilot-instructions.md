@@ -38,6 +38,10 @@ Review for **correctness, security, and reliability** — in that order.
   given the surrounding code. Do not flag structurally unreachable paths.
 - **Suggestions**: if a comment uses hedging language ("consider", "could", "might",
   "would be better"), it is a suggestion — only raise it if it addresses a real defect.
+- **Version numbers**: `@since` tags, `OOTB_VERSION`, `package.json version`,
+  `block.json version`, and `readme.txt stable tag` are bumped in a dedicated release
+  commit just before tagging. Feature branches intentionally stay at the previous version.
+  Do not flag version fields as inconsistent or mismatched during feature branch reviews.
 
 ## Public API — breaking change alert
 

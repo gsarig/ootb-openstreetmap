@@ -5,7 +5,7 @@ Tags: Map, OpenStreetMap, Leaflet, Google Maps, block
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 8.1
-Stable tag: 2.10.0
+Stable tag: 2.11.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -31,6 +31,7 @@ Instead of manually adding coordinates for each one of your markers, just click-
 * Support for multiple markers.
 * Support for a different icon per marker.
 * Support for polygons and polylines.
+* Marker clustering: group nearby markers into clusters that expand as you zoom in.
 * [Dead-simple interface](https://www.gsarigiannidis.gr/wordpress-gutenberg-map-block-openstreetmap/). Don't search for coordinates and don't get overwhelmed by too many fields when using multiple markers. Just point and click on the map to add your marker where you want it and edit it's popup content directly from there.
 * [Place search](https://www.gsarigiannidis.gr/openstreetmap-place-search/). Find locations by typing keywords.
 * Remembers the zoom that you set when adding the markers and stores it so that you don't set it by hand (which you can do anyway if you prefer).
@@ -107,6 +108,7 @@ Glad you asked! There are a few hooks that you can use to further customize the 
 10. Adding a polyline
 11. Export and import locations
 12. Demonstrating the OpenAI integration
+13. Marker clustering
 
 == Upgrade Notice ==
 = 2.8.6 =
@@ -142,6 +144,12 @@ Version 2.0.0 is a major, almost full, refactoring, both for the build scripts a
 = 1.0 =
 
 == Changelog ==
+= 2.11.0 =
+* Adds marker clustering support.
+* Extends the AI ability with additional map display and behavior parameters (map type, zoom range, interaction controls, shape options).
+* Adds integration tests for all public Query filter hooks.
+* Dependency updates: @wordpress/scripts, @playwright/test, and GitHub Actions.
+
 = 2.10.0 =
 * Added fullscreen support for the map block.
 * Geodata map markers now show the post title (and thumbnail if available) as default popup content when no address or custom filter content is provided.

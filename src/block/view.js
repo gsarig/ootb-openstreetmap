@@ -22,6 +22,7 @@ import createMapboxStyleUrl from "../common/createMapboxStyleUrl.js";
 		const doubleClickZoom = osmap.getAttribute('data-doubleclickzoom');
 		const scrollWheelZoom = osmap.getAttribute('data-scrollwheelzoom');
 		const fullscreen = osmap.getAttribute('data-fullscreen');
+		const enableClustering = osmap.getAttribute('data-enableclustering');
 		const defaultIcon = JSON.parse(decodeURIComponent(escapedDefaultIcon));
 		const locations = JSON.parse(decodeURIComponent(escapedMarkers));
 		const mapType = osmap.getAttribute('data-maptype');
@@ -64,7 +65,11 @@ import createMapboxStyleUrl from "../common/createMapboxStyleUrl.js";
 			}
 		}
 
-		const map = initializeMapView(osmap, mapOptions, zoom, locations, escapedDefaultIcon);
+		const clusterGroup = ('true' === enableClustering && typeof L.markerClusterGroup === 'function')
+			? L.markerClusterGroup(ootb.clusterOptions ?? {})
+			: null;
+
+		const map = initializeMapView(osmap, mapOptions, zoom, locations, escapedDefaultIcon, clusterGroup);
 
 		// Set the rest of the map options
 		if ('false' === dragging) {
@@ -106,6 +111,10 @@ import createMapboxStyleUrl from "../common/createMapboxStyleUrl.js";
 		if ('false' !== showMarkers) {
 			// Render the locations
 			locations.forEach(renderLocation);
+
+			if (clusterGroup) {
+				clusterGroup.addTo(map);
+			}
 		}
 
 		// Render a location's marker
@@ -120,16 +129,27 @@ import createMapboxStyleUrl from "../common/createMapboxStyleUrl.js";
 			if (location.text) {
 				marker.bindPopup(location.text);
 			}
-			marker.addTo(map);
+			if (clusterGroup) {
+				clusterGroup.addLayer(marker);
+			} else {
+				marker.addTo(map);
+			}
 		}
 	}
 
-	function initializeMapView(osmap, mapOptions, zoom, locations, defaultIconString) {
+	function initializeMapView(osmap, mapOptions, zoom, locations, defaultIconString, clusterGroup) {
 		const map = L.map(osmap, mapOptions);
 		const boundsCheck = JSON.parse(osmap.getAttribute('data-bounds'));
 
 		if (boundsCheck[0] !== null && boundsCheck[1] !== null) {
 			map.setView(boundsCheck, parseInt(zoom));
+		} else if (clusterGroup) {
+			// When clustering is enabled, fit bounds from raw coordinates.
+			// Markers will be added to the cluster group via renderLocation.
+			const latLngs = locations.map(location => [location.lat, location.lng]);
+			if (latLngs.length) {
+				map.fitBounds(L.latLngBounds(latLngs));
+			}
 		} else {
 			let markers = [];
 			locations.forEach(location => {

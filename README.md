@@ -47,6 +47,7 @@ Instead of manually adding coordinates for each one of your markers, just click-
 * Support for multiple markers.
 * Support for a different icon per marker.
 * Support for polygons and polylines.
+* Marker clustering: group nearby markers into clusters that expand as you zoom in.
 * [Dead-simple interface](https://www.gsarigiannidis.gr/wordpress-gutenberg-map-block-openstreetmap/). Don't search for coordinates and don't get overwhelmed by too many fields when using multiple markers. Just point and click on the map to add your marker where you want it and edit it's popup content directly from there.
 * [Place search](https://www.gsarigiannidis.gr/openstreetmap-place-search/). Find locations by typing keywords.
 * Remembers the zoom that you set when adding the markers and stores it so that you don't set it by hand (which you can do anyway if you prefer).
@@ -220,6 +221,89 @@ function my_marker_icon( $icon_url, $post_id ){
 }
 ```
 
+### ootb_marker_cluster_options
+Allows you to customize the behavior and appearance of marker clusters. The filter receives an empty array by default and should return an array of options supported by the [Leaflet.markercluster](https://github.com/Leaflet/Leaflet.markercluster) library. Example:
+```
+add_filter( 'ootb_marker_cluster_options', function( array $options ): array {
+    return [
+        // Maximum radius (px) within which markers are clustered together. Default: 80.
+        'maxClusterRadius'           => 80,
+
+        // Leaflet pane to render cluster icons in. Default: 'markerPane'.
+        'clusterPane'                => 'markerPane',
+
+        // Spiderfy (fan out) markers when clicking a cluster at max zoom. Default: true.
+        'spiderfyOnMaxZoom'          => true,
+
+        // Spiderfy on every zoom level, not just max zoom. Default: false.
+        'spiderfyOnEveryZoom'        => false,
+
+        // Show a polygon covering a cluster's bounds on hover. Default: true.
+        'showCoverageOnHover'        => true,
+
+        // Zoom into a cluster's bounds when clicking it. Default: true.
+        'zoomToBoundsOnClick'        => true,
+
+        // Wrap single markers in a cluster icon (useful for visual consistency). Default: false.
+        'singleMarkerMode'           => false,
+
+        // Zoom level at which clustering is disabled entirely. null = always cluster.
+        'disableClusteringAtZoom'    => null,
+
+        // Remove clusters/markers outside the visible map bounds for performance. Default: true.
+        'removeOutsideVisibleBounds' => true,
+
+        // Animate cluster split/merge on zoom. Default: true.
+        'animate'                    => true,
+
+        // Animate markers into the cluster when added dynamically. Default: false.
+        'animateAddingMarkers'       => false,
+
+        // Multiplier for the distance between spiderfied markers. Default: 1.
+        'spiderfyDistanceMultiplier' => 1,
+
+        // Style of the polyline legs drawn when spiderfying.
+        'spiderLegPolylineOptions'   => [
+            'weight'  => 1.5,
+            'color'   => '#222',
+            'opacity' => 0.5,
+        ],
+
+        // Load markers in chunks to avoid blocking the UI on large datasets. Default: false.
+        'chunkedLoading'             => false,
+
+        // Time (ms) allowed per chunk before yielding to the browser. Default: 200.
+        'chunkInterval'              => 200,
+
+        // Delay (ms) between chunks. Default: 50.
+        'chunkDelay'                 => 50,
+
+        // Options for the convex hull polygon shown on cluster hover. Default: [].
+        'polygonOptions'             => [],
+    ];
+} );
+```
+Note: the `iconCreateFunction`, `spiderfyShapePositions`, and `chunkProgress` options expect JavaScript functions and cannot be set through this filter. To use them, add an inline script targeting the plugin's script handle before it executes. For example, to customise the cluster icon:
+```
+add_action( 'enqueue_block_assets', function() {
+    wp_add_inline_script(
+        'ootb-openstreetmap-view-script',
+        'if ( typeof ootb !== "undefined" ) {
+             ootb.clusterOptions = ootb.clusterOptions || {};
+             ootb.clusterOptions.iconCreateFunction = function( cluster ) {
+                 var count = cluster.getChildCount();
+                 return L.divIcon( {
+                     html: "<div><span>" + count + "</span></div>",
+                     className: "my-custom-cluster",
+                     iconSize: L.point( 40, 40 ),
+                 } );
+             };
+         }',
+        'before'
+    );
+} );
+```
+
 ## Screenshots
 
 ![The map editing screen](.wordpress-org/screenshot-3.jpg)
@@ -236,3 +320,6 @@ Using custom markers
 
 ![Place search](.wordpress-org/screenshot-7.jpg)
 Place search
+
+![Marker clustering](.wordpress-org/screenshot-13.jpg)
+Marker clustering

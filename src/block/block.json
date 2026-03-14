@@ -2,7 +2,7 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 2,
 	"name": "ootb/openstreetmap",
-	"version": "2.10.0",
+	"version": "2.11.0",
 	"title": "OpenStreetMap by Out of the Block",
 	"category": "common",
 	"icon": "location-alt",
@@ -138,6 +138,10 @@
 			"default": true
 		},
 		"queryCustomFields": {
+			"type": "boolean",
+			"default": false
+		},
+		"enableClustering": {
 			"type": "boolean",
 			"default": false
 		}

@@ -89,6 +89,45 @@ class AssetsHookTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * JS-only keys (iconCreateFunction, spiderfyShapePositions, chunkProgress)
+	 * must be stripped even when the filter returns other valid options.
+	 */
+	public function test_js_only_keys_are_stripped_from_cluster_options(): void {
+		add_filter( 'ootb_marker_cluster_options', static function () {
+			return [
+				'maxClusterRadius'      => 40,
+				'iconCreateFunction'    => 'function(c){return c;}',
+				'spiderfyShapePositions' => 'function(n,c){return [];}',
+				'chunkProgress'         => 'function(p,t){return p/t;}',
+			];
+		} );
+
+		( new Assets() )->script_variables();
+
+		$inline = $this->get_inline_script();
+		$this->assertStringContainsString( 'clusterOptions', $inline );
+		$this->assertStringContainsString( '"maxClusterRadius":40', $inline );
+		$this->assertStringNotContainsString( 'iconCreateFunction', $inline );
+		$this->assertStringNotContainsString( 'spiderfyShapePositions', $inline );
+		$this->assertStringNotContainsString( 'chunkProgress', $inline );
+	}
+
+	/**
+	 * clusterOptions must be absent when the filter returns only JS-only keys.
+	 */
+	public function test_cluster_options_absent_when_only_js_only_keys_set(): void {
+		add_filter( 'ootb_marker_cluster_options', static function () {
+			return [
+				'iconCreateFunction' => 'function(c){return c;}',
+			];
+		} );
+
+		( new Assets() )->script_variables();
+
+		$this->assertStringNotContainsString( 'clusterOptions', $this->get_inline_script() );
+	}
+
+	/**
 	 * clusterOptions must be present and contain the filtered values.
 	 */
 	public function test_cluster_options_present_when_filter_returns_array(): void {

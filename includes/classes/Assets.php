@@ -119,24 +119,43 @@ class Assets {
 	}
 
 	public function maybe_enqueue_clustering(): void {
+		foreach ( $this->get_post_contents_for_clustering_scan() as $content ) {
+			if ( ( has_block( 'ootb/openstreetmap', $content ) &&
+					$this->has_clustering_block( parse_blocks( $content ) ) ) ||
+				( has_shortcode( $content, 'ootb_query' ) &&
+					preg_match( '/\[ootb_query[^\]]*\benableclustering\s*=\s*["\']?true["\']?/i', $content ) ) ) {
+				self::enqueue_clustering();
+				return;
+			}
+		}
+	}
+
+	/**
+	 * Returns post_content strings to scan for clustering.
+	 * On singular pages this is just the current post; on archives/search/home
+	 * it is all posts in the main query, so clustering CSS is enqueued before
+	 * wp_head even on non-singular page types.
+	 *
+	 * @return string[]
+	 */
+	private function get_post_contents_for_clustering_scan(): array {
 		$post = get_post();
-		if ( ! ( $post instanceof \WP_Post ) ) {
-			return;
+		if ( $post instanceof \WP_Post ) {
+			return [ $post->post_content ];
 		}
 
-		// Blocks: cheap pre-check before the recursive walk.
-		if ( has_block( 'ootb/openstreetmap', $post->post_content ) &&
-			$this->has_clustering_block( parse_blocks( $post->post_content ) ) ) {
-			self::enqueue_clustering();
-			return;
+		global $wp_query;
+		if ( empty( $wp_query->posts ) || ! is_array( $wp_query->posts ) ) {
+			return [];
 		}
 
-		// Shortcode: detect [ootb_query enableclustering=true] (or "true") in
-		// the post content so clustering assets reach <head> before wp_head.
-		if ( has_shortcode( $post->post_content, 'ootb_query' ) &&
-			preg_match( '/\[ootb_query[^\]]*\benableclustering\s*=\s*["\']?true["\']?/i', $post->post_content ) ) {
-			self::enqueue_clustering();
+		$contents = [];
+		foreach ( $wp_query->posts as $queried_post ) {
+			if ( $queried_post instanceof \WP_Post ) {
+				$contents[] = $queried_post->post_content;
+			}
 		}
+		return $contents;
 	}
 
 	/**

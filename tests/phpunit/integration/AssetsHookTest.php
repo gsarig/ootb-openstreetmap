@@ -29,6 +29,9 @@ class AssetsHookTest extends WP_UnitTestCase {
 	protected function tearDown(): void {
 		remove_all_filters( 'ootb_marker_cluster_options' );
 		wp_deregister_script( 'ootb-openstreetmap-view-script' );
+		// The Assets constructor registers enqueue_block_assets hooks; remove
+		// them to prevent accumulation and cross-test side effects.
+		remove_all_actions( 'enqueue_block_assets' );
 		parent::tearDown();
 	}
 

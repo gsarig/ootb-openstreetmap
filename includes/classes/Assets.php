@@ -120,7 +120,10 @@ class Assets {
 
 	public function maybe_enqueue_clustering(): void {
 		$post = get_post();
-		if ( ! ( $post instanceof \WP_Post ) || ! has_blocks( $post->post_content ) ) {
+		// Cheap pre-check: bail immediately if no OOTB map block is present,
+		// avoiding the more expensive parse_blocks() call on unrelated pages.
+		if ( ! ( $post instanceof \WP_Post ) ||
+			! has_block( 'ootb/openstreetmap', $post->post_content ) ) {
 			return;
 		}
 		foreach ( parse_blocks( $post->post_content ) as $block ) {
@@ -166,7 +169,13 @@ class Assets {
 		 */
 		$cluster_options = apply_filters( 'ootb_marker_cluster_options', [] );
 		if ( ! empty( $cluster_options ) && is_array( $cluster_options ) ) {
-			$params['clusterOptions'] = $cluster_options;
+			// Strip keys that require JavaScript functions — passing them as PHP
+			// values (strings, arrays) would cause markercluster to crash when
+			// it tries to invoke them.
+			unset( $cluster_options['iconCreateFunction'], $cluster_options['spiderfyShapePositions'], $cluster_options['chunkProgress'] );
+			if ( ! empty( $cluster_options ) ) {
+				$params['clusterOptions'] = $cluster_options;
+			}
 		}
 
 		$ootb_inline_scripts_tracking[] = $this->handle_ootb_script;

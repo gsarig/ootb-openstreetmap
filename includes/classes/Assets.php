@@ -206,9 +206,10 @@ class Assets {
 		 *
 		 * All scalar/array options supported by Leaflet.markercluster can be set
 		 * here (e.g. maxClusterRadius, disableClusteringAtZoom, showCoverageOnHover).
-		 * Note: iconCreateFunction expects a JavaScript function and cannot be set
-		 * through this filter — override it in JavaScript instead.
-		 * Non-array return values are ignored.
+		 * Note: iconCreateFunction, spiderfyShapePositions, and chunkProgress
+		 * expect JavaScript functions and cannot be set through this filter —
+		 * these keys are stripped automatically. Override them in JavaScript
+		 * instead. Non-array return values are ignored.
 		 *
 		 * @since 2.11.0
 		 */

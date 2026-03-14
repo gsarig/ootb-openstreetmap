@@ -322,6 +322,7 @@ class Query {
 	 * @type string $dragging (Optional) Enable dragging on the map. Default empty string.
 	 * @type string $doubleclickzoom (Optional) Enable zooming in on the map with a double click. Default empty string.
 	 * @type string $marker (Optional) The marker for the map. Default empty string.
+	 * @type string $enableclustering (Optional) Enable marker clustering. Accepts "true" or "false". Default empty string (disabled).
 	 *
 	 * @return string Rendered HTML content for the map.
 	 */

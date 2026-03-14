@@ -146,6 +146,9 @@ Version 2.0.0 is a major, almost full, refactoring, both for the build scripts a
 == Changelog ==
 = 2.11.0 =
 * Adds marker clustering support.
+* Extends the AI ability with additional map display and behavior parameters (map type, zoom range, interaction controls, shape options).
+* Adds integration tests for all public Query filter hooks.
+* Dependency updates: @wordpress/scripts, @playwright/test, and GitHub Actions.
 
 = 2.10.0 =
 * Added fullscreen support for the map block.

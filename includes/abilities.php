@@ -26,7 +26,8 @@ function register_ability_categories(): void {
 	wp_register_ability_category(
 		'ootb-openstreetmap',
 		[
-			'label' => __( 'OpenStreetMap', 'ootb-openstreetmap' ),
+			'label'       => __( 'OpenStreetMap', 'ootb-openstreetmap' ),
+			'description' => __( 'Abilities for managing OpenStreetMap blocks in posts and pages.', 'ootb-openstreetmap' ),
 		]
 	);
 }

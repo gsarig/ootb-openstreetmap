@@ -12,6 +12,26 @@
 namespace OOTB\Abilities;
 
 /**
+ * Registers all plugin ability categories.
+ *
+ * Must be hooked onto `wp_abilities_api_categories_init`.
+ *
+ * @return void
+ */
+function register_ability_categories(): void {
+	if ( ! function_exists( 'wp_register_ability_category' ) ) {
+		return;
+	}
+
+	wp_register_ability_category(
+		'ootb-openstreetmap',
+		[
+			'label' => __( 'OpenStreetMap', 'ootb-openstreetmap' ),
+		]
+	);
+}
+
+/**
  * Registers all plugin abilities.
  *
  * Must be hooked onto `wp_abilities_api_init`, not `init`.
@@ -26,6 +46,7 @@ function register_abilities(): void {
 	wp_register_ability(
 		'ootb-openstreetmap/add-map-to-post',
 		[
+			'category'            => 'ootb-openstreetmap',
 			'label'               => __( 'Add OpenStreetMap to Post', 'ootb-openstreetmap' ),
 			'description'         => __( 'Inserts an OpenStreetMap block into a post or page. Accepts a centre location, zoom level, one or more markers, and display options.', 'ootb-openstreetmap' ),
 			'thinking_message'    => __( 'Adding map to post…', 'ootb-openstreetmap' ),
@@ -183,6 +204,28 @@ function register_abilities(): void {
 					'edit_url' => [
 						'type'        => 'string',
 						'description' => __( 'Block-editor URL for the updated post.', 'ootb-openstreetmap' ),
+					],
+				],
+			],
+			'meta'                => [
+				/**
+				 * Kratt integration: associates this ability with the ootb/openstreetmap block.
+				 *
+				 * When Kratt scans the block catalog, it reads block_name to know which block
+				 * to enrich, then derives attribute descriptions from the input_schema above.
+				 * Attributes that don't map 1:1 from ability params to block attributes are
+				 * listed in block_attributes so Kratt can document them correctly.
+				 *
+				 * @see Kratt\Catalog\BlockCatalog::enrich_from_abilities()
+				 */
+				'block_name'       => 'ootb/openstreetmap',
+				'block_attributes' => [
+					// The block stores the map centre as bounds: [[lat, lng]].
+					// The ability accepts lat and lng as separate top-level params,
+					// which the execute_callback transforms into this format.
+					'bounds' => [
+						'type'        => 'array',
+						'description' => 'Map centre as [[lat, lng]], e.g. [[37.97, 23.72]] for Athens or [[51.5, -0.13]] for London.',
 					],
 				],
 			],

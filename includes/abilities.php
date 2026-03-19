@@ -64,11 +64,11 @@ function register_abilities(): void {
 					],
 					'lat'               => [
 						'type'        => 'number',
-						'description' => __( 'Latitude for the map centre. Defaults to the first marker\'s latitude, or the plugin default location.', 'ootb-openstreetmap' ),
+						'description' => __( 'Latitude for the map centre. Omit when placing markers — the map centres automatically on the first marker. Only set this to use a centre different from the marker position, or when adding a map with no markers.', 'ootb-openstreetmap' ),
 					],
 					'lng'               => [
 						'type'        => 'number',
-						'description' => __( 'Longitude for the map centre. Defaults to the first marker\'s longitude, or the plugin default location.', 'ootb-openstreetmap' ),
+						'description' => __( 'Longitude for the map centre. Omit when placing markers — the map centres automatically on the first marker. Only set this to use a centre different from the marker position, or when adding a map with no markers.', 'ootb-openstreetmap' ),
 					],
 					'zoom'              => [
 						'type'        => 'integer',
@@ -110,7 +110,7 @@ function register_abilities(): void {
 					],
 					'markers'           => [
 						'type'        => 'array',
-						'description' => __( 'List of markers to place on the map.', 'ootb-openstreetmap' ),
+						'description' => __( 'List of markers to place on the map. The map centres automatically on the first marker unless lat and lng are also provided.', 'ootb-openstreetmap' ),
 						'items'       => [
 							'type'                  => 'object',
 							'additional_properties' => false,

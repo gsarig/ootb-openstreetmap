@@ -207,28 +207,6 @@ function register_abilities(): void {
 					],
 				],
 			],
-			'meta'                => [
-				/**
-				 * Kratt integration: associates this ability with the ootb/openstreetmap block.
-				 *
-				 * When Kratt scans the block catalog, it reads block_name to know which block
-				 * to enrich, then derives attribute descriptions from the input_schema above.
-				 * Attributes that don't map 1:1 from ability params to block attributes are
-				 * listed in block_attributes so Kratt can document them correctly.
-				 *
-				 * @see Kratt\Catalog\BlockCatalog::enrich_from_abilities()
-				 */
-				'block_name'       => 'ootb/openstreetmap',
-				'block_attributes' => [
-					// The block stores the map centre as bounds: [[lat, lng]].
-					// The ability accepts lat and lng as separate top-level params,
-					// which the execute_callback transforms into this format.
-					'bounds' => [
-						'type'        => 'array',
-						'description' => 'Map centre as [[lat, lng]], e.g. [[37.97, 23.72]] for Athens or [[51.5, -0.13]] for London.',
-					],
-				],
-			],
 			'permission_callback' => static function () {
 				return current_user_can( 'edit_posts' );
 			},

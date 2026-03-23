@@ -53,5 +53,5 @@ update-snapshots-docker: up composer-install
 	docker compose exec -T cli bash -c "cd /var/www/html/wp-content/plugins/ootb-openstreetmap && bash bin/install-wp-tests.sh wordpress_test wordpress wordpress db $(WP_VERSION)"
 	docker compose exec -T cli bash -c "cd /var/www/html/wp-content/plugins/ootb-openstreetmap && UPDATE_SNAPSHOTS=1 vendor/bin/phpunit --testsuite snapshot"
 
-playwright: setup
-	@if [ -f .env ]; then set -a && . ./.env && set +a; fi && npx playwright test
+playwright:
+	@if [ -f .env ]; then set -a && . ./.env && set +a; fi && $(MAKE) setup && npx playwright test

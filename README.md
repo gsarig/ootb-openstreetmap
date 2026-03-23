@@ -14,6 +14,8 @@ Instead of manually adding coordinates for each one of your markers, just click-
 
 ---
 
+👉 [Using AI as a co-maintainer for a solo WordPress plugin](https://www.gsarigiannidis.gr/using-ai-as-a-co-maintainer-for-a-solo-wordpress-plugin/)
+
 👉 [Read more about the overall UX challenges](https://www.gsarigiannidis.gr/wordpress-gutenberg-map-block-openstreetmap/)
 
 👉 [The challenges of building a user-friendly place search for OpenStreetMap](https://www.gsarigiannidis.gr/openstreetmap-place-search/)

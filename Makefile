@@ -54,4 +54,4 @@ update-snapshots-docker: up composer-install
 	docker compose exec -T cli bash -c "cd /var/www/html/wp-content/plugins/ootb-openstreetmap && UPDATE_SNAPSHOTS=1 vendor/bin/phpunit --testsuite snapshot"
 
 playwright: setup
-	npx playwright test
+	@if [ -f .env ]; then set -a && . ./.env && set +a; fi && npx playwright test

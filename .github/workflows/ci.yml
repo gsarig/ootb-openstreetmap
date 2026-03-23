@@ -152,9 +152,13 @@ jobs:
           docker compose logs wordpress
           docker compose logs cli
       - run: bash scripts/wp-test-setup.sh
+        env:
+          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+          MAPBOX_STYLE_URL: ${{ secrets.MAPBOX_STYLE_URL }}
       - run: npx playwright test
         env:
           WP_BASE_URL: http://localhost:8080
+          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
       - uses: actions/upload-artifact@v7
         if: always()
         with:

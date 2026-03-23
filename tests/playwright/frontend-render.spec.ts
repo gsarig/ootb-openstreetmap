@@ -35,7 +35,14 @@ test.describe('OOTB OpenStreetMap block — smoke test', () => {
     test.skip( ! MAPBOX_TOKEN, 'MAPBOX_ACCESS_TOKEN not set — skipping Mapbox tile test' );
 
     const tileRequest = page.waitForRequest(
-      ( req ) => req.url().includes( 'api.mapbox.com' ),
+      ( req ) => {
+        try {
+          const url = new URL( req.url() );
+          return url.hostname === 'api.mapbox.com';
+        } catch {
+          return false;
+        }
+      },
       { timeout: 15_000 }
     );
 

@@ -63,7 +63,7 @@ if [ -f ".distignore" ]; then
 	RSYNC_EXCLUDE="--exclude-from=.distignore"
 fi
 
-rsync -av $RSYNC_EXCLUDE \
+rsync -av ${RSYNC_EXCLUDE:+"$RSYNC_EXCLUDE"} \
 	--exclude="${BUILD_DIR}" \
 	--exclude="*.zip" \
 	./ "$BUILD_DIR/"

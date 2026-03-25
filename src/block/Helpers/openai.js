@@ -48,7 +48,7 @@ export async function openaiAnswers(props) {
 
 	const findMarkers = (place) => {
 		if (place && place.length > 2) {
-			fetch(getNominatimSearchUrl(place, 1))
+			return fetch(getNominatimSearchUrl(place, 1))
 				.then(response => {
 					if (!response.ok) {
 						throw new Error(`Network response was not ok, status: ${response.status}`);
@@ -108,18 +108,20 @@ export async function openaiAnswers(props) {
 			}
 			let tasks = results?.map((place, index) =>
 				new Promise(resolve => setTimeout(() => {
-					findMarkers(place);
-					resolve();
+					const result = findMarkers(place);
+					if (result && typeof result.then === 'function') {
+						result.then(resolve, resolve);
+					} else {
+						resolve();
+					}
 				}, 1000 * (index + 1))) // Delay to avoid rate limiting.
 			);
 
 			Promise.all(tasks).then(() => {
-				setTimeout(() => {
-					setAttributes({
-						openAImode: '',
-						keywords: '',
-					});
-				}, 1000); // Wait for the last marker to be added.
+				setAttributes({
+					openAImode: '',
+					keywords: '',
+				});
 			});
 		})
 		.catch(error => {

@@ -74,8 +74,8 @@ class OpenAI {
 	 * @return \WP_Error|\WP_REST_Response Returns a WP_Error if the API request fails or a WP_REST_Response object if the request is successful.
 	 */
 	public function openai_callback( \WP_REST_Request $request ): \WP_Error|\WP_REST_Response {
-		$parameters = $request->get_json_params();
-		$api_key    = Helper::get_option( 'api_openai' );
+		$prompt  = $request->get_param( 'prompt' );
+		$api_key = Helper::get_option( 'api_openai' );
 
 		if ( empty( $api_key ) ) {
 			return new \WP_Error(
@@ -100,7 +100,7 @@ class OpenAI {
 				],
 				[
 					'role'    => 'user',
-					'content' => $parameters['prompt'],
+					'content' => $prompt,
 				],
 			],
 		];
@@ -122,6 +122,19 @@ class OpenAI {
 					__( 'An error occurred while making the OpenAI API request: %1$s', 'ootb-openstreetmap' ),
 					$response->get_error_message()
 				),
+			);
+		}
+
+		$status_code = wp_remote_retrieve_response_code( $response );
+		if ( $status_code < 200 || $status_code >= 300 ) {
+			return new \WP_Error(
+				'openai_upstream_error',
+				sprintf(
+					/* translators: %1$s is the HTTP status code */
+					__( 'The AI API returned an unexpected status code: %1$s', 'ootb-openstreetmap' ),
+					$status_code
+				),
+				[ 'status' => 502 ]
 			);
 		}
 

@@ -1,0 +1,28 @@
+{
+	"$schema": "https://playground.wordpress.net/blueprint-schema.json",
+	"landingPage": "/ootb-playground-setup.php",
+	"preferredVersions": {
+		"php": "8.2",
+		"wp": "latest"
+	},
+	"steps": [
+		{
+			"step": "login",
+			"username": "admin",
+			"password": "password"
+		},
+		{
+			"step": "installPlugin",
+			"pluginZipFile": {
+				"resource": "wordpress.org/plugins",
+				"slug": "ootb-openstreetmap"
+			},
+			"activate": true
+		},
+		{
+			"step": "writeFile",
+			"path": "/wordpress/ootb-playground-setup.php",
+			"data": "<?php require '/wordpress/wp-load.php'; if(!current_user_can('manage_options')){auth_redirect();} $existing=get_page_by_path('openstreetmap-demo'); if($existing){wp_redirect(admin_url('post.php?post='.$existing->ID.'&action=edit'));exit;} $plugin_url=plugin_dir_url(WP_PLUGIN_DIR.'/ootb-openstreetmap/ootb-openstreetmap.php'); $icon_url=$plugin_url.'assets/vendor/leaflet/images/marker-icon.png'; $markers=[['id'=>'mm1','lat'=>'37.9838','lng'=>'23.7275','title'=>'Athens','content'=>'The capital of Greece','icon'=>''],['id'=>'mm2','lat'=>'40.6401','lng'=>'22.9444','title'=>'Thessaloniki','content'=>'The second largest city in Greece','icon'=>''],['id'=>'mm3','lat'=>'35.3387','lng'=>'25.1442','title'=>'Heraklion','content'=>'The capital of Crete','icon'=>'']]; $shape=['fillColor'=>'#008EFF','color'=>'#008EFF','weight'=>3]; $icon=['iconUrl'=>$icon_url,'iconAnchor'=>[12,41],'popupAnchor'=>[0,-41]]; $bounds=[[37.9838,23.7275],[40.6401,22.9444],[35.3387,25.1442]]; $lats=array_column($bounds,0); $lngs=array_column($bounds,1); $center=[(min($lats)+max($lats))/2,(min($lngs)+max($lngs))/2]; $f=JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE; $attrs=json_encode(['markers'=>$markers,'zoom'=>7,'showDefaultBounds'=>false,'bounds'=>$bounds],$f); $q=chr(34); $html='<div class='.$q.'wp-block-ootb-openstreetmap'.$q.'><div class='.$q.'ootb-openstreetmap--map'.$q.' data-provider='.$q.'openstreetmap'.$q.' data-maptype='.$q.'marker'.$q.' data-showmarkers='.$q.'true'.$q.' data-shapestyle='.$q.rawurlencode(json_encode($shape,$f)).$q.' data-shapetext='.$q.$q.' data-markers='.$q.rawurlencode(json_encode($markers,$f)).$q.' data-bounds='.$q.esc_attr(json_encode($center,$f)).$q.' data-zoom='.$q.'7'.$q.' data-minzoom='.$q.'2'.$q.' data-maxzoom='.$q.'18'.$q.' data-dragging='.$q.'true'.$q.' data-touchzoom='.$q.'true'.$q.' data-doubleclickzoom='.$q.'true'.$q.' data-scrollwheelzoom='.$q.'true'.$q.' data-fullscreen='.$q.'false'.$q.' data-enableclustering='.$q.'false'.$q.' data-marker='.$q.rawurlencode(json_encode($icon,$f)).$q.' style='.$q.'height: 400px'.$q.'></div></div>'; $content='<!-- wp:ootb/openstreetmap '.$attrs.' -->'.PHP_EOL.$html.PHP_EOL.'<!-- /wp:ootb/openstreetmap -->'; $post_id=wp_insert_post(['post_type'=>'page','post_status'=>'publish','post_title'=>'OpenStreetMap Demo','post_name'=>'openstreetmap-demo','post_content'=>$content]); wp_redirect(admin_url('post.php?post='.$post_id.'&action=edit')); exit;"
+		}
+	]
+}

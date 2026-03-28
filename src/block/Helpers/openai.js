@@ -95,7 +95,8 @@ export async function openaiAnswers(props) {
 						});
 					}, 3000); // Remove the error message after 3 seconds.
 				} else {
-					results = JSON.parse(resultsRaw);
+					const parsed = JSON.parse(resultsRaw);
+					results = Array.isArray(parsed) ? parsed : [];
 					setAttributes({
 						openAImode: 'success',
 					});

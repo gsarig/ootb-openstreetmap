@@ -16,8 +16,7 @@
 			"pluginZipFile": {
 				"resource": "wordpress.org/plugins",
 				"slug": "ootb-openstreetmap"
-			},
-			"activate": true
+			}
 		},
 		{
 			"step": "writeFile",

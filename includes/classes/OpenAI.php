@@ -29,7 +29,7 @@ class OpenAI {
 	public static function ai_api_defaults( string $field = '' ): array|string {
 		$defaults = [
 			'url'   => 'https://api.openai.com/v1/chat/completions',
-			'model' => 'gpt-3.5-turbo',
+			'model' => 'gpt-4o-mini',
 		];
 		if ( empty( $field ) || ! isset( $defaults[ $field ] ) ) {
 			return $defaults;
@@ -53,6 +53,15 @@ class OpenAI {
 				'permission_callback' => function () {
 					return current_user_can( 'edit_posts' );
 				},
+				'args'                => [
+					'prompt' => [
+						'required'          => true,
+						'type'              => 'string',
+						'minLength'         => 1,
+						'maxLength'         => 2000,
+						'sanitize_callback' => 'sanitize_text_field',
+					],
+				],
 			]
 		);
 	}
@@ -65,48 +74,118 @@ class OpenAI {
 	 * @return \WP_Error|\WP_REST_Response Returns a WP_Error if the API request fails or a WP_REST_Response object if the request is successful.
 	 */
 	public function openai_callback( \WP_REST_Request $request ): \WP_Error|\WP_REST_Response {
-		$parameters = $request->get_json_params();
-		$api_key    = Helper::get_option( 'api_openai' );
-		$api_url    = ! empty( Helper::get_option( 'api_ai_provider' ) ) ? Helper::get_option( 'api_ai_provider' ) : self::ai_api_defaults( 'url' );
-		$api_model  = ! empty( Helper::get_option( 'api_ai_model' ) ) ? Helper::get_option( 'api_ai_model' ) : self::ai_api_defaults( 'model' );
-		$headers    = [
-			'Authorization' => 'Bearer ' . $api_key,
-			'Content-Type'  => 'application/json',
-		];
-		$body       = [
-			'model'    => $api_model,
-			'messages' => [
-				[
-					'role'    => 'system',
-					'content' => $this->context,
-				],
-				[
-					'role'    => 'user',
-					'content' => $parameters['prompt'],
-				],
-			],
-		];
-		$response   = wp_safe_remote_post(
-			$api_url,
-			[
-				'method'  => 'POST',
-				'headers' => $headers,
-				'body'    => wp_json_encode( $body ),
-				'timeout' => 15,  // In seconds
-			]
-		);
+		$prompt  = $request->get_param( 'prompt' );
+		$api_key = Helper::get_option( 'api_openai' );
 
-		if ( is_wp_error( $response ) ) {
-			return new \WP_Error(
-				'openai_error',
-				sprintf(
-					/* translators: %1$s is the error message */
-					__( 'An error occurred while making the OpenAI API request: %1$s', 'ootb-openstreetmap' ),
-					$response->get_error_message()
-				),
+		// Priority 1: Plugin API key is set — use direct provider call (explicit user intent).
+		if ( ! empty( $api_key ) ) {
+			$api_url   = ! empty( Helper::get_option( 'api_ai_provider' ) ) ? Helper::get_option( 'api_ai_provider' ) : self::ai_api_defaults( 'url' );
+			$api_model = ! empty( Helper::get_option( 'api_ai_model' ) ) ? Helper::get_option( 'api_ai_model' ) : self::ai_api_defaults( 'model' );
+			$headers   = [
+				'Authorization' => 'Bearer ' . $api_key,
+				'Content-Type'  => 'application/json',
+			];
+			$body      = [
+				'model'    => $api_model,
+				'messages' => [
+					[
+						'role'    => 'system',
+						'content' => $this->context,
+					],
+					[
+						'role'    => 'user',
+						'content' => $prompt,
+					],
+				],
+			];
+			$response  = wp_safe_remote_post(
+				$api_url,
+				[
+					'method'  => 'POST',
+					'headers' => $headers,
+					'body'    => wp_json_encode( $body ),
+					'timeout' => 15,  // In seconds
+				]
 			);
-		} else {
-			return rest_ensure_response( json_decode( wp_remote_retrieve_body( $response ), true ) );
+
+			if ( is_wp_error( $response ) ) {
+				return new \WP_Error(
+					'openai_error',
+					sprintf(
+						/* translators: %1$s is the error message */
+						__( 'An error occurred while making the OpenAI API request: %1$s', 'ootb-openstreetmap' ),
+						$response->get_error_message()
+					),
+					[ 'status' => 502 ]
+				);
+			}
+
+			$status_code = wp_remote_retrieve_response_code( $response );
+			if ( $status_code < 200 || $status_code >= 300 ) {
+				return new \WP_Error(
+					'openai_upstream_error',
+					sprintf(
+						/* translators: %1$s is the HTTP status code */
+						__( 'The AI API returned an unexpected status code: %1$s', 'ootb-openstreetmap' ),
+						$status_code
+					),
+					[ 'status' => 502 ]
+				);
+			}
+
+			$response_body = wp_remote_retrieve_body( $response );
+			$decoded       = json_decode( $response_body, true );
+
+			if ( null === $decoded && JSON_ERROR_NONE !== json_last_error() ) {
+				return new \WP_Error(
+					'invalid_response',
+					__( 'The AI API returned an invalid response.', 'ootb-openstreetmap' ),
+					[ 'status' => 502 ]
+				);
+			}
+
+			return rest_ensure_response( $decoded );
 		}
+
+		// Priority 2: No plugin key — use WordPress AI Client if available (WordPress 7.0+).
+		if ( function_exists( 'wp_ai_client_prompt' ) ) {
+			$result = wp_ai_client_prompt()
+				->using_system_instruction( $this->context )
+				->generate_text( $prompt );
+
+			if ( is_wp_error( $result ) ) {
+				$upstream_data   = $result->get_error_data();
+				$upstream_status = ( is_array( $upstream_data ) && ! empty( $upstream_data['status'] ) ) ? (int) $upstream_data['status'] : 502;
+				return new \WP_Error(
+					'wp_ai_client_error',
+					sprintf(
+						/* translators: %1$s is the error message */
+						__( 'The site-level AI connector returned an error: %1$s', 'ootb-openstreetmap' ),
+						$result->get_error_message()
+					),
+					[ 'status' => $upstream_status ]
+				);
+			}
+
+			// Normalize to the same shape the JS expects: choices[0].message.content.
+			return rest_ensure_response(
+				[
+					'choices' => [
+						[
+							'message' => [
+								'content' => $result,
+							],
+						],
+					],
+				]
+			);
+		}
+
+		// Priority 3: No AI backend configured.
+		return new \WP_Error(
+			'missing_api_key',
+			__( 'No AI backend is configured. Add a plugin API key in the plugin settings or configure a site-level AI connector at Settings → Connectors.', 'ootb-openstreetmap' ),
+			[ 'status' => 400 ]
+		);
 	}
 }

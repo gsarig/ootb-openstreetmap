@@ -44,6 +44,13 @@ wp plugin activate ootb-openstreetmap || {
 echo "==> Setting default plugin options..."
 wp option update ootb_options '{"prevent_default_gestures":"","api_mapbox":"","api_openai":"","global_mapbox_style_url":""}' --format=json
 
+if [ -n "${MAPBOX_ACCESS_TOKEN:-}" ]; then
+  MAPBOX_STYLE="${MAPBOX_STYLE_URL:-mapbox://styles/mapbox/streets-v11}"
+  echo "==> Storing Mapbox credentials in plugin options..."
+  wp option patch update ootb_options api_mapbox "${MAPBOX_ACCESS_TOKEN}"
+  wp option patch update ootb_options global_mapbox_style_url "${MAPBOX_STYLE}"
+fi
+
 echo "==> Creating test page..."
 # Use full block format with inner HTML (not self-closing) so render_callback receives content.
 # This mimics what the block editor saves when the block has markers.
@@ -94,6 +101,26 @@ else
     --post_status=publish \
     --post_content="${CLUSTER_PAGE_CONTENT}" \
     --porcelain
+fi
+
+if [ -n "${MAPBOX_ACCESS_TOKEN:-}" ]; then
+  echo "==> Creating Mapbox test page..."
+  MAPBOX_PAGE_CONTENT="<!-- wp:ootb/openstreetmap {\"mapId\":\"ootb-mapbox-map-1\",\"lat\":\"37.9838\",\"lng\":\"23.7275\",\"zoom\":13,\"markers\":[],\"provider\":\"mapbox\",\"serverSideRender\":false} -->
+<div class=\"wp-block-ootb-openstreetmap\"><div class=\"ootb-openstreetmap--map\" data-provider=\"mapbox\" data-maptype=\"marker\" data-showmarkers=\"true\" data-shapestyle=\"${SHAPE_STYLE}\" data-shapetext=\"\" data-markers=\"%5B%5D\" data-bounds=\"[37.9838,23.7275]\" data-zoom=\"13\" data-minzoom=\"2\" data-maxzoom=\"18\" data-dragging=\"true\" data-touchzoom=\"true\" data-doubleclickzoom=\"true\" data-scrollwheelzoom=\"true\" data-marker=\"${MARKER_ICON}\" style=\"height: 400px\"></div></div>
+<!-- /wp:ootb/openstreetmap -->"
+
+  EXISTING_MAPBOX_ID=$(wp post list --post_type=page --name=test-map-mapbox --field=ID --format=ids 2>/dev/null || true)
+  if [ -n "${EXISTING_MAPBOX_ID}" ]; then
+    wp post update "${EXISTING_MAPBOX_ID}" --post_content="${MAPBOX_PAGE_CONTENT}" --post_status=publish
+  else
+    wp post create \
+      --post_type=page \
+      --post_title="Test Map Mapbox" \
+      --post_name="test-map-mapbox" \
+      --post_status=publish \
+      --post_content="${MAPBOX_PAGE_CONTENT}" \
+      --porcelain
+  fi
 fi
 
 echo "==> Flushing rewrites..."

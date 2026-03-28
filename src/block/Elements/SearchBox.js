@@ -22,13 +22,17 @@ export default function SearchBox({props}) {
 		if (keywords && keywords.length > 2) {
 			fetch(getNominatimSearchUrl(keywords))
 				.then(response => {
-					if (200 !== response.status) {
-						return;
+					if (!response.ok) {
+						throw new Error(`Nominatim response: ${response.status}`);
 					}
 					return response.json();
 				}).then(data => {
 				setAttributes({
-					searchResults: data,
+					searchResults: data ?? [],
+				});
+			}).catch(() => {
+				setAttributes({
+					searchResults: [],
 				});
 			});
 		}

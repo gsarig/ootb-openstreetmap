@@ -57,7 +57,7 @@ export async function openaiAnswers(props) {
 					return response.json();
 				})
 				.then(data => {
-					if (!markerError) {
+					if (!markerError && Array.isArray(data) && data[0]) {
 						addMarker(data[0]);
 					}
 				})

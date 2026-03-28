@@ -45,6 +45,7 @@ jobs:
           node-version: '20'
           cache: 'npm'
       - run: npm ci
+      - run: node bin/validate-blueprint.js
       - run: npm run build
       - run: npm run test:unit
       - run: npm audit --audit-level=high --omit=dev

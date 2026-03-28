@@ -57,6 +57,8 @@ class OpenAI {
 					'prompt' => [
 						'required'          => true,
 						'type'              => 'string',
+						'minLength'         => 1,
+						'maxLength'         => 2000,
 						'sanitize_callback' => 'sanitize_text_field',
 					],
 				],
@@ -123,8 +125,8 @@ class OpenAI {
 			);
 		}
 
-		$body    = wp_remote_retrieve_body( $response );
-		$decoded = json_decode( $body, true );
+		$response_body = wp_remote_retrieve_body( $response );
+		$decoded       = json_decode( $response_body, true );
 
 		if ( null === $decoded && JSON_ERROR_NONE !== json_last_error() ) {
 			return new \WP_Error(

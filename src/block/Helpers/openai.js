@@ -109,6 +109,12 @@ export async function openaiAnswers(props) {
 				setAttributes({
 					openAImode: 'error',
 				});
+				setTimeout(() => {
+					setAttributes({
+						openAImode: '',
+						keywords: '',
+					});
+				}, 3000); // Remove the error message after 3 seconds.
 				console.error('Error parsing AI response');
 			}
 			if (results.length > 0) {

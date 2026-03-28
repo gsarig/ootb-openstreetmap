@@ -1,4 +1,4 @@
-.PHONY: up down setup test lint phpunit update-snapshots playwright build composer-install test-docker lint-docker phpunit-docker
+.PHONY: up down setup test lint lint-blueprint phpunit update-snapshots playwright build composer-install test-docker lint-docker phpunit-docker
 
 WP_VERSION ?= latest
 
@@ -39,9 +39,12 @@ test:
 	vendor/bin/phpcs
 	vendor/bin/phpunit
 
-lint:
+lint: lint-blueprint
 	vendor/bin/phpstan analyse --no-progress
 	vendor/bin/phpcs
+
+lint-blueprint:
+	node bin/validate-blueprint.js
 
 phpunit:
 	vendor/bin/phpunit

@@ -20,6 +20,7 @@ export async function openaiAnswers(props) {
 		return;
 	}
 	let newMarkers = [...markers];
+	let markerError = false;
 
 	const addMarker = (data) => {
 		const newMarker = {
@@ -59,6 +60,7 @@ export async function openaiAnswers(props) {
 					addMarker(data[0]);
 				})
 				.catch(error => {
+					markerError = true;
 					setAttributes({
 						openAImode: 'error',
 					});
@@ -107,23 +109,27 @@ export async function openaiAnswers(props) {
 				});
 				console.error('Error parsing AI response');
 			}
-			let tasks = results?.map((place, index) =>
-				new Promise(resolve => setTimeout(() => {
-					const result = findMarkers(place);
-					if (result && typeof result.then === 'function') {
-						result.then(resolve, resolve);
-					} else {
-						resolve();
-					}
-				}, 1000 * (index + 1))) // Delay to avoid rate limiting.
-			);
+			if (results.length > 0) {
+				const tasks = results.map((place, index) =>
+					new Promise(resolve => setTimeout(() => {
+						const result = findMarkers(place);
+						if (result && typeof result.then === 'function') {
+							result.then(resolve, resolve);
+						} else {
+							resolve();
+						}
+					}, 1000 * (index + 1))) // Delay to avoid rate limiting.
+				);
 
-			Promise.all(tasks).then(() => {
-				setAttributes({
-					openAImode: '',
-					keywords: '',
+				Promise.all(tasks).then(() => {
+					if (!markerError) {
+						setAttributes({
+							openAImode: '',
+							keywords: '',
+						});
+					}
 				});
-			});
+			}
 		})
 		.catch(error => {
 			setAttributes({

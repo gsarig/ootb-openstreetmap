@@ -13,6 +13,7 @@
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"start": "wp-scripts start",
+		"test:unit": "wp-scripts test-unit-js",
 		"postinstall": "cp -r ./node_modules/@raruto/leaflet-gesture-handling/dist/* ./assets/vendor/leaflet-gesture-handling && cp -r ./node_modules/leaflet/dist/* ./assets/vendor/leaflet && cp ./node_modules/leaflet.markercluster/dist/leaflet.markercluster.js ./assets/vendor/leaflet-markercluster/ && cp ./node_modules/leaflet.markercluster/dist/MarkerCluster.css ./assets/vendor/leaflet-markercluster/ && cp ./node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css ./assets/vendor/leaflet-markercluster/"
 	},
 	"devDependencies": {

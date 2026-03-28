@@ -11,6 +11,7 @@ import createMapboxStyleUrl from "../common/createMapboxStyleUrl.js";
 	maps.forEach(renderMap);
 
 	function renderMap(osmap) {
+		try {
 		const provider = osmap.getAttribute('data-provider') || 'openstreetmap';
 		const escapedMarkers = osmap.getAttribute('data-markers');
 		const escapedDefaultIcon = osmap.getAttribute('data-marker');
@@ -134,6 +135,10 @@ import createMapboxStyleUrl from "../common/createMapboxStyleUrl.js";
 			} else {
 				marker.addTo(map);
 			}
+		}
+		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.error('OOTB OpenStreetMap: failed to render map', e);
 		}
 	}
 

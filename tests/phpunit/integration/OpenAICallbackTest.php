@@ -132,10 +132,10 @@ namespace OOTB\Tests\Integration {
 		}
 
 		/**
-		 * Options: field_api_key_openai must output the WP AI Client notice
-		 * when wp_ai_client_prompt is available.
+		 * Options: when wp_ai_client_prompt is available and no plugin key is set,
+		 * the notice must tell the user the connector will be used automatically.
 		 */
-		public function test_options_notice_shown_when_wp_ai_client_available(): void {
+		public function test_options_notice_shown_when_wp_ai_client_available_and_no_key(): void {
 			if ( ! function_exists( 'wp_ai_client_prompt' ) ) {
 				$this->markTestSkipped( 'wp_ai_client_prompt not available.' );
 			}
@@ -152,7 +152,35 @@ namespace OOTB\Tests\Integration {
 			$output = ob_get_clean();
 
 			$this->assertStringContainsString( 'notice-info', $output );
-			$this->assertStringContainsString( 'site-level AI connector', $output );
+			$this->assertStringContainsString( 'use it automatically', $output );
+			$this->assertStringNotContainsString( 'takes precedence', $output );
+		}
+
+		/**
+		 * Options: when wp_ai_client_prompt is available and a plugin key is also set,
+		 * the notice must clarify that the plugin key takes precedence.
+		 */
+		public function test_options_notice_shows_precedence_when_both_key_and_connector_set(): void {
+			if ( ! function_exists( 'wp_ai_client_prompt' ) ) {
+				$this->markTestSkipped( 'wp_ai_client_prompt not available.' );
+			}
+
+			update_option( 'ootb_options', [ 'api_openai' => 'sk-test-key' ] );
+
+			$options = new \OOTB\Options();
+
+			ob_start();
+			$options->field_api_key_openai(
+				[
+					'label_for'   => 'api_openai',
+					'description' => 'Your API key.',
+				]
+			);
+			$output = ob_get_clean();
+
+			$this->assertStringContainsString( 'notice-info', $output );
+			$this->assertStringContainsString( 'takes precedence', $output );
+			$this->assertStringNotContainsString( 'use it automatically', $output );
 		}
 	}
 }

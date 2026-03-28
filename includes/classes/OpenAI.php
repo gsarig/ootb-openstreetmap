@@ -116,6 +116,7 @@ class OpenAI {
 						__( 'An error occurred while making the OpenAI API request: %1$s', 'ootb-openstreetmap' ),
 						$response->get_error_message()
 					),
+					[ 'status' => 502 ]
 				);
 			}
 
@@ -153,6 +154,8 @@ class OpenAI {
 				->generate_text( $prompt );
 
 			if ( is_wp_error( $result ) ) {
+				$upstream_data   = $result->get_error_data();
+				$upstream_status = ( is_array( $upstream_data ) && ! empty( $upstream_data['status'] ) ) ? (int) $upstream_data['status'] : 502;
 				return new \WP_Error(
 					'wp_ai_client_error',
 					sprintf(
@@ -160,7 +163,7 @@ class OpenAI {
 						__( 'The site-level AI connector returned an error: %1$s', 'ootb-openstreetmap' ),
 						$result->get_error_message()
 					),
-					[ 'status' => 502 ]
+					[ 'status' => $upstream_status ]
 				);
 			}
 

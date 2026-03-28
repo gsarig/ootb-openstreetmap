@@ -198,11 +198,13 @@ jobs:
           PHP_VER=$(grep -m1 "Version:" ootb-openstreetmap.php | awk '{print $NF}' | tr -d '\r')
           PKG_VER=$(node -p "require('./package.json').version")
           README_VER=$(grep "Stable tag:" readme.txt | awk '{print $NF}' | tr -d '\r')
+          BLOCK_VER=$(node -p "require('./src/block/block.json').version")
           echo "PHP header:   $PHP_VER"
           echo "package.json: $PKG_VER"
           echo "readme.txt:   $README_VER"
-          if [ "$PHP_VER" != "$PKG_VER" ] || [ "$PHP_VER" != "$README_VER" ]; then
-            echo "ERROR: Version mismatch — all three must match before releasing."
+          echo "block.json:   $BLOCK_VER"
+          if [ "$PHP_VER" != "$PKG_VER" ] || [ "$PHP_VER" != "$README_VER" ] || [ "$PHP_VER" != "$BLOCK_VER" ]; then
+            echo "ERROR: Version mismatch — all four must match before releasing."
             exit 1
           fi
           echo "All versions consistent: $PHP_VER"

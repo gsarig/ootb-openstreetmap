@@ -43,6 +43,9 @@ Review for **correctness, security, and reliability** — in that order.
   zero-parameter closure with one or more arguments is valid — the extras are silently
   ignored. Do not flag `fn() => ...` or `function() { ... }` closures used as WordPress
   filter/action callbacks as potential `ArgumentCountError` risks.
+- **"Tested up to" in the plugin PHP header**: this field belongs exclusively in
+  `readme.txt`, where WordPress.org reads it. WordPress core does not parse it from
+  the plugin file header (`ootb-openstreetmap.php`). Do not flag its absence there.
 - **Version numbers**: `@since` tags, `OOTB_VERSION`, `package.json version`,
   `block.json version`, and `readme.txt stable tag` are bumped in a dedicated release
   commit just before tagging. Feature branches intentionally stay at the previous version.

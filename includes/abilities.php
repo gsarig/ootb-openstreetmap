@@ -12,6 +12,27 @@
 namespace OOTB\Abilities;
 
 /**
+ * Registers all plugin ability categories.
+ *
+ * Must be hooked onto `wp_abilities_api_categories_init`.
+ *
+ * @return void
+ */
+function register_ability_categories(): void {
+	if ( ! function_exists( 'wp_register_ability_category' ) ) {
+		return;
+	}
+
+	wp_register_ability_category(
+		'ootb-openstreetmap',
+		[
+			'label'       => __( 'OpenStreetMap', 'ootb-openstreetmap' ),
+			'description' => __( 'Abilities for managing OpenStreetMap blocks in posts and pages.', 'ootb-openstreetmap' ),
+		]
+	);
+}
+
+/**
  * Registers all plugin abilities.
  *
  * Must be hooked onto `wp_abilities_api_init`, not `init`.
@@ -26,6 +47,7 @@ function register_abilities(): void {
 	wp_register_ability(
 		'ootb-openstreetmap/add-map-to-post',
 		[
+			'category'            => 'ootb-openstreetmap',
 			'label'               => __( 'Add OpenStreetMap to Post', 'ootb-openstreetmap' ),
 			'description'         => __( 'Inserts an OpenStreetMap block into a post or page. Accepts a centre location, zoom level, one or more markers, and display options.', 'ootb-openstreetmap' ),
 			'thinking_message'    => __( 'Adding map to post…', 'ootb-openstreetmap' ),
@@ -42,11 +64,11 @@ function register_abilities(): void {
 					],
 					'lat'               => [
 						'type'        => 'number',
-						'description' => __( 'Latitude for the map centre. Defaults to the first marker\'s latitude, or the plugin default location.', 'ootb-openstreetmap' ),
+						'description' => __( 'Latitude for the map centre. Omit when placing markers — the map centres automatically on the first marker. Only set this to use a centre different from the marker position, or when adding a map with no markers.', 'ootb-openstreetmap' ),
 					],
 					'lng'               => [
 						'type'        => 'number',
-						'description' => __( 'Longitude for the map centre. Defaults to the first marker\'s longitude, or the plugin default location.', 'ootb-openstreetmap' ),
+						'description' => __( 'Longitude for the map centre. Omit when placing markers — the map centres automatically on the first marker. Only set this to use a centre different from the marker position, or when adding a map with no markers.', 'ootb-openstreetmap' ),
 					],
 					'zoom'              => [
 						'type'        => 'integer',
@@ -88,7 +110,7 @@ function register_abilities(): void {
 					],
 					'markers'           => [
 						'type'        => 'array',
-						'description' => __( 'List of markers to place on the map.', 'ootb-openstreetmap' ),
+						'description' => __( 'List of markers to place on the map. The map centres automatically on the first marker unless lat and lng are also provided.', 'ootb-openstreetmap' ),
 						'items'       => [
 							'type'                  => 'object',
 							'additional_properties' => false,

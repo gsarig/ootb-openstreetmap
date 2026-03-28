@@ -38,6 +38,11 @@ Review for **correctness, security, and reliability** — in that order.
   given the surrounding code. Do not flag structurally unreachable paths.
 - **Suggestions**: if a comment uses hedging language ("consider", "could", "might",
   "would be better"), it is a suggestion — only raise it if it addresses a real defect.
+- **WordPress filter callbacks with zero declared parameters**: PHP raises `ArgumentCountError`
+  only when a function is called with *fewer* arguments than it requires. Calling a
+  zero-parameter closure with one or more arguments is valid — the extras are silently
+  ignored. Do not flag `fn() => ...` or `function() { ... }` closures used as WordPress
+  filter/action callbacks as potential `ArgumentCountError` risks.
 - **Version numbers**: `@since` tags, `OOTB_VERSION`, `package.json version`,
   `block.json version`, and `readme.txt stable tag` are bumped in a dedicated release
   commit just before tagging. Feature branches intentionally stay at the previous version.

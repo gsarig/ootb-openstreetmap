@@ -32,9 +32,15 @@ namespace {
 	}
 
 	if ( ! function_exists( 'wp_ai_client_prompt' ) ) {
+		// Track that the stub is in control so tests can skip safely on WP 7.0+.
+		define( 'OOTB_TEST_WP_AI_CLIENT_STUBBED', true );
 		function wp_ai_client_prompt(): MockWPAIClientPrompt {
 			return new MockWPAIClientPrompt();
 		}
+	} else {
+		// Real wp_ai_client_prompt() is present (WP 7.0+). Tests that depend on the
+		// controllable stub must be skipped to avoid hitting the real AI backend.
+		define( 'OOTB_TEST_WP_AI_CLIENT_STUBBED', false );
 	}
 }
 // phpcs:enable
@@ -98,8 +104,8 @@ namespace OOTB\Tests\Integration {
 		 * The callback must normalise the result to the choices[0].message.content shape.
 		 */
 		public function test_wp_ai_client_returns_normalised_choices_shape(): void {
-			if ( ! function_exists( 'wp_ai_client_prompt' ) ) {
-				$this->markTestSkipped( 'wp_ai_client_prompt not available.' );
+			if ( ! OOTB_TEST_WP_AI_CLIENT_STUBBED ) {
+				$this->markTestSkipped( 'Requires the test stub; skipping on WP 7.0+ where wp_ai_client_prompt() is provided by core.' );
 			}
 
 			\MockWPAIClientPrompt::$next_result = '["Paris, France"]';
@@ -117,8 +123,8 @@ namespace OOTB\Tests\Integration {
 		 * The callback must return a WP_Error with code wp_ai_client_error and HTTP status 502.
 		 */
 		public function test_wp_ai_client_error_returns_502(): void {
-			if ( ! function_exists( 'wp_ai_client_prompt' ) ) {
-				$this->markTestSkipped( 'wp_ai_client_prompt not available.' );
+			if ( ! OOTB_TEST_WP_AI_CLIENT_STUBBED ) {
+				$this->markTestSkipped( 'Requires the test stub; skipping on WP 7.0+ where wp_ai_client_prompt() is provided by core.' );
 			}
 
 			\MockWPAIClientPrompt::$next_result = new \WP_Error( 'connector_down', 'Upstream failure' );
@@ -136,8 +142,8 @@ namespace OOTB\Tests\Integration {
 		 * the notice must tell the user the connector will be used automatically.
 		 */
 		public function test_options_notice_shown_when_wp_ai_client_available_and_no_key(): void {
-			if ( ! function_exists( 'wp_ai_client_prompt' ) ) {
-				$this->markTestSkipped( 'wp_ai_client_prompt not available.' );
+			if ( ! OOTB_TEST_WP_AI_CLIENT_STUBBED ) {
+				$this->markTestSkipped( 'Requires the test stub; skipping on WP 7.0+ where wp_ai_client_prompt() is provided by core.' );
 			}
 
 			$options = new \OOTB\Options();
@@ -161,8 +167,8 @@ namespace OOTB\Tests\Integration {
 		 * the notice must clarify that the plugin key takes precedence.
 		 */
 		public function test_options_notice_shows_precedence_when_both_key_and_connector_set(): void {
-			if ( ! function_exists( 'wp_ai_client_prompt' ) ) {
-				$this->markTestSkipped( 'wp_ai_client_prompt not available.' );
+			if ( ! OOTB_TEST_WP_AI_CLIENT_STUBBED ) {
+				$this->markTestSkipped( 'Requires the test stub; skipping on WP 7.0+ where wp_ai_client_prompt() is provided by core.' );
 			}
 
 			update_option( 'ootb_options', [ 'api_openai' => 'sk-test-key' ] );

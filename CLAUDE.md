@@ -212,6 +212,9 @@ Reset everything: docker compose down -v && make setup
 - JavaScript: ES modules, async/await
 - No magic numbers or hardcoded strings — use constants or configuration
 - Escape all output; sanitize and validate all input (WordPress security standards)
+- Every `WP_Error` returned from a REST callback must include an HTTP status in its data:
+  `new \WP_Error('code', 'message', ['status' => 502])`. Omitting it silently defaults
+  to 500, which is almost never the right code for a deliberate error return.
 
 ---
 

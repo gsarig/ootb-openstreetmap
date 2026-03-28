@@ -90,13 +90,15 @@ namespace OOTB\Tests\Integration {
 			$filter = static fn() => $fake_response;
 			add_filter( 'pre_http_request', $filter );
 
-			$response = $this->openai->openai_callback( $this->make_request() );
+			try {
+				$response = $this->openai->openai_callback( $this->make_request() );
 
-			remove_filter( 'pre_http_request', $filter );
-
-			$this->assertInstanceOf( \WP_REST_Response::class, $response );
-			$data = $response->get_data();
-			$this->assertSame( '["Paris, France"]', $data['choices'][0]['message']['content'] );
+				$this->assertInstanceOf( \WP_REST_Response::class, $response );
+				$data = $response->get_data();
+				$this->assertSame( '["Paris, France"]', $data['choices'][0]['message']['content'] );
+			} finally {
+				remove_filter( 'pre_http_request', $filter );
+			}
 		}
 
 		/**

@@ -586,8 +586,13 @@ class Options {
 				value="<?php echo isset( $option[ $args['label_for'] ] ) ? esc_attr( $option[ $args['label_for'] ] ) : ''; ?>"/>
 		<?php if ( isset( $args['description'] ) ) : ?>
 			<p><?php echo esc_html( $args['description'] ); ?></p>
-			<?php
-		endif;
+		<?php endif; ?>
+		<?php if ( function_exists( 'wp_ai_client_prompt' ) ) : ?>
+		<div class="notice notice-info inline">
+			<p><?php esc_html_e( 'A site-level AI connector is configured. The plugin will use it automatically unless you enter a key above.', 'ootb-openstreetmap' ); ?></p>
+		</div>
+		<?php endif; ?>
+		<?php
 	}
 
 	/**

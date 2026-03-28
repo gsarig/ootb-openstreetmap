@@ -64,19 +64,25 @@ async function main() {
 	}
 
 	// 3. PHP syntax check for every embedded PHP script.
-	const phpSteps = blueprint.steps.filter(
-		( s ) => s.step === 'writeFile' && s.path?.endsWith( '.php' ) && s.data
-	);
-	for ( const step of phpSteps ) {
-		const tmp = `/tmp/ootb-blueprint-${ Date.now() }.php`;
-		fs.writeFileSync( tmp, step.data );
-		const result = spawnSync( 'php', [ '-l', tmp ], { encoding: 'utf8' } );
-		fs.unlinkSync( tmp );
-		if ( result.status === 0 ) {
-			console.log( `OK  PHP syntax (${ step.path })` );
-		} else {
-			console.error( `ERR PHP syntax (${ step.path }) —`, result.stdout.trim() );
-			failed = true;
+	//    Skipped gracefully if php is not available in PATH.
+	const phpAvailable = spawnSync( 'php', [ '--version' ] ).status === 0;
+	if ( ! phpAvailable ) {
+		console.warn( 'SKIP PHP syntax — php not in PATH' );
+	} else {
+		const phpSteps = blueprint.steps.filter(
+			( s ) => s.step === 'writeFile' && s.path?.endsWith( '.php' ) && s.data
+		);
+		for ( const step of phpSteps ) {
+			const tmp = `/tmp/ootb-blueprint-${ Date.now() }.php`;
+			fs.writeFileSync( tmp, step.data );
+			const result = spawnSync( 'php', [ '-l', tmp ], { encoding: 'utf8' } );
+			fs.unlinkSync( tmp );
+			if ( result.status === 0 ) {
+				console.log( `OK  PHP syntax (${ step.path })` );
+			} else {
+				console.error( `ERR PHP syntax (${ step.path }) —`, result.stdout.trim() );
+				failed = true;
+			}
 		}
 	}
 

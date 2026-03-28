@@ -112,6 +112,10 @@ export async function openaiAnswers(props) {
 			if (results.length > 0) {
 				const tasks = results.map((place, index) =>
 					new Promise(resolve => setTimeout(() => {
+						if (markerError) {
+							resolve();
+							return;
+						}
 						const result = findMarkers(place);
 						if (result && typeof result.then === 'function') {
 							result.then(resolve, resolve);

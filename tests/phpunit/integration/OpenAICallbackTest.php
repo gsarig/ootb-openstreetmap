@@ -160,7 +160,7 @@ namespace OOTB\Tests\Integration {
 			$output = ob_get_clean();
 
 			$this->assertStringContainsString( 'notice-info', $output );
-			$this->assertStringContainsString( 'use it automatically', $output );
+			$this->assertStringContainsString( 'use any configured connector automatically', $output );
 			$this->assertStringNotContainsString( 'takes precedence', $output );
 		}
 

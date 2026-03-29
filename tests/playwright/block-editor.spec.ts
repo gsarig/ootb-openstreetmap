@@ -17,7 +17,9 @@ test.describe( 'OOTB OpenStreetMap block — editor', () => {
     await page.goto( '/wp-admin/post-new.php' );
     // In apiVersion 3 the block canvas lives inside an iframe; check a
     // parent-document element to confirm the editor shell has loaded.
-    await expect( page.locator( 'button[aria-label="Block Inserter"]' ) ).toBeVisible( { timeout: 15_000 } );
+    // The button label changed between WP 6.6 ("Toggle block inserter") and
+    // WP 7.0+ ("Block Inserter"), so match both.
+    await expect( page.locator( 'button[aria-label="Block Inserter"], button[aria-label="Toggle block inserter"]' ) ).toBeVisible( { timeout: 15_000 } );
 
     // Dismiss the block editor welcome guide if present
     const editorWelcome = page.locator(

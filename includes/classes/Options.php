@@ -590,9 +590,9 @@ class Options {
 		<?php if ( function_exists( 'wp_ai_client_prompt' ) ) : ?>
 		<div class="notice notice-info inline">
 			<?php if ( ! empty( $option[ $args['label_for'] ] ) ) : ?>
-				<p><?php esc_html_e( 'A site-level AI connector is configured, but the API key above takes precedence.', 'ootb-openstreetmap' ); ?></p>
+				<p><?php esc_html_e( 'A site-level AI connector API is available, but the API key above takes precedence when used.', 'ootb-openstreetmap' ); ?></p>
 			<?php else : ?>
-				<p><?php esc_html_e( 'A site-level AI connector is configured. The plugin will use it automatically unless you enter a key above.', 'ootb-openstreetmap' ); ?></p>
+				<p><?php esc_html_e( 'A site-level AI connector API is available. The plugin will use any configured connector automatically unless you enter a key above.', 'ootb-openstreetmap' ); ?></p>
 			<?php endif; ?>
 		</div>
 		<?php endif; ?>

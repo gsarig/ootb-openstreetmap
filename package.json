@@ -22,7 +22,7 @@
 		"leaflet.markercluster": "^1.5.3"
 	},
 	"overrides": {
-		"serialize-javascript": "7.0.4",
+		"serialize-javascript": "7.0.5",
 		"webpack-dev-server": "5.2.3",
 		"markdownlint-cli": {
 			"minimatch": "3.1.5"

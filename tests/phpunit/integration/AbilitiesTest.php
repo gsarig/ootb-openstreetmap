@@ -19,6 +19,7 @@ class AbilitiesTest extends WP_UnitTestCase {
 			$this->markTestSkipped( 'Abilities API not available.' );
 		}
 
+		do_action( 'wp_abilities_api_categories_init' );
 		do_action( 'wp_abilities_api_init' );
 
 		$abilities = wp_list_abilities();

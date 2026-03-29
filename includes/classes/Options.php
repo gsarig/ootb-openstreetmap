@@ -586,8 +586,17 @@ class Options {
 				value="<?php echo isset( $option[ $args['label_for'] ] ) ? esc_attr( $option[ $args['label_for'] ] ) : ''; ?>"/>
 		<?php if ( isset( $args['description'] ) ) : ?>
 			<p><?php echo esc_html( $args['description'] ); ?></p>
-			<?php
-		endif;
+		<?php endif; ?>
+		<?php if ( function_exists( 'wp_ai_client_prompt' ) ) : ?>
+		<div class="notice notice-info inline">
+			<?php if ( ! empty( $option[ $args['label_for'] ] ) ) : ?>
+				<p><?php esc_html_e( 'A site-level AI connector API is available, but the API key above takes precedence when used.', 'ootb-openstreetmap' ); ?></p>
+			<?php else : ?>
+				<p><?php esc_html_e( 'A site-level AI connector API is available. The plugin will use any configured connector automatically unless you enter a key above.', 'ootb-openstreetmap' ); ?></p>
+			<?php endif; ?>
+		</div>
+		<?php endif; ?>
+		<?php
 	}
 
 	/**

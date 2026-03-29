@@ -13,9 +13,9 @@ export default function Alert({addingMarker, ...props}) {
 		alert = __('Release to drop a marker here', 'ootb-openstreetmap');
 	} else if (openAImode.length) {
 		if ('started' === openAImode) {
-			alert = __('You have entered OpenAI mode. When you finish your prompt, please hit enter or click on the bubble icon.', 'ootb-openstreetmap');
+			alert = __('You have entered AI mode. When you finish your prompt, please hit enter or click on the bubble icon.', 'ootb-openstreetmap');
 		} else if ('connecting' === openAImode) {
-			alert = __('Connecting to OpenAI...', 'ootb-openstreetmap');
+			alert = __('Connecting to AI...', 'ootb-openstreetmap');
 		} else if ('success' === openAImode) {
 			alert = __('Preparing the data. Please be patient...', 'ootb-openstreetmap');
 		} else if ('working' === openAImode) {

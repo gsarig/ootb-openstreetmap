@@ -45,7 +45,9 @@ jobs:
           node-version: '20'
           cache: 'npm'
       - run: npm ci
+      - run: node bin/validate-blueprint.js
       - run: npm run build
+      - run: npm run test:unit
       - run: npm audit --audit-level=high --omit=dev
       - uses: actions/upload-artifact@v7
         with:
@@ -152,9 +154,13 @@ jobs:
           docker compose logs wordpress
           docker compose logs cli
       - run: bash scripts/wp-test-setup.sh
-      - run: npx playwright test
+        env:
+          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+          MAPBOX_STYLE_URL: ${{ secrets.MAPBOX_STYLE_URL }}
+      - run: npx playwright test --trace off
         env:
           WP_BASE_URL: http://localhost:8080
+          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
       - uses: actions/upload-artifact@v7
         if: always()
         with:
@@ -193,11 +199,13 @@ jobs:
           PHP_VER=$(grep -m1 "Version:" ootb-openstreetmap.php | awk '{print $NF}' | tr -d '\r')
           PKG_VER=$(node -p "require('./package.json').version")
           README_VER=$(grep "Stable tag:" readme.txt | awk '{print $NF}' | tr -d '\r')
+          BLOCK_VER=$(node -p "require('./src/block/block.json').version")
           echo "PHP header:   $PHP_VER"
           echo "package.json: $PKG_VER"
           echo "readme.txt:   $README_VER"
-          if [ "$PHP_VER" != "$PKG_VER" ] || [ "$PHP_VER" != "$README_VER" ]; then
-            echo "ERROR: Version mismatch — all three must match before releasing."
+          echo "block.json:   $BLOCK_VER"
+          if [ "$PHP_VER" != "$PKG_VER" ] || [ "$PHP_VER" != "$README_VER" ] || [ "$PHP_VER" != "$BLOCK_VER" ]; then
+            echo "ERROR: Version mismatch — all four must match before releasing."
             exit 1
           fi
           echo "All versions consistent: $PHP_VER"

@@ -22,6 +22,7 @@ function setup(): void {
 
 	add_action( 'init', $n( 'i18n' ) );
 	add_action( 'init', $n( 'openstreetmap_block_init' ) );
+	add_action( 'wp_abilities_api_categories_init', '\OOTB\Abilities\register_ability_categories' );
 	add_action( 'wp_abilities_api_init', '\OOTB\Abilities\register_abilities' );
 }
 

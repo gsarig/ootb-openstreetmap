@@ -33,3 +33,20 @@ Reset everything: `docker compose down -v && make setup`
 
 CI runs identical commands. If something passes locally but fails in CI,
 reset stale Docker volumes with `docker compose down -v`.
+
+## Known local limitations
+
+### OSM tile 403s in the block editor
+
+When editing a block in the Gutenberg editor on **localhost**, OSM map tiles will not load
+and the browser console will show 403 errors. This is expected and is not a code bug.
+
+**Why it happens**: In apiVersion 3, the editor canvas is a `blob:` URL iframe. The
+`blob:` origin on localhost is `http://localhost:8080`. OSM's tile servers explicitly
+reject requests from localhost origins by policy, regardless of what `Referer` is sent.
+
+**On a production site** tiles load correctly in the editor — the origin sent is the real
+domain (e.g. `https://example.com`) which OSM accepts.
+
+**Impact**: none. The block editor on localhost is fully functional — markers, drag, zoom,
+and all interactions work. Only the tile background is absent in the editor view.

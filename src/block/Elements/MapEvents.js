@@ -134,6 +134,21 @@ export default function MapEvents({addingMarker, setAddingMarker, props}) {
 
         let cleanupForwarding = () => {};
         if (isInsideIframe) {
+            // Tile images are appended to the iframe's DOM, so the browser uses
+            // the iframe document's URL (a blob: URL) when determining the Referer
+            // header for tile requests. Blob: URLs carry no Referer by default,
+            // which causes OSM tile servers to return 403. Setting the referrer
+            // policy to "origin" on the iframe document causes the browser to send
+            // the page's origin (e.g. https://example.com) as the Referer instead.
+            // Note: on localhost the origin is http://localhost which OSM also
+            // rejects — that is an OSM policy limitation, not a code issue.
+            if ( ! iframeDoc.querySelector( 'meta[name="referrer"]' ) ) {
+                const referrerMeta = iframeDoc.createElement( 'meta' );
+                referrerMeta.name = 'referrer';
+                referrerMeta.content = 'origin';
+                iframeDoc.head.appendChild( referrerMeta );
+            }
+
             // Gutenberg's useBubbleEvents (block-editor.js) translates forwarded
             // mousemove coordinates from iframe-relative to parent-relative by adding
             // the iframe element's getBoundingClientRect() offset to clientX/Y.

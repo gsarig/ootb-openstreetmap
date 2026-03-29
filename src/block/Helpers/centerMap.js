@@ -12,5 +12,13 @@ export default function centerMap(props) {
 		//noinspection JSUnresolvedVariable
 		return getBoundsCenter(ootbGlobal.defaultLocation);
 	}
-	return getBoundsCenter(bounds) || (markers.length ? [markers[0].lat, markers[0].lng] : [0, 0]);
+	const centerFromBounds = getBoundsCenter(bounds);
+	if (centerFromBounds) {
+		return centerFromBounds;
+	}
+	if (markers.length) {
+		return [markers[0].lat, markers[0].lng];
+	}
+	//noinspection JSUnresolvedVariable
+	return getBoundsCenter(ootbGlobal.defaultLocation) || [0, 0];
 }

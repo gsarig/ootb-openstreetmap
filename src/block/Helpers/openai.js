@@ -101,9 +101,16 @@ export async function openaiAnswers(props) {
 				} else {
 					const parsed = JSON.parse(resultsRaw);
 					results = Array.isArray(parsed) ? parsed : [];
-					setAttributes({
-						openAImode: 'success',
-					});
+					if (results.length > 0) {
+						setAttributes({
+							openAImode: 'success',
+						});
+					} else {
+						setAttributes({ openAImode: 'error' });
+						setTimeout(() => {
+							setAttributes({ openAImode: '', keywords: '' });
+						}, 3000);
+					}
 				}
 			} catch (e) {
 				setAttributes({

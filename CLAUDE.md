@@ -69,6 +69,24 @@ All plugin script handles (e.g. `ootb-openstreetmap-view-script`) are registered
 a plugin handle must hook into `enqueue_block_assets`, not `wp_enqueue_scripts` — otherwise
 the handle doesn't exist yet and the call is silently ignored.
 
+### apiVersion 3 editor iframe — OSM tile 403s on localhost
+Since apiVersion 3, the Gutenberg editor renders the block canvas inside a `blob:` URL
+iframe. Tile `<img>` elements created by Leaflet are inserted into that iframe's DOM, so
+the browser uses the iframe document's URL (a `blob:` URL) when determining the `Referer`
+header for tile requests.
+
+A `<meta name="referrer" content="origin">` tag is injected into the iframe's `<head>`
+by `MapEvents.js` so that the browser sends the page's real origin as the `Referer`.
+
+**On production** this resolves the 403: OSM receives `https://example.com` as the
+`Referer` and serves the tiles normally.
+
+**On localhost** the 403 persists. The origin sent is `http://localhost:8080`, which OSM
+explicitly rejects by policy — they do not serve tiles to localhost origins regardless of
+what `Referer` is declared. This is expected and not a code bug. The block editor on
+localhost still works fully (markers, drag, zoom, all interactions); only the tile
+background is missing in the editor view.
+
 ---
 
 ## Stack

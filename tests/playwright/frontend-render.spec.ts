@@ -38,7 +38,11 @@ test.describe('OOTB OpenStreetMap block — smoke test', () => {
       ( req ) => {
         try {
           const url = new URL( req.url() );
-          return url.hostname === 'api.mapbox.com';
+          return (
+            url.hostname === 'api.mapbox.com' &&
+            url.pathname.includes( '/tiles/' ) &&
+            url.searchParams.has( 'access_token' )
+          );
         } catch {
           return false;
         }

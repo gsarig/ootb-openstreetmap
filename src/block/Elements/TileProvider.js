@@ -46,7 +46,6 @@ export default function TileProvider({props}) {
 			ref={ref}
 			url={providerUrl}
 			attribution={providerAttribution}
-			referrerPolicy="origin"
 		/>
 	);
 }

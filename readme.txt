@@ -5,7 +5,7 @@ Tags: Map, OpenStreetMap, Leaflet, Google Maps, block
 Requires at least: 6.6
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 2.11.0
+Stable tag: 2.12.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -146,6 +146,14 @@ Version 2.0.0 is a major, almost full, refactoring, both for the build scripts a
 = 1.0 =
 
 == Changelog ==
+= 2.12.0 =
+* Adds WordPress 7.0 compatibility.
+* Adds WordPress AI Client integration for smarter location search.
+* Adds WordPress Playground blueprint for quick demos.
+* Fixes JS error handling, race condition, and edge cases.
+* Hardens OpenAI REST endpoint validation and error handling.
+* Dependency updates.
+
 = 2.11.0 =
 * Adds marker clustering support.
 * Extends the AI ability with additional map display and behavior parameters (map type, zoom range, interaction controls, shape options).

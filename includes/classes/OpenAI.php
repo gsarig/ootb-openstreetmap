@@ -149,9 +149,8 @@ class OpenAI {
 
 		// Priority 2: No plugin key — use WordPress AI Client if available (WordPress 7.0+).
 		if ( function_exists( 'wp_ai_client_prompt' ) ) {
-			$result = wp_ai_client_prompt()
+			$result = wp_ai_client_prompt( $prompt )
 				->using_system_instruction( $this->context )
-				->withText( $prompt )
 				->generate_text();
 
 			if ( is_wp_error( $result ) ) {
@@ -167,6 +166,12 @@ class OpenAI {
 					[ 'status' => $upstream_status ]
 				);
 			}
+
+			// Strip markdown code fences that some models add despite instructions.
+			$result = trim( $result );
+			$result = (string) preg_replace( '/^```(?:json)?\s*\n?/', '', $result );
+			$result = (string) preg_replace( '/\n?```\s*$/', '', $result );
+			$result = trim( $result );
 
 			// Normalize to the same shape the JS expects: choices[0].message.content.
 			return rest_ensure_response(

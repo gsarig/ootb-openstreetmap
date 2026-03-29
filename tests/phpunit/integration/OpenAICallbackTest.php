@@ -25,10 +25,6 @@ namespace {
 				return $this;
 			}
 
-			public function withText( string $text ): static {
-				return $this;
-			}
-
 			public function generate_text(): string|\WP_Error {
 				return static::$next_result;
 			}
@@ -38,7 +34,7 @@ namespace {
 	if ( ! function_exists( 'wp_ai_client_prompt' ) ) {
 		// Track that the stub is in control so tests can skip safely on WP 7.0+.
 		define( 'OOTB_TEST_WP_AI_CLIENT_STUBBED', true );
-		function wp_ai_client_prompt(): MockWPAIClientPrompt {
+		function wp_ai_client_prompt( string $prompt ): MockWPAIClientPrompt {
 			return new MockWPAIClientPrompt();
 		}
 	} else {

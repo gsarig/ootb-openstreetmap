@@ -16,16 +16,13 @@ if ( ! class_exists( 'OOTB_WP_AI_Client_Prompt' ) ) {
 		public function using_system_instruction( string $instruction ): static {
 			return $this;
 		}
-		public function withText( string $text ): static {
-			return $this;
-		}
 		public function generate_text(): string|\WP_Error {
 			return '';
 		}
 	}
 }
 if ( ! function_exists( 'wp_ai_client_prompt' ) ) {
-	function wp_ai_client_prompt(): OOTB_WP_AI_Client_Prompt {
+	function wp_ai_client_prompt( string $prompt ): OOTB_WP_AI_Client_Prompt {
 		return new OOTB_WP_AI_Client_Prompt();
 	}
 }

@@ -28,7 +28,7 @@ export default function SearchBox({props}) {
 					return response.json();
 				}).then(data => {
 				setAttributes({
-					searchResults: data ?? [],
+					searchResults: Array.isArray(data) ? data : [],
 				});
 			}).catch(() => {
 				setAttributes({

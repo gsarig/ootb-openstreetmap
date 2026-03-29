@@ -20,7 +20,7 @@ export default function SearchBox(props) {
                     }
                     return response.json();
                 }).then(data => {
-                setSearchResults(data ?? []);
+                setSearchResults(Array.isArray(data) ? data : []);
             }).catch(() => {
                 setSearchResults([]);
             });

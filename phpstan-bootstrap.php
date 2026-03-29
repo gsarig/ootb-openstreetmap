@@ -16,7 +16,10 @@ if ( ! class_exists( 'OOTB_WP_AI_Client_Prompt' ) ) {
 		public function using_system_instruction( string $instruction ): static {
 			return $this;
 		}
-		public function generate_text( string $prompt ): string|\WP_Error {
+		public function withText( string $text ): static {
+			return $this;
+		}
+		public function generate_text(): string|\WP_Error {
 			return '';
 		}
 	}

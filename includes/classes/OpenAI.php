@@ -151,7 +151,8 @@ class OpenAI {
 		if ( function_exists( 'wp_ai_client_prompt' ) ) {
 			$result = wp_ai_client_prompt()
 				->using_system_instruction( $this->context )
-				->generate_text( $prompt );
+				->withText( $prompt )
+				->generate_text();
 
 			if ( is_wp_error( $result ) ) {
 				$upstream_data   = $result->get_error_data();

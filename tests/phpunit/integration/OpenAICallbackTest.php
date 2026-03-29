@@ -25,7 +25,11 @@ namespace {
 				return $this;
 			}
 
-			public function generate_text( string $prompt ): string|\WP_Error {
+			public function withText( string $text ): static {
+				return $this;
+			}
+
+			public function generate_text(): string|\WP_Error {
 				return static::$next_result;
 			}
 		}

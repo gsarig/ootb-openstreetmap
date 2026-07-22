@@ -70,7 +70,7 @@ wp plugin activate ootb-openstreetmap || {
 }
 
 echo "==> Setting default plugin options..."
-wp option update ootb_options '{"prevent_default_gestures":"","api_mapbox":"","api_openai":"","global_mapbox_style_url":""}' --format=json
+wp option update ootb_options '{"prevent_default_gestures":"","api_mapbox":"","api_openai":"","global_mapbox_style_url":"","geodata":"1","geo_post_types":{"poi":"1"}}' --format=json
 
 echo "==> Creating test page..."
 MARKER_ICON='%7B%22iconUrl%22%3A%22http%3A%2F%2Flocalhost%3A8080%2Fwp-content%2Fplugins%2Footb-openstreetmap%2Fassets%2Fvendor%2Fleaflet%2Fimages%2Fmarker-icon.png%22%2C%22iconAnchor%22%3A%5B12%2C41%5D%2C%22popupAnchor%22%3A%5B0%2C-41%5D%7D'

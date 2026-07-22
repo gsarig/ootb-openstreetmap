@@ -50,7 +50,9 @@ function MapCustomField({geoAddress, geoLatitude, geoLongitude, setMetaValues}) 
 export default compose([
     withSelect((select) => {
         const {getEditedPostAttribute} = select('core/editor');
-        const meta = getEditedPostAttribute('meta');
+        // Post types without `custom-fields` support expose no meta over REST,
+        // in which case getEditedPostAttribute('meta') returns undefined.
+        const meta = getEditedPostAttribute('meta') ?? {};
         return {
             meta,
             geoAddress: meta['geo_address'],

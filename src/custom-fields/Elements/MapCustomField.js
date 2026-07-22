@@ -50,18 +50,27 @@ function MapCustomField({geoAddress, geoLatitude, geoLongitude, setMetaValues}) 
 export default compose([
     withSelect((select) => {
         const {getEditedPostAttribute} = select('core/editor');
-        const meta = getEditedPostAttribute('meta');
+        // Post types without `custom-fields` support expose no meta over REST,
+        // in which case getEditedPostAttribute('meta') returns undefined.
+        const rawMeta = getEditedPostAttribute('meta');
+        const meta = rawMeta ?? {};
         return {
             meta,
+            metaSupported: rawMeta != null,
             geoAddress: meta['geo_address'],
             geoLatitude: meta['geo_latitude'],
             geoLongitude: meta['geo_longitude'],
         };
     }),
-    withDispatch((dispatch, {meta}) => {
+    withDispatch((dispatch, {meta, metaSupported}) => {
         const {editPost} = dispatch('core/editor');
         return {
             setMetaValues: (values) => {
+                // Without REST-exposed meta there is nothing to save; dispatching
+                // editPost would only mark the post dirty with a phantom edit.
+                if (!metaSupported) {
+                    return;
+                }
                 editPost({meta: {...meta, ...values}});
             }
         }

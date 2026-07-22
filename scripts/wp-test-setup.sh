@@ -44,6 +44,10 @@ wp plugin activate ootb-openstreetmap || {
 echo "==> Setting default plugin options..."
 wp option update ootb_options '{"prevent_default_gestures":"","api_mapbox":"","api_openai":"","global_mapbox_style_url":""}' --format=json
 
+echo "==> Enabling geodata for the poi test CPT..."
+wp option patch insert ootb_options geodata '"1"' --format=json
+wp option patch insert ootb_options geo_post_types '{"poi":"1"}' --format=json
+
 if [ -n "${MAPBOX_ACCESS_TOKEN:-}" ]; then
   MAPBOX_STYLE="${MAPBOX_STYLE_URL:-mapbox://styles/mapbox/streets-v11}"
   echo "==> Storing Mapbox credentials in plugin options..."

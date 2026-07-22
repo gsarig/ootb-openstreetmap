@@ -72,6 +72,10 @@ wp plugin activate ootb-openstreetmap || {
 echo "==> Setting default plugin options..."
 wp option update ootb_options '{"prevent_default_gestures":"","api_mapbox":"","api_openai":"","global_mapbox_style_url":""}' --format=json
 
+echo "==> Enabling geodata for the poi test CPT..."
+wp option patch insert ootb_options geodata '"1"' --format=json
+wp option patch insert ootb_options geo_post_types '{"poi":"1"}' --format=json
+
 echo "==> Creating test page..."
 MARKER_ICON='%7B%22iconUrl%22%3A%22http%3A%2F%2Flocalhost%3A8080%2Fwp-content%2Fplugins%2Footb-openstreetmap%2Fassets%2Fvendor%2Fleaflet%2Fimages%2Fmarker-icon.png%22%2C%22iconAnchor%22%3A%5B12%2C41%5D%2C%22popupAnchor%22%3A%5B0%2C-41%5D%7D'
 MARKERS='%5B%7B%22id%22%3A%22marker-test-1%22%2C%22lat%22%3A%2237.9838%22%2C%22lng%22%3A%2223.7275%22%2C%22title%22%3A%22Test%20Marker%20Athens%22%2C%22content%22%3A%22This%20is%20a%20deterministic%20test%20marker.%22%2C%22icon%22%3A%22%22%2C%22text%22%3A%22This%20is%20a%20deterministic%20test%20marker.%22%7D%5D'

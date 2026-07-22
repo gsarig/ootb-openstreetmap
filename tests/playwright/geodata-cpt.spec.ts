@@ -51,6 +51,13 @@ test.describe( 'Geodata panel on a CPT without custom-fields support', () => {
 
     // No uncaught JS errors (the pre-fix crash surfaced here as a TypeError on 'geo_address')
     expect( jsErrors ).toHaveLength( 0 );
+
+    // The untouched post must not be marked dirty by a phantom meta edit
+    // (setMetaValues no-ops when meta is not exposed over REST)
+    const isDirty = await page.evaluate(
+      () => ( window as any ).wp.data.select( 'core/editor' ).isEditedPostDirty()
+    );
+    expect( isDirty ).toBe( false );
   } );
 
 } );

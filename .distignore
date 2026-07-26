@@ -24,6 +24,7 @@ assets/vendor/leaflet/reference-1.6.0*.html
 .distignore
 .eslintrc.js
 .gitignore
+.nvmrc
 Makefile
 package.json
 package-lock.json

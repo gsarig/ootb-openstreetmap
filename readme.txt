@@ -5,7 +5,7 @@ Tags: Map, OpenStreetMap, Leaflet, Google Maps, block
 Requires at least: 6.6
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 2.12.0
+Stable tag: 2.13.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -146,6 +146,11 @@ Version 2.0.0 is a major, almost full, refactoring, both for the build scripts a
 = 1.0 =
 
 == Changelog ==
+= 2.13.0 =
+* Improves AI-assisted search to return more accurate locations.
+* Fixes an editor crash on post types that do not support custom fields.
+* Dependency updates.
+
 = 2.12.0 =
 * Adds WordPress 7.0 compatibility.
 * Adds WordPress AI Client integration for smarter location search.

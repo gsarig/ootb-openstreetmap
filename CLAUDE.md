@@ -247,12 +247,12 @@ These are part of the public API — do not change signatures or remove without 
 
 ## Release Procedure
 
-When asked to **"deploy the release"**, execute the following steps in order — do not skip any, do not push anything.
+When asked to **"deploy the release"**, execute the following steps in order — do not skip any, do not push anything, and never create a git tag. Tagging is always the user's action; do not run `git tag` and do not offer to.
 
 ### Steps (automated)
 
 1. **Confirm the target version** — ask if not told explicitly.
-2. **Update all four version strings** to the new version:
+2. **Update all five version strings** to the new version:
    - ` * Version:` header in `ootb-openstreetmap.php`
    - `OOTB_VERSION` constant in `ootb-openstreetmap.php`
    - `"version"` in `package.json`
@@ -264,17 +264,25 @@ When asked to **"deploy the release"**, execute the following steps in order —
    * ...user-facing changes...
    ```
 4. **Commit** all changed files with message: `Bump version to X.Y.Z and update changelog`
-5. **Create a git tag**: `git tag X.Y.Z`
+
+The automated block stops here, on the release branch. The tag cannot be created yet: it belongs on the merge commit in `master`, which does not exist until the release PR is merged.
 
 ### Steps (manual — you do these)
 
 After the above is done, report:
 
-> Done. Now run:
+> Done. Now:
+> 1. Push the release branch, then open or update its PR into `master`.
+> 2. Wait for CI. `artifact-playwright` must be green before merging.
+> 3. Merge the PR into `master` on GitHub.
+> 4. Tag the merged commit and push:
 > ```
+> git checkout master && git pull origin master
+> git tag X.Y.Z
 > git push origin --tags
-> git push origin master
 > ```
+
+Pushing the tag triggers `release.yml` and deploys to WordPress.org. It is the point of no return.
 
 ### Version consistency rule
 All five locations must match exactly before tagging. The `artifact-playwright` CI job checks three of them (PHP header, `package.json`, `readme.txt`) and fails fast if they diverge.

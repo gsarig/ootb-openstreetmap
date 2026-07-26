@@ -67,7 +67,7 @@ services:
     working_dir: /app
 
   node:
-    image: node:20-alpine
+    image: node:24-alpine
     restart: "no"
     profiles: ["tools"]
     volumes:

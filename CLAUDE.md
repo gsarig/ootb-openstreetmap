@@ -252,12 +252,14 @@ When asked to **"deploy the release"**, execute the following steps in order —
 ### Steps (automated)
 
 1. **Confirm the target version** — ask if not told explicitly.
-2. **Update all five version strings** to the new version:
+2. **Update all six version strings** to the new version:
    - ` * Version:` header in `ootb-openstreetmap.php`
    - `OOTB_VERSION` constant in `ootb-openstreetmap.php`
    - `"version"` in `package.json`
    - `"version"` in `src/block/block.json`
    - `Stable tag:` in `readme.txt`
+   - `"version"` in `package-lock.json` (two places: the root object and `packages[""]`).
+     Easiest via `npm install --package-lock-only` after bumping `package.json`, rather than editing by hand.
 3. **Add a changelog entry** at the top of the `== Changelog ==` section in `readme.txt`:
    ```
    = X.Y.Z =
@@ -285,7 +287,7 @@ After the above is done, report:
 Pushing the tag triggers `release.yml` and deploys to WordPress.org. It is the point of no return.
 
 ### Version consistency rule
-All five locations must match exactly before tagging. The `artifact-playwright` CI job checks three of them (PHP header, `package.json`, `readme.txt`) and fails fast if they diverge.
+All six locations must match exactly before tagging. The `artifact-playwright` CI job checks only three of them (PHP header, `package.json`, `readme.txt`) and fails fast if they diverge, so the other three, including `package-lock.json`, can drift without CI noticing.
 
 ---
 

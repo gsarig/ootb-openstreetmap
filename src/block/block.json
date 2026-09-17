@@ -107,6 +107,10 @@
 			"type": "integer",
 			"default": 3
 		},
+		"circleRadius": {
+			"type": "integer",
+			"default": 8
+		},
 		"shapeText": {
 			"type": "string",
 			"default": ""
@@ -156,6 +160,15 @@
 				"showMapData": false,
 				"showSearchBox": false,
 				"serverSideRender": true
+			}
+		},
+		{
+			"name": "circle",
+			"title": "OpenStreetMap Circle Marker",
+			"icon": "circle",
+			"attributes": {
+				"mapType": "circle",
+				"showMarkers": false
 			}
 		}
 	],

@@ -104,9 +104,16 @@ function register_abilities(): void {
 					],
 					'map_type'          => [
 						'type'        => 'string',
-						'description' => __( 'Map type. Accepted values: "marker", "polygon", "polyline". Defaults to "marker".', 'ootb-openstreetmap' ),
-						'enum'        => [ 'marker', 'polygon', 'polyline' ],
+						'description' => __( 'Map type. Accepted values: "marker", "polygon", "polyline", "circle". Defaults to "marker".', 'ootb-openstreetmap' ),
+						'enum'        => [ 'marker', 'polygon', 'polyline', 'circle' ],
 						'default'     => 'marker',
+					],
+					'circle_radius'     => [
+						'type'        => 'integer',
+						'description' => __( 'Radius in pixels for a circle marker. Defaults to 8.', 'ootb-openstreetmap' ),
+						'minimum'     => 1,
+						'maximum'     => 1000,
+						'default'     => 8,
 					],
 					'markers'           => [
 						'type'        => 'array',
@@ -281,6 +288,7 @@ function execute_add_map_to_post( array $args ): array|\WP_Error {
 		'show_markers'      => $args['show_markers'] ?? true,
 		'shape_color'       => $args['shape_color'] ?? '#008EFF',
 		'shape_weight'      => isset( $args['shape_weight'] ) ? (int) $args['shape_weight'] : 3,
+		'circle_radius'     => isset( $args['circle_radius'] ) ? (int) $args['circle_radius'] : 8,
 		'shape_text'        => $args['shape_text'] ?? '',
 		'min_zoom'          => $min_zoom,
 		'max_zoom'          => $max_zoom,
@@ -369,6 +377,7 @@ function build_block_markup(
 	$fullscreen        = (bool) ( $options['fullscreen'] ?? false );
 	$enable_clustering = (bool) ( $options['enable_clustering'] ?? false );
 
+	$circle_radius = max( 1, min( 1000, (int) ( $options['circle_radius'] ?? 8 ) ) );
 	$bool = static fn( bool $v ): string => $v ? 'true' : 'false';
 
 	// Block comment attributes (what the editor stores and uses to reconstruct UI state).
@@ -395,6 +404,7 @@ function build_block_markup(
 		'shapeColor'        => $shape_color,
 		'shapeWeight'       => $shape_weight,
 		'shapeText'         => $shape_text,
+		'circleRadius'      => 'circle' === $map_type ? $circle_radius : null,
 		'dragging'          => $dragging,
 		'touchZoom'         => $touch_zoom,
 		'doubleClickZoom'   => $double_click_zoom,
@@ -458,6 +468,7 @@ function build_block_markup(
 		. ' data-showmarkers="' . $bool( $show_markers ) . '"'
 		. ' data-shapestyle="' . esc_attr( $shape_styles ) . '"'
 		. ' data-shapetext="' . esc_attr( $shape_text ) . '"'
+		. ( 'circle' === $map_type ? ' data-circleradius="' . (int) $circle_radius . '"' : '' )
 		. ' data-markers="' . esc_attr( $data_markers ) . '"'
 		. ' data-bounds="' . esc_attr( $data_bounds ) . '"'
 		. ' data-zoom="' . $zoom . '"'

@@ -50,8 +50,6 @@ function register_abilities(): void {
 			'category'            => 'ootb-openstreetmap',
 			'label'               => __( 'Add OpenStreetMap to Post', 'ootb-openstreetmap' ),
 			'description'         => __( 'Inserts an OpenStreetMap block into a post or page. Accepts a centre location, zoom level, one or more markers, and display options.', 'ootb-openstreetmap' ),
-			'thinking_message'    => __( 'Adding map to post…', 'ootb-openstreetmap' ),
-			'success_message'     => __( 'Map block added successfully.', 'ootb-openstreetmap' ),
 			'execute_callback'    => __NAMESPACE__ . '\\execute_add_map_to_post',
 			'input_schema'        => [
 				'type'                  => 'object',

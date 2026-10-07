@@ -25,7 +25,7 @@ services:
       retries: 10
 
   wordpress:
-    image: ${WP_IMAGE:-wordpress:php8.1-apache}
+    image: ${WP_IMAGE:-wordpress:php8.3-apache}
     restart: unless-stopped
     depends_on:
       db:
@@ -48,7 +48,7 @@ services:
       retries: 12
 
   cli:
-    image: wordpress:cli-php8.1
+    image: wordpress:cli-php8.3
     restart: "no"
     depends_on:
       wordpress:

@@ -14,10 +14,12 @@ wp() {
   docker compose -f "${COMPOSE_FILE}" exec -T cli wp --allow-root --path=/var/www/html "$@"
 }
 
+# Probe from inside the container: a sandboxed host shell may have its own
+# loopback and never see the published port.
 echo "==> Waiting for WordPress and database..."
 MAX_TRIES=60
 TRIES=0
-until curl -sf "${WP_URL}/wp-login.php" > /dev/null 2>&1 || [ $TRIES -ge $MAX_TRIES ]; do
+until docker compose -f "${COMPOSE_FILE}" exec -T wordpress curl -sf http://localhost/wp-login.php > /dev/null 2>&1 || [ $TRIES -ge $MAX_TRIES ]; do
   sleep 2
   TRIES=$((TRIES + 1))
   if [ $((TRIES % 10)) -eq 0 ]; then
@@ -68,6 +70,13 @@ wp plugin activate ootb-openstreetmap || {
   echo "ERROR: Plugin activation failed."
   exit 1
 }
+
+echo "==> Creating role users..."
+for ROLE in editor author contributor subscriber; do
+  if ! wp user get "${ROLE}" --field=ID > /dev/null 2>&1; then
+    wp user create "${ROLE}" "${ROLE}@example.com" --role="${ROLE}" --user_pass=password
+  fi
+done
 
 echo "==> Setting default plugin options..."
 wp option update ootb_options '{"prevent_default_gestures":"","api_mapbox":"","api_openai":"","global_mapbox_style_url":""}' --format=json
@@ -127,3 +136,4 @@ echo ""
 echo "==> Done. WordPress at ${WP_URL} (admin / password)"
 echo "    Test page: ${WP_URL}/test-map/"
 echo "    Clustering test page: ${WP_URL}/test-map-cluster/"
+echo "    Users: editor, author, contributor, subscriber / password"

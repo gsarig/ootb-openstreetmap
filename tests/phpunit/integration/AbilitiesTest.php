@@ -412,4 +412,57 @@ class AbilitiesTest extends WP_UnitTestCase {
 		$this->assertStringContainsString( '"showMarkers":false', $post->post_content );
 		$this->assertStringContainsString( 'data-showmarkers="false"', $post->post_content );
 	}
+
+	/*
+	 * Role boundaries through core's Abilities API. The ability is not exposed over
+	 * REST, so tests/playwright/roles.spec.ts cannot reach it and points here instead.
+	 */
+
+	public function test_core_permission_check_requires_edit_posts(): void {
+		if ( ! function_exists( 'wp_get_ability' ) ) {
+			$this->markTestSkipped( 'Abilities API not available.' );
+		}
+
+		$ability = wp_get_ability( 'ootb-openstreetmap/add-map-to-post' );
+		$this->assertNotNull( $ability );
+		$input = [ 'post_id' => 1 ];
+
+		wp_set_current_user( 0 );
+		$this->assertFalse( $ability->check_permissions( $input ) );
+
+		wp_set_current_user( $this->factory()->user->create( [ 'role' => 'subscriber' ] ) );
+		$this->assertFalse( $ability->check_permissions( $input ) );
+
+		wp_set_current_user( $this->factory()->user->create( [ 'role' => 'contributor' ] ) );
+		$this->assertTrue( $ability->check_permissions( $input ) );
+	}
+
+	public function test_contributor_can_add_a_map_only_to_a_post_they_can_edit(): void {
+		if ( ! function_exists( 'wp_get_ability' ) ) {
+			$this->markTestSkipped( 'Abilities API not available.' );
+		}
+
+		$ability     = wp_get_ability( 'ootb-openstreetmap/add-map-to-post' );
+		$admin_id    = $this->factory()->user->create( [ 'role' => 'administrator' ] );
+		$contributor = $this->factory()->user->create( [ 'role' => 'contributor' ] );
+		$admin_post  = $this->factory()->post->create( [ 'post_author' => $admin_id ] );
+		$own_draft   = $this->factory()->post->create(
+			[
+				'post_author' => $contributor,
+				'post_status' => 'draft',
+			]
+		);
+
+		wp_set_current_user( $contributor );
+
+		$denied = $ability->execute( [ 'post_id' => $admin_post ] );
+		$this->assertWPError( $denied );
+		$this->assertSame( 'ootb_forbidden', $denied->get_error_code() );
+		$this->assertStringNotContainsString( 'wp:ootb/openstreetmap', get_post( $admin_post )->post_content );
+
+		$allowed = $ability->execute( [ 'post_id' => $own_draft ] );
+		$this->assertIsArray( $allowed );
+		$this->assertSame( $own_draft, $allowed['post_id'] );
+		$this->assertStringContainsString( '<!-- wp:ootb/openstreetmap', get_post( $own_draft )->post_content );
+	}
 }

@@ -1,14 +1,17 @@
-import { test, expect } from '@playwright/test';
-import { loginIfNeeded, dismissModals, insertBlock } from './helpers';
+import { test, expect, FrameLocator, Page } from '@playwright/test';
+import { loginIfNeeded, dismissModals, insertBlock, editorCanvas } from './helpers';
 
 test.describe( 'OOTB OpenStreetMap block — editor', () => {
+
+  let canvas: Page | FrameLocator;
 
   test.beforeEach( async ({ page }) => {
     await loginIfNeeded( page );
     await dismissModals( page );
 
     await page.goto( '/wp-admin/post-new.php' );
-    await expect( page.locator( '.block-editor-writing-flow' ) ).toBeVisible( { timeout: 15_000 } );
+    canvas = await editorCanvas( page );
+    await expect( canvas.locator( '.is-root-container' ) ).toBeVisible( { timeout: 15_000 } );
 
     // Dismiss the block editor welcome guide if present
     const editorWelcome = page.locator(
@@ -30,12 +33,12 @@ test.describe( 'OOTB OpenStreetMap block — editor', () => {
     await page.keyboard.press( 'Escape' );
 
     await expect(
-      page.locator( '[data-type="ootb/openstreetmap"] .leaflet-container' ).first()
+      canvas.locator( '[data-type="ootb/openstreetmap"] .leaflet-container' ).first()
     ).toBeVisible( { timeout: 15_000 } );
 
     // Fail explicitly if the block validation error is present
     await expect(
-      page.locator( '[data-type="ootb/openstreetmap"] .block-editor-warning' )
+      canvas.locator( '[data-type="ootb/openstreetmap"] .block-editor-warning' )
     ).not.toBeVisible();
   } );
 
@@ -45,7 +48,7 @@ test.describe( 'OOTB OpenStreetMap block — editor', () => {
     await page.keyboard.press( 'Escape' );
 
     await expect(
-      page.locator( '[data-type="ootb/openstreetmap"] .leaflet-container' ).first()
+      canvas.locator( '[data-type="ootb/openstreetmap"] .leaflet-container' ).first()
     ).toBeVisible( { timeout: 15_000 } );
 
     // Open the Settings sidebar if not already open
@@ -78,12 +81,12 @@ test.describe( 'OOTB OpenStreetMap block — editor', () => {
 
     // Map container must still be visible (no block crash)
     await expect(
-      page.locator( '[data-type="ootb/openstreetmap"] .leaflet-container' ).first()
+      canvas.locator( '[data-type="ootb/openstreetmap"] .leaflet-container' ).first()
     ).toBeVisible( { timeout: 10_000 } );
 
     // Block validation error must not appear
     await expect(
-      page.locator( '[data-type="ootb/openstreetmap"] .block-editor-warning' )
+      canvas.locator( '[data-type="ootb/openstreetmap"] .block-editor-warning' )
     ).not.toBeVisible();
 
     // No uncaught JS errors triggered by enabling the toggle
@@ -96,7 +99,7 @@ test.describe( 'OOTB OpenStreetMap block — editor', () => {
     await page.keyboard.press( 'Escape' );
 
     await expect(
-      page.locator( '[data-type="ootb/openstreetmap"] .leaflet-container' ).first()
+      canvas.locator( '[data-type="ootb/openstreetmap"] .leaflet-container' ).first()
     ).toBeVisible( { timeout: 15_000 } );
 
     // Open the Settings sidebar if not already open
@@ -125,7 +128,7 @@ test.describe( 'OOTB OpenStreetMap block — editor', () => {
 
     // The fullscreen control button should now appear in the editor map
     await expect(
-      page.locator( '[data-type="ootb/openstreetmap"] .leaflet-control-fullscreen' )
+      canvas.locator( '[data-type="ootb/openstreetmap"] .leaflet-control-fullscreen' )
     ).toBeVisible( { timeout: 5_000 } );
   } );
 

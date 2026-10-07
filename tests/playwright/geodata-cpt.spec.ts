@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { loginIfNeeded, dismissModals } from './helpers';
+import { loginIfNeeded, dismissModals, editorCanvas } from './helpers';
 
 /**
  * Regression test for the geodata custom fields panel crash (PR #154).
@@ -21,7 +21,8 @@ test.describe( 'Geodata panel on a CPT without custom-fields support', () => {
     page.on( 'pageerror', err => jsErrors.push( err.message ) );
 
     await page.goto( '/wp-admin/post-new.php?post_type=poi' );
-    await expect( page.locator( '.block-editor-writing-flow' ) ).toBeVisible( { timeout: 15_000 } );
+    const canvas = await editorCanvas( page );
+    await expect( canvas.locator( '.is-root-container' ) ).toBeVisible( { timeout: 15_000 } );
 
     // Dismiss the block editor welcome guide if present
     const editorWelcome = page.locator(

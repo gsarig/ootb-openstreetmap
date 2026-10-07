@@ -16,7 +16,9 @@ services:
       retries: 10
 
   wordpress:
-    image: ${WP_IMAGE:-wordpress:php8.1-apache}
+    # The php8.1 tags stopped receiving WordPress updates when PHP 8.1 reached
+    # end of life (frozen at 6.9).
+    image: ${WP_IMAGE:-wordpress:php8.3-apache}
     restart: unless-stopped
     depends_on:
       db:
@@ -40,7 +42,7 @@ services:
       retries: 12
 
   cli:
-    image: wordpress:cli-php8.1
+    image: wordpress:cli-php8.3
     restart: "no"
     depends_on:
       wordpress:
@@ -56,12 +58,18 @@ services:
       - ./docker/php.ini:/usr/local/etc/php/conf.d/ootb-memory.ini
     entrypoint: ["tail", "-f", "/dev/null"]
 
+  # Tool services run as the host user when .env sets HOST_UID/HOST_GID, so files
+  # they write into the mounted clone stay owned by that user. Without .env (CI)
+  # they keep running as root.
   composer:
     image: composer:2
     restart: "no"
     profiles: ["tools"]
+    user: "${HOST_UID:-0}:${HOST_GID:-0}"
     environment:
       COMPOSER_ALLOW_SUPERUSER: "1"
+      HOME: /tmp
+      COMPOSER_HOME: /tmp
     volumes:
       - .:/app
     working_dir: /app
@@ -70,6 +78,26 @@ services:
     image: node:24-alpine
     restart: "no"
     profiles: ["tools"]
+    user: "${HOST_UID:-0}:${HOST_GID:-0}"
+    environment:
+      HOME: /tmp
+    volumes:
+      - .:/app
+    working_dir: /app
+
+  # The image tag must match the @playwright/test version in package-lock.json;
+  # .env's PW_VERSION overrides the default, which must be bumped with the lockfile.
+  # A required variable here would break every other compose command when unset.
+  # Host networking lets the browser reach WordPress on localhost:8080.
+  playwright:
+    image: mcr.microsoft.com/playwright:v${PW_VERSION:-1.61.1}-noble
+    restart: "no"
+    profiles: ["tools"]
+    network_mode: host
+    user: "${HOST_UID:-0}:${HOST_GID:-0}"
+    environment:
+      HOME: /tmp
+      PLAYWRIGHT_JSON_OUTPUT_NAME: test-results/results.json
     volumes:
       - .:/app
     working_dir: /app

@@ -119,7 +119,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - wp-image: wordpress:php8.1-apache
+          - wp-image: wordpress:php8.3-apache
             wp-label: latest
           - wp-image: wordpress:6.6-php8.1-apache
             wp-label: '6.6'
@@ -179,7 +179,7 @@ jobs:
     permissions:
       contents: read
     env:
-      WP_IMAGE: wordpress:php8.1-apache
+      WP_IMAGE: wordpress:php8.3-apache
     steps:
       - uses: actions/checkout@v6
 

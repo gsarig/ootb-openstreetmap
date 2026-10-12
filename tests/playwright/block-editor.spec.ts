@@ -1,4 +1,4 @@
-import { test, expect, FrameLocator, Page } from '@playwright/test';
+import { test, expect, FrameLocator, Page, Request } from '@playwright/test';
 import { loginIfNeeded, dismissModals, insertBlock, editorCanvas } from './helpers';
 
 test.describe( 'OOTB OpenStreetMap block — editor', () => {
@@ -40,6 +40,33 @@ test.describe( 'OOTB OpenStreetMap block — editor', () => {
     await expect(
       canvas.locator( '[data-type="ootb/openstreetmap"] .block-editor-warning' )
     ).not.toBeVisible();
+  } );
+
+  // tile.openstreetmap.org serves an "Access blocked" tile to requests without a
+  // Referer, and requests made from the editor's blob: iframe carry none. Assert on
+  // the header: the blocked tile is also a 200 response with a valid 256px PNG, so
+  // the image alone can't tell the two apart. Without the fix this only fails on
+  // WordPress 7.1+, where the editor is always iframed.
+  test( 'editor tile requests carry a Referer header', async ({ page }) => {
+    const tileRequests: Request[] = [];
+    page.on( 'request', request => {
+      if ( request.url().includes( 'tile.openstreetmap.org' ) ) {
+        tileRequests.push( request );
+      }
+    } );
+
+    const blockItem = await insertBlock( page );
+    await blockItem.click();
+    await page.keyboard.press( 'Escape' );
+
+    await expect(
+      canvas.locator( '[data-type="ootb/openstreetmap"] .leaflet-tile-loaded' ).first()
+    ).toBeVisible( { timeout: 15_000 } );
+
+    expect( tileRequests.length ).toBeGreaterThan( 0 );
+    for ( const request of tileRequests ) {
+      expect( ( await request.allHeaders() ).referer ).toBeTruthy();
+    }
   } );
 
   test( 'clustering toggle can be enabled without crashing the block', async ({ page }) => {

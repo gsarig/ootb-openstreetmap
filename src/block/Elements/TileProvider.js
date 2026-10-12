@@ -1,7 +1,7 @@
-import {TileLayer} from 'react-leaflet';
 // noinspection NpmUsedModulesInstalled
 import {useEffect, useRef} from '@wordpress/element';
 import createMapboxStyleUrl from '../../common/createMapboxStyleUrl';
+import FetchTileLayer from './FetchTileLayer';
 
 export default function TileProvider({props}) {
 	const {
@@ -42,7 +42,7 @@ export default function TileProvider({props}) {
 		ref.current.setUrl(providerUrl);
 	}, [providerUrl]);
 	return (
-		<TileLayer
+		<FetchTileLayer
 			ref={ref}
 			url={providerUrl}
 			attribution={providerAttribution}

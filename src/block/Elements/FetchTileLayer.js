@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useImperativeHandle, useState } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import { useMap } from 'react-leaflet/hooks';
 import L from 'leaflet';
 
@@ -26,34 +26,40 @@ const FetchingTileLayer = L.TileLayer.extend({
 		tile.alt = '';
 		tile.setAttribute('role', 'presentation');
 
-		fetch(url, { mode: 'cors', credentials: 'omit' })
-			.then((response) => {
+		fetch(url, { mode: 'cors', credentials: 'omit' }).then(
+			(response) => {
+				// The provider answered: report HTTP errors (404 past the map edge, 429 rate
+				// limiting) as tile errors rather than repeating the request as an image.
 				if (!response.ok) {
-					throw new Error(`Tile request failed with status ${response.status}`);
+					done(new Error(`Tile request failed with status ${response.status}`), tile);
+					return;
 				}
-				return response.blob();
-			})
-			.then((blob) => {
-				const objectUrl = URL.createObjectURL(blob);
-				const revoke = () => URL.revokeObjectURL(objectUrl);
-				tile.addEventListener('load', revoke, { once: true });
-				tile.addEventListener('error', revoke, { once: true });
-				tile.src = objectUrl;
-			})
-			// Providers without CORS headers can't be fetched; fall back to a plain image.
-			.catch(() => {
+				response
+					.blob()
+					.then((blob) => {
+						const objectUrl = URL.createObjectURL(blob);
+						const revoke = () => URL.revokeObjectURL(objectUrl);
+						tile.addEventListener('load', revoke, { once: true });
+						tile.addEventListener('error', revoke, { once: true });
+						tile.src = objectUrl;
+					})
+					.catch((e) => done(e, tile));
+			},
+			// fetch() itself failed: a network error, or a provider without CORS headers.
+			// Fall back to a plain image. The browser has already sent the request once,
+			// so providers without CORS headers cost two requests per tile.
+			() => {
 				tile.src = url;
-			});
+			}
+		);
 
 		return tile;
 	},
 });
 
-const FetchTileLayer = forwardRef(function FetchTileLayer({ url, attribution }, ref) {
+export default function FetchTileLayer({ url, attribution }) {
 	const map = useMap();
 	const [layer] = useState(() => new FetchingTileLayer(url, { attribution }));
-
-	useImperativeHandle(ref, () => layer, [layer]);
 
 	useEffect(() => {
 		layer.addTo(map);
@@ -67,6 +73,4 @@ const FetchTileLayer = forwardRef(function FetchTileLayer({ url, attribution }, 
 	}, [layer, url]);
 
 	return null;
-});
-
-export default FetchTileLayer;
+}

@@ -1,5 +1,3 @@
-// noinspection NpmUsedModulesInstalled
-import {useEffect, useRef} from '@wordpress/element';
 import createMapboxStyleUrl from '../../common/createMapboxStyleUrl';
 import FetchTileLayer from './FetchTileLayer';
 
@@ -37,13 +35,8 @@ export default function TileProvider({props}) {
 		providerUrl = stamen.url;
 		providerAttribution = stamen.attribution;
 	}
-	const ref = useRef(null);
-	useEffect(() => {
-		ref.current.setUrl(providerUrl);
-	}, [providerUrl]);
 	return (
 		<FetchTileLayer
-			ref={ref}
 			url={providerUrl}
 			attribution={providerAttribution}
 		/>

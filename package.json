@@ -21,6 +21,7 @@
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.61.1",
+		"@wordpress/block-editor": "^16.0.0",
 		"@wordpress/scripts": "^33.0.0",
 		"leaflet.markercluster": "^1.5.3"
 	},
@@ -38,7 +39,6 @@
 	},
 	"dependencies": {
 		"@raruto/leaflet-gesture-handling": "^1.4.4",
-		"@wordpress/block-editor": "^16.0.0",
 		"leaflet": "^1.9.4",
 		"react-device-detect": "^2.2.3",
 		"react-leaflet": "^4.2.1"

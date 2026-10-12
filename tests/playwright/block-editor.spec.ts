@@ -1,6 +1,10 @@
 import { test, expect, FrameLocator, Page, Request } from '@playwright/test';
 import { loginIfNeeded, dismissModals, insertBlock, editorCanvas } from './helpers';
 
+const OSM_TILE_HOST = /(^|\.)tile\.openstreetmap\.org$/;
+// 1×1 transparent PNG, served in place of real tiles.
+const STUB_TILE_PNG = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+
 test.describe( 'OOTB OpenStreetMap block — editor', () => {
 
   let canvas: Page | FrameLocator;
@@ -50,7 +54,7 @@ test.describe( 'OOTB OpenStreetMap block — editor', () => {
   test( 'editor tile requests carry a Referer header', async ({ page }) => {
     const tileRequests: Request[] = [];
     page.on( 'request', request => {
-      if ( /(^|\.)tile\.openstreetmap\.org$/.test( new URL( request.url() ).hostname ) ) {
+      if ( OSM_TILE_HOST.test( new URL( request.url() ).hostname ) ) {
         tileRequests.push( request );
       }
     } );
@@ -66,6 +70,51 @@ test.describe( 'OOTB OpenStreetMap block — editor', () => {
     expect( tileRequests.length ).toBeGreaterThan( 0 );
     for ( const request of tileRequests ) {
       expect( ( await request.allHeaders() ).referer ).toBeTruthy();
+    }
+  } );
+
+  // FetchTileLayer shows each fetched tile through a blob: object URL. Unlike the
+  // Referer test, this fails on any WordPress version if the editor goes back to
+  // plain <img src> tiles.
+  test( 'editor tiles load through fetch()', async ({ page }) => {
+    const blockItem = await insertBlock( page );
+    await blockItem.click();
+    await page.keyboard.press( 'Escape' );
+
+    const loadedTiles = canvas.locator( '[data-type="ootb/openstreetmap"] .leaflet-tile-loaded' );
+    await expect( loadedTiles.first() ).toBeVisible( { timeout: 15_000 } );
+
+    const sources = await loadedTiles.evaluateAll( tiles => tiles.map( tile => ( tile as HTMLImageElement ).src ) );
+    for ( const src of sources ) {
+      expect( src ).toMatch( /^blob:/ );
+    }
+  } );
+
+  // Providers that don't allow cross-origin fetches must still show tiles, through
+  // the plain <img src> fallback. Abort the fetch() outright: a route-fulfilled
+  // response without Access-Control-Allow-Origin still let the fetch() succeed in
+  // Chromium, so the fallback never ran.
+  test( 'editor tiles fall back to a plain image when fetch is refused', async ({ page }) => {
+    await page.route( url => OSM_TILE_HOST.test( url.hostname ), route => {
+      if ( route.request().resourceType() === 'fetch' ) {
+        return route.abort();
+      }
+      return route.fulfill( {
+        contentType: 'image/png',
+        body: Buffer.from( STUB_TILE_PNG, 'base64' ),
+      } );
+    } );
+
+    const blockItem = await insertBlock( page );
+    await blockItem.click();
+    await page.keyboard.press( 'Escape' );
+
+    const loadedTiles = canvas.locator( '[data-type="ootb/openstreetmap"] .leaflet-tile-loaded' );
+    await expect( loadedTiles.first() ).toBeVisible( { timeout: 15_000 } );
+
+    const sources = await loadedTiles.evaluateAll( tiles => tiles.map( tile => ( tile as HTMLImageElement ).src ) );
+    for ( const src of sources ) {
+      expect( OSM_TILE_HOST.test( new URL( src ).hostname ) ).toBe( true );
     }
   } );
 

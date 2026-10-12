@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      WP_IMAGE: wordpress:php8.1-apache
+      WP_IMAGE: wordpress:php8.3-apache
       WP_TESTS_DIR: /tmp/wordpress-tests-lib
       WP_BASE_URL: http://localhost:8080
 

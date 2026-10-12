@@ -118,6 +118,77 @@ test.describe( 'OOTB OpenStreetMap block — editor', () => {
     }
   } );
 
+  // In an iframed editor (always from WordPress 7.1) drags used to jump by the
+  // iframe's offset and never end on release; see IframeMouseFix.js. Positions are
+  // compared in page coordinates; a 2px tolerance absorbs subpixel rounding.
+  test( 'map drag follows the mouse and ends on release', async ({ page }) => {
+    const blockItem = await insertBlock( page );
+    await blockItem.click();
+    await page.keyboard.press( 'Escape' );
+
+    const map = canvas.locator( '[data-type="ootb/openstreetmap"] .leaflet-container' ).first();
+    await expect( map.locator( '.leaflet-tile-loaded' ).first() ).toBeVisible( { timeout: 15_000 } );
+    const pane = map.locator( '.leaflet-map-pane' );
+    const panePosition = () => pane.evaluate( el => { const r = el.getBoundingClientRect(); return [ r.left, r.top ]; } );
+
+    const box = ( await map.boundingBox() )!;
+    const x = box.x + box.width / 2;
+    const y = box.y + box.height / 2;
+    const start = await panePosition();
+
+    await page.mouse.move( x, y );
+    await page.mouse.down();
+    await page.mouse.move( x + 10, y + 10, { steps: 2 } );
+    const afterFirstMove = await panePosition();
+    expect( Math.abs( afterFirstMove[ 0 ] - start[ 0 ] - 10 ) ).toBeLessThanOrEqual( 2 );
+    expect( Math.abs( afterFirstMove[ 1 ] - start[ 1 ] - 10 ) ).toBeLessThanOrEqual( 2 );
+
+    await page.mouse.move( x + 150, y + 80, { steps: 10 } );
+    await page.mouse.up();
+    // Let Leaflet's inertia settle, then moving the mouse must no longer pan the map.
+    await page.waitForTimeout( 1_000 );
+    const afterRelease = await panePosition();
+    await page.mouse.move( x - 100, y - 100, { steps: 10 } );
+    expect( await panePosition() ).toEqual( afterRelease );
+  } );
+
+  test( 'markers can be added and dragged', async ({ page }) => {
+    const blockItem = await insertBlock( page );
+    await blockItem.click();
+    await page.keyboard.press( 'Escape' );
+
+    const map = canvas.locator( '[data-type="ootb/openstreetmap"] .leaflet-container' ).first();
+    await expect( map.locator( '.leaflet-tile-loaded' ).first() ).toBeVisible( { timeout: 15_000 } );
+    const box = ( await map.boundingBox() )!;
+
+    // A press held for longer than the 300ms pinning delay adds a marker.
+    await page.mouse.move( box.x + box.width / 2, box.y + box.height / 2 );
+    await page.mouse.down();
+    await page.waitForTimeout( 450 );
+    await page.mouse.up();
+    const marker = map.locator( '.leaflet-marker-icon' ).first();
+    await expect( marker ).toBeVisible( { timeout: 5_000 } );
+    // Adding a marker re-fits the map to it; wait for that to finish before measuring.
+    await page.waitForTimeout( 1_000 );
+
+    const markerBox = ( await marker.boundingBox() )!;
+    const x = markerBox.x + markerBox.width / 2;
+    const y = markerBox.y + markerBox.height - 4;
+    await page.mouse.move( x, y );
+    await page.mouse.down();
+    await page.mouse.move( x + 80, y + 50, { steps: 10 } );
+    const dragged = ( await marker.boundingBox() )!;
+    expect( Math.abs( dragged.x - markerBox.x - 80 ) ).toBeLessThanOrEqual( 2 );
+    expect( Math.abs( dragged.y - markerBox.y - 50 ) ).toBeLessThanOrEqual( 2 );
+
+    await page.mouse.up();
+    await page.waitForTimeout( 300 );
+    await page.mouse.move( x - 80, y - 80, { steps: 10 } );
+    const afterRelease = ( await marker.boundingBox() )!;
+    expect( afterRelease.x ).toBeCloseTo( dragged.x, 0 );
+    expect( afterRelease.y ).toBeCloseTo( dragged.y, 0 );
+  } );
+
   test( 'clustering toggle can be enabled without crashing the block', async ({ page }) => {
     const blockItem = await insertBlock( page );
     await blockItem.click();

@@ -1,5 +1,6 @@
 // noinspection NpmUsedModulesInstalled,JSUnresolvedVariable
 
+import {useEffect} from 'react';
 import {__} from '@wordpress/i18n';
 import {BaseControl, SelectControl} from '@wordpress/components';
 import getGeoPostTypes from "../../common/getGeoPostTypes";
@@ -29,6 +30,17 @@ export default function QueryControl({props}) {
     }
 
     const selectOptions = queryCustomFields ? getGeoPostTypes() : ootbGlobal?.postTypes;
+    const minOptions = queryCustomFields ? 1 : 2;
+
+    // The custom fields variation must query a post type that can have locations. Blocks created
+    // with the default `post` type would otherwise silently query posts when it is not geo-enabled.
+    const firstGeoPostType = queryCustomFields ? selectOptions[0]?.value : undefined;
+    const isGeoPostType = selectOptions.some(option => option.value === queryArgs.post_type);
+    useEffect(() => {
+        if (firstGeoPostType && !isGeoPostType) {
+            setAttributes({queryArgs: {...queryArgs, post_type: firstGeoPostType}});
+        }
+    }, [firstGeoPostType, isGeoPostType]);
     return (
         <>
             <BaseControl
@@ -36,7 +48,7 @@ export default function QueryControl({props}) {
                 help={help}
             >
                 <div>
-                    {((!serverSideRender || queryCustomFields) && selectOptions.length > 1) && (
+                    {((!serverSideRender || queryCustomFields) && selectOptions.length >= minOptions) && (
                         <>
                             <SelectControl
                                 label={__('Post type', 'ootb-openstreetmap')}

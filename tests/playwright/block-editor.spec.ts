@@ -50,7 +50,7 @@ test.describe( 'OOTB OpenStreetMap block — editor', () => {
   test( 'editor tile requests carry a Referer header', async ({ page }) => {
     const tileRequests: Request[] = [];
     page.on( 'request', request => {
-      if ( request.url().includes( 'tile.openstreetmap.org' ) ) {
+      if ( /(^|\.)tile\.openstreetmap\.org$/.test( new URL( request.url() ).hostname ) ) {
         tileRequests.push( request );
       }
     } );

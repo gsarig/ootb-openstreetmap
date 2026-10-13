@@ -3,9 +3,9 @@ Contributors: gsarig
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MZR4JSRUMH5EA&source=url
 Tags: Map, OpenStreetMap, Leaflet, Google Maps, block
 Requires at least: 6.6
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 2.13.0
+Stable tag: 2.13.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -146,6 +146,11 @@ Version 2.0.0 is a major, almost full, refactoring, both for the build scripts a
 = 1.0 =
 
 == Changelog ==
+= 2.13.1 =
+* Fixes the custom fields map ignoring a single geo-enabled post type.
+* Fixes blocked OpenStreetMap tiles in the block editor on WordPress 7.1.
+* Dependency updates.
+
 = 2.13.0 =
 * Improves AI-assisted search to return more accurate locations.
 * Fixes an editor crash on post types that do not support custom fields.

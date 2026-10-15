@@ -7,6 +7,13 @@ updates:
       day: "monday"
     labels:
       - "dependencies"
+    groups:
+      minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
 
   - package-ecosystem: "composer"
     directory: "/"
@@ -15,6 +22,13 @@ updates:
       day: "monday"
     labels:
       - "dependencies"
+    groups:
+      minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
 
   - package-ecosystem: "npm"
     directory: "/"
@@ -23,3 +37,15 @@ updates:
       day: "monday"
     labels:
       - "dependencies"
+    groups:
+      minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    ignore:
+      # react-leaflet 5 requires React 19; WordPress core still ships React 18.
+      - dependency-name: "react-leaflet"
+        update-types:
+          - "version-update:semver-major"

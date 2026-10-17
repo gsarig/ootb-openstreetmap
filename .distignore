@@ -40,6 +40,7 @@ phpstan.neon
 phpstan-bootstrap.php
 phpunit.xml.dist
 playwright.config.ts
+vitest.config.mjs
 docker-compose.yml
 TESTING.md
 /tmp

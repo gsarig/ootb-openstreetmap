@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import createMapboxStyleUrl from './createMapboxStyleUrl';
 
 const FAKE_TOKEN = 'pk.fakeToken123';

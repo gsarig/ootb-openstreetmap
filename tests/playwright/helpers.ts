@@ -8,10 +8,21 @@ const WP_PASS  = process.env.WP_ADMIN_PASS ?? 'password';
 export const ROLES = [ 'admin', 'editor', 'author', 'contributor', 'subscriber' ] as const;
 export type Role = ( typeof ROLES )[ number ];
 
+// wp-login.php focuses and selects the username field 200ms after load. If that
+// lands while the password is being typed, the password replaces the username and
+// the login fails, so fill until both fields hold what was typed.
+async function fillLoginForm( page: Page, user: string, pass: string ) {
+  await expect( async () => {
+    await page.fill( '#user_login', user );
+    await page.fill( '#user_pass', pass );
+    await expect( page.locator( '#user_login' ) ).toHaveValue( user, { timeout: 1_000 } );
+    await expect( page.locator( '#user_pass' ) ).toHaveValue( pass, { timeout: 1_000 } );
+  } ).toPass( { timeout: 10_000 } );
+}
+
 export async function loginAs( page: Page, role: Role ) {
   await page.goto( '/wp-login.php', { waitUntil: 'domcontentloaded' } );
-  await page.fill( '#user_login', role );
-  await page.fill( '#user_pass', 'password' );
+  await fillLoginForm( page, role, 'password' );
   await page.click( '#wp-submit' );
   await page.waitForURL( /wp-admin/, { timeout: 15_000 } );
   await expect( page.locator( '#wpadminbar' ) ).toBeVisible( { timeout: 15_000 } );
@@ -29,8 +40,7 @@ export async function loginIfNeeded( page: Page ) {
 
   const loginForm = page.locator( '#user_login' );
   if ( await loginForm.isVisible( { timeout: 10_000 } ) ) {
-    await page.fill( '#user_login', WP_ADMIN );
-    await page.fill( '#user_pass', WP_PASS );
+    await fillLoginForm( page, WP_ADMIN, WP_PASS );
     await page.click( '#wp-submit' );
     await page.waitForURL( /wp-admin/, { timeout: 15_000 } );
   }

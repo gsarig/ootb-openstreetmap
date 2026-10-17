@@ -131,6 +131,15 @@ test.describe( 'OOTB OpenStreetMap block — editor', () => {
     const pane = map.locator( '.leaflet-map-pane' );
     const panePosition = () => pane.evaluate( el => { const r = el.getBoundingClientRect(); return [ r.left, r.top ]; } );
 
+    // The inserter is still sliding shut when the first tiles load, which shifts
+    // the canvas and the map with it. A start position taken mid-slide is stale,
+    // so wait until the map holds still.
+    await expect.poll( async () => {
+      const before = await map.boundingBox();
+      await page.waitForTimeout( 100 );
+      return JSON.stringify( await map.boundingBox() ) === JSON.stringify( before );
+    } ).toBe( true );
+
     const box = ( await map.boundingBox() )!;
     const x = box.x + box.width / 2;
     const y = box.y + box.height / 2;
@@ -139,13 +148,20 @@ test.describe( 'OOTB OpenStreetMap block — editor', () => {
     await page.mouse.move( x, y );
     await page.mouse.down();
     await page.mouse.move( x + 10, y + 10, { steps: 2 } );
-    const afterFirstMove = await panePosition();
-    expect( Math.abs( afterFirstMove[ 0 ] - start[ 0 ] - 10 ) ).toBeLessThanOrEqual( 2 );
-    expect( Math.abs( afterFirstMove[ 1 ] - start[ 1 ] - 10 ) ).toBeLessThanOrEqual( 2 );
+    // Leaflet moves the pane on the next animation frame, so poll rather than read
+    // once. An offset bug never converges and still fails here.
+    await expect.poll( async () => {
+      const [ left, top ] = await panePosition();
+      return Math.max( Math.abs( left - start[ 0 ] - 10 ), Math.abs( top - start[ 1 ] - 10 ) );
+    } ).toBeLessThanOrEqual( 2 );
 
     await page.mouse.move( x + 150, y + 80, { steps: 10 } );
+    // Hold still before releasing: Leaflet's inertia only uses the last 50ms of
+    // movement, so this ends the drag without a throw whose length would depend
+    // on how fast the steps above were sent.
+    await page.waitForTimeout( 100 );
     await page.mouse.up();
-    // Let Leaflet's inertia settle, then moving the mouse must no longer pan the map.
+    // Moving the mouse after release must no longer pan the map.
     await page.waitForTimeout( 1_000 );
     const afterRelease = await panePosition();
     await page.mouse.move( x - 100, y - 100, { steps: 10 } );

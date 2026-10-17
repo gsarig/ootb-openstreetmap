@@ -90,7 +90,7 @@ services:
   # A required variable here would break every other compose command when unset.
   # Host networking lets the browser reach WordPress on localhost:8080.
   playwright:
-    image: mcr.microsoft.com/playwright:v${PW_VERSION:-1.61.1}-noble
+    image: mcr.microsoft.com/playwright:v${PW_VERSION:-1.64.0}-noble
     restart: "no"
     profiles: ["tools"]
     network_mode: host
